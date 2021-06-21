@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mes.board.service.impl.BoardMapper">
+	
+
+	<resultMap id="board" type="mes.board.service.BoardVO">
+		<result property="no" column="NO" />
+		<result property="title" column="TITLE" />
+		<result property="content" column="CONTENT" />
+		<result property="wdate" column="WDATE" />
+	</resultMap>
+	
+	<insert id="insertBoard">
+		<![CDATA[
+			INSERT INTO BOARD 
+				( NO
+				  , TITLE
+				  , CONTENT
+				  , WDATE )
+			VALUES ( #{no}
+				  , #{title}
+				  , #{content}
+				  , #{wdate} )
+		]]>
+	</insert>
+	
+	<update id="updateBoard">
+		<![CDATA[
+			UPDATE BOARD
+			SET NO=#{no}
+				, TITLE=#{title}
+				, CONTENT=#{content}
+				, WDATE=#{wdate}
+						WHERE NO=#{no}
+				]]>
+	</update>
+	
+	<delete id="deleteBoard">
+		<![CDATA[
+			DELETE FROM BOARD 
+						WHERE NO=#{no}
+				]]>
+	</delete>
+	
+	<select id="selectBoard" resultMap="board">
+		<![CDATA[
+			SELECT
+				NO
+				, TITLE
+				, CONTENT
+				, WDATE
+			FROM BOARD
+						WHERE NO=#{no}
+				]]>
+	</select>
+	
+	<select id="selectBoardList" parameterType="mes.board.service.BoardVO" resultType="egovMap">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM (
+				SELECT
+								NO
+								, TITLE
+								, CONTENT
+								, WDATE
+						FROM BOARD
+				WHERE 1=1
+				<if test="searchKeyword != null and searchKeyword != ''">
+					<if test="searchCondition == 0">AND
+						NO = #{searchKeyword}
+					</if>
+					<if test="searchCondition == 1">AND
+						TITLE LIKE '%' || #{searchKeyword} || '%'
+					</if>
+				</if>
+					ORDER BY 
+						NO DESC
+		
+		<![CDATA[					
+	) A WHERE ROWNUM <= #{lastIndex}
+)WHERE RNUM > #{firstIndex}
+]]>
+	</select>	
+	<select id="selectBoardListTotCnt" parameterType="mes.board.service.BoardVO" resultType="int">
+			SELECT COUNT(*) totcnt
+			FROM BOARD
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 0">AND
+					NO = #{searchKeyword}
+				</if>
+				<if test="searchCondition == 1">AND
+					TITLE LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+	</select>
+
+</mapper>
