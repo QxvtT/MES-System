@@ -84,7 +84,7 @@ public class BoardController {
             @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)
             throws Exception {
         model.addAttribute("boardVO", new BoardVO());
-        return "board/BoardRegister";
+        return "board/BoardRegister.page";
     }
     
     @RequestMapping("/board/addBoard.do")
@@ -106,7 +106,7 @@ public class BoardController {
         boardVO.setNo(no);
         // 변수명은 CoC 에 따라 boardVO
         model.addAttribute(selectBoard(boardVO, searchVO));
-        return "board/BoardRegister";
+        return "board/BoardRegister.page";
     }
 
     @RequestMapping("/board/selectBoard.do")
