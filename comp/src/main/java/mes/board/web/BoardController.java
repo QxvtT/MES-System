@@ -32,7 +32,7 @@ import mes.board.service.BoardVO;
  *  
  *  Copyright (C)  All right reserved.
  */
-
+ 
 @Controller
 @SessionAttributes(types=BoardVO.class)
 public class BoardController {
