@@ -75,8 +75,8 @@ public class BoardController {
         int totCnt = boardService.selectBoardListTotCnt(searchVO);
 		paginationInfo.setTotalRecordCount(totCnt);
         model.addAttribute("paginationInfo", paginationInfo);
-        
-        return "/mes/board/BoardList";
+        System.out.println("Test123123123");
+        return "board/BoardList.page";
     } 
     
     @RequestMapping("/board/addBoardView.do")
@@ -84,7 +84,7 @@ public class BoardController {
             @ModelAttribute("searchVO") BoardDefaultVO searchVO, Model model)
             throws Exception {
         model.addAttribute("boardVO", new BoardVO());
-        return "/mes/board/BoardRegister";
+        return "board/BoardRegister";
     }
     
     @RequestMapping("/board/addBoard.do")
@@ -106,7 +106,7 @@ public class BoardController {
         boardVO.setNo(no);
         // 변수명은 CoC 에 따라 boardVO
         model.addAttribute(selectBoard(boardVO, searchVO));
-        return "/mes/board/BoardRegister";
+        return "board/BoardRegister";
     }
 
     @RequestMapping("/board/selectBoard.do")
@@ -136,5 +136,7 @@ public class BoardController {
         status.setComplete();
         return "forward:/board/BoardList.do";
     }
+    
+    
 
 }
