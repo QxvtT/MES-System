@@ -70,6 +70,9 @@ local.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse
 
+comp/target/
+comp/target/*
+/target/*
 /target/
 /target/*
 .classpath
