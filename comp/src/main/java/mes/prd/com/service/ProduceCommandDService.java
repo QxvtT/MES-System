@@ -1,8 +1,6 @@
 package mes.prd.com.service;
 
 import java.util.List;
-import mes.prd.com.service.ProduceCommandDDefaultVO;
-import mes.prd.com.service.ProduceCommandDVO;
 
 /**
  * @Class Name : ProduceCommandDService.java

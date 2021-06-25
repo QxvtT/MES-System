@@ -4,18 +4,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.stereotype.Service;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import egovframework.rte.fdl.idgnr.EgovIdGnrService;
-import mes.prd.com.service.ProduceCommandDService;
 import mes.prd.com.service.ProduceCommandDDefaultVO;
+import mes.prd.com.service.ProduceCommandDService;
 import mes.prd.com.service.ProduceCommandDVO;
-import mes.prd.com.service.impl.ProduceCommandDDAO;
-import mes.prd.com.service.impl.ProduceCommandDMapper;
 /**
  * @Class Name : ProduceCommandDServiceImpl.java
  * @Description : ProduceCommandD Business Implement class

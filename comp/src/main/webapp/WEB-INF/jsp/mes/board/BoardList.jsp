@@ -51,6 +51,7 @@ function fn_egov_link_page(pageNo){
 </script>
 </head>
 <body>
+
 <form:form commandName="searchVO" name="listForm" id="listForm" method="post">
 	<input type="hidden" name="no" />
 <div id="content_pop">
