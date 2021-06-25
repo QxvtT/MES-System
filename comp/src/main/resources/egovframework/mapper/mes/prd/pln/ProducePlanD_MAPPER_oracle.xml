@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mes.prd.pln.service.impl.ProducePlanDMapper">
+	
+
+	<resultMap id="producePlanD" type="mes.prd.pln.service.ProducePlanDVO">
+		<result property="prdPlanDNum" column="PRD_PLAN_D_NUM" />
+		<result property="prdNum" column="PRD_NUM" />
+		<result property="itmCode" column="ITM_CODE" />
+		<result property="prdWorkVol" column="PRD_WORK_VOL" />
+		<result property="prdPlanDate" column="PRD_PLAN_DATE" />
+		<result property="prdNo" column="PRD_NO" />
+		<result property="prdNote" column="PRD_NOTE" />
+		<result property="comChk" column="COM_CHK" />
+		<result property="ordNum" column="ORD_NUM" />
+	</resultMap>
+	
+	<insert id="insertProducePlanD">
+		<![CDATA[
+			INSERT INTO PRODUCE_PLAN_D 
+				( PRD_PLAN_D_NUM
+				  , PRD_NUM
+				  , ITM_CODE
+				  , PRD_WORK_VOL
+				  , PRD_PLAN_DATE
+				  , PRD_NO
+				  , PRD_NOTE
+				  , COM_CHK
+				  , ORD_NUM )
+			VALUES ( #{prdPlanDNum}
+				  , #{prdNum}
+				  , #{itmCode}
+				  , #{prdWorkVol}
+				  , #{prdPlanDate}
+				  , #{prdNo}
+				  , #{prdNote}
+				  , #{comChk}
+				  , #{ordNum} )
+		]]>
+	</insert>
+	
+	<update id="updateProducePlanD">
+		<![CDATA[
+			UPDATE PRODUCE_PLAN_D
+			SET PRD_PLAN_D_NUM=#{prdPlanDNum}
+				, PRD_NUM=#{prdNum}
+				, ITM_CODE=#{itmCode}
+				, PRD_WORK_VOL=#{prdWorkVol}
+				, PRD_PLAN_DATE=#{prdPlanDate}
+				, PRD_NO=#{prdNo}
+				, PRD_NOTE=#{prdNote}
+				, COM_CHK=#{comChk}
+				, ORD_NUM=#{ordNum}
+						WHERE PRD_PLAN_D_NUM=#{prdPlanDNum}
+				]]>
+	</update>
+	
+	<delete id="deleteProducePlanD">
+		<![CDATA[
+			DELETE FROM PRODUCE_PLAN_D 
+						WHERE PRD_PLAN_D_NUM=#{prdPlanDNum}
+				]]>
+	</delete>
+	
+	<select id="selectProducePlanD" resultMap="producePlanD">
+		<![CDATA[
+			SELECT
+				PRD_PLAN_D_NUM
+				, PRD_NUM
+				, ITM_CODE
+				, PRD_WORK_VOL
+				, PRD_PLAN_DATE
+				, PRD_NO
+				, PRD_NOTE
+				, COM_CHK
+				, ORD_NUM
+			FROM PRODUCE_PLAN_D
+						WHERE PRD_PLAN_D_NUM=#{prdPlanDNum}
+				]]>
+	</select>
+	
+	<select id="selectProducePlanDList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="egovMap">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM (
+				SELECT
+								PRD_PLAN_D_NUM
+								, PRD_NUM
+								, ITM_CODE
+								, PRD_WORK_VOL
+								, PRD_PLAN_DATE
+								, PRD_NO
+								, PRD_NOTE
+								, COM_CHK
+								, ORD_NUM
+						FROM PRODUCE_PLAN_D
+				WHERE 1=1
+				<if test="searchKeyword != null and searchKeyword != ''">
+					<if test="searchCondition == 0">AND
+						PRD_PLAN_D_NUM = #{searchKeyword}
+					</if>
+					<if test="searchCondition == 1">AND
+						PRD_NUM LIKE '%' || #{searchKeyword} || '%'
+					</if>
+				</if>
+					ORDER BY 
+						PRD_PLAN_D_NUM DESC
+		
+		<![CDATA[					
+	) A WHERE ROWNUM <= #{lastIndex}
+)WHERE RNUM > #{firstIndex}
+]]>
+	</select>	
+	<select id="selectProducePlanDListTotCnt" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="int">
+			SELECT COUNT(*) totcnt
+			FROM PRODUCE_PLAN_D
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 0">AND
+					PRD_PLAN_D_NUM = #{searchKeyword}
+				</if>
+				<if test="searchCondition == 1">AND
+					PRD_NUM LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+	</select>
+
+</mapper>
