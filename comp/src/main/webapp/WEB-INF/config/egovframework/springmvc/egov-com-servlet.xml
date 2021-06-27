@@ -38,6 +38,23 @@
 		<property name="webBindingInitializer">
 			<bean class="egovframework.com.cmm.web.EgovBindingInitializer" />
 		</property>
+		<!-- ajax 설정 -->
+		<property name="messageConverters">
+		<list>
+			<bean
+			class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+			
+			<bean
+			class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>*/*;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</list>
+		</property>
+		<!-- // -->
 	</bean>
 
 	<!-- setting Locale Locale Interceptor 설정하기 -->
@@ -76,7 +93,7 @@
 	<!-- for JFile -->
 	<bean
 		class="org.springframework.web.servlet.view.BeanNameViewResolver"
-		p:order="0" />
+		p:order="0" />	
 
 	<bean
 		class="org.springframework.web.servlet.view.UrlBasedViewResolver"

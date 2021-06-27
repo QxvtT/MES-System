@@ -8,8 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -49,6 +52,31 @@ public class ProduceCommandDController {
 	 * @return "/produceCommandD/ProduceCommandDList"
 	 * @exception Exception
 	 */
+    
+	@RequestMapping(value ="/prd/com/ProduceCommandDList", method=RequestMethod.GET)
+    @ResponseBody
+    public List<?> ajax(@ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO) throws Exception {
+
+		/** EgovPropertyService.sample */
+    	searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
+    	searchVO.setPageSize(propertiesService.getInt("pageSize"));
+    	
+    	/** pageing */
+    	PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
+		paginationInfo.setPageSize(searchVO.getPageSize());
+		
+		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
+		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+		
+    	System.out.println("이름 : ");
+    	List<?> list = produceCommandDService.selectProduceCommandDList(searchVO);
+    	System.out.println(list);
+    	return list;
+    }
+    
     @RequestMapping(value="/prd/com/ProduceCommandDList.do")
     public String selectProduceCommandDList(@ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, 
     		ModelMap model)

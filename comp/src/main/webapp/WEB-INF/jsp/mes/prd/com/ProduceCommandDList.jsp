@@ -22,28 +22,127 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>"/>
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+<script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
+$.ajax({
+	url : "ProduceCommandDList",
+	type : "get",
+	dataType: "json",
+	contentType: "application/json; charset=UTF-8",
+	success : function(result){
+		console.log(result);
+		const grid = new tui.Grid({
+		    el: document.getElementById('grid'),
+		    scrollX: false,
+		    scrollY: false,
+		    minBodyHeight: 30,
+		    rowHeaders: ['rowNum'],
+		    columns: [
+		    	{ header: 'PrdComDNum', name:'prdComDNum'},
+				{ header: 'PrdComNum', name:'prdComNum'},
+				{ header: 'MatCode', name:'matCode'},
+				{ header: 'LotNum', name:'lotNum'},
+				{ header: 'ItmCode', name:'itmCode'},
+				{ header: 'PrcFNo', name:'prcFNo'},
+				{ header: 'PrdComVol', name:'prdComVol'},
+				{ header: 'PrdComDDate', name:'prdComDDate'},
+				{ header: 'PrcComNo', name:'prcComNo'},
+				{ header: 'PrcComDiv', name:'prcComDiv'},
+				{ header: 'MatVol', name:'matVol'},
+				{ header: 'PrdComNote', name:'prdComNote'},
+				{ header: 'DivMatCode', name:'divMatCode'},
+				{ header: 'DivLotNum', name:'divLotNum'},
+				{ header: 'PrdPlanNum', name:'prdPlanNum'}
+		    ]
+		}); // end const grid
+		const dataSource = { 
+				api : { 
+				    readData : {  url : 'ProduceCommandDList' ,  method : 'GET'  }
+				},
+				contentType: 'application/json',
+				serializer(params) {
+					console.log("dd");
+					console.log(params);
+					return JSON.stringify(params);
+				}
+			} ;
+		console.log(dataSource);
+		grid.resetData(result);
+	} // end success
+}); // end ajax 
+
+<%--
+  $(function(){
+	  const dataSource = { 
+				api : { 
+				    readData : {  url : '${pageContext.request.contextPath}/prd/com/ProduceCommandDList' ,  method : 'GET'  }
+				},
+				contentType: 'application/json',
+				serializer(params) {
+					console.log("dd");
+					console.log(params);
+					return JSON.stringify(params);
+				}
+			} ;
+			
+		const grid = new tui.Grid({
+		    el: document.getElementById('grid'),
+		    data: dataSource,
+		    scrollX: false,
+		    scrollY: false,
+		    minBodyHeight: 30,
+		    rowHeaders: ['rowNum'],
+		    columns: [
+		    	{ header: 'PrdComDNum', name:'prdComDNum'},
+				{ header: 'PrdComNum', name:'prdComNum'},
+				{ header: 'MatCode', name:'matCode'},
+				{ header: 'LotNum', name:'lotNum'},
+				{ header: 'ItmCode', name:'itmCode'},
+				{ header: 'PrcFNo', name:'prcFNo'},
+				{ header: 'PrdComVol', name:'prdComVol'},
+				{ header: 'PrdComDDate', name:'prdComDDate'},
+				{ header: 'PrcComNo', name:'prcComNo'},
+				{ header: 'PrcComDiv', name:'prcComDiv'},
+				{ header: 'MatVol', name:'matVol'},
+				{ header: 'PrdComNote', name:'prdComNote'},
+				{ header: 'DivMatCode', name:'divMatCode'},
+				{ header: 'DivLotNum', name:'divLotNum'},
+				{ header: 'PrdPlanNum', name:'prdPlanNum'}
+		    ]
+		  }); // end const grid
+	  
+		  //console.log(grid.request('readData'));
+		  grid.request('readData');
+ 
+  });
+--%>
+
+ 
+
+
 <!--
 /* 글 수정 화면 function */
 
 
 function fn_egov_select(prdComDNum) {
 	document.getElementById("listForm").prdComDNum.value = prdComDNum;
-   	document.getElementById("listForm").action = "<c:url value='/produceCommandD/updateProduceCommandDView.do'/>";
+   	document.getElementById("listForm").action = "<c:url value='/prd/com/updateProduceCommandDView.do'/>";
    	document.getElementById("listForm").submit();
 }
 
 /* 글 등록 화면 function */
 function fn_egov_addView() {
-   	document.getElementById("listForm").action = "<c:url value='/produceCommandD/addProduceCommandDView.do'/>";
+   	document.getElementById("listForm").action = "<c:url value='/prd/com/addProduceCommandDView.do'/>";
    	document.getElementById("listForm").submit();		
 }
 
 /* pagination 페이지 링크 function */
 function fn_egov_link_page(pageNo){
 	document.getElementById("listForm").pageIndex.value = pageNo;
-	document.getElementById("listForm").action = "<c:url value='/produceCommandD/ProduceCommandDList.do'/>";
+	document.getElementById("listForm").action = "<c:url value='/prd/com/ProduceCommandDList.do'/>";
    	document.getElementById("listForm").submit();
 }
 
@@ -53,15 +152,24 @@ function fn_egov_link_page(pageNo){
 <body>
 <form:form commandName="searchVO" name="listForm" id="listForm" method="post">
 	<input type="hidden" name="prdComDNum" />
-<div id="content_pop">
+<div class="pcoded-inner-content">
+<div class="main-body">
+<div class="page-wrapper">
+<div class="row">
+<div class="col-xl-12">
+<div class="card">
+
+
 	<!-- 타이틀 -->
-	<div id="title">
+	<div id="title" class="card-header">
 		<ul>
-			<li><img src="<c:url value='/images/egovframework/example/title_dot.gif'/>" alt="title" /> List </li>
+			<li> List </li>
 		</ul>
 	</div>
 	<!-- // 타이틀 -->
 	<!-- List -->
+	<div id="grid">
+	</div>
 	<div id="table">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<colgroup>
@@ -131,12 +239,17 @@ function fn_egov_link_page(pageNo){
 		<ul>
 			<li>
 				<div id="sysbtn">
-					<span class="btn_blue_l"><a href="javascript:fn_egov_addView();">등록</a><img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" alt="" />
+					<span class="btn_blue_l"><a href="javascript:fn_egov_addView();">등록</a>
 					</span>
 				</div>
 			</li>
 		</ul>
 	</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </form:form>
 </body>
