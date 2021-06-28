@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="mes.prd.com.service.impl.ProduceCommandDMapper">
-	
+<mapper
+	namespace="mes.prd.com.service.impl.ProduceCommandDMapper">
 
-	<resultMap id="produceCommandD" type="mes.prd.com.service.ProduceCommandDVO">
-		<result property="prdComDNum" column="PRD_COM_D_NUM" />
-		<result property="prdComNum" column="PRD_COM_NUM" />
-		<result property="matCode" column="MAT_CODE" />
-		<result property="lotNum" column="LOT_NUM" />
+
+	<resultMap id="produceCommandD"
+		type="mes.prd.com.service.ProduceCommandDVO">
+		<result property="prdDate" column="PRD_DATE" />
+		<result property="operName" column="OPER_NAME" />
 		<result property="itmCode" column="ITM_CODE" />
-		<result property="prcFNo" column="PRC_F_NO" />
-		<result property="prdComVol" column="PRD_COM_VOL" />
-		<result property="prdComDDate" column="PRD_COM_D_DATE" />
-		<result property="prcComNo" column="PRC_COM_NO" />
-		<result property="prcComDiv" column="PRC_COM_DIV" />
-		<result property="matVol" column="MAT_VOL" />
-		<result property="prdComNote" column="PRD_COM_NOTE" />
-		<result property="divMatCode" column="DIV_MAT_CODE" />
-		<result property="divLotNum" column="DIV_LOT_NUM" />
-		<result property="prdPlanNum" column="PRD_PLAN_NUM" />
+		<result property="itmName" column="ITM_NAME" />
+		<result property="ordNum" column="ORD_NUM" />
+		<result property="ordDeliveryDate" column="ORD_DELIVERY_DATE" />
+		<result property="prdWorkVol" column="ORD_VOL" />
+		<result property="prdPlanDate" column="PRD_WORK_VOL" />
+		<result property="prdNo" column="PRD_PLAN_DATE" />
+		<result property="matVol" column="PRD_NO" />
+		<result property="prdDNote" column="PRD_D_NOTE" />
 	</resultMap>
-	
+
 	<insert id="insertProduceCommandD">
 		<![CDATA[
 			INSERT INTO PRODUCE_COMMAND_D 
@@ -57,7 +55,7 @@
 				  , #{prdPlanNum} )
 		]]>
 	</insert>
-	
+
 	<update id="updateProduceCommandD">
 		<![CDATA[
 			UPDATE PRODUCE_COMMAND_D
@@ -79,14 +77,14 @@
 						WHERE PRD_COM_D_NUM=#{prdComDNum}
 				]]>
 	</update>
-	
+
 	<delete id="deleteProduceCommandD">
 		<![CDATA[
 			DELETE FROM PRODUCE_COMMAND_D 
 						WHERE PRD_COM_D_NUM=#{prdComDNum}
 				]]>
 	</delete>
-	
+
 	<select id="selectProduceCommandD" resultMap="produceCommandD">
 		<![CDATA[
 			SELECT
@@ -109,61 +107,54 @@
 						WHERE PRD_COM_D_NUM=#{prdComDNum}
 				]]>
 	</select>
-	
-	<select id="selectProduceCommandDList" parameterType="mes.prd.com.service.ProduceCommandDVO" resultType="egovMap">
-SELECT * FROM (
-	SELECT A.*, ROWNUM RNUM FROM (
-				SELECT
-								PRD_COM_D_NUM
-								, PRD_COM_NUM
-								, MAT_CODE
-								, LOT_NUM
-								, ITM_CODE
-								, PRC_F_NO
-								, PRD_COM_VOL
-								, PRD_COM_D_DATE
-								, PRC_COM_NO
-								, PRC_COM_DIV
-								, MAT_VOL
-								, PRD_COM_NOTE
-								, DIV_MAT_CODE
-								, DIV_LOT_NUM
-								, PRD_PLAN_NUM
-						FROM PRODUCE_COMMAND_D
-				WHERE 1=1
-				<if test="prdComDNum != null">
+
+	<select id="selectProduceCommandDList"
+		parameterType="mes.prd.com.service.ProduceCommandDVO"
+		resultType="egovMap">
+		select p.prd_date, m.OPER_NAME, d.ITM_CODE,i.ITM_NAME, d.ORD_NUM,
+		m.ORD_DELIVERY_DATE
+		,d.ORD_VOL,p.prd_work_vol,p.prd_plan_date,p.prd_no,p.prd_d_note
+		from ORDER_D d, ORDER_M m,
+		(select * from
+		PRODUCE_PLAN p, PRODUCE_PLAN_d d
+		where p.PRD_PLAN_NUM = d.PRD_NUM) p, ITEM i
+		where p.ORD_NUM = d.ord_num
+		and d.ORD_NUM = m.ORD_NUM
+		and d.ITM_CODE = i.ITM_CODE;
+		<if test="prdComDNum != null">
 				<![CDATA[	
 					and Prd_Com_D_Num < #{prdComDNum}
-				]]>	
-				</if>
-				<if test="searchKeyword != null and searchKeyword != ''">
-					<if test="searchCondition == 0">AND
-						PRD_COM_D_NUM = #{searchKeyword}
-					</if>
-					<if test="searchCondition == 1">AND
-						PRD_COM_NUM LIKE '%' || #{searchKeyword} || '%'
-					</if>
-				</if>
-					ORDER BY 
-						PRD_COM_D_NUM DESC
+				]]>
+		</if>
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<if test="searchCondition == 0">AND
+				PRD_COM_D_NUM = #{searchKeyword}
+			</if>
+			<if test="searchCondition == 1">AND
+				PRD_COM_NUM LIKE '%' || #{searchKeyword} || '%'
+			</if>
+		</if>
+		ORDER BY
+		PRD_COM_D_NUM DESC
 		
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )
 ]]>
-	</select>	
-	<select id="selectProduceCommandDListTotCnt" parameterType="mes.prd.com.service.ProduceCommandDVO" resultType="int">
-			SELECT COUNT(*) totcnt
-			FROM PRODUCE_COMMAND_D
-			WHERE 1=1
-			<if test="searchKeyword != null and searchKeyword != ''">
-				<if test="searchCondition == 0">AND
-					PRD_COM_D_NUM = #{searchKeyword}
-				</if>
-				<if test="searchCondition == 1">AND
-					PRD_COM_NUM LIKE '%' || #{searchKeyword} || '%'
-				</if>
+	</select>
+	<select id="selectProduceCommandDListTotCnt"
+		parameterType="mes.prd.com.service.ProduceCommandDVO" resultType="int">
+		SELECT COUNT(*) totcnt
+		FROM PRODUCE_COMMAND_D
+		WHERE 1=1
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<if test="searchCondition == 0">AND
+				PRD_COM_D_NUM = #{searchKeyword}
 			</if>
+			<if test="searchCondition == 1">AND
+				PRD_COM_NUM LIKE '%' || #{searchKeyword} || '%'
+			</if>
+		</if>
 	</select>
 
 </mapper>

@@ -33,25 +33,21 @@ $(function(){
 	    el: document.getElementById('grid'),
 	    scrollX: false,
 	    scrollY: true,
-	    bodyHeight: 200,
+	    bodyHeight: 600,
 	    data: getList(),
 	    rowHeaders: ['rowNum'],
 	    columns: [
-	    	{ header: 'PrdComDNum', name:'prdComDNum'},
-			{ header: 'PrdComNum', name:'prdComNum'},
-			{ header: 'MatCode', name:'matCode'},
-			{ header: 'LotNum', name:'lotNum'},
-			{ header: 'ItmCode', name:'itmCode'},
-			{ header: 'PrcFNo', name:'prcFNo'},
-			{ header: 'PrdComVol', name:'prdComVol'},
-			{ header: 'PrdComDDate', name:'prdComDDate'},
-			{ header: 'PrcComNo', name:'prcComNo'},
-			{ header: 'PrcComDiv', name:'prcComDiv'},
-			{ header: 'MatVol', name:'matVol'},
-			{ header: 'PrdComNote', name:'prdComNote'},
-			{ header: 'DivMatCode', name:'divMatCode'},
-			{ header: 'DivLotNum', name:'divLotNum'},
-			{ header: 'PrdPlanNum', name:'prdPlanNum'}
+	    	{ header: '계획일자', name:'prdComDNum'},
+			{ header: '고객사명', name:'prdComNum'},
+			{ header: '제품코드', name:'matCode'},
+			{ header: '제품명', name:'lotNum'},
+			{ header: '주문코드', name:'itmCode'},
+			{ header: '납기일자', name:'prcFNo'},
+			{ header: '주문량', name:'prdComVol'},
+			{ header: '계획량', name:'prdComDDate'},
+			{ header: '작업일자', name:'prcComNo'},
+			{ header: '순서', name:'prcComDiv'},
+			{ header: '비고', name:'matVol'}
 	    ]
 	}); // end const grid
 	

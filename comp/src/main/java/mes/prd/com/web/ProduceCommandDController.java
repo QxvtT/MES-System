@@ -63,7 +63,7 @@ public class ProduceCommandDController {
     	return list;
     }
 	
-	@RequestMapping(value="/prd/com/ProduceCommandDList.do")
+	@RequestMapping(value="/ProduceCommandDList.do")
     public String selectProduceCommandDList(@ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, 
     		ModelMap model)
             throws Exception {
