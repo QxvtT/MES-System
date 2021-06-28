@@ -72,6 +72,22 @@ public class MaterialStockController {
     public String selectMaterialStockList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, ModelMap model) throws Exception{
     	return "mat/stc/MaterialStockList.page";
     }
+    
+    @RequestMapping(value="/mat/stc/MaterialLotStockList", method=RequestMethod.GET)
+    @ResponseBody
+    public List<?> ajax2(MaterialStockVO searchVO) throws Exception {
+    	
+    	List<?> list = materialStockService.selectMaterialStockList(searchVO);
+    	
+    	System.out.println("a");
+    	System.out.println(list);
+    	return list;
+    }
+    
+    @RequestMapping("/mat/stc/MaterialLotStockList.do")
+    public String selectMaterialLotStockList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, ModelMap model) throws Exception{
+    	return "mat/stc/MaterialLotStockList.page";
+    }
     /*
     @RequestMapping(value="/mat/stc/MaterialStockList.do")
     public String selectMaterialStockList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, MaterialDefaultVO materialVO,

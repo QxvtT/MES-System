@@ -76,29 +76,15 @@ $(function(){
 $('#mobile-collapse').click(function() {
       grid.refreshLayout();
    });
-<!--
-	/* 글 수정 화면 function */
+   
+$('#searchMatBtn').click(function(){
+	$("#myModal").modal("toggle");
+	$("#myModal").on('shown.bs.modal', function () {
+		grid.refreshLayout();
+	});
+	
+})
 
-	function fn_egov_select(lotNum, matCode) {
-		document.getElementById("listForm").lotNum.value = lotNum;
-		document.getElementById("listForm").matCode.value = matCode;
-		document.getElementById("listForm").action = "<c:url value='/materialStock/updateMaterialStockView.do'/>";
-		document.getElementById("listForm").submit();
-	}
-
-	/* 글 등록 화면 function */
-	function fn_egov_addView() {
-		document.getElementById("listForm").action = "<c:url value='/materialStock/addMaterialStockView.do'/>";
-		document.getElementById("listForm").submit();
-	}
-
-	/* pagination 페이지 링크 function */
-	function fn_egov_link_page(pageNo) {
-		document.getElementById("listForm").pageIndex.value = pageNo;
-		document.getElementById("listForm").action = "<c:url value='/materialStock/MaterialStockList.do'/>";
-		document.getElementById("listForm").submit();
-	}
-// -->
 </script>
 </head>
 <body>
@@ -109,7 +95,37 @@ $('#mobile-collapse').click(function() {
 <div class="page-wrapper">
 <div class="row">
 <div class="col-xl-12">
-<div class="card">
+<div id="datePicker"></div>
+<button type="button" class="btn btn-info btn-sm" id="searchMatBtn" data-toggle="modal" data-target="#myModal">조회(검색팝업)</button>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="exampleModalLabel">
+					모달테스트
+				</h3>
+				<button class="close" type="button" data-dismiss="modal"
+					aria-label="Close">
+					&times;
+				</button>
+			</div>
+			<p>작성일자</p>
+			<div class="col-sm-6">
+				<input type="date" name="dateRangeS" />
+			</div>
+			<p> ~ </p>
+			<div class="col-sm-6">
+				<input type="date" name="dateRangeE" />
+			</div>
+			<div id="grid"></div>
+			<div class="modal-footer">
+				<a class="btn" id="modalY" href="#">예</a>
+				<button class="btn" type="button" data-dismiss="modal">아니요</button>
+			</div>
+		</div>
+	</div>
+</div>
 			<!-- 타이틀 -->
 			<div id="title" class="card-header">
 				<h3>자재 재고 조회</h3>
