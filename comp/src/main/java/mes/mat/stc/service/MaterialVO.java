@@ -81,13 +81,6 @@ public class MaterialVO extends MaterialDefaultVO{
     /** mat_max_stock */
     private java.lang.String matMaxStock;
     
-    public java.lang.String getMatCode() {
-        return this.matCode;
-    }
-    
-    public void setMatCode(java.lang.String matCode) {
-        this.matCode = matCode;
-    }
     
     public java.lang.String getOperCode() {
         return this.operCode;
@@ -255,6 +248,157 @@ public class MaterialVO extends MaterialDefaultVO{
     
     public void setMatMaxstock(java.lang.String matMaxStock) {
         this.matMaxStock = matMaxStock;
+    }
+    
+    /** MAT_HIS_D_NUM */
+    private java.math.BigDecimal matHisDNum;
+    
+    /** MAT_COM_NUM */
+    private java.lang.String matComNum;
+    
+    /** LOT_NO */
+    private java.math.BigDecimal lotNo;
+    
+    /** MAT_HIS_D_VOL */
+    private java.math.BigDecimal matHisDVol;
+    
+    /** MAT_HIS_PRICE */
+    private java.math.BigDecimal matHisPrice;
+    
+    /** MAT_OUT_OPER */
+    private java.lang.String matOutOper;
+    
+    public java.math.BigDecimal getMatHisDNum() {
+        return this.matHisDNum;
+    }
+    
+    public void setMatHisDNum(java.math.BigDecimal matHisDNum) {
+        this.matHisDNum = matHisDNum;
+    }
+    
+    public java.lang.String getMatCode() {
+        return this.matCode;
+    }
+    
+    public void setMatCode(java.lang.String matCode) {
+        this.matCode = matCode;
+    }
+    
+    public java.lang.String getMatComNum() {
+        return this.matComNum;
+    }
+    
+    public void setMatComNum(java.lang.String matComNum) {
+        this.matComNum = matComNum;
+    }
+    
+    public java.math.BigDecimal getLotNo() {
+        return this.lotNo;
+    }
+    
+    public void setLotNo(java.math.BigDecimal lotNo) {
+        this.lotNo = lotNo;
+    }
+    
+    public java.math.BigDecimal getMatHisDVol() {
+        return this.matHisDVol;
+    }
+    
+    public void setMatHisDVol(java.math.BigDecimal matHisDVol) {
+        this.matHisDVol = matHisDVol;
+    }
+    
+    public java.math.BigDecimal getMatHisPrice() {
+        return this.matHisPrice;
+    }
+    
+    public void setMatHisPrice(java.math.BigDecimal matHisPrice) {
+        this.matHisPrice = matHisPrice;
+    }
+    
+    public java.lang.String getMatOutOper() {
+        return this.matOutOper;
+    }
+    
+    public void setMatOutOper(java.lang.String matOutOper) {
+        this.matOutOper = matOutOper;
+    }
+    
+    /** MAT_HIS_NUM */
+    private java.math.BigDecimal matHisNum;
+    
+    /** MAT_HIS_DIV */
+    private java.lang.String matHisDiv;
+    
+    /** MAT_HIS_DATE */
+    private java.sql.Date matHisDate;
+    
+    /** MAT_OUT */
+    private java.lang.String matOut;
+    
+    /** MAT_HIS_VOL */
+    private java.math.BigDecimal matHisVol;
+    
+    public java.math.BigDecimal getMatHisNum() {
+        return this.matHisNum;
+    }
+    
+    public void setMatHisNum(java.math.BigDecimal matHisNum) {
+        this.matHisNum = matHisNum;
+    }
+    
+    public java.lang.String getMatHisDiv() {
+        return this.matHisDiv;
+    }
+    
+    public void setMatHisDiv(java.lang.String matHisDiv) {
+        this.matHisDiv = matHisDiv;
+    }
+    
+    public java.sql.Date getMatHisDate() {
+        return this.matHisDate;
+    }
+    
+    public void setMatHisDate(java.sql.Date matHisDate) {
+        this.matHisDate = matHisDate;
+    }
+    
+    public java.lang.String getMatOut() {
+        return this.matOut;
+    }
+    
+    public void setMatOut(java.lang.String matOut) {
+        this.matOut = matOut;
+    }
+    
+    public java.math.BigDecimal getMatHisVol() {
+        return this.matHisVol;
+    }
+    
+    public void setMatHisVol(java.math.BigDecimal matHisVol) {
+        this.matHisVol = matHisVol;
+    }
+    
+    /** LOT_NUM */
+    private java.math.BigDecimal lotNum;
+    
+    /** MAT_VOL */
+    private java.math.BigDecimal matVol;
+    
+    public java.math.BigDecimal getLotNum() {
+        return this.lotNum;
+    }
+    
+    public void setLotNum(java.math.BigDecimal lotNum) {
+        this.lotNum = lotNum;
+    }
+    
+    public java.math.BigDecimal getMatVol() {
+        return this.matVol;
+    }
+    
+    public void setMatVol(java.math.BigDecimal matVol) {
+        this.matVol = matVol;
     }
     
 }

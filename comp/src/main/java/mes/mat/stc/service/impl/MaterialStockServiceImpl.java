@@ -101,7 +101,7 @@ public class MaterialStockServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return MATERIAL_STOCK 목록
 	 * @exception Exception
 	 */
-    public List<?> selectMaterialStockList(MaterialStockDefaultVO searchVO) throws Exception {
+    public List<?> selectMaterialStockList(MaterialStockVO searchVO) throws Exception {
         return materialStockDAO.selectMaterialStockList(searchVO);
     }
 

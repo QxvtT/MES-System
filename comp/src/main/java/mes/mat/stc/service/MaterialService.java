@@ -1,8 +1,6 @@
 package mes.mat.stc.service;
 
 import java.util.List;
-import mes.mat.stc.service.MaterialDefaultVO;
-import mes.mat.stc.service.MaterialVO;
 
 /**
  * @Class Name : MaterialService.java

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mes.mat.stc.service.impl.MaterialHistoryMapper">
+	
+
+	<resultMap id="materialHistory" type="mes.mat.stc.service.MaterialHistoryVO">
+		<result property="matHisNum" column="MAT_HIS_NUM" />
+		<result property="matHisDiv" column="MAT_HIS_DIV" />
+		<result property="matHisDate" column="MAT_HIS_DATE" />
+		<result property="matOut" column="MAT_OUT" />
+		<result property="matHisVol" column="MAT_HIS_VOL" />
+	</resultMap>
+	
+	<insert id="insertMaterialHistory">
+		<![CDATA[
+			INSERT INTO MATERIAL_HISTORY 
+				( MAT_HIS_NUM
+				  , MAT_HIS_DIV
+				  , MAT_HIS_DATE
+				  , MAT_OUT
+				  , MAT_HIS_VOL )
+			VALUES ( #{matHisNum}
+				  , #{matHisDiv}
+				  , #{matHisDate}
+				  , #{matOut}
+				  , #{matHisVol} )
+		]]>
+	</insert>
+	
+	<update id="updateMaterialHistory">
+		<![CDATA[
+			UPDATE MATERIAL_HISTORY
+			SET MAT_HIS_NUM=#{matHisNum}
+				, MAT_HIS_DIV=#{matHisDiv}
+				, MAT_HIS_DATE=#{matHisDate}
+				, MAT_OUT=#{matOut}
+				, MAT_HIS_VOL=#{matHisVol}
+						WHERE MAT_HIS_NUM=#{matHisNum}
+				]]>
+	</update>
+	
+	<delete id="deleteMaterialHistory">
+		<![CDATA[
+			DELETE FROM MATERIAL_HISTORY 
+						WHERE MAT_HIS_NUM=#{matHisNum}
+				]]>
+	</delete>
+	
+	<select id="selectMaterialHistory" resultMap="materialHistory">
+		<![CDATA[
+			SELECT
+				MAT_HIS_NUM
+				, MAT_HIS_DIV
+				, MAT_HIS_DATE
+				, MAT_OUT
+				, MAT_HIS_VOL
+			FROM MATERIAL_HISTORY
+						WHERE MAT_HIS_NUM=#{matHisNum}
+				]]>
+	</select>
+	
+	<select id="selectMaterialHistoryList" parameterType="mes.mat.stc.service.MaterialHistoryVO" resultType="egovMap">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM (
+				SELECT
+								MAT_HIS_NUM
+								, MAT_HIS_DIV
+								, MAT_HIS_DATE
+								, MAT_OUT
+								, MAT_HIS_VOL
+						FROM MATERIAL_HISTORY
+				WHERE 1=1
+				<if test="searchKeyword != null and searchKeyword != ''">
+					<if test="searchCondition == 0">AND
+						MAT_HIS_NUM = #{searchKeyword}
+					</if>
+					<if test="searchCondition == 1">AND
+						MAT_HIS_DIV LIKE '%' || #{searchKeyword} || '%'
+					</if>
+				</if>
+					ORDER BY 
+						MAT_HIS_NUM DESC
+		
+		<![CDATA[					
+	) A WHERE ROWNUM <= #{lastIndex}
+)WHERE RNUM > #{firstIndex}
+]]>
+	</select>	
+	<select id="selectMaterialHistoryListTotCnt" parameterType="mes.mat.stc.service.MaterialHistoryVO" resultType="int">
+			SELECT COUNT(*) totcnt
+			FROM MATERIAL_HISTORY
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 0">AND
+					MAT_HIS_NUM = #{searchKeyword}
+				</if>
+				<if test="searchCondition == 1">AND
+					MAT_HIS_DIV LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+	</select>
+
+</mapper>

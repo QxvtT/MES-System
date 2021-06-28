@@ -20,6 +20,13 @@
 		<result property="cylinder" column="cylinder" />
 		<result property="matLotDiv" column="mat_lot_div" />
 		<result property="matSafeStockMag" column="mat_safe_stock_mag" />
+		<result property="matHisDNum" column="MAT_HIS_D_NUM" />
+		<result property="matHisNum" column="MAT_HIS_NUM" />
+		<result property="matComNum" column="MAT_COM_NUM" />
+		<result property="lotNo" column="LOT_NO" />
+		<result property="matHisDVol" column="MAT_HIS_D_VOL" />
+		<result property="matHisPrice" column="MAT_HIS_PRICE" />
+		<result property="matOutOper" column="MAT_OUT_OPER" />
 		
 	</resultMap>
 	

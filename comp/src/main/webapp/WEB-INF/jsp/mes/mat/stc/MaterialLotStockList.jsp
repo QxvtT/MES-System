@@ -39,12 +39,12 @@ $(function(){
 	    columns: [
 	    	{ header: '자재코드', name:'matCode'},
 			{ header: '자재명', name:'matName'},
-			{ header: '규격', name:'matDiv'},
-			{ header: 'Lot No', name:'lotNo'},
+			{ header: '자재구분', name:'matDiv'},
+			{ header: '안전재고', name:'matSafeStock'},
+// 			{ header: '이월량', name:''},
 			{ header: '입고량', name:'matHisDVol'},
 // 			{ header: '출고량', name:''},
 			{ header: '현재고', name:'matVol'},
-			{ header: '미달량', name:'short'},
 // 			{ header: '특기사항', name:''},
 	    ]
 	}); // end const grid
@@ -57,7 +57,7 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
-			url : "MaterialStockList",
+			url : "MaterialLotStockList",
 			type : "get",
 			data : {matCode: matCode},
 			dataType: "json",
@@ -112,7 +112,7 @@ $('#mobile-collapse').click(function() {
 <div class="card">
 			<!-- 타이틀 -->
 			<div id="title" class="card-header">
-				<h3>자재 재고 조회</h3>
+				<h3>자재 LOT 재고 조회</h3>
 				<br />
 			</div>
 			<!-- // 타이틀 -->

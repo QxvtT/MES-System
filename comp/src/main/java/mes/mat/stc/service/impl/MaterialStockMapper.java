@@ -61,7 +61,7 @@ public interface MaterialStockMapper {
 	 * @return MATERIAL_STOCK 목록
 	 * @exception Exception
 	 */
-    public List<?> selectMaterialStockList(MaterialStockDefaultVO searchVO) throws Exception;
+    public List<?> selectMaterialStockList(MaterialStockVO searchVO) throws Exception;
 
     /**
 	 * MATERIAL_STOCK 총 갯수를 조회한다.

@@ -9,17 +9,20 @@
         <Logger name="java.sql" level="DEBUG" additivity="false">
             <AppenderRef ref="console" />
         </Logger>
-        <Logger name="egovframework" level="DEBUG" additivity="false">
+        <Logger name="mes" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="egovframework" level="info" additivity="false">
             <AppenderRef ref="console" />
         </Logger>
 		  <!-- log SQL with timing information, post execution -->
 	    <Logger name="jdbc.sqltiming" level="DEBUG" additivity="false">
 	        <AppenderRef ref="console" />
 	    </Logger>
-	    <Logger name="org.springframework" level="INFO" additivity="false">
+	    <Logger name="org.springframework.web.servlet.DispatcherServlet" level="debug" additivity="false">
 	        <AppenderRef ref="console" />
 	    </Logger>
-        <Root level="INFO">
+        <Root level="error">
             <AppenderRef ref="console" />
         </Root>
     </Loggers>

@@ -8,6 +8,12 @@
 		<result property="lotNum" column="LOT_NUM" />
 		<result property="matCode" column="MAT_CODE" />
 		<result property="matVol" column="MAT_VOL" />
+		<result property="matName" column="MAT_NAME" />
+		<result property="matDiv" column="MAT_DIV" />
+		<result property="matSafeStock" column="MAT_SAFE_STOCK" />
+		<result property="matHisDVol" column="MAT_HIS_D_VOL" />
+		<result property="matHisNum" column="MAT_HIS_NUM"/>
+		<result property="matHisDate" column="MAT_HIS_DATE"/>
 	</resultMap>
 	
 	<insert id="insertMaterialStock">
@@ -57,26 +63,39 @@
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
 				SELECT
-								LOT_NUM
-								, MAT_CODE
-								, MAT_VOL
-						FROM MATERIAL_STOCK
-				WHERE 1=1
+						M.MAT_CODE,
+						M.MAT_NAME,
+						M.MAT_DIV,
+						SA.MAT_SAFE_STOCK,
+						ST.MAT_VOL,
+						(SA.MAT_SAFE_STOCK - ST.MAT_VOL) AS SHORT,
+						MHD.MAT_HIS_D_VOL
+						FROM MATERIAL M,
+							 MATERIAL_SAFE SA,
+							 MATERIAL_STOCK ST,
+							 MATERIAL_HISTORY MH,
+							 MATERIAL_HISTORY_D MHD 
+				WHERE M.MAT_CODE=SA.MAT_CODE
+						AND M.MAT_CODE=MHD.MAT_CODE
+						AND M.MAT_CODE=ST.MAT_CODE
+						AND MH.MAT_HIS_NUM=MHD.MAT_HIS_NUM
+						AND MH.MAT_HIS_DIV='입고'
+					and m.mat_code between #{matCode} and #{matCode}
+					AND MH.MAT_HIS_DATE BETWEEN TO_DATE(#{matHisDate}, 'YYYY-MM-DD') AND TO_DATE(#{matHisDate}, 'YYYY-MM-DD')
 				<if test="searchKeyword != null and searchKeyword != ''">
 					<if test="searchCondition == 0">AND
-						LOT_NUM = #{searchKeyword}
+						M.MAT_NAME = #{searchKeyword}
 					</if>
 					<if test="searchCondition == 1">AND
-						MAT_CODE LIKE '%' || #{searchKeyword} || '%'
+						M.MAT_CODE LIKE '%' || #{searchKeyword} || '%'
 					</if>
-				</if>
+				</if>   
 					ORDER BY 
-						LOT_NUM DESC
-							, MAT_CODE DESC
+						M.MAT_CODE DESC
 		
 		<![CDATA[					
-	) A WHERE ROWNUM <= #{lastIndex}
-)WHERE RNUM > #{firstIndex}
+	) A WHERE ROWNUM <= 10
+)
 ]]>
 	</select>	
 	<select id="selectMaterialStockListTotCnt" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="int">
@@ -91,6 +110,36 @@ SELECT * FROM (
 					MAT_CODE LIKE '%' || #{searchKeyword} || '%'
 				</if>
 			</if>
+	</select>
+	
+	<select id="selectMaterialStockList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+			SELECT M.MAT_CODE, 
+			       M.MAT_NAME, 
+			       M.MAT_SIZE, 
+			       M.MAT_UNIT, 
+			       MHD.LOT_NO, 
+			       MHD.MAT_HIS_D_VOL,
+			       ST.MAT_VOL
+		FROM MATERIAL M, MATERIAL_STOCK ST, MATERIAL_HISTORY_D MHD
+		WHERE M.MAT_CODE=MHD.MAT_CODE 
+			  AND M.MAT_CODE=ST.MAT_CODE
+			<if test="searchKeyword != null and searchKeyword != ''">
+					<if test="searchCondition == 0">AND
+						M.MAT_NAME = #{searchKeyword}
+					</if>
+					<if test="searchCondition == 1">AND
+						M.MAT_CODE LIKE '%' || #{searchKeyword} || '%'
+					</if>
+				</if>   
+					ORDER BY 
+						M.MAT_CODE DESC
+		
+		<![CDATA[					
+	) A WHERE ROWNUM <= 10
+)
+]]>
 	</select>
 
 </mapper>

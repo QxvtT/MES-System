@@ -9,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -17,6 +19,8 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 import mes.mat.stc.service.MaterialStockService;
+import mes.mat.stc.service.MaterialDefaultVO;
+import mes.mat.stc.service.MaterialService;
 import mes.mat.stc.service.MaterialStockDefaultVO;
 import mes.mat.stc.service.MaterialStockVO;
 
@@ -39,6 +43,8 @@ public class MaterialStockController {
 
     @Resource(name = "materialStockService")
     private MaterialStockService materialStockService;
+    @Resource(name = "materialService")
+    private MaterialService materialService;
     
     /** EgovPropertyService */
     @Resource(name = "propertiesService")
@@ -50,16 +56,31 @@ public class MaterialStockController {
 	 * @return "/materialStock/MaterialStockList"
 	 * @exception Exception
 	 */
+    
+    @RequestMapping(value="/mat/stc/MaterialStockList", method=RequestMethod.GET)
+    @ResponseBody
+    public List<?> ajax(MaterialStockVO searchVO) throws Exception {
+    	
+    	List<?> list = materialStockService.selectMaterialStockList(searchVO);
+    	
+    	System.out.println("a");
+    	System.out.println(list);
+    	return list;
+    }
+    
+    @RequestMapping("/mat/stc/MaterialStockList.do")
+    public String selectMaterialStockList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, ModelMap model) throws Exception{
+    	return "mat/stc/MaterialStockList.page";
+    }
+    /*
     @RequestMapping(value="/mat/stc/MaterialStockList.do")
-    public String selectMaterialStockList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, 
+    public String selectMaterialStockList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, MaterialDefaultVO materialVO,
     		ModelMap model)
             throws Exception {
     	
-    	/** EgovPropertyService.sample */
     	searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
     	searchVO.setPageSize(propertiesService.getInt("pageSize"));
     	
-    	/** pageing */
     	PaginationInfo paginationInfo = new PaginationInfo();
 		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
 		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
@@ -71,13 +92,14 @@ public class MaterialStockController {
 		
         List<?> materialStockList = materialStockService.selectMaterialStockList(searchVO);
         model.addAttribute("resultList", materialStockList);
+        model.addAttribute("materials", materialService.selectMaterialList(materialVO));
         
         int totCnt = materialStockService.selectMaterialStockListTotCnt(searchVO);
 		paginationInfo.setTotalRecordCount(totCnt);
         model.addAttribute("paginationInfo", paginationInfo);
         
         return "mat/stc/MaterialStockList.page";
-    } 
+    } */
     
     @RequestMapping("/mat/stc/addMaterialStockView.do")
     public String addMaterialStockView(
