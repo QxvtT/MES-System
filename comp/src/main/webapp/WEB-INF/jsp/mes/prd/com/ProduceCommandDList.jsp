@@ -226,13 +226,15 @@ function fn_egov_link_page(pageNo){
 					&times;
 				</button>
 			</div>
-			<p>작성일자</p>
-			<div class="col-sm-6">
-				<input type="date" name="dateRangeS" />
-			</div>
-			<p> ~ </p>
-			<div class="col-sm-6">
-				<input type="date" name="dateRangeE" />
+			<div class="form-group row">
+				<p>작성일자</p>
+				<div class="col-sm-6">
+					<input type="date" name="dateRangeS" />
+				</div>
+				<p> ~ </p>
+				<div class="col-sm-6">
+					<input type="date" name="dateRangeE" />
+				</div>
 			</div>
 			<div id="grid"></div>
 			<div class="modal-footer">

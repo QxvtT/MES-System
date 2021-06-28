@@ -129,6 +129,12 @@ $('#mobile-collapse').click(function() {
 			</div><br/>
 			<div id="grid">
 			</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+		</div>
 	</form:form>
 </body>
 </html>
