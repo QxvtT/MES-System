@@ -104,7 +104,7 @@ $('#mobile-collapse').click(function() {
 <body>
 	<form:form commandName="searchVO" name="listForm" id="listForm"	method="post">
 		<input type="hidden" name="matCode" />
-		<div class="pcoded-inner-content">
+<div class="pcoded-inner-content">
 <div class="main-body">
 <div class="page-wrapper">
 <div class="row">
@@ -113,28 +113,54 @@ $('#mobile-collapse').click(function() {
 			<!-- 타이틀 -->
 			<div id="title" class="card-header">
 				<h3>자재 LOT 재고 조회</h3>
-				<br />
 			</div>
 			<!-- // 타이틀 -->
-			<div>
-			작업일자
-			<input type="date" id="matHisDate" name="matHisDate" value=${result.matHisDate } /> ~ <input type="date" id="matHisDate" name="matHisDate" value=${result.matHisDate } /></div><br/>
-			<div>
-			자재코드
-			<input type="text" id="matCode" name="matCode" value=${result.matCode }></input><input type="button" value="검색"></input> ~ <input type="text" id="matCode" name="matCode" value=${result.matCode }></input><input type="button" value="검색"></input>
-			</div><br/>
-			<div>
-			<button onclick="location.href=''">조회</button>
-			<input type="reset" value="리셋"></input>
-			</div><br/>
-			<div id="grid">
+			<div class="card-block">
+				<div class="form-group row">
+					<label class="col-xl-1 col-form-label text-center">작업일자</label>
+					<div class="col-xl-2">
+					<input type="date" class="form-control" id="matHisDate" name="matHisDate" value="${result.matHisDate }" />
+					</div>
+					<label class="col-form-label text-center"> ~ </label>
+					 <div class="col-xl-2">
+					 <input type="date" class="form-control" id="matHisDate" name="matHisDate" value="${result.matHisDate }" />
+					 </div>
+					 <div class="col-xl-7"></div>
+				 </div>
+				 <div class="form-group row">
+				 	<label class="col-xl-1 col-form-label text-center">자재코드</label>
+					<div class="col-xl-2">
+					<input type="text" class="form-control" id="matCode" name="matCode" value="${result.matCode }"></input>
+					</div> 
+					<input type="button" value="검색" class="btn btn-sm btn-primary waves-effect waves-light"></input>
+					<label class="col-form-label text-center"> ~ </label>
+					 <div class="col-xl-2">
+					 <input type="text" class="form-control" id="matCode" name="matCode" value="${result.matCode }"></input>
+					 </div>
+					 <input type="button" value="검색" class="btn btn-sm btn-primary waves-effect waves-light"></input>
+					 <div class="col-xl-7"></div>
+				</div>
+				<div class="row">
+					<div class="col-xl-10"></div>
+					<div class="col-xl-2 text-right">
+						<div class="btn-group">
+							<button onclick="location.href=''" class="btn waves-effect waves-light btn-primary btn-outline-primary"> 조회 </button>
+							<input type="reset" value=" 리셋 " class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
+						</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-xl-12">
+						<div id="grid"></div>
+					</div>
+				</div>
 			</div>
 </div>
 </div>
 </div>
 </div>
 </div>
-		</div>
+</div>
 	</form:form>
 </body>
 </html>
