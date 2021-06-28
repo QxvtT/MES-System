@@ -22,9 +22,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
-<script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
 let prdComDNum = null;
@@ -33,21 +33,26 @@ $(function(){
 	    el: document.getElementById('grid'),
 	    scrollX: false,
 	    scrollY: true,
-	    bodyHeight: 600,
+	    bodyHeight: 200,
+	    rowWidth: 100,
 	    data: getList(),
 	    rowHeaders: ['rowNum'],
 	    columns: [
-	    	{ header: '계획일자', name:'prdComDNum'},
-			{ header: '고객사명', name:'prdComNum'},
-			{ header: '제품코드', name:'matCode'},
-			{ header: '제품명', name:'lotNum'},
-			{ header: '주문코드', name:'itmCode'},
-			{ header: '납기일자', name:'prcFNo'},
-			{ header: '주문량', name:'prdComVol'},
-			{ header: '계획량', name:'prdComDDate'},
-			{ header: '작업일자', name:'prcComNo'},
-			{ header: '순서', name:'prcComDiv'},
-			{ header: '비고', name:'matVol'}
+	    	{ header: 'PrdComDNum', name:'prdComDNum'},
+			{ header: 'PrdComNum', name:'prdComNum'},
+			{ header: 'MatCode', name:'matCode'},
+			{ header: 'LotNum', name:'lotNum'},
+			{ header: 'ItmCode', name:'itmCode'},
+			{ header: 'PrcFNo', name:'prcFNo'},
+			{ header: 'PrdComVol', name:'prdComVol'},
+			{ header: 'PrdComDDate', name:'prdComDDate'},
+			{ header: 'PrcComNo', name:'prcComNo'},
+			{ header: 'PrcComDiv', name:'prcComDiv'},
+			{ header: 'MatVol', name:'matVol'},
+			{ header: 'PrdComNote', name:'prdComNote'},
+			{ header: 'DivMatCode', name:'divMatCode'},
+			{ header: 'DivLotNum', name:'divLotNum'},
+			{ header: 'PrdPlanNum', name:'prdPlanNum'}
 	    ]
 	}); // end const grid
 	
@@ -73,6 +78,49 @@ $(function(){
 		}); // end ajax 
 		return data;
 	}
+	
+	$('#mobile-collapse').click(function() {
+		grid.refreshLayout();
+	});
+	
+	const gridData = [
+	      {
+	        c1: '1992/03/25',
+	        c3: '2014-04-16'
+	      }
+	    ];
+	<%--
+	const datePicker = new tui.Grid({
+	      el: document.getElementById('datePicker'),
+	      scrollX: false,
+	      scrollY: false,
+	      data: gridData,
+	      columns: [
+	        {
+	          name: 'c1',
+	          editor: 'datePicker'
+	        },
+	        {
+	          name: 'c3',
+	          editor: {
+	            type: 'datePicker',
+	            options: {
+	              selectableRanges: [[new Date(2014, 3, 10), new Date(2014, 5, 20)]]
+	            }
+	          }
+	        }
+		]
+	}) // end const datePicker
+	--%>
+	
+	$('#searchComBtn').click(function(){
+		$("#myModal").modal("toggle");
+		$("#myModal").on('shown.bs.modal', function () {
+			grid.refreshLayout();
+		});
+		
+	})
+	
 })
 
 
@@ -162,6 +210,39 @@ function fn_egov_link_page(pageNo){
 <div class="page-wrapper">
 <div class="row">
 <div class="col-xl-12">
+<div id="datePicker"></div>
+<button type="button" class="btn btn-info btn-sm" id="searchComBtn" data-toggle="modal" data-target="#myModal">조회(검색팝업)</button>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="exampleModalLabel">
+					모달테스트
+				</h3>
+				<button class="close" type="button" data-dismiss="modal"
+					aria-label="Close">
+					&times;
+				</button>
+			</div>
+			<p>작성일자</p>
+			<div class="col-sm-6">
+				<input type="date" name="dateRangeS" />
+			</div>
+			<p> ~ </p>
+			<div class="col-sm-6">
+				<input type="date" name="dateRangeE" />
+			</div>
+			<div id="grid"></div>
+			<div class="modal-footer">
+				<a class="btn" id="modalY" href="#">예</a>
+				<button class="btn" type="button" data-dismiss="modal">아니요</button>
+			</div>
+		</div>
+	</div>
+</div>
+  
 <div class="card">
 
 
