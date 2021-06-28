@@ -36,7 +36,7 @@ import mes.prd.com.service.ProduceCommandDVO;
  */
 
 @Controller
-//@SessionAttributes(types=ProduceCommandDVO.class)
+@SessionAttributes(types=ProduceCommandDVO.class)
 public class ProduceCommandDController {
 
     @Resource(name = "produceCommandDService")
@@ -55,7 +55,7 @@ public class ProduceCommandDController {
     
 	@RequestMapping(value ="/prd/com/ProduceCommandDList", method=RequestMethod.GET)
     @ResponseBody
-    public List<?> ajax(@ModelAttribute("searchVO") ProduceCommandDVO searchVO) throws Exception {
+    public List<?> ajax(ProduceCommandDVO searchVO) throws Exception {
 		
     	System.out.println("이름 : ");
     	List<?> list = produceCommandDService.selectProduceCommandDList(searchVO);
@@ -95,7 +95,7 @@ public class ProduceCommandDController {
         model.addAttribute("paginationInfo", paginationInfo);
         
         return "prd/com/ProduceCommandDList.page";
-    } */
+    }*/
     
     @RequestMapping("/prd/com/addProduceCommandDView.do")
     public String addProduceCommandDView(
