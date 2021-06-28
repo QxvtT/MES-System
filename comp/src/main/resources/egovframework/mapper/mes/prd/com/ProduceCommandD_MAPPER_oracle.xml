@@ -131,6 +131,11 @@ SELECT * FROM (
 								, PRD_PLAN_NUM
 						FROM PRODUCE_COMMAND_D
 				WHERE 1=1
+				<if test="prdComDNum != null">
+				<![CDATA[	
+					and Prd_Com_D_Num < #{prdComDNum}
+				]]>	
+				</if>
 				<if test="searchKeyword != null and searchKeyword != ''">
 					<if test="searchCondition == 0">AND
 						PRD_COM_D_NUM = #{searchKeyword}
@@ -143,8 +148,8 @@ SELECT * FROM (
 						PRD_COM_D_NUM DESC
 		
 		<![CDATA[					
-	) A WHERE ROWNUM <= #{lastIndex}
-)WHERE RNUM > #{firstIndex}
+	) A WHERE ROWNUM <= 10
+)
 ]]>
 	</select>	
 	<select id="selectProduceCommandDListTotCnt" parameterType="mes.prd.com.service.ProduceCommandDVO" resultType="int">

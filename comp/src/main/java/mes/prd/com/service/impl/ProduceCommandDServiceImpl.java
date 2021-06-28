@@ -100,7 +100,7 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
 	 * @return PRODUCE_COMMAND_D 목록
 	 * @exception Exception
 	 */
-    public List<?> selectProduceCommandDList(ProduceCommandDDefaultVO searchVO) throws Exception {
+    public List<?> selectProduceCommandDList(ProduceCommandDVO searchVO) throws Exception {
         return produceCommandDDAO.selectProduceCommandDList(searchVO);
     }
 

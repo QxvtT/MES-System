@@ -36,7 +36,7 @@ import mes.prd.com.service.ProduceCommandDVO;
  */
 
 @Controller
-@SessionAttributes(types=ProduceCommandDVO.class)
+//@SessionAttributes(types=ProduceCommandDVO.class)
 public class ProduceCommandDController {
 
     @Resource(name = "produceCommandDService")
@@ -55,38 +55,29 @@ public class ProduceCommandDController {
     
 	@RequestMapping(value ="/prd/com/ProduceCommandDList", method=RequestMethod.GET)
     @ResponseBody
-    public List<?> ajax(@ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO) throws Exception {
-
-		/** EgovPropertyService.sample */
-    	searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
-    	searchVO.setPageSize(propertiesService.getInt("pageSize"));
-    	
-    	/** pageing */
-    	PaginationInfo paginationInfo = new PaginationInfo();
-		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
-		paginationInfo.setPageSize(searchVO.getPageSize());
-		
-		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
-		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+    public List<?> ajax(@ModelAttribute("searchVO") ProduceCommandDVO searchVO) throws Exception {
 		
     	System.out.println("이름 : ");
     	List<?> list = produceCommandDService.selectProduceCommandDList(searchVO);
     	System.out.println(list);
     	return list;
     }
-    
+	
+	@RequestMapping(value="/prd/com/ProduceCommandDList.do")
+    public String selectProduceCommandDList(@ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, 
+    		ModelMap model)
+            throws Exception {
+		return "prd/com/ProduceCommandDList.page";
+	}
+    /*
     @RequestMapping(value="/prd/com/ProduceCommandDList.do")
     public String selectProduceCommandDList(@ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, 
     		ModelMap model)
             throws Exception {
     	
-    	/** EgovPropertyService.sample */
     	searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
     	searchVO.setPageSize(propertiesService.getInt("pageSize"));
     	
-    	/** pageing */
     	PaginationInfo paginationInfo = new PaginationInfo();
 		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
 		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
@@ -104,7 +95,7 @@ public class ProduceCommandDController {
         model.addAttribute("paginationInfo", paginationInfo);
         
         return "prd/com/ProduceCommandDList.page";
-    } 
+    } */
     
     @RequestMapping("/prd/com/addProduceCommandDView.do")
     public String addProduceCommandDView(

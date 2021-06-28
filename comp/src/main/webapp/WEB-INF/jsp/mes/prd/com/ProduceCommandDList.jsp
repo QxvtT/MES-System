@@ -27,52 +27,61 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
-$.ajax({
-	url : "ProduceCommandDList",
-	type : "get",
-	dataType: "json",
-	contentType: "application/json; charset=UTF-8",
-	success : function(result){
-		console.log(result);
-		const grid = new tui.Grid({
-		    el: document.getElementById('grid'),
-		    scrollX: false,
-		    scrollY: false,
-		    minBodyHeight: 30,
-		    rowHeaders: ['rowNum'],
-		    columns: [
-		    	{ header: 'PrdComDNum', name:'prdComDNum'},
-				{ header: 'PrdComNum', name:'prdComNum'},
-				{ header: 'MatCode', name:'matCode'},
-				{ header: 'LotNum', name:'lotNum'},
-				{ header: 'ItmCode', name:'itmCode'},
-				{ header: 'PrcFNo', name:'prcFNo'},
-				{ header: 'PrdComVol', name:'prdComVol'},
-				{ header: 'PrdComDDate', name:'prdComDDate'},
-				{ header: 'PrcComNo', name:'prcComNo'},
-				{ header: 'PrcComDiv', name:'prcComDiv'},
-				{ header: 'MatVol', name:'matVol'},
-				{ header: 'PrdComNote', name:'prdComNote'},
-				{ header: 'DivMatCode', name:'divMatCode'},
-				{ header: 'DivLotNum', name:'divLotNum'},
-				{ header: 'PrdPlanNum', name:'prdPlanNum'}
-		    ]
-		}); // end const grid
-		const dataSource = { 
-				api : { 
-				    readData : {  url : 'ProduceCommandDList' ,  method : 'GET'  }
-				},
-				contentType: 'application/json',
-				serializer(params) {
-					console.log("dd");
-					console.log(params);
-					return JSON.stringify(params);
+let prdComDNum = null;
+$(function(){
+	const grid = new tui.Grid({
+	    el: document.getElementById('grid'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: getList(),
+	    rowHeaders: ['rowNum'],
+	    columns: [
+	    	{ header: 'PrdComDNum', name:'prdComDNum'},
+			{ header: 'PrdComNum', name:'prdComNum'},
+			{ header: 'MatCode', name:'matCode'},
+			{ header: 'LotNum', name:'lotNum'},
+			{ header: 'ItmCode', name:'itmCode'},
+			{ header: 'PrcFNo', name:'prcFNo'},
+			{ header: 'PrdComVol', name:'prdComVol'},
+			{ header: 'PrdComDDate', name:'prdComDDate'},
+			{ header: 'PrcComNo', name:'prcComNo'},
+			{ header: 'PrcComDiv', name:'prcComDiv'},
+			{ header: 'MatVol', name:'matVol'},
+			{ header: 'PrdComNote', name:'prdComNote'},
+			{ header: 'DivMatCode', name:'divMatCode'},
+			{ header: 'DivLotNum', name:'divLotNum'},
+			{ header: 'PrdPlanNum', name:'prdPlanNum'}
+	    ]
+	}); // end const grid
+	
+	grid.on('scrollEnd', () => {
+	    grid.appendRows(getList());
+	  })
+	  
+	function getList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "ProduceCommandDList",
+			type : "get",
+			data : {prdComDNum: prdComDNum},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					prdComDNum = result[result.length -1].prdComDNum;
 				}
-			} ;
-		console.log(dataSource);
-		grid.resetData(result);
-	} // end success
-}); // end ajax 
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+})
+
+
+
+
 
 <%--
   $(function(){
@@ -170,6 +179,7 @@ function fn_egov_link_page(pageNo){
 	<!-- List -->
 	<div id="grid">
 	</div>
+	<%--
 	<div id="table">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<colgroup>
@@ -228,23 +238,7 @@ function fn_egov_link_page(pageNo){
 		</table>
 	</div>
 	<!-- /List -->
-	<div id="paging">
-		<ui:pagination paginationInfo = "${paginationInfo}"
-				   type="image"
-				   jsFunction="fn_egov_link_page"
-				   />
-		<form:hidden path="pageIndex" />
-	</div>
-	<div id="sysbtn1">
-		<ul>
-			<li>
-				<div id="sysbtn">
-					<span class="btn_blue_l"><a href="javascript:fn_egov_addView();">등록</a>
-					</span>
-				</div>
-			</li>
-		</ul>
-	</div>
+ --%>	
 </div>
 </div>
 </div>
