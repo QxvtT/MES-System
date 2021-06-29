@@ -22,13 +22,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
-<script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+<style type="">
+	.form-control {
+		min-width: 150px;
+	}
+</style>
 <script type="text/javaScript" language="javascript" defer="defer">
 let matCode = null;
 $(function(){
+
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
 	    scrollX: false,
@@ -71,11 +75,13 @@ $(function(){
 		}); // end ajax 
 		return data;
 	}
+	
+	$('#mobile-collapse').click(function() {
+	   grid.refreshLayout();
+	});
+	
 })
 
-$('#mobile-collapse').click(function() {
-      grid.refreshLayout();
-   });
 <!--
 	/* 글 수정 화면 function */
 
@@ -108,54 +114,67 @@ $('#mobile-collapse').click(function() {
 <div class="main-body">
 <div class="page-wrapper">
 <div class="row">
-<div class="col-xl-12">
-<div class="card">
-			<!-- 타이틀 -->
-			<div id="title" class="card-header">
-				<h3>자재 LOT 재고 조회</h3>
-			</div>
-			<!-- // 타이틀 -->
-			<div class="card-block">
-				<div class="form-group row">
-					<label class="col-xl-1 col-form-label text-center">작업일자</label>
-					<div class="col-xl-2">
-					<input type="date" class="form-control" id="matHisDate" name="matHisDate" value="${result.matHisDate }" />
-					</div>
-					<label class="col-form-label text-center"> ~ </label>
-					 <div class="col-xl-2">
-					 <input type="date" class="form-control" id="matHisDate" name="matHisDate" value="${result.matHisDate }" />
-					 </div>
-					 <div class="col-xl-7"></div>
-				 </div>
-				 <div class="form-group row">
-				 	<label class="col-xl-1 col-form-label text-center">자재코드</label>
-					<div class="col-xl-2">
-					<input type="text" class="form-control" id="matCode" name="matCode" value="${result.matCode }"></input>
-					</div> 
-					<input type="button" value="검색" class="btn btn-sm btn-primary waves-effect waves-light"></input>
-					<label class="col-form-label text-center"> ~ </label>
-					 <div class="col-xl-2">
-					 <input type="text" class="form-control" id="matCode" name="matCode" value="${result.matCode }"></input>
-					 </div>
-					 <input type="button" value="검색" class="btn btn-sm btn-primary waves-effect waves-light"></input>
-					 <div class="col-xl-7"></div>
-				</div>
-				<div class="row">
-					<div class="col-xl-10"></div>
-					<div class="col-xl-2 text-right">
-						<div class="btn-group">
-							<button onclick="location.href=''" class="btn waves-effect waves-light btn-primary btn-outline-primary"> 조회 </button>
-							<input type="reset" value=" 리셋 " class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
-						</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-xl-12">
-						<div id="grid"></div>
-					</div>
-				</div>
-			</div>
+<div class="col-sm-12">
+<!-- 타이틀 -->
+<div id="title" class="mb-4">
+	<h3>자재 LOT 재고 조회</h3>
 </div>
+<!-- // 타이틀 -->
+<div class="row">
+	<div class="col-lg-12">
+		<div class="table">
+		<table class="table">
+			<tr>
+				<td>
+					<div class="d-inline-block align-middle">작업일자</div>
+				</td>
+				<td>
+					<div class="row align-items-center text-center col-lg-8">
+						<input type="date" class="form-control w-25 ml-3" id="matHisDate" name="matHisDate" value="${result.matHisDate }" />
+						<label class="col-form-label text-center ml-3"> ~ </label>
+						<input type="date" class="form-control w-25 ml-3" id="matHisDate" name="matHisDate" value="${result.matHisDate }" />
+					</div>
+					<div class="col-lg-4">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+			 		<label class="col-form-label text-center">자재코드</label>
+			 	</td>
+			 	<td>
+				 	<div class="row align-items-center text-center col-lg-8">
+						<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode" value="${result.matCode }"></input>
+						<input type="button" value="검색" class="btn btn-sm btn-primary waves-effect waves-light"></input>
+						<label class="col-form-label text-center ml-3"> ~ </label>
+						<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode" value="${result.matCode }"></input>
+						<input type="button" value="검색" class="btn btn-sm btn-primary waves-effect waves-light"></input>
+					</div>
+					<div class="col-lg-4">
+					</div>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</div>
+
+</div>
+				
+	<div class="row">
+		<div class="col-sm-9"></div>
+		<div class="col-sm-3 text-right">
+			<div class="btn-group">
+				<button onclick="location.href=''" class="btn waves-effect waves-light btn-primary btn-outline-primary"> 조회 </button>
+				<input type="reset" value=" 리셋 " class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
+			</div>
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-sm-12">
+			<div id="grid"></div>
+		</div>
+	</div>
+	
 </div>
 </div>
 </div>
