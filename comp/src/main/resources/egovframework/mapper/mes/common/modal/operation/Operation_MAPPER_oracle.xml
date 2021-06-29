@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mes.common.modal.service.impl.OperationMapper">
+
+
+	<select id="selectOperationList"
+		parameterType="mes.common.modal.service.OperationVO"
+		resultType="mes.common.modal.service.OperationVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+
+		select *
+		from operation
+			
+			<![CDATA[					
+		) A WHERE ROWNUM <= 10 )
+	]]>
+	</select>
+
+
+
+
+
+
+	<!-- <select id="selectOperationList"
+		parameterType="mes.common.modal.service.OperationVO"
+		resultType="mes.common.modal.service.OperationVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+
+		select itm_code,
+		itm_name, itm_size
+		from item
+		
+			<![CDATA[					
+		) A WHERE ROWNUM <= 10 )
+	]]>
+	</select>
+
+
+
+
+
+
+	<select id="selectOperationList"
+		parameterType="mes.common.modal.service.OperationVO"
+		resultType="mes.common.modal.service.OperationVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+
+		select prc_code,
+		prc_name, prc_note
+		from process
+			
+			<![CDATA[					
+		) A WHERE ROWNUM <= 10 )
+	]]>
+	</select>
+
+
+
+
+
+	<select id="selectOperationList"
+		parameterType="mes.common.modal.service.OperationVO"
+		resultType="mes.common.modal.service.OperationVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+
+		select m.mat_code,
+		m.mat_name, m.mat_size, i.operation_name
+		from material m, item i;
+			
+			<![CDATA[					
+		) A WHERE ROWNUM <= 10 )
+	]]>
+	</select>
+
+
+
+
+
+
+
+
+
+
+	<select id="selectOperationList"
+		parameterType="mes.common.modal.service.OperationVO"
+		resultType="mes.common.modal.service.OperationVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+
+		select mac_code, mac_name, mac_div, mac_size
+		from machine;
+			
+			<![CDATA[					
+		) A WHERE ROWNUM <= 10 )
+	]]>
+	</select>
+ -->
+</mapper>

@@ -111,16 +111,7 @@
 	<select id="selectProduceCommandDList"
 		parameterType="mes.prd.com.service.ProduceCommandDVO"
 		resultType="egovMap">
-		select p.prd_date, m.OPER_NAME, d.ITM_CODE,i.ITM_NAME, d.ORD_NUM,
-		m.ORD_DELIVERY_DATE
-		,d.ORD_VOL,p.prd_work_vol,p.prd_plan_date,p.prd_no,p.prd_d_note
-		from ORDER_D d, ORDER_M m,
-		(select * from
-		PRODUCE_PLAN p, PRODUCE_PLAN_d d
-		where p.PRD_PLAN_NUM = d.PRD_NUM) p, ITEM i
-		where p.ORD_NUM = d.ord_num
-		and d.ORD_NUM = m.ORD_NUM
-		and d.ITM_CODE = i.ITM_CODE;
+	
 		<if test="prdComDNum != null">
 				<![CDATA[	
 					and Prd_Com_D_Num < #{prdComDNum}

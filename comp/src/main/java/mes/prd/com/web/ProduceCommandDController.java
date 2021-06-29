@@ -115,18 +115,19 @@ public class ProduceCommandDController {
         return "forward:/prd/com/ProduceCommandDList.do";
     }
     
-    @RequestMapping("/prd/com/updateProduceCommandDView.do")
-    public String updateProduceCommandDView(
-            @RequestParam("prdComDNum") java.math.BigDecimal prdComDNum ,
-            @ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, Model model)
-            throws Exception {
-        ProduceCommandDVO produceCommandDVO = new ProduceCommandDVO();
-        produceCommandDVO.setPrdComDNum(prdComDNum);
-        // 변수명은 CoC 에 따라 produceCommandDVO
-        model.addAttribute(selectProduceCommandD(produceCommandDVO, searchVO));
-        return "prd/com/ProduceCommandDRegister.page";
-    }
-
+	/*
+	 * @RequestMapping("/prd/com/updateProduceCommandDView.do") public String
+	 * updateProduceCommandDView(
+	 * 
+	 * @RequestParam("prdComDNum") java.math.BigDecimal prdComDNum ,
+	 * 
+	 * @ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, Model model)
+	 * throws Exception { ProduceCommandDVO produceCommandDVO = new
+	 * ProduceCommandDVO(); produceCommandDVO.setPrdComDNum(prdComDNum); // 변수명은 CoC
+	 * 에 따라 produceCommandDVO
+	 * model.addAttribute(selectProduceCommandD(produceCommandDVO, searchVO));
+	 * return "prd/com/ProduceCommandDRegister.page"; }
+	 */
     @RequestMapping("/prd/com/selectProduceCommandD.do")
     public @ModelAttribute("produceCommandDVO")
     ProduceCommandDVO selectProduceCommandD(
