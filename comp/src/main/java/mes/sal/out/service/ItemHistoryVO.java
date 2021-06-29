@@ -3,6 +3,7 @@ package mes.sal.out.service;
 import java.sql.Date;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @Class Name : ItemHistoryVO.java
@@ -17,6 +18,7 @@ import lombok.Data;
  *  Copyright (C)  All right reserved.
  */
 @Data
+@NoArgsConstructor
 public class ItemHistoryVO extends ItemHistoryDefaultVO{
     private static final long serialVersionUID = 1L;
     

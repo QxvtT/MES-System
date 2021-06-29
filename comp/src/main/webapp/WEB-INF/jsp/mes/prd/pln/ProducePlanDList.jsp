@@ -22,8 +22,26 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link type="text/css" rel="stylesheet"
-	href="<c:url value='/css/egovframework/sample.css'/>" />
+<!-- Toast Grid CDN -->
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+
+<!-- DatePicker -->
+<%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/datepicker.css"/>
+<script src="${pageContext.request.contextPath}/assets/js/datepicker.js"></script> --%>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css"/>
+<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+
+
+<!-- Jquery DatePicker -->
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/jquery-ui.css" />
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/assets/js/jquery-ui/jquery-ui.min.js "></script>
+
+
 <script type="text/javaScript" language="javascript" defer="defer">
 <!--
 	/* 글 수정 화면 function */
@@ -47,96 +65,369 @@
 		document.getElementById("listForm").submit();
 	}
 // -->
+
+let prdPlanDNum = null;
+let prdNum = null;
+$(function(){
+	const grid = new tui.Grid({
+	    el: document.getElementById('grid'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 400,
+	    data: getList(),
+	    rowHeaders: ['rowNum'],
+	    columns: [
+			{ 
+	    		header: '계획번호', 
+	    		name:'prdNum',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '제품코드', 
+	    		name:'itmCode',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '제품명', 
+	    		name:'itmName',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '규격', 
+	    		name:'matCode',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '주문서관리번호', 
+	    		name:'ordNum',
+	    		align: 'center'
+	    		},
+			{
+	    		header: '납기일자', 
+	    		name:'ordDeliveryDate',
+	    		align: 'center'
+	    		},
+			{
+	    		header: '주문량', 
+	    		name:'ordVol',
+	    		align: 'center'
+	    		},
+			{
+	    		header: '작업량', 
+	    		name:'prdWorkVol',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '일생산량', 
+	    		name:'itmDayOutput',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '생산일수', 
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '작업일자', 
+	    		name:'prdPlanDate',
+	    		format: 'yyyy/MM/dd',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '작업순서', 
+	    		name:'prdNo',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '지시여부', 
+	    		name:'comChk',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '비고', 
+	    		name:'prdDNote',
+	    		align: 'center'
+	    		}
+	    ]
+	}); // end const grid
+	
+	function getList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "ProducePlanDList",
+			type : "get",
+			data : {prdPlanDNum: prdPlanDNum},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					prdPlanDNum = result[result.length -1].prdPlanDNum;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	
+	
+	
+	grid.on('scrollEnd', () => {
+	    grid.appendRows(getList());
+	  })
+	
+	$('#mobile-collapse').click(function() {
+		grid.refreshLayout();
+	})
+	
+	$(".datePicker").datepicker({
+		changeMonth: true, 
+		changeYear: true, 
+		minDate: '-50y', 
+		nextText: '다음 달', 
+		prevText: '이전 달', 
+		yearRange: 'c-50:c+20', 
+		showButtonPanel: true, 
+		currentText: '오늘 날짜', 
+		closeText: '닫기', 
+		dateFormat: "yy-mm-dd", 
+		showMonthAfterYear: true,
+		showOn:"both", 
+		buttonImage:"${pageContext.request.contextPath}/assets/images/btn_calendar.png", 
+		buttonImageOnly:true,
+		dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'], 
+		monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
+	});
+	
+	
+	
+	$("#prevDate").datepicker("setDate", '-7D');
+	$(".nowDate").datepicker("setDate", 'today');
+	
+	
+	$('#searchBtn').click(function(){
+		$('#searchModal').modal('toggle');
+		$('#searchModal').on('shown.bs.modal', function(){
+			grid2.refreshLayout();
+		});
+	});
+	
+	$('#resetBtn').click(function(){
+		$('#master').each(function() {
+			this.reset();
+			$("#prevDate").datepicker("setDate", '-7D');
+			$(".nowDate").datepicker("setDate", 'today');
+		});
+	});
+	
+	var datepicker = new tui.DatePicker('#wrapper',
+            {
+            language: 'ko',
+            date: new Date(),
+            input: {
+                element: '#datepicker-input',
+                format: 'yyyy-MM-dd',
+            }
+        });
+	
+	const grid2 = new tui.Grid({
+	    el: document.getElementById('grid2'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: [],
+	    columns: [
+	    	{ 
+	    		header: '계획일자', 
+	    		name:'prdDate',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '계획번호', 
+	    		name:'prdNum',
+	    		align: 'center'
+	    		},
+	    	{ 
+		    	header: '계획명', 
+		    	name:'prdName',
+		    	align: 'center'
+		    	},
+			{ 
+	    		header: '비고', 
+	    		name:'prdDNote',
+	    		align: 'center'
+	    		}
+	    ]
+	}); // end const grid
+	
+	$('#prdSearchBtn').click(function() {
+	});
+	
+	function getPrdList() {
+		grid2.clear();
+		let data;
+		$.ajax({
+			async: false,
+			url : "ProducePlanList",
+			type : "get",
+			data : {prdNum: prdNum},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					prdNum = result[result.length -1].prdNum;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+
+});
+
+
 </script>
+<style>
+	.datePicker {
+		width: 120px;
+	}
+	
+	.modal-content {
+		padding: 5px;
+	}
+	
+	.tui-calendar {
+		z-index: 1;
+	}
+	
+</style>
 </head>
 <body>
-	
-	<div class="card">
-		<div class="card-header">
-			<h2 class="title">생산 계획 관리</h2>
-			</span>
-			<div class="card-header-right">
-				
+	<!-- 생산계획관리  -->
+	<div class="page-header">
+		<div class="page-block">
+			<div class="row align-items-center">
+				<div class="col-md-8">
+					<div class="page-header-title">
+						<h5 class="m-b-10">생산계획관리</h5>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<ul class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/comp"> <i
+								class="fa fa-home"></i>
+						</a></li>
+						<li class="breadcrumb-item">생산관리</li>
+						<li class="breadcrumb-item">생산계획관리</li>
+					</ul>
+				</div>
 			</div>
 		</div>
-		<div class="card-block table-border-style" style="">
-			<div class="table-responsive">
+	</div>
+	
+	<!-- Page-header end -->
+	<div class="pcoded-inner-content">
+		<br />
+		<!-- 조회 Modal-->
+		<div class="modal fade" id="searchModal" tabindex="-1"
+			role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title" id="exampleModalLabel">생산계획 조회</h3>
+						<button class="close" type="button" data-dismiss="modal"
+							aria-label="Close">
+							&times;
+						</button>
+					</div>
+					<div class="modal-body">
+						<form id="prdSearch" name="prdSearch" method="post" action="ProducePlanList.do" onsubmit="return false">
+							<div class="form-group row">
+								<div class="col-md-3">계획일자</div>
+								<div class="col">
+									<div
+										class="tui-datepicker-input tui-datetime-input tui-has-focus">
+										<input type="text" id="datepicker-input" class="nowDate"
+											aria-label="Date-Time" /> <span class="tui-ico-date"></span>
+									</div>
+									<div id="wrapper" style="margin-top: -1px;"></div>
+									
+								</div>
+								<span>~</span>
+								<div class="col">
+									<div>
+										<input type="text" class="datePicker nowDate" name="endDate"/>
+									</div>
+								</div>
+								<div class="col-md-3"><button type="button" class="btn btn-primary" id="prdSearchBtn">검색</button></div>
+							</div>
+						</form>
+						<div id="grid2"></div>
+					</div>
+					<div class="modal-footer">
+						<a class="btn" id="modalY" href="#">예</a>
+						<button class="btn" type="button" data-dismiss="modal">아니요</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-				<form:form commandName="searchVO" name="listForm" id="listForm"
-					method="post">
-					<input type="hidden" name="prdPlanDNum" />
-					<div id="content_pop">
-						<!-- List -->
-						<div id="table">
-							<table width="100%" border="0" cellpadding="0" cellspacing="0"
-								class="table">
-								<colgroup>
-									<col />
-									<col />
-									<col />
-									<col />
-									<col />
-									<col />
-									<col />
-									<col />
-									<col />
-								</colgroup>
+
+		<div class="main-body">
+			<div class="page-wrapper">
+				<div class="text-right">
+					<button type="button" class="btn btn-primary" id="searchBtn">조회</button>
+					<button type="button" class="btn btn-primary" id="resetBtn">새자료</button>
+					<button type="button" class="btn btn-primary" id="saveBtn">저장</button>
+					<button type="button" class="btn btn-primary" id="removeBtn">삭제</button>
+				</div>
+				<br />
+				<form action="" id="master" name="master">
+					<div class="row">
+						<div class="col">
+							<table class="table" style="background-color: white;">
 								<tr>
-									<th align="center">생산계획 일련번호</th>
-									<th align="center">계획번호</th>
-									<th align="center">제품코드</th>
-									<th align="center">작업량</th>
-									<th align="center">작업일자</th>
-									<th align="center">작업순서</th>
-									<th align="center">비고</th>
-									<th align="center">지시여부</th>
-									<th align="center">주문번호</th>
+									<th>계획일자*</th>
+									<td><div><input type="text" class="datePicker"/></div></td>
 								</tr>
-								<c:forEach var="result" items="${resultList}" varStatus="status">
-									<tr>
-										<td align="center" class="listtd"><a
-											href="javascript:fn_egov_select('<c:out value="${result.prdPlanDNum}"/>')"><c:out
-													value="${result.prdPlanDNum}" /></a>&nbsp;</td>
-										<td align="center" class="listtd"><c:out
-												value="${result.prdNum}" />&nbsp;</td>
-										<td align="center" class="listtd"><c:out
-												value="${result.itmCode}" />&nbsp;</td>
-										<td align="center" class="listtd"><c:out
-												value="${result.prdWorkVol}" />&nbsp;</td>
-										<td align="center" class="listtd"><c:out
-												value="${result.prdPlanDate}" />&nbsp;</td>
-										<td align="center" class="listtd"><c:out
-												value="${result.prdNo}" />&nbsp;</td>
-										<td align="center" class="listtd"><c:out
-												value="${result.prdNote}" />&nbsp;</td>
-										<td align="center" class="listtd"><c:out
-												value="${result.comChk}" />&nbsp;</td>
-										<td align="center" class="listtd"><c:out
-												value="${result.ordNum}" />&nbsp;</td>
-									</tr>
-								</c:forEach>
+								<tr>
+									<th>생산계획명*</th>
+									<td><input type="text" id="prd_name" /></td>
+								</tr>
+								<tr>
+									<th>특기사항</th>
+									<td><input type="text" id="prd_note" /></td>
+								</tr>
 							</table>
 						</div>
-						<!-- /List -->
-						<div id="paging">
-							<ui:pagination paginationInfo="${paginationInfo}" type="image"
-								jsFunction="fn_egov_link_page"/>
-							<form:hidden path="pageIndex" />
-						</div>
-						<div id="sysbtn1">
-							<ul>
-								<li>
-									<div id="sysbtn">
-										<span class="btn_blue_l"><a
-											href="javascript:fn_egov_addView();">등록</a><img
-											src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>"
-											alt="" /> </span>
-									</div>
-								</li>
-							</ul>
+						<div class="col border"
+							style="background-color: white; padding: 10px;">
+							<h5>미생산 계획 검색</h5>
+							<div>납기일자</div>
+							<div class="row">
+								<div class="col">
+									<input type="text" class="datePicker" id="prevDate" />
+								</div>
+								<span>~</span>
+								<div class="col">
+									<input type="text" class="datePicker nowDate" />
+								</div>
+								<div class="col">
+									<button type="submit" class="btn btn-primary">미생산 계획
+										조회</button>
+								</div>
+							</div>
 						</div>
 					</div>
-				</form:form>
+				</form>
+			</div>
+			<div class="page-wrapper">
+				<div class="row">
+					<div class="col-xl-12">
+						<div class="card">
+							<div id="grid" />
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

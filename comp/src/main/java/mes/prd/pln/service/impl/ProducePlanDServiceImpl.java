@@ -104,6 +104,11 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
         return producePlanDDAO.selectProducePlanDList(searchVO);
     }
 
+    // 생산계획 목록 조회
+	public List<?> selectProducePlanList(ProducePlanDVO prdVO) throws Exception {
+		return producePlanDDAO.selectProducePlanList(prdVO);
+	}
+    
     /**
 	 * PRODUCE_PLAN_D 총 갯수를 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO
@@ -113,5 +118,7 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
     public int selectProducePlanDListTotCnt(ProducePlanDDefaultVO searchVO) {
 		return producePlanDDAO.selectProducePlanDListTotCnt(searchVO);
 	}
+
+	
     
 }

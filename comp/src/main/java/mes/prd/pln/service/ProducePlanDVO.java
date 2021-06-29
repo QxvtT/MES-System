@@ -34,7 +34,7 @@ public class ProducePlanDVO extends ProducePlanDDefaultVO{
     private java.math.BigDecimal prdNo;
     
     /** PRD_NOTE */
-    private java.lang.String prdNote;
+    private java.lang.String prdDNote;
     
     /** COM_CHK */
     private java.lang.String comChk;
@@ -42,7 +42,102 @@ public class ProducePlanDVO extends ProducePlanDDefaultVO{
     /** ORD_NUM */
     private java.lang.String ordNum;
     
-    public java.math.BigDecimal getPrdPlanDNum() {
+    // 생산계획 detail 테이블
+    private java.lang.String itmName;
+    private java.lang.String matCode;
+    private java.sql.Date ordDeliveryDate;
+    private java.math.BigDecimal ordVol;
+    private java.math.BigDecimal itmDayOutput;
+
+    // 생산계획 master 테이블
+    private java.sql.Date prdDate;
+    private java.lang.String prdName;
+    private java.lang.String prdNote;
+    
+    private java.sql.Date startDate;
+    private java.sql.Date endDate;
+    
+    public java.sql.Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(java.sql.Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public java.sql.Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(java.sql.Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public java.sql.Date getPrdDate() {
+		return prdDate;
+	}
+
+	public void setPrdDate(java.sql.Date prdDate) {
+		this.prdDate = prdDate;
+	}
+
+	public java.lang.String getPrdName() {
+		return prdName;
+	}
+
+	public void setPrdName(java.lang.String prdName) {
+		this.prdName = prdName;
+	}
+
+	public java.lang.String getPrdNote() {
+		return prdNote;
+	}
+
+	public void setPrdNote(java.lang.String prdNote) {
+		this.prdNote = prdNote;
+	}
+
+	public java.lang.String getItmName() {
+		return itmName;
+	}
+
+	public void setItmName(java.lang.String itmName) {
+		this.itmName = itmName;
+	}
+
+	public java.lang.String getMatCode() {
+		return matCode;
+	}
+
+	public void setMatCode(java.lang.String matCode) {
+		this.matCode = matCode;
+	}
+
+	public java.sql.Date getOrdDeliveryDate() {
+		return ordDeliveryDate;
+	}
+
+	public void setOrdDeliveryDate(java.sql.Date ordDeliveryDate) {
+		this.ordDeliveryDate = ordDeliveryDate;
+	}
+
+	public java.math.BigDecimal getOrdVol() {
+		return ordVol;
+	}
+
+	public void setOrdVol(java.math.BigDecimal ordVol) {
+		this.ordVol = ordVol;
+	}
+
+	public java.math.BigDecimal getItmDayOutput() {
+		return itmDayOutput;
+	}
+
+	public void setItmDayOutput(java.math.BigDecimal itmDayOutput) {
+		this.itmDayOutput = itmDayOutput;
+	}
+
+	public java.math.BigDecimal getPrdPlanDNum() {
         return this.prdPlanDNum;
     }
     
@@ -90,12 +185,12 @@ public class ProducePlanDVO extends ProducePlanDDefaultVO{
         this.prdNo = prdNo;
     }
     
-    public java.lang.String getPrdNote() {
-        return this.prdNote;
+    public java.lang.String getPrdDNote() {
+        return this.prdDNote;
     }
     
-    public void setPrdNote(java.lang.String prdNote) {
-        this.prdNote = prdNote;
+    public void setPrdDNote(java.lang.String prdDNote) {
+        this.prdDNote = prdDNote;
     }
     
     public java.lang.String getComChk() {
