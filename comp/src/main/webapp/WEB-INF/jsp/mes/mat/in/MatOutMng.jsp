@@ -81,6 +81,24 @@ $(function(){
 		});
 		
 	})
+	
+	function appendRow(index) {
+		var newRow = {
+		eventId: '',
+		localEvent: '',
+		copyControl: ''
+		};
+		if (index== null) { // 행 추가(끝에)
+		grid.appendRow(epgCleanRow, null);
+		} else { // 행 삽입
+		var optionsOpt = {
+		at: indx,
+		extendPrevRowSpan: false,
+		focus: false
+		};
+		grid.appendRow(newRow , optionsOpt);
+		}
+		}
 })
 </script>
 </head>
