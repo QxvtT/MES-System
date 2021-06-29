@@ -1,6 +1,8 @@
 package mes.sal.ord.service;
 
 import java.io.Serializable;
+import java.sql.Date;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -46,7 +48,8 @@ public class OrderMDefaultVO implements Serializable {
     /** recordCountPerPage */
     private int recordCountPerPage = 10;
     
-        
+
+
 	public int getFirstIndex() {
 		return firstIndex;
 	}

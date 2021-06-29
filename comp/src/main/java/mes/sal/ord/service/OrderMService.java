@@ -1,8 +1,7 @@
 package mes.sal.ord.service;
 
+import java.sql.Date;
 import java.util.List;
-import mes.sal.ord.service.OrderMDefaultVO;
-import mes.sal.ord.service.OrderMVO;
 
 /**
  * @Class Name : OrderMService.java
@@ -56,7 +55,7 @@ public interface OrderMService {
 	 * @return ORDER_M 목록
 	 * @exception Exception
 	 */
-    List selectOrderMList(OrderMDefaultVO searchVO) throws Exception;
+    List selectOrderMList(OrderMVO searchVO) throws Exception;
     
     /**
 	 * ORDER_M 총 갯수를 조회한다.

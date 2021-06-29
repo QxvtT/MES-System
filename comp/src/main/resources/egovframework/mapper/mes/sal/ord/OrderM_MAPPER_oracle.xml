@@ -14,17 +14,34 @@
 	
 	<insert id="insertOrderM">
 		<![CDATA[
-			INSERT INTO ORDER_M 
-				( ORD_NUM
-				  , ORD_REQUEST_DATE
-				  , ORD_DELIVERY_DATE
-				  , OPER_CODE
-				  , OPER_NAME )
-			VALUES ( #{ordNum}
-				  , #{ordRequestDate}
-				  , #{ordDeliveryDate}
-				  , #{operCode}
-				  , #{operName} )
+			declare
+				ord varchar(50) :='SO'||to_char(sysdate,'yyMMdd')||to_char(order_num_seq.nextval,'FM0000');
+				vol number;
+			begin
+ 				select itm_vol into vol
+ 				from item_stock
+ 				where itm_code = #{itmCode};
+ 				
+ 				INSERT INTO ORDER_M 
+					VALUES ( ord
+				  			, #{ordRequestDate}
+				  			, #{ordDeliveryDate}
+				  			, #{operCode}
+				  			, #{operName} );
+				insert into order_d
+    				values
+          					(order_d_seq.nextval
+          					,ord
+          					, #{itmCode}
+          					,'진행'
+          					, #{ordVol}
+          					,0
+          					,0
+          					,vol
+          					, #{ordNote}
+          					,'N');
+					end;
+					/
 		]]>
 	</insert>
 	
@@ -63,28 +80,43 @@
 	<select id="selectOrderMList" parameterType="mes.sal.ord.service.OrderMVO" resultType="egovMap">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
-				SELECT
-								ORD_NUM
-								, ORD_REQUEST_DATE
-								, ORD_DELIVERY_DATE
-								, OPER_CODE
-								, OPER_NAME
-						FROM ORDER_M
-				WHERE 1=1
-				<if test="searchKeyword != null and searchKeyword != ''">
-					<if test="searchCondition == 0">AND
-						ORD_NUM = #{searchKeyword}
-					</if>
-					<if test="searchCondition == 1">AND
-						ORD_REQUEST_DATE LIKE '%' || #{searchKeyword} || '%'
-					</if>
-				</if>
+				 select 
+						m.ord_num
+					  , to_char(m.ord_request_date,'yy/mm/dd') as ord_request_date
+					  , to_date(m.ORD_DELIVERY_DATE,'yy/mm/dd') as ORD_DELIVERY_DATE
+					  , m.oper_code
+					  , m.oper_name
+					  , d.ITM_CODE
+					  , d.ORD_STATUS
+					  , d.ORD_VOL
+					  , d.ORD_IND_VOL 
+					  , ihd.ITM_VOL as ord_out_vol
+					  , i.ITM_VOL as itm_stock
+					  , d.ORD_NOTE  
+					  , d.PRD_CHK
+						from order_d d, order_m m,ITEM_STOCK i,ITEM_HISTORY ih, ITEM_HISTORY_D ihd
+						where m.ORD_NUM=d.ORD_NUM
+			            and i.ITM_CODE=d.ITM_CODE 
+			            and ih.ORD_NUM=m.ORD_NUM
+			            and ihd.ITM_HIS_NUM = ih.ITM_HIS_NUM
+            			<if test = "a_date !=null and a_date != '' and b_date != null and b_date !=''">and 
+	        				<![CDATA[			    			
+	            			
+	            			to_date(m.ORD_DELIVERY_DATE,'yy/MM/dd') >= to_date(#{b_date} ,'yy/MM/dd') and
+	            			to_date(m.ORD_DELIVERY_DATE,'yy/MM/dd') <= to_date(#{a_date} ,'yy/MM/dd')
+	            			]]>
+            			</if>
+            			<if test = "operCode !=null and operCode !=''">and
+            				m.oper_code = #{operCode}
+            			</if>
+            			<if test = "itmCode !=null and itmCode !=''">and
+            				i.ITM_CODE = #{itmCode}
+            			</if>
 					ORDER BY 
-						ORD_NUM DESC
-		
+						m.ORD_NUM DESC
 		<![CDATA[					
-	) A WHERE ROWNUM <= #{lastIndex}
-)WHERE RNUM > #{firstIndex}
+	) A WHERE ROWNUM <= 10
+)
 ]]>
 	</select>	
 	<select id="selectOrderMListTotCnt" parameterType="mes.sal.ord.service.OrderMVO" resultType="int">

@@ -1,5 +1,6 @@
 package mes.sal.ord.service.impl;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -100,7 +101,7 @@ public class OrderMServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return ORDER_M 목록
 	 * @exception Exception
 	 */
-    public List<?> selectOrderMList(OrderMDefaultVO searchVO) throws Exception {
+    public List<?> selectOrderMList(OrderMVO searchVO) throws Exception {
         return orderMDAO.selectOrderMList(searchVO);
     }
 
@@ -113,5 +114,6 @@ public class OrderMServiceImpl extends EgovAbstractServiceImpl implements
     public int selectOrderMListTotCnt(OrderMDefaultVO searchVO) {
 		return orderMDAO.selectOrderMListTotCnt(searchVO);
 	}
+
     
 }
