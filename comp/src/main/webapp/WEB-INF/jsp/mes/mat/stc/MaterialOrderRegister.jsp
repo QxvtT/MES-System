@@ -5,12 +5,12 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
  /**
-  * @Class Name : MaterialHistoryDRegister.jsp
-  * @Description : MaterialHistoryD Register 화면
+  * @Class Name : MaterialOrderRegister.jsp
+  * @Description : MaterialOrder Register 화면
   * @Modification Information
   * 
-  * @author soyeon
-  * @since 20210625
+  * @author materialOrder
+  * @since 2021-06-29
   * @version 1.0
   * @see
   *  
@@ -22,26 +22,26 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<c:set var="registerFlag" value="${empty materialHistoryDVO.matHisDNum ? '등록' : '수정'}"/>
+<c:set var="registerFlag" value="${empty materialOrderVO.matOrdNum ? '등록' : '수정'}"/>
 
 <title> <c:out value="${registerFlag}"/> </title>
 <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>"/>
 
 <!--For Commons Validator Client Side-->
 <!-- script type="text/javascript" src="<c:url value='/cmmn/validator.do'/>"></script -->
-<!-- validator:javascript formName="materialHistoryDVO" staticJavascript="false" xhtml="true" cdata="false"/ -->
+<!-- validator:javascript formName="materialOrderVO" staticJavascript="false" xhtml="true" cdata="false"/ -->
 
 <script type="text/javaScript" language="javascript" defer="defer">
 <!--
 /* 글 목록 화면 function */
 function fn_egov_selectList() {
-   	document.getElementById("detailForm").action = "<c:url value='/materialHistoryD/MaterialHistoryDList.do'/>";
+   	document.getElementById("detailForm").action = "<c:url value='/materialOrder/MaterialOrderList.do'/>";
    	document.getElementById("detailForm").submit();		
 }
 
 /* 글 삭제 function */
 function fn_egov_delete() {
-   	document.getElementById("detailForm").action = "<c:url value='/materialHistoryD/deleteMaterialHistoryD.do'/>";
+   	document.getElementById("detailForm").action = "<c:url value='/materialOrder/deleteMaterialOrder.do'/>";
    	document.getElementById("detailForm").submit();		
 }
 
@@ -51,7 +51,7 @@ function fn_egov_save() {
 
 	/* TODO Validation기능 보완 */
 	
-  	frm.action = "<c:url value="${registerFlag == '등록' ? '/materialHistoryD/addMaterialHistoryD.do' : '/materialHistoryD/updateMaterialHistoryD.do'}"/>";
+  	frm.action = "<c:url value="${registerFlag == '등록' ? '/materialOrder/addMaterialOrder.do' : '/materialOrder/updateMaterialOrder.do'}"/>";
     frm.submit();
 
 }
@@ -61,7 +61,7 @@ function fn_egov_save() {
 </head>
 <body>
 
-<form:form commandName="materialHistoryDVO" name="detailForm" id="detailForm" >
+<form:form commandName="materialOrderVO" name="detailForm" id="detailForm" >
 <div id="content_pop">
 	<!-- 타이틀 -->
 	<div id="title">
@@ -79,25 +79,32 @@ function fn_egov_save() {
 			
 		<c:if test="${registerFlag == '수정'}">
 	   <tr>
-			<th>MAT_HIS_D_NUM *</th>
+			<th>MAT_ORD_NUM *</th>
 			<td>
-				<form:input path="matHisDNum" cssClass="essentiality" readonly="true" />
+				<form:input path="matOrdNum" cssClass="essentiality" readonly="true" />
 			</td>			
 		</tr>	
 		</c:if>
 		<c:if test="${registerFlag == '등록'}">
 	   <tr>
-			<th>MAT_HIS_D_NUM *</th>
+			<th>MAT_ORD_NUM *</th>
 			<td>
-				<form:input path="matHisDNum" cssClass="txt" readonly="false" />
+				<form:input path="matOrdNum" cssClass="txt" readonly="false" />
 			</td>			
 		</tr>	
 		</c:if>		
 		<tr>
-			<th>MAT_HIS_NUM</th>
+			<th>MAT_ORD_DATE</th>
 			<td>
-				<form:input path="matHisNum" cssClass="txt"/>
-				&nbsp;<form:errors path="matHisNum" />
+				<form:input path="matOrdDate" cssClass="txt"/>
+				&nbsp;<form:errors path="matOrdDate" />
+			</td>
+		</tr>	
+		<tr>
+			<th>MAT_ORD_OPER</th>
+			<td>
+				<form:input path="matOrdOper" cssClass="txt"/>
+				&nbsp;<form:errors path="matOrdOper" />
 			</td>
 		</tr>	
 		<tr>
@@ -108,38 +115,45 @@ function fn_egov_save() {
 			</td>
 		</tr>	
 		<tr>
-			<th>MAT_COM_NUM</th>
+			<th>MAT_COM_DATE</th>
 			<td>
-				<form:input path="matComNum" cssClass="txt"/>
-				&nbsp;<form:errors path="matComNum" />
+				<form:input path="matComDate" cssClass="txt"/>
+				&nbsp;<form:errors path="matComDate" />
 			</td>
 		</tr>	
 		<tr>
-			<th>LOT_NO</th>
+			<th>OPER_CODE</th>
 			<td>
-				<form:input path="lotNo" cssClass="txt"/>
-				&nbsp;<form:errors path="lotNo" />
+				<form:input path="operCode" cssClass="txt"/>
+				&nbsp;<form:errors path="operCode" />
 			</td>
 		</tr>	
 		<tr>
-			<th>MAT_HIS_D_VOL</th>
+			<th>MAT_VOL</th>
 			<td>
-				<form:input path="matHisDVol" cssClass="txt"/>
-				&nbsp;<form:errors path="matHisDVol" />
+				<form:input path="matVol" cssClass="txt"/>
+				&nbsp;<form:errors path="matVol" />
 			</td>
 		</tr>	
 		<tr>
-			<th>MAT_HIS_PRICE</th>
+			<th>MAT_ORD_VOL</th>
 			<td>
-				<form:input path="matHisPrice" cssClass="txt"/>
-				&nbsp;<form:errors path="matHisPrice" />
+				<form:input path="matOrdVol" cssClass="txt"/>
+				&nbsp;<form:errors path="matOrdVol" />
 			</td>
 		</tr>	
 		<tr>
-			<th>MAT_OUT_OPER</th>
+			<th>MAT_NORD_VOL</th>
 			<td>
-				<form:input path="matOutOper" cssClass="txt"/>
-				&nbsp;<form:errors path="matOutOper" />
+				<form:input path="matNordVol" cssClass="txt"/>
+				&nbsp;<form:errors path="matNordVol" />
+			</td>
+		</tr>	
+		<tr>
+			<th>MAT_ORD_NOTE</th>
+			<td>
+				<form:input path="matOrdNote" cssClass="txt"/>
+				&nbsp;<form:errors path="matOrdNote" />
 			</td>
 		</tr>	
 	</table>

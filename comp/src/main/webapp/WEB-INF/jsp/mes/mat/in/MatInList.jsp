@@ -37,15 +37,16 @@ $(function(){
 	    data: getList(),
 	    rowHeaders: ['rowNum'],
 	    columns: [
+	    	{ header: '입고일자', name:'matHisDate'},
 	    	{ header: '자재코드', name:'matCode'},
 			{ header: '자재명', name:'matName'},
-			{ header: '규격', name:'matDiv'},
-			{ header: 'Lot No', name:'lotNo'},
+			{ header: '규격', name:'matSize'},
+			{ header: '업체명', name:'matOutOper'},
+			{ header: '발주번호', name:'matComNum'},
 			{ header: '입고량', name:'matHisDVol'},
-// 			{ header: '출고량', name:''},
-			{ header: '현재고', name:'matVol'},
-			{ header: '미달량', name:'short'},
-// 			{ header: '특기사항', name:''},
+			{ header: '단가', name:'matHisPrice'},
+			{ header: '금액', name:'amount'},
+			{ header: 'Lot No', name:'lotNo'},
 	    ]
 	}); // end const grid
 	
@@ -57,7 +58,7 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
-			url : "MaterialStockList",
+			url : "MatInList",
 			type : "get",
 			data : {matCode: matCode},
 			dataType: "json",
@@ -70,20 +71,22 @@ $(function(){
 			} // end success
 		}); // end ajax 
 		return data;
-	}
+	} 
+	
+	$('#mobile-collapse').click(function() {
+	      grid.refreshLayout();
+	   });
+	   
+	$('#searchMatBtn').click(function(){
+		$("#myModal").modal("toggle");
+		$("#myModal").on('shown.bs.modal', function () {
+			grid.refreshLayout();
+		});
+		
+	})
 })
 
-$('#mobile-collapse').click(function() {
-      grid.refreshLayout();
-   });
-   
-$('#searchMatBtn').click(function(){
-	$("#myModal").modal("toggle");
-	$("#myModal").on('shown.bs.modal', function () {
-		grid.refreshLayout();
-	});
-	
-})
+
 
 </script>
 </head>
@@ -96,15 +99,14 @@ $('#searchMatBtn').click(function(){
 <div class="row">
 <div class="col-xl-12">
 <div id="datePicker"></div>
-<button type="button" class="btn btn-info btn-sm" id="searchMatBtn" data-toggle="modal" data-target="#myModal">조회(검색팝업)</button>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h3 class="modal-title" id="exampleModalLabel">
-					모달테스트
-				</h3>
+				<h4 class="modal-title" id="exampleModalLabel">
+					자재 검색
+				</h4>
 				<button class="close" type="button" data-dismiss="modal"
 					aria-label="Close">
 					&times;
@@ -112,13 +114,8 @@ $('#searchMatBtn').click(function(){
 			</div>
 			<p>작성일자</p>
 			<div class="col-sm-6">
-				<input type="date" name="dateRangeS" />
+				<input type="date" name="dateRangeS" />	~ <input type="date" name="dateRangeE" />
 			</div>
-			<p> ~ </p>
-			<div class="col-sm-6">
-				<input type="date" name="dateRangeE" />
-			</div>
-			<div id="grid"></div>
 			<div class="modal-footer">
 				<a class="btn" id="modalY" href="#">예</a>
 				<button class="btn" type="button" data-dismiss="modal">아니요</button>
@@ -128,7 +125,7 @@ $('#searchMatBtn').click(function(){
 </div>
 			<!-- 타이틀 -->
 			<div id="title" class="card-header">
-				<h3>자재 재고 조회</h3>
+				<h3>자재 입고 조회</h3>
 				<br />
 			</div>
 			<!-- // 타이틀 -->
@@ -137,11 +134,14 @@ $('#searchMatBtn').click(function(){
 			<input type="date" id="matHisDate" name="matHisDate" value=${result.matHisDate } /> ~ <input type="date" id="matHisDate" name="matHisDate" value=${result.matHisDate } /></div><br/>
 			<div>
 			자재코드
-			<input type="text" id="matCode" name="matCode" value=${result.matCode }></input><input type="button" value="검색"></input> ~ <input type="text" id="matCode" name="matCode" value=${result.matCode }></input><input type="button" value="검색"></input>
+			<input type="text" id="matCode" name="matCode" value=${result.matCode }></input>&nbsp;&nbsp;
+			<button type="button" class="btn btn-info btn-sm" id="searchMatBtn" data-toggle="modal" data-target="#myModal">검색</button>&nbsp;&nbsp; ~ &nbsp;&nbsp;
+			<input type="text" id="matCode" name="matCode" value=${result.matCode }></input>&nbsp;&nbsp;
+			<button type="button" class="btn btn-info btn-sm" id="searchMatBtn" data-toggle="modal" data-target="#myModal">검색</button>
 			</div><br/>
 			<div>
-			<button onclick="location.href=''">조회</button>
-			<input type="reset" value="리셋"></input>
+			<button class="btn btn-info btn-sm" onclick="location.href=''">조회</button>
+			<input class="btn btn-info btn-sm" type="reset" value="리셋"></input>
 			</div><br/>
 			<div id="grid">
 			</div>

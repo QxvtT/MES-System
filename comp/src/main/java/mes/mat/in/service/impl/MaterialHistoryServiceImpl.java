@@ -1,4 +1,4 @@
-package mes.mat.stc.service.impl;
+package mes.mat.in.service.impl;
 
 import java.util.List;
 
@@ -11,10 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
-import mes.mat.stc.service.MaterialHistoryService;
-import mes.mat.stc.service.MaterialHistoryDefaultVO;
-import mes.mat.stc.service.MaterialHistoryVO;
-import mes.mat.stc.service.impl.MaterialHistoryMapper;
+import mes.mat.in.service.MaterialHistoryDefaultVO;
+import mes.mat.in.service.MaterialHistoryService;
+import mes.mat.in.service.MaterialHistoryVO;
 /**
  * @Class Name : MaterialHistoryServiceImpl.java
  * @Description : MaterialHistory Business Implement class
@@ -103,9 +102,9 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 	 * @return MATERIAL_HISTORY 목록
 	 * @exception Exception
 	 */
-    public List<?> selectMaterialHistoryList(MaterialHistoryDefaultVO searchVO) throws Exception {
-        return materialHistoryDAO.selectMaterialHistoryList(searchVO);
-    }
+    public List<?> selectMatInList(MaterialHistoryVO searchVO) throws Exception {
+        return materialHistoryDAO.selectMatInList(searchVO);
+    } // 자재 입고 조회
 
     /**
 	 * MATERIAL_HISTORY 총 갯수를 조회한다.
@@ -113,6 +112,16 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 	 * @return MATERIAL_HISTORY 총 갯수
 	 * @exception
 	 */
+    
+    public List<?> selectMatOutMng(MaterialHistoryVO searchVO) throws Exception{
+    	return materialHistoryDAO.selectMatOutMng(searchVO);
+    } // 자재 출고 관리 조회
+    
+    public List<?> selectMatInMng(MaterialHistoryVO searchVO) throws Exception {
+    	return materialHistoryDAO.selectMatInMng(searchVO);
+    	// 자재 입고 관리 조회
+    }
+    
     public int selectMaterialHistoryListTotCnt(MaterialHistoryDefaultVO searchVO) {
 		return materialHistoryDAO.selectMaterialHistoryListTotCnt(searchVO);
 	}

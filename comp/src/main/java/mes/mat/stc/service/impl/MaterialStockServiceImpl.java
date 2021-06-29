@@ -101,9 +101,9 @@ public class MaterialStockServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return MATERIAL_STOCK 목록
 	 * @exception Exception
 	 */
-    public List<?> selectMaterialStockList(MaterialStockVO searchVO) throws Exception {
-        return materialStockDAO.selectMaterialStockList(searchVO);
-    }
+    public List<?> selectMatStcList(MaterialStockVO searchVO) throws Exception {
+        return materialStockDAO.selectMatStcList(searchVO);
+    } // 자재 재고 조회
 
     /**
 	 * MATERIAL_STOCK 총 갯수를 조회한다.
@@ -111,6 +111,11 @@ public class MaterialStockServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return MATERIAL_STOCK 총 갯수
 	 * @exception
 	 */
+    
+    public List<?> selectMatLotStcList(MaterialStockVO searchVO) throws Exception{
+    	return materialStockDAO.selectMatLotStcList(searchVO);
+    } // 자재 LOT 재고 조회
+    
     public int selectMaterialStockListTotCnt(MaterialStockDefaultVO searchVO) {
 		return materialStockDAO.selectMaterialStockListTotCnt(searchVO);
 	}

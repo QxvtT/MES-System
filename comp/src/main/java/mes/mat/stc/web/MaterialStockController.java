@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 import mes.mat.stc.service.MaterialStockService;
-import mes.mat.stc.service.MaterialDefaultVO;
 import mes.mat.stc.service.MaterialService;
 import mes.mat.stc.service.MaterialStockDefaultVO;
 import mes.mat.stc.service.MaterialStockVO;
@@ -43,8 +41,6 @@ public class MaterialStockController {
 
     @Resource(name = "materialStockService")
     private MaterialStockService materialStockService;
-    @Resource(name = "materialService")
-    private MaterialService materialService;
     
     /** EgovPropertyService */
     @Resource(name = "propertiesService")
@@ -57,27 +53,28 @@ public class MaterialStockController {
 	 * @exception Exception
 	 */
     
-    @RequestMapping(value="/mat/stc/MaterialStockList", method=RequestMethod.GET)
+    @RequestMapping(value="/mat/stc/MatStcList", method=RequestMethod.GET)
     @ResponseBody
-    public List<?> ajax(MaterialStockVO searchVO) throws Exception {
+    public List<?> ajaxMatStcList(MaterialStockVO searchVO) throws Exception {
     	
-    	List<?> list = materialStockService.selectMaterialStockList(searchVO);
+    	List<?> list = materialStockService.selectMatStcList(searchVO);
     	
     	System.out.println("a");
     	System.out.println(list);
     	return list;
     }
     
-    @RequestMapping("/mat/stc/MaterialStockList.do")
-    public String selectMaterialStockList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, ModelMap model) throws Exception{
-    	return "mat/stc/MaterialStockList.page";
+    @RequestMapping("/mat/stc/MatStcList.do")
+    public String selectMatStcList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, ModelMap model) throws Exception{
+    	return "mat/stc/MatStcList.page";
     }
+    // end 자재 재고 조회
     
     @RequestMapping(value="/mat/stc/MaterialLotStockList", method=RequestMethod.GET)
     @ResponseBody
-    public List<?> ajax2(MaterialStockVO searchVO) throws Exception {
+    public List<?> ajaxMatLotStcList(MaterialStockVO searchVO) throws Exception {
     	
-    	List<?> list = materialStockService.selectMaterialStockList(searchVO);
+    	List<?> list = materialStockService.selectMatLotStcList(searchVO);
     	
     	System.out.println("a");
     	System.out.println(list);
@@ -85,37 +82,10 @@ public class MaterialStockController {
     }
     
     @RequestMapping("/mat/stc/MaterialLotStockList.do")
-    public String selectMaterialLotStockList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, ModelMap model) throws Exception{
-    	return "mat/stc/MaterialLotStockList.page";
+    public String selectMatLotStcList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, ModelMap model) throws Exception{
+    	return "mat/stc/MatLotStcList.page";
     }
-    /*
-    @RequestMapping(value="/mat/stc/MaterialStockList.do")
-    public String selectMaterialStockList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, MaterialDefaultVO materialVO,
-    		ModelMap model)
-            throws Exception {
-    	
-    	searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
-    	searchVO.setPageSize(propertiesService.getInt("pageSize"));
-    	
-    	PaginationInfo paginationInfo = new PaginationInfo();
-		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
-		paginationInfo.setPageSize(searchVO.getPageSize());
-		
-		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
-		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-		
-        List<?> materialStockList = materialStockService.selectMaterialStockList(searchVO);
-        model.addAttribute("resultList", materialStockList);
-        model.addAttribute("materials", materialService.selectMaterialList(materialVO));
-        
-        int totCnt = materialStockService.selectMaterialStockListTotCnt(searchVO);
-		paginationInfo.setTotalRecordCount(totCnt);
-        model.addAttribute("paginationInfo", paginationInfo);
-        
-        return "mat/stc/MaterialStockList.page";
-    } */
+    // end 자재 LOT 재고 조회
     
     @RequestMapping("/mat/stc/addMaterialStockView.do")
     public String addMaterialStockView(

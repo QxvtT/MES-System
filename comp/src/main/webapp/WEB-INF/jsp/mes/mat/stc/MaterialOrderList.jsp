@@ -5,12 +5,12 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
  /**
-  * @Class Name : MaterialHistoryList.jsp
-  * @Description : MaterialHistory List 화면
+  * @Class Name : MaterialOrderList.jsp
+  * @Description : MaterialOrder List 화면
   * @Modification Information
   * 
-  * @author materialHistory
-  * @since 2021-06-28
+  * @author materialOrder
+  * @since 2021-06-29
   * @version 1.0
   * @see
   *  
@@ -28,22 +28,23 @@
 /* 글 수정 화면 function */
 
 
-function fn_egov_select(matHisNum) {
-	document.getElementById("listForm").matHisNum.value = matHisNum;
-   	document.getElementById("listForm").action = "<c:url value='/materialHistory/updateMaterialHistoryView.do'/>";
+function fn_egov_select(matOrdNum, matComNum) {
+	document.getElementById("listForm").matOrdNum.value = matOrdNum;
+	document.getElementById("listForm").matComNum.value = matComNum;
+   	document.getElementById("listForm").action = "<c:url value='/materialOrder/updateMaterialOrderView.do'/>";
    	document.getElementById("listForm").submit();
 }
 
 /* 글 등록 화면 function */
 function fn_egov_addView() {
-   	document.getElementById("listForm").action = "<c:url value='/materialHistory/addMaterialHistoryView.do'/>";
+   	document.getElementById("listForm").action = "<c:url value='/materialOrder/addMaterialOrderView.do'/>";
    	document.getElementById("listForm").submit();		
 }
 
 /* pagination 페이지 링크 function */
 function fn_egov_link_page(pageNo){
 	document.getElementById("listForm").pageIndex.value = pageNo;
-	document.getElementById("listForm").action = "<c:url value='/materialHistory/MaterialHistoryList.do'/>";
+	document.getElementById("listForm").action = "<c:url value='/materialOrder/MaterialOrderList.do'/>";
    	document.getElementById("listForm").submit();
 }
 
@@ -52,7 +53,8 @@ function fn_egov_link_page(pageNo){
 </head>
 <body>
 <form:form commandName="searchVO" name="listForm" id="listForm" method="post">
-	<input type="hidden" name="matHisNum" />
+	<input type="hidden" name="matOrdNum" />
+	<input type="hidden" name="matComNum" />
 <div id="content_pop">
 	<!-- 타이틀 -->
 	<div id="title">
@@ -70,21 +72,39 @@ function fn_egov_link_page(pageNo){
 								<col/>				
 								<col/>				
 								<col/>				
+								<col/>				
+								<col/>				
+								<col/>				
+								<col/>				
+								<col/>				
+								<col/>				
 							</colgroup>		  
 			<tr>
-								<th align="center">MatHisNum</th>
-								<th align="center">MatHisDiv</th>
-								<th align="center">MatHisDate</th>
-								<th align="center">MatOut</th>
-								<th align="center">MatHisVol</th>
+								<th align="center">MatOrdNum</th>
+								<th align="center">MatComNum</th>
+								<th align="center">MatOrdDate</th>
+								<th align="center">MatOrdOper</th>
+								<th align="center">MatCode</th>
+								<th align="center">MatComDate</th>
+								<th align="center">OperCode</th>
+								<th align="center">MatVol</th>
+								<th align="center">MatOrdVol</th>
+								<th align="center">MatNordVol</th>
+								<th align="center">MatOrdNote</th>
 							</tr>
 			<c:forEach var="result" items="${resultList}" varStatus="status">
 			<tr>
-													<td align="center" class="listtd"><a href="javascript:fn_egov_select('<c:out value="${result.matHisNum}"/>')"><c:out value="${result.matHisNum}"/></a>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.matHisDiv}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.matHisDate}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.matOut}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.matHisVol}"/>&nbsp;</td>
+																			<td align="center" class="listtd"><a href="javascript:fn_egov_select('<c:out value="${result.matOrdNum}"/>', '<c:out value="${result.matComNum}"/>')"><c:out value="${result.matOrdNum}"/></a>&nbsp;</td>
+						<td align="center" class="listtd"><a href="javascript:fn_egov_select('<c:out value="${result.matOrdNum}"/>', '<c:out value="${result.matComNum}"/>')"><c:out value="${result.matComNum}"/></a>&nbsp;</td>
+						<td align="center" class="listtd"><c:out value="${result.matOrdDate}"/>&nbsp;</td>
+						<td align="center" class="listtd"><c:out value="${result.matOrdOper}"/>&nbsp;</td>
+						<td align="center" class="listtd"><c:out value="${result.matCode}"/>&nbsp;</td>
+						<td align="center" class="listtd"><c:out value="${result.matComDate}"/>&nbsp;</td>
+						<td align="center" class="listtd"><c:out value="${result.operCode}"/>&nbsp;</td>
+						<td align="center" class="listtd"><c:out value="${result.matVol}"/>&nbsp;</td>
+						<td align="center" class="listtd"><c:out value="${result.matOrdVol}"/>&nbsp;</td>
+						<td align="center" class="listtd"><c:out value="${result.matNordVol}"/>&nbsp;</td>
+						<td align="center" class="listtd"><c:out value="${result.matOrdNote}"/>&nbsp;</td>
 				    			</tr>
 			</c:forEach>
 		</table>

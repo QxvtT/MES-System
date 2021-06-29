@@ -56,7 +56,7 @@ public interface MaterialStockService {
 	 * @return MATERIAL_STOCK 목록
 	 * @exception Exception
 	 */
-    List selectMaterialStockList(MaterialStockVO searchVO) throws Exception;
+    List selectMatStcList(MaterialStockVO searchVO) throws Exception; // 자재 재고 조회
     
     /**
 	 * MATERIAL_STOCK 총 갯수를 조회한다.
@@ -64,6 +64,9 @@ public interface MaterialStockService {
 	 * @return MATERIAL_STOCK 총 갯수
 	 * @exception
 	 */
+    
+    List selectMatLotStcList(MaterialStockVO searchVO) throws Exception; // 자재 LOT 재고 조회
+    
     int selectMaterialStockListTotCnt(MaterialStockDefaultVO searchVO);
     
 }

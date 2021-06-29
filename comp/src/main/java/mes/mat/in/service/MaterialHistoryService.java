@@ -1,8 +1,6 @@
-package mes.mat.stc.service;
+package mes.mat.in.service;
 
 import java.util.List;
-import mes.mat.stc.service.MaterialHistoryDefaultVO;
-import mes.mat.stc.service.MaterialHistoryVO;
 
 /**
  * @Class Name : MaterialHistoryService.java
@@ -56,7 +54,7 @@ public interface MaterialHistoryService {
 	 * @return MATERIAL_HISTORY 목록
 	 * @exception Exception
 	 */
-    List selectMaterialHistoryList(MaterialHistoryDefaultVO searchVO) throws Exception;
+    List selectMatInList(MaterialHistoryVO searchVO) throws Exception; // 자재 입고 조회
     
     /**
 	 * MATERIAL_HISTORY 총 갯수를 조회한다.
@@ -64,6 +62,10 @@ public interface MaterialHistoryService {
 	 * @return MATERIAL_HISTORY 총 갯수
 	 * @exception
 	 */
+    List selectMatOutMng(MaterialHistoryVO searchVO) throws Exception; // 자재 출고 관리 조회
+    
+    List selectMatInMng(MaterialHistoryVO searchVO) throws Exception; // 자재 입고 관리 조회 
+    
     int selectMaterialHistoryListTotCnt(MaterialHistoryDefaultVO searchVO);
     
 }

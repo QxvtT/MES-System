@@ -1,4 +1,4 @@
-package mes.mat.stc.service;
+package mes.mat.in.service;
 
 import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;

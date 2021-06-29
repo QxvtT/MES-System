@@ -1,4 +1,6 @@
-package mes.mat.stc.service;
+package mes.mat.in.service;
+
+import mes.mat.stc.service.MaterialDefaultVO;
 
 /**
  * @Class Name : MaterialVO.java
@@ -12,7 +14,7 @@ package mes.mat.stc.service;
  *  
  *  Copyright (C)  All right reserved.
  */
-public class MaterialStockVO extends MaterialDefaultVO{
+public class MaterialHistoryVO extends MaterialDefaultVO{
     private static final long serialVersionUID = 1L;
     
     /** mat_code */

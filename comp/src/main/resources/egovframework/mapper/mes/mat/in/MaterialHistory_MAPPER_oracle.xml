@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mes.mat.in.service.impl.MaterialHistoryMapper">
+
+	<insert id="insertMaterialHistory">
+		<![CDATA[
+			INSERT INTO MATERIAL_HISTORY 
+				( MAT_HIS_NUM
+				  , MAT_HIS_DIV
+				  , MAT_HIS_DATE
+				  , MAT_OUT
+				  , MAT_HIS_VOL )
+			VALUES ( #{matHisNum}
+				  , #{matHisDiv}
+				  , #{matHisDate}
+				  , #{matOut}
+				  , #{matHisVol} )
+		]]>
+	</insert>
+	
+	<update id="updateMaterialHistory">
+		<![CDATA[
+			UPDATE MATERIAL_HISTORY
+			SET MAT_HIS_NUM=#{matHisNum}
+				, MAT_HIS_DIV=#{matHisDiv}
+				, MAT_HIS_DATE=#{matHisDate}
+				, MAT_OUT=#{matOut}
+				, MAT_HIS_VOL=#{matHisVol}
+						WHERE MAT_HIS_NUM=#{matHisNum}
+				]]>
+	</update>
+	
+	<delete id="deleteMaterialHistory">
+		<![CDATA[
+			DELETE FROM MATERIAL_HISTORY 
+						WHERE MAT_HIS_NUM=#{matHisNum}
+				]]>
+	</delete>
+	
+	<select id="selectMaterialHistory" resultType="mes.mat.in.service.MaterialHistoryVO">
+		<![CDATA[
+			SELECT
+				MAT_HIS_NUM
+				, MAT_HIS_DIV
+				, MAT_HIS_DATE
+				, MAT_OUT
+				, MAT_HIS_VOL
+			FROM MATERIAL_HISTORY
+						WHERE MAT_HIS_NUM=#{matHisNum}
+				]]>
+	</select>
+	
+	<select id="selectMatInList" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="egovMap">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM (
+				SELECT MH.MAT_HIS_DATE, 
+				       M.MAT_CODE, 
+				       M.MAT_NAME,
+				       M.MAT_SIZE, 
+				       MHD.MAT_OUT_OPER,
+				       MHD.MAT_COM_NUM,
+				       MHD.MAT_HIS_D_VOL, 
+				       MHD.MAT_HIS_PRICE, 
+				       (MHD.MAT_HIS_D_VOL * MHD.MAT_HIS_PRICE) AS AMOUNT, 
+				       MHD.LOT_NO
+				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_HISTORY MH, OPERATION O
+				WHERE M.MAT_CODE = MHD.MAT_CODE 
+				      AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
+				      AND M.OPER_CODE = O.OPER_CODE
+				      AND MH.MAT_HIS_DIV='입고'
+				      AND MH.MAT_HIS_DATE BETWEEN TO_DATE('2021-06-09', 'YYYY-MM-DD') AND TO_DATE('2021-06-25', 'YYYY-MM-DD')
+				      AND M.MAT_CODE BETWEEN '0001' AND '0003'
+				      AND O.OPER_CODE BETWEEN 'oper-01' AND 'oper-10'
+				<if test="searchKeyword != null and searchKeyword != ''">
+					<if test="searchCondition == 0">AND
+						M.MAT_NAME = #{searchKeyword}
+					</if>
+					<if test="searchCondition == 1">AND
+						M.MAT_NAME '%' || #{searchKeyword} || '%'
+					</if>
+				</if>
+					
+		<![CDATA[					
+	) A WHERE ROWNUM <= 10
+)
+]]>
+	</select>	
+	<!-- END 자재 입고 조회 -->
+	
+		<select id="selectMatOutMng" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="egovMap">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM (
+				SELECT M.MAT_CODE,
+				       M.MAT_NAME,
+				       M.MAT_SIZE,
+				       M.MAT_UNIT,
+				       MHD.MAT_HIS_D_VOL,
+				       MHD.LOT_NO,
+				       MS.MAT_VOL
+				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_STOCK MS, MATERIAL_HISTORY MH
+				WHERE M.MAT_CODE = MHD.MAT_CODE
+				  AND M.MAT_CODE = MS.MAT_CODE
+				  AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM  
+				  AND MH.MAT_HIS_DIV='출고'
+				  AND MH.MAT_HIS_DATE BETWEEN TO_DATE('2021-06-09', 'YYYY-MM-DD') AND TO_DATE('2021-06-25', 'YYYY-MM-DD')
+				<if test="searchKeyword != null and searchKeyword != ''">
+					<if test="searchCondition == 0">AND
+						M.MAT_NAME = #{searchKeyword}
+					</if>
+					<if test="searchCondition == 1">AND
+						M.MAT_NAME '%' || #{searchKeyword} || '%'
+					</if>
+				</if>
+					
+		<![CDATA[					
+	) A WHERE ROWNUM <= 10
+)
+]]>
+	</select> 
+	<!-- END 자재 출고 관리 조회 -->
+	
+	<select id="selectMatInMng" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="egovMap">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM (
+				SELECT M.MAT_CODE,
+				       M.MAT_NAME,
+				       M.MAT_SIZE,
+				       M.MAT_UNIT,
+				       MO.MAT_COM_NUM,
+				       MHD.MAT_HIS_D_VOL,
+				       MHD.MAT_HIS_PRICE,
+				       (MHD.MAT_HIS_D_VOL * MHD.MAT_HIS_PRICE) AS AMOUNT, 
+				       MHD.LOT_NO,
+				       MS.MAT_VOL,
+				       MO.OPER_CODE
+				FROM MATERIAL M, 
+				     MATERIAL_ORDER MO, 
+				     MATERIAL_HISTORY_D MHD, 
+				     MATERIAL_HISTORY MH, 
+				     MATERIAL_STOCK MS
+				WHERE M.MAT_CODE = MO.MAT_CODE
+				  AND MHD.MAT_CODE = M.MAT_CODE
+				  AND MS.MAT_CODE = M.MAT_CODE
+				  AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
+				  AND MH.MAT_HIS_DIV='입고'
+				  AND MH.MAT_HIS_DATE BETWEEN TO_DATE('2021-06-09', 'YYYY-MM-DD') AND TO_DATE('2021-06-25', 'YYYY-MM-DD')
+				  AND MO.OPER_CODE = 'oper-01'
+				<if test="searchKeyword != null and searchKeyword != ''">
+					<if test="searchCondition == 0">AND
+						M.MAT_NAME = #{searchKeyword}
+					</if>
+					<if test="searchCondition == 1">AND
+						M.MAT_NAME '%' || #{searchKeyword} || '%'
+					</if>
+				</if>
+					
+		<![CDATA[					
+	) A WHERE ROWNUM <= 10
+)
+]]>
+	</select>
+	<!-- END 자재 입고 관리 조회 -->
+	
+	<select id="selectMaterialHistoryListTotCnt" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="int">
+			SELECT COUNT(*) totcnt
+			FROM MATERIAL_HISTORY
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 0">AND
+					MAT_HIS_NUM = #{searchKeyword}
+				</if>
+				<if test="searchCondition == 1">AND
+					MAT_HIS_DIV LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+	</select>
+
+</mapper>

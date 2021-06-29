@@ -4,7 +4,7 @@
 <mapper namespace="mes.mat.stc.service.impl.MaterialStockMapper">
 	
 
-	<resultMap id="materialStock" type="mes.mat.stc.service.MaterialStockVO">
+	<!-- <resultMap id="materialStock" type="mes.mat.stc.service.MaterialStockVO">
 		<result property="lotNum" column="LOT_NUM" />
 		<result property="matCode" column="MAT_CODE" />
 		<result property="matVol" column="MAT_VOL" />
@@ -14,7 +14,7 @@
 		<result property="matHisDVol" column="MAT_HIS_D_VOL" />
 		<result property="matHisNum" column="MAT_HIS_NUM"/>
 		<result property="matHisDate" column="MAT_HIS_DATE"/>
-	</resultMap>
+	</resultMap> -->
 	
 	<insert id="insertMaterialStock">
 		<![CDATA[
@@ -59,17 +59,17 @@
 				]]>
 	</select>
 	
-	<select id="selectMaterialStockList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
+	<select id="selectMatStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
-				select b.* , nvl(b.MAT_HIS_D_VOL, 0) as out
+				select b.* , nvl(c.MAT_HIS_D_VOL, 0) as out
 				from (select m.mat_code, 
 				      m.mat_name, 
 				      m.mat_div, 
 				      sa.MAT_SAFE_STOCK, 
 				      st.mat_vol, 
 				      (sa.mat_safe_stock - st.mat_vol) as short, 
-				      mhd.mat_his_d_vol
+				      nvl(mhd.mat_his_d_vol, 0) as mat_his_d_vol
 				from material m, material_safe sa, material_stock st, material_history mh, material_history_d mhd
 				where m.mat_code=sa.mat_code 
 				  AND M.MAT_CODE=ST.MAT_CODE 
@@ -99,21 +99,9 @@ SELECT * FROM (
 )
 ]]>
 	</select>	
-	<select id="selectMaterialStockListTotCnt" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="int">
-			SELECT COUNT(*) totcnt
-			FROM MATERIAL_STOCK
-			WHERE 1=1
-			<if test="searchKeyword != null and searchKeyword != ''">
-				<if test="searchCondition == 0">AND
-					LOT_NUM = #{searchKeyword}
-				</if>
-				<if test="searchCondition == 1">AND
-					MAT_CODE LIKE '%' || #{searchKeyword} || '%'
-				</if>
-			</if>
-	</select>
+	<!-- 자재 재고 조회 -->
 	
-	<select id="selectMaterialLotStockList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
+	<select id="selectMatLotStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 			SELECT M.MAT_CODE, 
@@ -142,5 +130,20 @@ SELECT * FROM (
 )
 ]]>
 	</select>
-
+	<!-- 자재 LOT 재고 조회 -->
+	
+	<select id="selectMaterialStockListTotCnt" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="int">
+			SELECT COUNT(*) totcnt
+			FROM MATERIAL_STOCK
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 0">AND
+					LOT_NUM = #{searchKeyword}
+				</if>
+				<if test="searchCondition == 1">AND
+					MAT_CODE LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+	</select>
+	
 </mapper>
