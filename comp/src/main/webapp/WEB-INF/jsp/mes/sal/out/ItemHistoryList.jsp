@@ -27,10 +27,9 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
-let ordNum = null;
+let itmHisNum = null;
 let aDate = null;
 let bDate = null;
-let itmCode = null;
 let operCode = null;
 
 $(function(){
@@ -42,19 +41,18 @@ $(function(){
 	    data: getList(),
 	    rowHeaders: ['rowNum'],
 	    columns: [
-	    	{ header: '주문번호', name:'ordNum'},
-			{ header: '주문일자', name:'ordRequestDate'},
-			{ header: '납기일자', name:'ordDeliveryDate'},
-			{ header: '업체코드', name:'operCode'},
-			{ header: '업체이름', name:'operName'},
+	    	{ header: '전표번호', name:'itmHisNum'},
+			{ header: '주문번호', name:'ordNum'},
+			{ header: '구분', name:'itmDiv'},
+			{ header: '출고일자', name:'itmHisRdy'},
+			{ header: '특이사항', name:'itmNote'},
+			{ header: '일련번호', name:'itmHisDNum'},
 			{ header: '제품코드', name:'itmCode'},
-			{ header: '주문상태', name:'ordStatus'},
-			{ header: '주문량', name:'ordVol'},
-			{ header: '지시량', name:'ordIndVol'},
-			{ header: '출고량', name:'ordOutVol'},
-			{ header: '완제품재고', name:'itmStock'},
-			{ header: '비고', name:'ordNote'},
-			{ header: '계획여부', name:'prdChk'}
+			{ header: '자재LOT_NO', name:'lotNum'},
+			{ header: '수량', name:'itmVol'},
+			{ header: '단가', name:'itmPrice'},
+			{ header: '금액', name:'totalPrice'},
+			{ header: '비고', name:'itmNoteD'}
 	    ]
 	}); // end const grid
 	
@@ -66,19 +64,18 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false, 
-			url : "OrderMList",
+			url : "ItemHistoryList",
 			type : "get",
 			data : {
-  				aDate : aDate,
+				aDate : aDate,
   				bDate : bDate,
- 				itmCode : itmCode,
- 				operCode: operCode,
-				ordNum : ordNum
+  				operCode: operCode,
+				itmHisNum : itmHisNum
 				},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					ordNum = result[result.length -1].ordNum;
+					itmHisNum = result[result.length -1].itmHisNum;
 				}
 				console.log(result);
 				data = result;
@@ -86,20 +83,17 @@ $(function(){
 		}); // end ajax 
 		return data;
 	}
-		button.onclick = function(){
-		itmCode = $( 'input#itmCode' ).val();
+	button.onclick = function(){
 		aDate = $( 'input#aDate' ).val();
 		bDate = $( 'input#bDate' ).val();
 		operCode = $( 'input#operCode' ).val();
 		grid.resetData(getList());
-		console.log(itmCode);
+		console.log(operCode);
 	}
-		$('#mobile-collapse').click(function() {
-		      grid.refreshLayout();
-		   });
+	$('#mobile-collapse').click(function() {
+	      grid.refreshLayout();
+	   });
 })
-
-
 </script>
 </head>
 <body>
@@ -109,7 +103,7 @@ $(function(){
 			<div class="row align-items-center">
 				<div class="col-md-8">
 					<div class="page-header-title">
-						<h5 class="m-b-10">주문관리</h5>
+						<h5 class="m-b-10">출고관리</h5>
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -117,19 +111,16 @@ $(function(){
 						<li class="breadcrumb-item"><a href="index.jsp"> <i
 								class="fa fa-home"></i>
 						</a></li>
-						<li class="breadcrumb-item"><a href="#!">주문관리</a></li>
+						<li class="breadcrumb-item"><a href="#!">출고관리</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- Page-header end -->
-
 	<form id="frm" name = "frm">
-	제품코드<input type ="text" id="itmCode" name = "itmCode" ></input><br>
-	날짜<input type ="text" id="bDate" name = "bDate" ></input>~<input type ="text" id="aDate" name = "aDate" ></input><br>
+	날짜<input type ="text" id="bDate" name = ""bDate"" ></input>~<input type ="text" id="aDate" name = "aDate" ></input><br>
 	업체<input type ="text" id="operCode" name = "operCode" ></input><br>
-	
 	<button type="button" id ="button" name="button">조회</button>
 	</form>
 
@@ -158,7 +149,6 @@ $(function(){
 				</div>
 			</div>
 		</div>
-		
 	</form:form>
 </body>
 </html>

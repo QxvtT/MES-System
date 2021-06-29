@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mes.sal.out.service.impl.ItemHistoryMapper">
+	
+
+	<resultMap id="itemHistory" type="mes.sal.out.service.ItemHistoryVO">
+		<result property="itmHisNum" column="ITM_HIS_NUM" />
+		<result property="ordNum" column="ORD_NUM" />
+		<result property="itmDiv" column="ITM_DIV" />
+		<result property="itmHisRdy" column="ITM_HIS_RDY" />
+		<result property="itmNote" column="ITM_NOTE" />
+	</resultMap>
+	
+	<insert id="insertItemHistory">
+		<![CDATA[
+			INSERT INTO ITEM_HISTORY 
+				( ITM_HIS_NUM
+				  , ORD_NUM
+				  , ITM_DIV
+				  , ITM_HIS_RDY
+				  , ITM_NOTE )
+			VALUES ( #{itmHisNum}
+				  , #{ordNum}
+				  , #{itmDiv}
+				  , #{itmHisRdy}
+				  , #{itmNote} )
+		]]>
+	</insert>
+	
+	<update id="updateItemHistory">
+		<![CDATA[
+			UPDATE ITEM_HISTORY
+			SET ITM_HIS_NUM=#{itmHisNum}
+				, ORD_NUM=#{ordNum}
+				, ITM_DIV=#{itmDiv}
+				, ITM_HIS_RDY=#{itmHisRdy}
+				, ITM_NOTE=#{itmNote}
+						WHERE ITM_HIS_NUM=#{itmHisNum}
+				]]>
+	</update>
+	
+	<delete id="deleteItemHistory">
+		<![CDATA[
+			DELETE FROM ITEM_HISTORY 
+						WHERE ITM_HIS_NUM=#{itmHisNum}
+				]]>
+	</delete>
+	
+	<select id="selectItemHistory" resultMap="itemHistory">
+		<![CDATA[
+			SELECT
+				ITM_HIS_NUM
+				, ORD_NUM
+				, ITM_DIV
+				, ITM_HIS_RDY
+				, ITM_NOTE
+			FROM ITEM_HISTORY
+						WHERE ITM_HIS_NUM=#{itmHisNum}
+				]]>
+	</select>
+	
+	<select id="selectItemHistoryList" parameterType="mes.sal.out.service.ItemHistoryVO" resultType="mes.sal.out.service.ItemHistoryVO">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM (
+				select          i.ITM_HIS_NUM
+		                        , i.ORD_NUM
+		                        , i.ITM_DIV
+		                        , i.ITM_HIS_RDY
+		                        , i.ITM_NOTE 
+				                , d.ITM_HIS_D_NUM
+				                , d.ITM_CODE
+				                , d.ITM_VOL
+				                , d.LOT_NUM
+				                , d.ITM_PRICE
+                       			, (d.ITM_VOL * d.ITM_PRICE) as total_price
+				                , d.ITM_NOTE_d
+				from item_history_d d
+					, ITEM_HISTORY i 
+					<if test = "operCode != null and operCode !=''">
+					,(select ord_num from order_m where oper_code like '%' || #{operCode} || '%') o
+					</if>
+				where i.ITM_HIS_NUM = d.ITM_HIS_NUM
+					<if test = "operCode != null and operCode !=''">
+	        		and i.ORD_NUM = o.ord_num
+					</if>
+					<if test = "aDate != null and aDate != '' and bDate != null and bDate !=''">and 
+	        				<![CDATA[			    			
+	            			to_date(i.ITM_HIS_RDY,'yy/MM/dd') >= to_date(#{bDate} ,'yy/MM/dd') and
+	            			to_date(i.ITM_HIS_RDY,'yy/MM/dd') <= to_date(#{aDate} ,'yy/MM/dd')
+	            			]]>
+	           		 </if>
+				ORDER BY 
+				i.ITM_HIS_NUM DESC
+						
+		<![CDATA[					
+	) A WHERE ROWNUM <= 10
+)
+
+]]>
+	</select>	
+	<select id="selectItemHistoryListTotCnt" parameterType="mes.sal.out.service.ItemHistoryVO" resultType="int">
+			SELECT COUNT(*) totcnt
+			FROM ITEM_HISTORY
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 0">AND
+					ITM_HIS_NUM = #{searchKeyword}
+				</if>
+				<if test="searchCondition == 1">AND
+					ORD_NUM LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+	</select>
+
+</mapper>

@@ -24,7 +24,7 @@
  				
  				INSERT INTO ORDER_M 
 					VALUES ( ord
-				  			, #{ordRequestDate}
+				  			, sysdate
 				  			, #{ordDeliveryDate}
 				  			, #{operCode}
 				  			, #{operName} );
@@ -77,42 +77,48 @@
 				]]>
 	</select>
 	
-	<select id="selectOrderMList" parameterType="mes.sal.ord.service.OrderMVO" resultType="egovMap">
+	<select id="selectOrderMList" parameterType="mes.sal.ord.service.OrderMVO" resultType="mes.sal.ord.service.OrderMVO">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
-				 select 
+				  select 
 						m.ord_num
 					  , to_char(m.ord_request_date,'yy/mm/dd') as ord_request_date
-					  , to_date(m.ORD_DELIVERY_DATE,'yy/mm/dd') as ORD_DELIVERY_DATE
+					  , to_char(m.ORD_DELIVERY_DATE,'yy/mm/dd') as ORD_DELIVERY_DATE
 					  , m.oper_code
 					  , m.oper_name
 					  , d.ITM_CODE
 					  , d.ORD_STATUS
 					  , d.ORD_VOL
 					  , d.ORD_IND_VOL 
-					  , ihd.ITM_VOL as ord_out_vol
+					  , d.ORD_OUT_VOL
 					  , i.ITM_VOL as itm_stock
 					  , d.ORD_NOTE  
 					  , d.PRD_CHK
-						from order_d d, order_m m,ITEM_STOCK i,ITEM_HISTORY ih, ITEM_HISTORY_D ihd
+						from order_d d, order_m m,ITEM_STOCK i
 						where m.ORD_NUM=d.ORD_NUM
 			            and i.ITM_CODE=d.ITM_CODE 
-			            and ih.ORD_NUM=m.ORD_NUM
-			            and ihd.ITM_HIS_NUM = ih.ITM_HIS_NUM
-            			<if test = "a_date !=null and a_date != '' and b_date != null and b_date !=''">and 
-	        				<![CDATA[			    			
-	            			
-	            			to_date(m.ORD_DELIVERY_DATE,'yy/MM/dd') >= to_date(#{b_date} ,'yy/MM/dd') and
-	            			to_date(m.ORD_DELIVERY_DATE,'yy/MM/dd') <= to_date(#{a_date} ,'yy/MM/dd')
-	            			]]>
+			            
+	            		<if test = "aDate !=null and aDate != '' and bDate != null and bDate !=''"> and
+	            			<if test = "date == 'request'"> 
+		        				<![CDATA[			    			
+		            			to_date(m.ORD_DELIVERY_DATE,'yy/MM/dd') >= to_date(#{bDate} ,'yy/MM/dd') and
+		            			to_date(m.ORD_DELIVERY_DATE,'yy/MM/dd') <= to_date(#{aDate} ,'yy/MM/dd')
+		            			]]>
+	            			</if>
+	            			<if test = "date == 'delivery'"> 
+		        				<![CDATA[			    			
+		            			to_date(m.ORD_DELIVERY_DATE,'yy/MM/dd') >= to_date(#{bDate} ,'yy/MM/dd') and
+		            			to_date(m.ORD_DELIVERY_DATE,'yy/MM/dd') <= to_date(#{aDate} ,'yy/MM/dd')
+		            			]]>
+	            			</if>
             			</if>
-            			<if test = "operCode !=null and operCode !=''">and
-            				m.oper_code = #{operCode}
+            			<if test = "operCode !=null and operCode !=''"> and
+            				m.oper_code like '%' || #{operCode} || '%'
             			</if>
-            			<if test = "itmCode !=null and itmCode !=''">and
-            				i.ITM_CODE = #{itmCode}
+            			<if test = "itmCode !=null and itmCode !=''"> and
+            				i.ITM_CODE like '%' || #{itmCode} || '%' 
             			</if>
-					ORDER BY 
+					    ORDER BY 
 						m.ORD_NUM DESC
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10

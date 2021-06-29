@@ -108,9 +108,9 @@
 								class="ti-angle-right"></i></span> <span class="pcoded-mtext">주문조회</span>
 							<span class="pcoded-mcaret"></span>
 					</a></li>
-					<li class=" "><a href="button.html"
+					<li class=" "><a href="ItemHistoryList.do"
 						class="waves-effect waves-dark"> <span class="pcoded-micon"><i
-								class="ti-angle-right"></i></span> <span class="pcoded-mtext">Button</span>
+								class="ti-angle-right"></i></span> <span class="pcoded-mtext">출고조회</span>
 							<span class="pcoded-mcaret"></span>
 					</a></li>
 					<li class=""><a href="accordion.html"
