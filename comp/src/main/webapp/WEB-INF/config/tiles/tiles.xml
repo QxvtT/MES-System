@@ -25,7 +25,7 @@
     <definition name="baseEmpty" template="/WEB-INF/jsp/tiles/templateEmpty.jsp">
     </definition>
     <definition name="*.part" extends="baseEmpty">
-        <put-attribute name="body" value="/WEB-INF/jsp/mes/common/modal/{1}.jsp" />
+        <put-attribute name="body" value="/WEB-INF/jsp/mes/common/modal/{1}.jsp" /> 
     </definition>
      <definition name="*/*.part" extends="baseEmpty">
          <put-attribute name="body" value="/WEB-INF/jsp/mes/common/modal/{1}/{2}.jsp" />
