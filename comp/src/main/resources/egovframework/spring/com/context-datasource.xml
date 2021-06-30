@@ -31,11 +31,11 @@
 	
 	<!-- oracle -->
 	<beans profile="oracle">
-	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="${Globals.oracle.DriverClassName}"/>
-		<property name="url" value="${Globals.oracle.Url}" />
-		<property name="username" value="${Globals.oracle.UserName}"/>
-		<property name="password" value="#{egovEnvCryptoService.getPassword()}"/>
+	<bean id="dataSource" class="oracle.ucp.jdbc.PoolDataSourceImpl">
+		<property name="connectionFactoryClassName" value="${Globals.oracle.DriverClassName}"/>
+		<property name="URL" value="${Globals.oracle.Url}" />
+		<property name="user" value="${Globals.oracle.UserName}"/>
+		<property name="password" value="${Globals.oracle.Password}"/>
 	</bean>
 	</beans>
 

@@ -22,11 +22,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 
-import egovframework.com.cmm.EgovWebUtil;
-import egovframework.com.cmm.service.EgovProperties;
-import egovframework.com.cmm.service.Globals;
-import egovframework.com.cmm.util.EgovResourceCloseHelper;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -37,13 +32,19 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import noNamespace.SndngMailDocument;
-
 import org.apache.xmlbeans.XmlOptions;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
+
+
+import egovframework.com.cmm.EgovWebUtil;
+import egovframework.com.cmm.service.EgovProperties;
+import egovframework.com.cmm.service.Globals;
+import egovframework.com.cmm.util.EgovResourceCloseHelper;
+import noNamespace.SndngMailDocument;
+
 
 public class EgovXMLDoc {
 

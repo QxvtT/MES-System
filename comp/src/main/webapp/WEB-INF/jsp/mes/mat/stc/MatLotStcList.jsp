@@ -22,16 +22,35 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <style type="">
 	.form-control {
 		min-width: 150px;
 	}
+	
+	#wrapper {
+		z-index: 100;
+	}
 </style>
 <script type="text/javaScript" language="javascript" defer="defer">
 let matCode = null;
 $(function(){
+	$(document).ready(function () {
+        var datepicker = new tui.DatePicker('#wrapper',
+            {
+            language: 'ko',
+            date: new Date(),
+            input: {
+                element: '#datepicker-input',
+                format: 'yyyy-MM-dd'
+            }
+        });
+        
+    });
+
 
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -130,6 +149,12 @@ $(function(){
 				</td>
 				<td>
 					<div class="row align-items-center text-center col-lg-8">
+					    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+					        <input type="text" id="datepicker-input" aria-label="Date-Time" />
+					        <span class="tui-ico-date"></span>
+					    </div>
+					    <div id="wrapper" style="margin-top: -1px;"></div>
+
 						<input type="date" class="form-control w-25 ml-3" id="matHisDate" name="matHisDate" value="${result.matHisDate }" />
 						<label class="col-form-label text-center ml-3"> ~ </label>
 						<input type="date" class="form-control w-25 ml-3" id="matHisDate" name="matHisDate" value="${result.matHisDate }" />
