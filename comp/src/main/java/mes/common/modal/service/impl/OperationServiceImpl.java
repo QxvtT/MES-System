@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import mes.common.modal.service.ItemVO;
+import mes.common.modal.service.MachineVO;
+import mes.common.modal.service.MaterialVO;
 import mes.common.modal.service.OperationDefaultVO;
 import mes.common.modal.service.OperationService;
 import mes.common.modal.service.OperationVO;
@@ -89,6 +91,10 @@ public class OperationServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return 조회한 OPERATION
 	 * @exception Exception
 	 */
+    
+    //
+    
+    
     public OperationVO selectOperation(OperationVO vo) throws Exception {
         OperationVO resultVO = operationDAO.selectOperation(vo);
         if (resultVO == null)
@@ -106,12 +112,7 @@ public class OperationServiceImpl extends EgovAbstractServiceImpl implements
         return operationDAO.selectOperationList(searchVO);
     }
 
-    /**
-	 * OPERATION 총 갯수를 조회한다.
-	 * @param searchVO - 조회할 정보가 담긴 VO
-	 * @return OPERATION 총 갯수
-	 * @exception
-	 */
+  
     
     ///////
     
@@ -132,12 +133,7 @@ public class OperationServiceImpl extends EgovAbstractServiceImpl implements
         return operationDAO.selectItemList(searchVO);
     }
 
-    /**
-	 * OPERATION 총 갯수를 조회한다.
-	 * @param searchVO - 조회할 정보가 담긴 VO
-	 * @return OPERATION 총 갯수
-	 * @exception
-	 */
+  
     
  ///////
     
@@ -158,13 +154,49 @@ public class OperationServiceImpl extends EgovAbstractServiceImpl implements
         return operationDAO.selectProcessList(searchVO);
     }
 
+   
+    
+ ///////
+    
+    public MaterialVO selectMaterial(MaterialVO vo) throws Exception {
+    	MaterialVO resultVO = operationDAO.selectMaterial(vo);
+        if (resultVO == null)
+            throw processException("info.nodata.msg");
+        return resultVO;
+    }
+
     /**
-	 * OPERATION 총 갯수를 조회한다.
+	 * OPERATION 목록을 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO
-	 * @return OPERATION 총 갯수
-	 * @exception
+	 * @return OPERATION 목록
+	 * @exception Exception
 	 */
-  
+    public List<?> selectMaterialList(MaterialVO searchVO) throws Exception {
+        return operationDAO.selectMaterialList(searchVO);
+    }
+
+ 
+    
+    ///////
+       
+       public MachineVO selectMachine (MachineVO vo) throws Exception {
+    	   MachineVO resultVO = operationDAO.selectMachine(vo);
+           if (resultVO == null)
+               throw processException("info.nodata.msg");
+           return resultVO;
+       }
+
+       /**
+   	 * OPERATION 목록을 조회한다.
+   	 * @param searchVO - 조회할 정보가 담긴 VO
+   	 * @return OPERATION 목록
+   	 * @exception Exception
+   	 */
+       public List<?> selectMachineList(MachineVO searchVO) throws Exception {
+           return operationDAO.selectMachineList(searchVO);
+       }
+
+     
   
     
 }

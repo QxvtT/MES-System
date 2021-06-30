@@ -8,7 +8,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-
                     <tiles:insertAttribute name="body" />
 </body>
 </html> 

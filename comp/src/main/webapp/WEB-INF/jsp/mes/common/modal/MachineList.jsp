@@ -50,6 +50,7 @@
 </script>
 </head>
 <body>
-	Operation
+	MachineList
+	
 </body>
 </html>

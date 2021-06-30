@@ -104,5 +104,37 @@ public interface OperationService {
 	 * @exception
 	 */
     
+ //
+    
+    
+    MaterialVO selectMaterial(MaterialVO vo) throws Exception;
+    
+    /**
+	 * OPERATION 목록을 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 목록
+	 * @exception Exception
+	 */
+    List selectMaterialList(MaterialVO searchVO) throws Exception;
+    
+    /**
+	 * OPERATION 총 갯수를 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 총 갯수
+	 * @exception
+	 */
+    
+    //
+    
+    MachineVO selectMachine(MachineVO vo) throws Exception;
+    
+    /**
+	 * OPERATION 목록을 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 목록
+	 * @exception Exception
+	 */
+    
+    List selectMachineList(MachineVO searchVO) throws Exception;
     
 }

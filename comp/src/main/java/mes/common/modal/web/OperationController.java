@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import mes.common.modal.service.ItemVO;
+import mes.common.modal.service.MachineVO;
+import mes.common.modal.service.MaterialVO;
 import mes.common.modal.service.OperationService;
 import mes.common.modal.service.OperationVO;
 import mes.common.modal.service.ProcessVO;
@@ -59,12 +61,12 @@ public class OperationController {
         return operationList;
     } 
     
-    @RequestMapping(value="/operationList.page")
+    @RequestMapping(value="/OperationList.page")
     public String operationList( OperationVO searchVO, 
     		ModelMap model)
             throws Exception {
     	
-        return "operationList.part";
+        return "OperationList.part";
     } 
     
     // 
@@ -72,13 +74,13 @@ public class OperationController {
     @ResponseBody
     public List<?> ajaxSelectItemList(ItemVO searchVO, ModelMap model) throws Exception {
     	
-        List<?> ItemList = operationService.selectItemList(searchVO);
-        model.addAttribute("resultList", ItemList);
+        List<?> itemList = operationService.selectItemList(searchVO);
+        model.addAttribute("resultList", itemList);
         
-        return ItemList;
+        return itemList;
     } 
     
-    @RequestMapping(value="/ItemList.do")
+    @RequestMapping(value="/ItemList.page")
     public String selectItemList( ItemVO searchVO, 
     		ModelMap model)
             throws Exception {
@@ -100,59 +102,56 @@ public class OperationController {
         return ProcessList;
     } 
     
-    @RequestMapping(value="/ProcessList.do")
+    @RequestMapping(value="/ProcessList.page")
     public String selectProcessList( ProcessVO searchVO, 
     		ModelMap model)
             throws Exception {
     	
-        return "processList.part";
+        return "ProcessList.part";
     } 
     
     
-    /**
     
-    @RequestMapping(value="/common/modal/OperationList")
+    @RequestMapping(value="/MaterialList")
     @ResponseBody
-    public List<?> ajaxSelectOperationList(OperationVO searchVO, 
+    public List<?> ajaxselectMaterialList(MaterialVO searchVO, 
     		ModelMap model)
             throws Exception {
     	
-        List<?> operationList = operationService.selectOperationList(searchVO);
-        model.addAttribute("resultList", operationList);
+        List<?> MaterialList = operationService.selectMaterialList(searchVO);
+        model.addAttribute("resultList", MaterialList);
         
-        return operationList;
+        return MaterialList;
     } 
     
-    @RequestMapping(value="/common/modal/OperationList.do")
+    @RequestMapping(value="/MaterialList.page")
+    public String selectMaterialList( MaterialVO searchVO, 
+    		ModelMap model)
+            throws Exception {
+    	
+        return "MaterialList.part";
+    } 
+    
+    
+    @RequestMapping(value="/MachineList")
+    @ResponseBody
+    public List<?> ajaxSelectMachineList(MachineVO searchVO, 
+    		ModelMap model)
+            throws Exception {
+    	
+        List<?> MachineList = operationService.selectMachineList(searchVO);
+        model.addAttribute("resultList", MachineList);
+        
+        return MachineList;
+    } 
+    
+    @RequestMapping(value="/MachineList.page")
     public String selectOperationList( OperationVO searchVO, 
     		ModelMap model)
             throws Exception {
     	
-        return "/common/modal/OperationList";
+        return "MachineList";
     } 
     
-    @RequestMapping(value="/common/modal/OperationList")
-    @ResponseBody
-    public List<?> ajaxSelectOperationList(OperationVO searchVO, 
-    		ModelMap model)
-            throws Exception {
-    	
-        List<?> operationList = operationService.selectOperationList(searchVO);
-        model.addAttribute("resultList", operationList);
-        
-        return operationList;
-    } 
-    
-    @RequestMapping(value="/common/modal/OperationList.do")
-    public String selectOperationList( OperationVO searchVO, 
-    		ModelMap model)
-            throws Exception {
-    	
-        return "/common/modal/OperationList";
-    } 
-     * 
-     * 
-     * 
-     * **/
     
 }

@@ -29,8 +29,7 @@
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
-		select itm_code,
-		itm_name, itm_size
+		select itm_code, itm_name, itm_size
 		from item
 		
 			<![CDATA[					
@@ -49,8 +48,7 @@
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
-		select prc_code,
-		prc_name, prc_note
+		select prc_code, prc_name, prc_note
 		from process
 			
 			<![CDATA[					
@@ -62,14 +60,13 @@
 
 
 
-	<select id="selectOperationList"
+	<select id="selectMaterialList"
 		parameterType="mes.common.modal.service.OperationVO"
 		resultType="mes.common.modal.service.OperationVO">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
-		select m.mat_code,
-		m.mat_name, m.mat_size, i.operation_name
+		select m.mat_code, m.mat_name, m.mat_size, i.operation_name
 		from material m, item i;
 			
 			<![CDATA[					
@@ -77,17 +74,13 @@
 	]]>
 	</select>
 
-	<!--
 
 
 
 
 
 
-
-
-
-	<select id="selectOperationList"
+	<select id="selectMachineList"
 		parameterType="mes.common.modal.service.OperationVO"
 		resultType="mes.common.modal.service.OperationVO">
 		SELECT * FROM (
@@ -100,5 +93,6 @@
 		) A WHERE ROWNUM <= 10 )
 	]]>
 	</select>
+	<!--
  -->
 </mapper>

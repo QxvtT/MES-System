@@ -4,6 +4,8 @@ import java.util.List;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import mes.common.modal.service.ItemVO;
+import mes.common.modal.service.MachineVO;
+import mes.common.modal.service.MaterialVO;
 import mes.common.modal.service.OperationDefaultVO;
 import mes.common.modal.service.OperationVO;
 import mes.common.modal.service.ProcessVO;
@@ -107,6 +109,28 @@ public interface OperationMapper {
 	 * @return OPERATION 총 갯수
 	 * @exception
 	 */
+    
+    //
+    public MaterialVO selectMaterial(MaterialVO vo) throws Exception;
+
+    /**
+	 * OPERATION 목록을 조회한다.
+	 * @param searchMap - 조회할 정보가 담긴 Map
+	 * @return OPERATION 목록
+	 * @exception Exception
+	 */
+    public List<?> selectMaterialList(MaterialVO searchVO) throws Exception;
+
+    //
+    public MachineVO selectMachine(MachineVO vo) throws Exception;
+
+    /**
+	 * OPERATION 목록을 조회한다.
+	 * @param searchMap - 조회할 정보가 담긴 Map
+	 * @return OPERATION 목록
+	 * @exception Exception
+	 */
+    public List<?> selectMachineList(MachineVO searchVO) throws Exception;
    
     
 
