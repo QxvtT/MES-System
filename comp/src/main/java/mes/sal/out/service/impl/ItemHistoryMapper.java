@@ -62,6 +62,7 @@ public interface ItemHistoryMapper {
 	 * @exception Exception
 	 */
     public List<?> selectItemHistoryList(ItemHistoryDefaultVO searchVO) throws Exception;
+    public List<?> ItemHisNumList(ItemHistoryDefaultVO searchVO) throws Exception;
 
     /**
 	 * ITEM_HISTORY 총 갯수를 조회한다.

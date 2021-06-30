@@ -22,16 +22,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
-<script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+<script
+	src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
 let itmHisDNum = null;
 let aDate = null;
 let bDate = null;
 let operCode = null;
-
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -58,7 +60,6 @@ $(function(){
 	grid.on('scrollEnd', () => {
 	    grid.appendRows(getList());
 	  })
-	  
 	function getList() { 
 		let data;
 		$.ajax({
@@ -66,8 +67,6 @@ $(function(){
 			url : "ItemHistoryList",
 			type : "get",
 			data : {
-				aDate : aDate,
-  				bDate : bDate,
   				operCode: operCode,
   				itmHisDNum : itmHisDNum
 				},
@@ -84,16 +83,73 @@ $(function(){
 	}
 	button.onclick = function(){
 		itmHisDNum = null;
-		aDate = $( 'input#aDate' ).val();
-		bDate = $( 'input#bDate' ).val();
 		operCode = $( 'input#operCode' ).val();
 		grid.resetData(getList());
 		console.log(operCode);
 	}
+	
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
 	   });
+	
+	const grid2 = new tui.Grid({
+		el: document.getElementById('grid2'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: getItemHisNumList(),
+	    rowHeaders: ['rowNum'],
+	    columns: [
+	    	{ header: '자재코드', name:'itmHisNum'},
+			{ header: '출고일자', name:'itmHisRdy'},
+			{ header: '업체명', name:'operName'},
+			{ header: '자재명', name:'itmName'},
+			{ header: '  ', name:'checkbox'}
+	    ]
+	});
+	function getItemHisNumList() {
+		itmHisDNum = null;
+		console.log('tttt');
+		let data2;
+		$.ajax({
+			async: false,
+			url : "ItemHisNumList",
+			type : "get",
+			data : {
+				aDate : aDate,
+  				bDate : bDate,
+				itmHisDNum: itmHisDNum
+				},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					itmHisDNum = result[result.length -1].itmHisDNum;
+				}
+				console.log(result);
+				data2 = result;
+			} // end success
+		}); // end ajax 
+		return data2;
+	} 
+	$('#searchHisNumBtn').click(function(){
+		$("#myModal").modal("toggle");
+		$("#myModal").on('shown.bs.modal', function () {
+			console.log(aDate);
+			grid2.refreshLayout(getItemHisNumList());
+		});
+	});
+	
+	HisNumSearch.onclick = function(){
+		itmHisDNum = null;
+		bDate = $("#modal-body").find('input[name="bDate"]').val();
+		aDate = $("#modal-body").find('input[name="aDate"]').val();
+		grid2.resetData(getItemHisNumList());
+		console.log(bDate);
+		console.log('aaaaa');
+	}
 })
+
+
 </script>
 </head>
 <body>
@@ -118,13 +174,19 @@ $(function(){
 		</div>
 	</div>
 	<!-- Page-header end -->
-	<form id="frm" name = "frm">
-	날짜<input type ="date" id="bDate" name = ""bDate"" ></input>~<input type ="date" id="aDate" name = "aDate" ></input><br>
-	업체<input type ="text" id="operCode" name = "operCode" ></input><br>
-	<button type="button" id ="button" name="button">조회</button>
+	
+	
+	<button type="button" class="btn btn-info btn-sm"
+			id="searchHisNumBtn" data-toggle="modal" data-target="#myModal">검색</button>
+	<form id="frm" name="frm">
+		날짜<input type="date" id="bDate" name=""bDate"" ></input>~<input
+			type="date" id="aDate" name="aDate"></input><br> 업체<input
+			type="text" id="operCode" name="operCode"></input><br>
+		<button type="button" id="button" name="button">조회</button>
 	</form>
 
-	<form:form commandName="searchVO" name="listForm" id="listForm" method="post">
+	<form:form commandName="searchVO" name="listForm" id="listForm"
+		method="post">
 		<input type="hidden" name="itmHisDNum" />
 		<div class="pcoded-inner-content">
 			<div class="main-body">
@@ -138,17 +200,55 @@ $(function(){
 										<li>List</li>
 									</ul>
 								</div>
-								
+
 								<!-- // 타이틀 -->
 								<!-- List -->
 								<div id="grid"></div>
 							</div>
 						</div>
-						
+
 					</div>
 				</div>
 			</div>
 		</div>
 	</form:form>
+
+
+
+	<!-- 출고번호 검색 모달 -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="exampleModalLabel">출고 검색</h4>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body" id= "modal-body" name ="modal-body">
+					<form id="matCodeSearch" name="matCodeSearch" method="post"
+						action="OrderNumList" onsubmit="return false">
+						<div class="form-group row">
+							<div class="col" id="test">
+								출고일자<input type="date" name="bDate"/>~<input type="date" name="aDate"/>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<button type="button" class="btn btn-info btn-sm"
+								id="HisNumSearch" name ="HisNumSearch">검색</button>
+						</div>
+					</form>
+					<br />
+					<div id="grid2"></div>
+				</div>
+				<div class="modal-footer">
+					<a class="btn" id="modalY" href="#">예</a>
+					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

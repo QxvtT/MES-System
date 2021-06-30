@@ -57,6 +57,7 @@ public interface ItemHistoryService {
 	 * @exception Exception
 	 */
     List selectItemHistoryList(ItemHistoryVO searchVO) throws Exception;
+    List ItemHisNumList(ItemHistoryVO searchVO) throws Exception;
     
     /**
 	 * ITEM_HISTORY 총 갯수를 조회한다.

@@ -123,7 +123,43 @@ SELECT * FROM (
 )
 
 ]]>
-	</select>	
+	</select>
+	
+	
+	<select id="ItemHisNumList" parameterType="mes.sal.out.service.ItemHistoryVO" resultType="mes.sal.out.service.ItemHistoryVO">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM (
+				select item.itm_his_num,
+				       op.oper_name,
+				       item.itm_his_rdy,
+				       i.itm_name,
+				       itemd.itm_his_d_num
+				from item_history item, item_history_d itemd, operation op, order_m o, item i
+				where item.itm_his_num = itemd.itm_his_num and
+				      item.ord_num = o.ord_num and
+				      o.oper_code = op.oper_code and
+				      itemd.itm_code = i.itm_code
+					<if test="itmHisDNum != null">
+						<![CDATA[	
+							and itemd.ITM_HIS_D_NUM < #{itmHisDNum}
+						]]>
+					</if>
+					<if test = "aDate != null and aDate != '' and bDate != null and bDate !=''">and 
+	        				<![CDATA[			    			
+	            			item.ITM_HIS_RDY >= to_date(#{bDate} ,'yyyy-MM-dd') and
+	            			item.ITM_HIS_RDY <= to_date(#{aDate} ,'yyyy-MM-dd')
+	            			]]>
+	           		 </if>
+				ORDER BY 
+				itemd.ITM_HIS_D_NUM DESC
+		<![CDATA[					
+	) A WHERE ROWNUM <= 10
+)
+
+]]>
+	</select>
+	
+		
 	<select id="selectItemHistoryListTotCnt" parameterType="mes.sal.out.service.ItemHistoryVO" resultType="int">
 			SELECT COUNT(*) totcnt
 			FROM ITEM_HISTORY

@@ -160,10 +160,11 @@ $(function(){
 										</div>
 										<div class="modal-body">
 											<form id="matCodeSearch" name="matCodeSearch" method="post"
-												action="matCodeList.do" onsubmit="return false">
+												action="OrderNumList" onsubmit="return false">
 												<div class="form-group row">
 													<div class="col">
-														<input type="text" name="matCode" /> &nbsp;&nbsp; 자재코드
+														<input type="text" name="matCode" /> &nbsp;&nbsp; 주문번호
+														<input type="text" name="matName" />  &nbsp;&nbsp; 업체명
 														<input type="text" name="matName" />  &nbsp;&nbsp; 자재명
 													</div>
 												</div>

@@ -44,6 +44,7 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     
     /** ITM_CODE */
     private java.lang.String itmCode;
+    private java.lang.String itmName;
     
     /** ITM_VOL */
     private java.math.BigDecimal itmVol;
@@ -61,6 +62,7 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     private java.lang.String bDate;
     
     private java.lang.String operCode;
+    private java.lang.String operName;
     
     private java.math.BigDecimal totalPrice;
     

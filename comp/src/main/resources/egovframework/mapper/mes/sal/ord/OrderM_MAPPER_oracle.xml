@@ -148,12 +148,28 @@ SELECT * FROM (
 						from order_d d, order_m m,item
 						where m.ORD_NUM=d.ORD_NUM
 			            and d.ord_status ='진행'
-			            and item.itm_code = d.itm_code;
+			            and item.itm_code = d.itm_code
 			            <if test="ordDNum != null and ordDNum != ''">
 							<![CDATA[	
 								and d.ord_d_num < ${ordDNum}
 							]]>
 						</if>
+						<if test="operName != null and operName != ''">
+							<![CDATA[	
+								and m.ord_name < ${operName}
+							]]>
+						</if>
+						<if test="itmName != null and itmName != ''">
+							<![CDATA[	
+								and item.itm_name < ${itmName}
+							]]>
+						</if>
+						<if test = "aDate !=null and aDate != '' and bDate != null and bDate !=''"> and
+		        				<![CDATA[			    			
+		            			to_date(m.ORD_DELIVERY_DATE,'yyyy-MM-dd') >= to_date(#{bDate} ,'yyyy-MM-dd') and
+		            			to_date(m.ORD_DELIVERY_DATE,'yyyy-MM-dd') <= to_date(#{aDate} ,'yyyy-MM-dd')
+		            			]]>
+            			</if>
 					    ORDER BY 
 						d.ORD_D_NUM DESC
 		<![CDATA[					

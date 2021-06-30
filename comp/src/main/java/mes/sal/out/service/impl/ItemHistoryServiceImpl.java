@@ -103,6 +103,9 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
     public List<?> selectItemHistoryList(ItemHistoryVO searchVO) throws Exception {
         return itemHistoryDAO.selectItemHistoryList(searchVO);
     }
+    public List<?> ItemHisNumList(ItemHistoryVO searchVO) throws Exception {
+        return itemHistoryDAO.ItemHisNumList(searchVO);
+    }
 
     /**
 	 * ITEM_HISTORY 총 갯수를 조회한다.

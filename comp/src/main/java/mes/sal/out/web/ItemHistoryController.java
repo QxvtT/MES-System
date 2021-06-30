@@ -65,7 +65,16 @@ public class ItemHistoryController {
             throws Exception {
 
         return "sal/out/ItemHistoryList.page";
-    } 
+    }
+    
+    @RequestMapping(value="/ItemHisNumList", method=RequestMethod.GET)
+    @ResponseBody
+    public List<?> ItemHisNumList(ItemHistoryVO searchVO ) throws Exception {
+    	
+        List<?> ItemHistoryList = itemHistoryService.ItemHisNumList(searchVO);
+        return ItemHistoryList;
+    }
+
     
     @RequestMapping("/addItemHistoryView.do")
     public String addItemHistoryView(
