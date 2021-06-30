@@ -113,9 +113,9 @@
 								class="ti-angle-right"></i></span> <span class="pcoded-mtext">출고조회</span>
 							<span class="pcoded-mcaret"></span>
 					</a></li>
-					<li class=""><a href="accordion.html"
+					<li class=""><a href="addItemHistoryView.do"
 						class="waves-effect waves-dark"> <span class="pcoded-micon"><i
-								class="ti-angle-right"></i></span> <span class="pcoded-mtext">Accordion</span>
+								class="ti-angle-right"></i></span> <span class="pcoded-mtext">출고관리</span>
 							<span class="pcoded-mcaret"></span>
 					</a></li>
 					<li class=" "><a href="tabs.html"

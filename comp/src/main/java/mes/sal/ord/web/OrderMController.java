@@ -50,7 +50,7 @@ public class OrderMController {
 	 * @return "/orderM/OrderMList"
 	 * @exception Exception
 	 */
-    
+    //주문조회 페이지 리스트
     @RequestMapping(value="/OrderMList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajax(OrderMVO searchVO ) throws Exception {
@@ -58,13 +58,33 @@ public class OrderMController {
         List<?> orderMList = orderMService.selectOrderMList(searchVO);
         return orderMList;
     }
-    
+    //주문조회 페이지     
     @RequestMapping(value="/OrderMList.do")
     public String OrderMList(@ModelAttribute("searchVO") OrderMDefaultVO searchVO, 
     		ModelMap model)
             throws Exception {
 		return "sal/ord/OrderMList.page";
 	}
+    
+  //주분번호 페이지 리스트
+    @RequestMapping(value="/OrderNumList", method=RequestMethod.GET)
+    @ResponseBody
+    public List<?> ajaxmodal(OrderMVO searchVO ) throws Exception {
+    	
+        List<?> orderMList = orderMService.OrderNumList(searchVO);
+        return orderMList;
+    }
+    //주문번호      
+    @RequestMapping(value="/OrderNumList.do")
+    public String OrderNumList(@ModelAttribute("searchVO") OrderMDefaultVO searchVO, 
+    		ModelMap model)
+            throws Exception {
+		return "sal/ord/OrderMList.page";
+	}
+    
+    
+  
+    
     @RequestMapping("/addOrderMView.do")
     public String addOrderMView(
             @ModelAttribute("searchVO") OrderMDefaultVO searchVO, Model model)
@@ -80,7 +100,7 @@ public class OrderMController {
             throws Exception {
         orderMService.insertOrderM(orderMVO);
         status.setComplete();
-        return "forward:/OrderMList.do";
+        return "redirect:/OrderMList.do";
     }
     
     @RequestMapping("/updateOrderMView.do")

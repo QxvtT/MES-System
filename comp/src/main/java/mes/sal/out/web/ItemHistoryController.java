@@ -71,8 +71,7 @@ public class ItemHistoryController {
     public String addItemHistoryView(
             @ModelAttribute("searchVO") ItemHistoryDefaultVO searchVO, Model model)
             throws Exception {
-        model.addAttribute("itemHistoryVO", new ItemHistoryVO());
-        return "sal/out//ItemHistoryRegister.page";
+        return "sal/out/ItemHistoryRegister.page";
     }
     
     @RequestMapping("/addItemHistory.do")
@@ -82,7 +81,7 @@ public class ItemHistoryController {
             throws Exception {
         itemHistoryService.insertItemHistory(itemHistoryVO);
         status.setComplete();
-        return "forward:/ItemHistoryList.do";
+        return "redirect:/ItemHistoryList.do";
     }
     
     @RequestMapping("/updateItemHistoryView.do")

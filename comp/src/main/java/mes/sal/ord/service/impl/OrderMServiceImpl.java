@@ -103,6 +103,11 @@ public class OrderMServiceImpl extends EgovAbstractServiceImpl implements
     public List<?> selectOrderMList(OrderMVO searchVO) throws Exception {
         return orderMDAO.selectOrderMList(searchVO);
     }
+    
+    
+    public List<?> OrderNumList(OrderMVO searchVO) throws Exception {
+        return orderMDAO.OrderNumList(searchVO);
+    }
 
     /**
 	 * ORDER_M 총 갯수를 조회한다.
@@ -113,6 +118,7 @@ public class OrderMServiceImpl extends EgovAbstractServiceImpl implements
     public int selectOrderMListTotCnt(OrderMDefaultVO searchVO) {
 		return orderMDAO.selectOrderMListTotCnt(searchVO);
 	}
+
 
     
 }

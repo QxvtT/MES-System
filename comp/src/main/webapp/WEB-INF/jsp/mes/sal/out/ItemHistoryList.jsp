@@ -27,7 +27,7 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
-let itmHisNum = null;
+let itmHisDNum = null;
 let aDate = null;
 let bDate = null;
 let operCode = null;
@@ -46,7 +46,6 @@ $(function(){
 			{ header: '구분', name:'itmDiv'},
 			{ header: '출고일자', name:'itmHisRdy'},
 			{ header: '특이사항', name:'itmNote'},
-			{ header: '일련번호', name:'itmHisDNum'},
 			{ header: '제품코드', name:'itmCode'},
 			{ header: '자재LOT_NO', name:'lotNum'},
 			{ header: '수량', name:'itmVol'},
@@ -70,12 +69,12 @@ $(function(){
 				aDate : aDate,
   				bDate : bDate,
   				operCode: operCode,
-				itmHisNum : itmHisNum
+  				itmHisDNum : itmHisDNum
 				},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					itmHisNum = result[result.length -1].itmHisNum;
+					itmHisDNum = result[result.length -1].itmHisDNum;
 				}
 				console.log(result);
 				data = result;
@@ -84,6 +83,7 @@ $(function(){
 		return data;
 	}
 	button.onclick = function(){
+		itmHisDNum = null;
 		aDate = $( 'input#aDate' ).val();
 		bDate = $( 'input#bDate' ).val();
 		operCode = $( 'input#operCode' ).val();
@@ -103,7 +103,7 @@ $(function(){
 			<div class="row align-items-center">
 				<div class="col-md-8">
 					<div class="page-header-title">
-						<h5 class="m-b-10">출고관리</h5>
+						<h5 class="m-b-10">출고조회</h5>
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -111,7 +111,7 @@ $(function(){
 						<li class="breadcrumb-item"><a href="index.jsp"> <i
 								class="fa fa-home"></i>
 						</a></li>
-						<li class="breadcrumb-item"><a href="#!">출고관리</a></li>
+						<li class="breadcrumb-item"><a href="#!">출고조회</a></li>
 					</ul>
 				</div>
 			</div>
@@ -119,13 +119,13 @@ $(function(){
 	</div>
 	<!-- Page-header end -->
 	<form id="frm" name = "frm">
-	날짜<input type ="text" id="bDate" name = ""bDate"" ></input>~<input type ="text" id="aDate" name = "aDate" ></input><br>
+	날짜<input type ="date" id="bDate" name = ""bDate"" ></input>~<input type ="date" id="aDate" name = "aDate" ></input><br>
 	업체<input type ="text" id="operCode" name = "operCode" ></input><br>
 	<button type="button" id ="button" name="button">조회</button>
 	</form>
 
 	<form:form commandName="searchVO" name="listForm" id="listForm" method="post">
-		<input type="hidden" name="ordNum" />
+		<input type="hidden" name="itmHisDNum" />
 		<div class="pcoded-inner-content">
 			<div class="main-body">
 				<div class="page-wrapper">

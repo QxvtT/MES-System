@@ -32,7 +32,7 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     private java.lang.String itmDiv;
     
     /** ITM_HIS_RDY */
-    private java.sql.Date itmHisRdy;
+    private java.lang.String itmHisRdy;
     
     /** ITM_NOTE */
     private java.lang.String itmNote;
@@ -63,9 +63,10 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     private java.lang.String operCode;
     
     private java.math.BigDecimal totalPrice;
-
+    
 	
     
    
     
 }
+

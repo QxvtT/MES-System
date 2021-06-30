@@ -56,6 +56,7 @@ public interface OrderMService {
 	 * @exception Exception
 	 */
     List selectOrderMList(OrderMVO searchVO) throws Exception;
+    List OrderNumList(OrderMVO searchVO) throws Exception;
     
     /**
 	 * ORDER_M 총 갯수를 조회한다.

@@ -40,6 +40,8 @@ public class OrderMVO extends OrderMDefaultVO{
     
     /** ITM_CODE */
     private java.lang.String itmCode;
+    /** ITM_NAME */
+    private java.lang.String itmName;
     
     /** ORD_STATUS */
     private java.lang.String ordStatus;
@@ -55,6 +57,7 @@ public class OrderMVO extends OrderMDefaultVO{
     
     /** ITM_STOCK */
     private java.math.BigDecimal itmStock;
+    private java.math.BigDecimal ordDNum;
     
     /** ORD_NOTE */
     private java.lang.String ordNote;

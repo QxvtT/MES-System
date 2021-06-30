@@ -32,16 +32,16 @@
 <!-- validator:javascript formName="orderMVO" staticJavascript="false" xhtml="true" cdata="false"/ -->
 
 <script type="text/javaScript" language="javascript" defer="defer">
-<!--
+
 /* 글 목록 화면 function */
 function fn_egov_selectList() {
-   	document.getElementById("detailForm").action = "<c:url value='/orderM/OrderMList.do'/>";
+   	document.getElementById("detailForm").action = "<c:url value='/OrderMList.do'/>";
    	document.getElementById("detailForm").submit();		
 }
 
 /* 글 삭제 function */
 function fn_egov_delete() {
-   	document.getElementById("detailForm").action = "<c:url value='/orderM/deleteOrderM.do'/>";
+   	document.getElementById("detailForm").action = "<c:url value='/deleteOrderM.do'/>";
    	document.getElementById("detailForm").submit();		
 }
 
@@ -51,12 +51,12 @@ function fn_egov_save() {
 
 	/* TODO Validation기능 보완 */
 	
-  	frm.action = "<c:url value="${registerFlag == '등록' ? '/orderM/addOrderM.do' : '/orderM/updateOrderM.do'}"/>";
+  	frm.action = "<c:url value="${registerFlag == '등록' ? '/addOrderM.do' : '/updateOrderM.do'}"/>";
     frm.submit();
 
 }
 
-// -->
+
 </script>
 </head>
 <body>
@@ -70,59 +70,61 @@ function fn_egov_save() {
 		</ul>
 	</div>
 	<!-- // 타이틀 -->
-	<div id="table">
-	<table width="100%" border="1" cellpadding="0" cellspacing="0" >
-		<colgroup>
-			<col width="150"/>
-			<col width=""/>
-		</colgroup>
+	<form id="frm" name = "frm">
+		<div id="table">
+		<table width="100%" border="1" cellpadding="0" cellspacing="0" >
+			<colgroup>
+				<col width="150"/>
+				<col width=""/>
+			</colgroup>
+			<c:if test="${registerFlag == '수정'}">
+		  		 <tr>
+					<th>ORD_NUM *</th>
+					<td>
+						<form:input path="ordNum" cssClass="essentiality" readonly="true" />
+					</td>			
+				</tr>	
+			</c:if>
+			<tr>
+				<th>납기일</th>
+				<td>
+					<input type="date" name ="ordDeliveryDate" id = "ordDeliveryDate" ></input>
+				</td>
+			</tr>	
+			<tr>
+				<th>OPER_CODE</th>
+				<td>
+					<input type="text" name ="operCode" id = "operCode" ></input>
+				</td>
+			</tr>	
+			<tr>
+				<th>OPER_NAME</th>
+				<td>
+					<input type="text" name ="operName" id = "operName" ></input>
+				</td>
+			</tr>	
+			<tr>
+				<th>itm_code</th>
+				<td>
+					<input type="text" name ="itmCode" id = "itmCode" ></input>
+				</td>
+			</tr>
+			<tr>
+				<th>ord_vol</th>
+				<td>
+					<input type="text" name ="ordVol" id = "ordVol" ></input>
+				</td>
+			</tr>
+			<tr>
+				<th>ord_note</th>
+				<td>
+					<input type="text" name ="ordNote" id = "ordNote" ></input>
+				</td>
+			</tr>
 			
-		<c:if test="${registerFlag == '수정'}">
-	   <tr>
-			<th>ORD_NUM *</th>
-			<td>
-				<form:input path="ordNum" cssClass="essentiality" readonly="true" />
-			</td>			
-		</tr>	
-		</c:if>
-		<c:if test="${registerFlag == '등록'}">
-	   <tr>
-			<th>ORD_NUM *</th>
-			<td>
-				<form:input path="ordNum" cssClass="txt" readonly="false" />
-			</td>			
-		</tr>	
-		</c:if>		
-		<tr>
-			<th>ORD_REQUEST_DATE</th>
-			<td>
-				<form:input path="ordRequestDate" cssClass="txt"/>
-				&nbsp;<form:errors path="ordRequestDate" />
-			</td>
-		</tr>	
-		<tr>
-			<th>ORD_DELIVERY_DATE</th>
-			<td>
-				<form:input path="ordDeliveryDate" cssClass="txt"/>
-				&nbsp;<form:errors path="ordDeliveryDate" />
-			</td>
-		</tr>	
-		<tr>
-			<th>OPER_CODE</th>
-			<td>
-				<form:input path="operCode" cssClass="txt"/>
-				&nbsp;<form:errors path="operCode" />
-			</td>
-		</tr>	
-		<tr>
-			<th>OPER_NAME</th>
-			<td>
-				<form:input path="operName" cssClass="txt"/>
-				&nbsp;<form:errors path="operName" />
-			</td>
-		</tr>	
-	</table>
-  </div>
+		</table>
+	  </div>
+  </form>
 	<div id="sysbtn">
 		<ul>
 			<li><span class="btn_blue_l"><a href="javascript:fn_egov_selectList();">List</a><img src="<c:url value='/images//btn_bg_r.gif'/>" alt="" /></span></li>
