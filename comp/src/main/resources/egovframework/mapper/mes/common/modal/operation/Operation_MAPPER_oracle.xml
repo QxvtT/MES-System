@@ -24,8 +24,8 @@
 
 
 	 <select id="selectItemList"
-		parameterType="mes.common.modal.service.OperationVO"
-		resultType="mes.common.modal.service.OperationVO">
+		parameterType="mes.common.modal.service.ItemVO"
+		resultType="mes.common.modal.service.ItemVO">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
@@ -43,8 +43,8 @@
 
 
 	<select id="selectProcessList"
-		parameterType="mes.common.modal.service.OperationVO"
-		resultType="mes.common.modal.service.OperationVO">
+		parameterType="mes.common.modal.service.ProcessVO"
+		resultType="mes.common.modal.service.ProcessVO">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
@@ -61,13 +61,13 @@
 
 
 	<select id="selectMaterialList"
-		parameterType="mes.common.modal.service.OperationVO"
-		resultType="mes.common.modal.service.OperationVO">
+		parameterType="mes.common.modal.service.MaterialVO"
+		resultType="mes.common.modal.service.MaterialVO">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
 		select m.mat_code, m.mat_name, m.mat_size, i.operation_name
-		from material m, item i;
+		from material m, item i
 			
 			<![CDATA[					
 		) A WHERE ROWNUM <= 10 )
@@ -81,13 +81,13 @@
 
 
 	<select id="selectMachineList"
-		parameterType="mes.common.modal.service.OperationVO"
-		resultType="mes.common.modal.service.OperationVO">
+		parameterType="mes.common.modal.service.MachineVO"
+		resultType="mes.common.modal.service.MachineVO">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
 		select mac_code, mac_name, mac_div, mac_size
-		from machine;
+		from machine
 			
 			<![CDATA[					
 		) A WHERE ROWNUM <= 10 )

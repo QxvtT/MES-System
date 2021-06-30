@@ -146,11 +146,11 @@ public class OperationController {
     } 
     
     @RequestMapping(value="/MachineList.page")
-    public String selectOperationList( OperationVO searchVO, 
+    public String selectSelectMachineList( MachineVO searchVO, 
     		ModelMap model)
             throws Exception {
     	
-        return "MachineList";
+        return "MachineList.part";
     } 
     
     

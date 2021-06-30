@@ -21,7 +21,7 @@ public class MaterialVO extends OperationDefaultVO{
     
   
     // 자재검색
-    private java.lang.String operName;
+    private java.lang.String operationName;
 
     private java.lang.String matCode;
 
