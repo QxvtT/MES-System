@@ -22,19 +22,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<style type="">
-	.form-control {
-		min-width: 150px;
-	}
-	
-	#wrapper {
-		z-index: 100;
-	}
-</style>
+
 <script type="text/javaScript" language="javascript" defer="defer">
 let matCode = null;
 $(function(){
@@ -142,7 +130,7 @@ $(function(){
 <div class="row">
 	<div class="col-lg-12">
 		<div class="table">
-		<table class="table">
+		<table class="">
 			<tr>
 				<td>
 					<div class="d-inline-block align-middle">작업일자</div>
