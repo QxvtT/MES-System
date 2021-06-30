@@ -116,6 +116,10 @@ public class MaterialStockServiceImpl extends EgovAbstractServiceImpl implements
     	return materialStockDAO.selectMatLotStcList(searchVO);
     } // 자재 LOT 재고 조회
     
+    public List<?> selectMatCodeList(MaterialStockVO searchVO) throws Exception{
+    	return materialStockDAO.selectMatCodeList(searchVO);
+    } // 자재 코드 조회
+    
     public int selectMaterialStockListTotCnt(MaterialStockDefaultVO searchVO) {
 		return materialStockDAO.selectMaterialStockListTotCnt(searchVO);
 	}

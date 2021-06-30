@@ -36,7 +36,7 @@ import mes.mat.stc.service.MaterialStockVO;
  */
 
 @Controller
-@SessionAttributes(types=MaterialStockVO.class)
+//@SessionAttributes(types=MaterialStockVO.class)
 public class MaterialStockController {
 
     @Resource(name = "materialStockService")
@@ -52,6 +52,17 @@ public class MaterialStockController {
 	 * @return "/materialStock/MaterialStockList"
 	 * @exception Exception
 	 */
+    
+    @RequestMapping(value="/mat/stc/MatCodeList", method=RequestMethod.GET)
+    @ResponseBody
+    public List<?> ajaxMatCodeList(@ModelAttribute("matCodeVO") MaterialStockVO matCodeVO) throws Exception {
+    	System.out.println("a");
+    	List<?> matCodelist = materialStockService.selectMatCodeList(matCodeVO);
+    	System.out.println(matCodelist);
+    	return matCodelist;
+    }
+    
+    // end 자재 코드 조회
     
     @RequestMapping(value="/mat/stc/MatStcList", method=RequestMethod.GET)
     @ResponseBody

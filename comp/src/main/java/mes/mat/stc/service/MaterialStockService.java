@@ -67,6 +67,8 @@ public interface MaterialStockService {
     
     List selectMatLotStcList(MaterialStockVO searchVO) throws Exception; // 자재 LOT 재고 조회
     
+    List selectMatCodeList(MaterialStockVO searchVO) throws Exception; // 자재 코드 조회
+    
     int selectMaterialStockListTotCnt(MaterialStockDefaultVO searchVO);
     
 }

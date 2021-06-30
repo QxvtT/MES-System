@@ -72,6 +72,8 @@ public interface MaterialStockMapper {
     
     public List<?> selectMatLotStcList(MaterialStockVO searchVO) throws Exception; // 자재 LOT 재고 조회
     
+    public List<?> selectMatCodeList(MaterialStockVO searchVO) throws Exception; // 자재 코드 조회
+    
     public int selectMaterialStockListTotCnt(MaterialStockDefaultVO searchVO);
 
 }
