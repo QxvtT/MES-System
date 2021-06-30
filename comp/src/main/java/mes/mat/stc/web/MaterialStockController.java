@@ -70,7 +70,7 @@ public class MaterialStockController {
     }
     // end 자재 재고 조회
     
-    @RequestMapping(value="/mat/stc/MaterialLotStockList", method=RequestMethod.GET)
+    @RequestMapping(value="/mat/stc/MatLotStcList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajaxMatLotStcList(MaterialStockVO searchVO) throws Exception {
     	
@@ -81,7 +81,7 @@ public class MaterialStockController {
     	return list;
     }
     
-    @RequestMapping("/mat/stc/MaterialLotStockList.do")
+    @RequestMapping("/mat/stc/MatLotStcList.do")
     public String selectMatLotStcList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, ModelMap model) throws Exception{
     	return "mat/stc/MatLotStcList.page";
     }
