@@ -3,6 +3,7 @@ package mes.sal.ord.service;
 import java.sql.Date;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @Class Name : OrderMVO.java
@@ -18,6 +19,7 @@ import lombok.Data;
  */
 
 @Data
+@NoArgsConstructor
 public class OrderMVO extends OrderMDefaultVO{
     private static final long serialVersionUID = 1L;
     

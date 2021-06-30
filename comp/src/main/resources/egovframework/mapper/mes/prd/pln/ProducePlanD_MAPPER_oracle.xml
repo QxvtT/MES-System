@@ -83,18 +83,8 @@
 	<select id="selectProducePlanDList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="egovMap">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
-				SELECT
-								PRD_PLAN_D_NUM
-								, PRD_NUM
-								, ITM_CODE
-								, PRD_WORK_VOL
-								, PRD_PLAN_DATE
-								, PRD_NO
-								, PRD_NOTE
-								, COM_CHK
-								, ORD_NUM
-						FROM PRODUCE_PLAN_D
-				WHERE 1=1
+				SELECT *
+				FROM pd
 				<if test="searchKeyword != null and searchKeyword != ''">
 					<if test="searchCondition == 0">AND
 						PRD_PLAN_D_NUM = #{searchKeyword}
@@ -107,8 +97,8 @@ SELECT * FROM (
 						PRD_PLAN_D_NUM DESC
 		
 		<![CDATA[					
-	) A WHERE ROWNUM <= #{lastIndex}
-)WHERE RNUM > #{firstIndex}
+	) A WHERE ROWNUM <= 10
+)
 ]]>
 	</select>	
 	<select id="selectProducePlanDListTotCnt" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="int">
@@ -123,6 +113,12 @@ SELECT * FROM (
 					PRD_NUM LIKE '%' || #{searchKeyword} || '%'
 				</if>
 			</if>
+	</select>
+
+	<!-- 생산계획 master 테이블 조회 -->
+	<select id="selectProducePlanList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="egovMap">
+		SELECT *
+		FROM PRODUCE_PLAN
 	</select>
 
 </mapper>

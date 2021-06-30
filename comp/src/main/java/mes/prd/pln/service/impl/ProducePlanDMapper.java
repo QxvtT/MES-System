@@ -63,6 +63,8 @@ public interface ProducePlanDMapper {
 	 */
     public List<?> selectProducePlanDList(ProducePlanDDefaultVO searchVO) throws Exception;
 
+    //생산계획 조회
+    public List<?> selectProducePlanList(ProducePlanDVO prdVO) throws Exception;
     /**
 	 * PRODUCE_PLAN_D 총 갯수를 조회한다.
 	 * @param searchMap - 조회할 정보가 담긴 Map
@@ -70,5 +72,6 @@ public interface ProducePlanDMapper {
 	 * @exception
 	 */
     public int selectProducePlanDListTotCnt(ProducePlanDDefaultVO searchVO);
+
 
 }
