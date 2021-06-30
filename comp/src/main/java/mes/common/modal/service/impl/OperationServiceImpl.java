@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import mes.common.modal.service.ItemVO;
 import mes.common.modal.service.OperationDefaultVO;
 import mes.common.modal.service.OperationService;
 import mes.common.modal.service.OperationVO;
+import mes.common.modal.service.ProcessVO;
 /**
  * @Class Name : OperationServiceImpl.java
  * @Description : Operation Business Implement class
@@ -110,8 +112,59 @@ public class OperationServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return OPERATION 총 갯수
 	 * @exception
 	 */
-    public int selectOperationListTotCnt(OperationVO searchVO) {
-		return operationDAO.selectOperationListTotCnt(searchVO);
-	}
+    
+    ///////
+    
+    public ItemVO selectItem(ItemVO vo) throws Exception {
+    	ItemVO resultVO = operationDAO.selectItem(vo);
+        if (resultVO == null)
+            throw processException("info.nodata.msg");
+        return resultVO;
+    }
+
+    /**
+	 * OPERATION 목록을 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 목록
+	 * @exception Exception
+	 */
+    public List<?> selectItemList(ItemVO searchVO) throws Exception {
+        return operationDAO.selectItemList(searchVO);
+    }
+
+    /**
+	 * OPERATION 총 갯수를 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 총 갯수
+	 * @exception
+	 */
+    
+ ///////
+    
+    public ProcessVO selectProcess(ProcessVO vo) throws Exception {
+    	ProcessVO resultVO = operationDAO.selectProcess(vo);
+        if (resultVO == null)
+            throw processException("info.nodata.msg");
+        return resultVO;
+    }
+
+    /**
+	 * OPERATION 목록을 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 목록
+	 * @exception Exception
+	 */
+    public List<?> selectProcessList(ProcessVO searchVO) throws Exception {
+        return operationDAO.selectProcessList(searchVO);
+    }
+
+    /**
+	 * OPERATION 총 갯수를 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 총 갯수
+	 * @exception
+	 */
+  
+  
     
 }

@@ -3,8 +3,10 @@ package mes.common.modal.service.impl;
 import java.util.List;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import mes.common.modal.service.ItemVO;
 import mes.common.modal.service.OperationDefaultVO;
 import mes.common.modal.service.OperationVO;
+import mes.common.modal.service.ProcessVO;
 
 /**
  * @Class Name : OperationMapper.java
@@ -69,5 +71,43 @@ public interface OperationMapper {
 	 * @exception
 	 */
     public int selectOperationListTotCnt(OperationDefaultVO searchVO);
+    
+    //
+    public ItemVO selectItem(ItemVO vo) throws Exception;
+
+    /**
+	 * OPERATION 목록을 조회한다.
+	 * @param searchMap - 조회할 정보가 담긴 Map
+	 * @return OPERATION 목록
+	 * @exception Exception
+	 */
+    public List<?> selectItemList(ItemVO searchVO) throws Exception;
+
+    /**
+	 * OPERATION 총 갯수를 조회한다.
+	 * @param searchMap - 조회할 정보가 담긴 Map
+	 * @return OPERATION 총 갯수
+	 * @exception
+	 */
+    
+    //
+    public ProcessVO selectProcess(ProcessVO vo) throws Exception;
+
+    /**
+	 * OPERATION 목록을 조회한다.
+	 * @param searchMap - 조회할 정보가 담긴 Map
+	 * @return OPERATION 목록
+	 * @exception Exception
+	 */
+    public List<?> selectProcessList(ProcessVO searchVO) throws Exception;
+
+    /**
+	 * OPERATION 총 갯수를 조회한다.
+	 * @param searchMap - 조회할 정보가 담긴 Map
+	 * @return OPERATION 총 갯수
+	 * @exception
+	 */
+   
+    
 
 }

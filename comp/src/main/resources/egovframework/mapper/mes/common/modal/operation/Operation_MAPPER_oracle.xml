@@ -23,7 +23,7 @@
 
 
 
-	<!-- <select id="selectOperationList"
+	 <select id="selectItemList"
 		parameterType="mes.common.modal.service.OperationVO"
 		resultType="mes.common.modal.service.OperationVO">
 		SELECT * FROM (
@@ -39,11 +39,11 @@
 	</select>
 
 
+ 
 
 
 
-
-	<select id="selectOperationList"
+	<select id="selectProcessList"
 		parameterType="mes.common.modal.service.OperationVO"
 		resultType="mes.common.modal.service.OperationVO">
 		SELECT * FROM (
@@ -77,6 +77,7 @@
 	]]>
 	</select>
 
+	<!--
 
 
 

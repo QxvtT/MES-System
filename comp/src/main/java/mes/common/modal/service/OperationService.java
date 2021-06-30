@@ -62,6 +62,47 @@ public interface OperationService {
 	 * @return OPERATION 총 갯수
 	 * @exception
 	 */
-    int selectOperationListTotCnt(OperationVO searchVO);
+
+    //
+    
+    
+    ItemVO selectItem(ItemVO vo) throws Exception;
+    
+    /**
+	 * OPERATION 목록을 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 목록
+	 * @exception Exception
+	 */
+    List selectItemList(ItemVO searchVO) throws Exception;
+    
+    /**
+	 * OPERATION 총 갯수를 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 총 갯수
+	 * @exception
+	 */
+    
+    
+ //
+    
+    
+    ProcessVO selectProcess(ProcessVO vo) throws Exception;
+    
+    /**
+	 * OPERATION 목록을 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 목록
+	 * @exception Exception
+	 */
+    List selectProcessList(ProcessVO searchVO) throws Exception;
+    
+    /**
+	 * OPERATION 총 갯수를 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 총 갯수
+	 * @exception
+	 */
+    
     
 }
