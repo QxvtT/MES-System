@@ -26,22 +26,6 @@
 <link rel="stylesheet"
 	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-
-<!-- DatePicker -->
-<%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/datepicker.css"/>
-<script src="${pageContext.request.contextPath}/assets/js/datepicker.js"></script> --%>
-
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css"/>
-<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-
-
-<!-- Jquery DatePicker -->
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/assets/css/jquery-ui.css" />
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/assets/js/jquery-ui/jquery-ui.min.js "></script>
-
-
 <script type="text/javaScript" language="javascript" defer="defer">
 <!--
 	/* 글 수정 화면 function */
@@ -74,160 +58,76 @@ $(function(){
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 400,
-	    data: getList(),
-	    rowHeaders: ['rowNum'],
+	    data: [],
 	    columns: [
-			{ 
-	    		header: '계획번호', 
-	    		name:'prdNum',
-	    		align: 'center'
-	    		},
 			{ 
 	    		header: '제품코드', 
 	    		name:'itmCode',
-	    		align: 'center'
-	    		},
+	    		align: 'center',
+	    		editor: 'text'
+	    	},
 			{ 
 	    		header: '제품명', 
 	    		name:'itmName',
 	    		align: 'center'
-	    		},
+	    	},
 			{ 
 	    		header: '규격', 
 	    		name:'matCode',
 	    		align: 'center'
-	    		},
+	    	},
 			{ 
 	    		header: '주문서관리번호', 
 	    		name:'ordNum',
 	    		align: 'center'
-	    		},
+	    	},
 			{
 	    		header: '납기일자', 
 	    		name:'ordDeliveryDate',
 	    		align: 'center'
-	    		},
+	    	},
 			{
 	    		header: '주문량', 
 	    		name:'ordVol',
 	    		align: 'center'
-	    		},
+	    	},
 			{
 	    		header: '작업량', 
 	    		name:'prdWorkVol',
-	    		align: 'center'
-	    		},
+	    		align: 'center',
+	    	},
 			{ 
 	    		header: '일생산량', 
 	    		name:'itmDayOutput',
 	    		align: 'center'
-	    		},
+	    	},
 			{ 
 	    		header: '생산일수', 
 	    		align: 'center'
-	    		},
+	    	},
 			{ 
 	    		header: '작업일자', 
 	    		name:'prdPlanDate',
 	    		format: 'yyyy/MM/dd',
-	    		align: 'center'
-	    		},
+	    		align: 'center',
+	    		editor: {
+	    			type: 'datePicker'
+	    		}
+	    	},
 			{ 
 	    		header: '작업순서', 
 	    		name:'prdNo',
-	    		align: 'center'
-	    		},
-			{ 
-	    		header: '지시여부', 
-	    		name:'comChk',
-	    		align: 'center'
-	    		},
+	    		align: 'center',
+	    		editor: 'text'
+	    	},
 			{ 
 	    		header: '비고', 
 	    		name:'prdDNote',
-	    		align: 'center'
-	    		}
+	    		align: 'center',
+	    		editor: 'text'
+	    	}
 	    ]
 	}); // end const grid
-	
-	function getList() {
-		let data;
-		$.ajax({
-			async: false,
-			url : "ProducePlanDList",
-			type : "get",
-			data : {prdPlanDNum: prdPlanDNum},
-			dataType: "json",
-			success : function(result){
-				if(result.length > 0) {
-					prdPlanDNum = result[result.length -1].prdPlanDNum;
-				}
-				console.log(result);
-				data = result;
-			} // end success
-		}); // end ajax 
-		return data;
-	}
-	
-	
-	
-	grid.on('scrollEnd', () => {
-	    grid.appendRows(getList());
-	  })
-	
-	$('#mobile-collapse').click(function() {
-		grid.refreshLayout();
-	})
-	
-	$(".datePicker").datepicker({
-		changeMonth: true, 
-		changeYear: true, 
-		minDate: '-50y', 
-		nextText: '다음 달', 
-		prevText: '이전 달', 
-		yearRange: 'c-50:c+20', 
-		showButtonPanel: true, 
-		currentText: '오늘 날짜', 
-		closeText: '닫기', 
-		dateFormat: "yy-mm-dd", 
-		showMonthAfterYear: true,
-		showOn:"both", 
-		buttonImage:"${pageContext.request.contextPath}/assets/images/btn_calendar.png", 
-		buttonImageOnly:true,
-		dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'], 
-		monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
-	});
-	
-	
-	
-	$("#prevDate").datepicker("setDate", '-7D');
-	$(".nowDate").datepicker("setDate", 'today');
-	
-	
-	$('#searchBtn').click(function(){
-		$('#searchModal').modal('toggle');
-		$('#searchModal').on('shown.bs.modal', function(){
-			grid2.refreshLayout();
-		});
-	});
-	
-	$('#resetBtn').click(function(){
-		$('#master').each(function() {
-			this.reset();
-			$("#prevDate").datepicker("setDate", '-7D');
-			$(".nowDate").datepicker("setDate", 'today');
-		});
-	});
-	
-	var datepicker = new tui.DatePicker('#wrapper',
-            {
-            language: 'ko',
-            date: new Date(),
-            input: {
-                element: '#datepicker-input',
-                format: 'yyyy-MM-dd',
-            }
-        });
 	
 	const grid2 = new tui.Grid({
 	    el: document.getElementById('grid2'),
@@ -259,7 +159,101 @@ $(function(){
 	    ]
 	}); // end const grid
 	
+	function getKeyByValue(object, value) {
+		return Object.keys(object).find(key => object[key] === value);
+	}
+	
+	grid2.on('dblclick', () => { 
+		var selectPrd = grid2.getFocusedCell();
+		if(getKeyByValue(selectPrd, "prdNum") != null){
+			let prdNum = Object.values(selectPrd)[2];
+			$('#searchModal').modal("hide");
+			grid.resetData(getList());
+		}
+	});
+	
+	function getList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "ProducePlanDList",
+			type : "get",
+			data : {
+				prdPlanDNum: prdPlanDNum,
+				prdNum : prdNum
+				},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					prdPlanDNum = result[result.length -1].prdPlanDNum;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	
+	grid.on('scrollEnd', () => {
+	    grid.appendRows(getList());
+	  })
+	  
+	$('#mobile-collapse').click(function() {
+		grid.refreshLayout();
+	})
+	
+	/* $(".datePicker").datepicker({
+		changeMonth: true, 
+		changeYear: true, 
+		minDate: '-50y', 
+		nextText: '다음 달', 
+		prevText: '이전 달', 
+		yearRange: 'c-50:c+20', 
+		showButtonPanel: true, 
+		currentText: '오늘 날짜', 
+		closeText: '닫기', 
+		dateFormat: "yy-mm-dd", 
+		showMonthAfterYear: true,
+		showOn:"both", 
+		buttonImage:"${pageContext.request.contextPath}/assets/images/btn_calendar.png", 
+		buttonImageOnly:true,
+		dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'], 
+		monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
+	}); */
+	
+	var datepicker = new tui.DatePicker('.wrapper',
+            {
+            language: 'ko',
+            date: new Date(),
+            input: {
+                element: '.datepicker-input',
+                format: 'yyyy-MM-dd'
+            }
+    });
+	
+	$("#prevDate").datepicker("setDate", '-7D');
+	$(".nowDate").datepicker("setDate", 'today');
+	
+	$('#searchBtn').click(function(){
+		$('#searchModal').modal('toggle');
+		$('#searchModal').on('shown.bs.modal', function(){
+			grid2.refreshLayout();
+		});
+	});
+	
+	$('#resetBtn').click(function(){
+		$('#master').each(function() {
+			this.reset();
+			$("#prevDate").datepicker("setDate", '-7D');
+			$(".nowDate").datepicker("setDate", 'today');
+		});
+	});
+	
+	
 	$('#prdSearchBtn').click(function() {
+		startDate = $('#startDate').val();
+		endDate = $('#endDate').val();
+		grid2.resetData(getPrdList());
 	});
 	
 	function getPrdList() {
@@ -269,7 +263,11 @@ $(function(){
 			async: false,
 			url : "ProducePlanList",
 			type : "get",
-			data : {prdNum: prdNum},
+			data : {
+				startDate : startDate,
+				endDate : endDate,
+				prdNum: prdNum
+				},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
@@ -281,24 +279,20 @@ $(function(){
 		}); // end ajax 
 		return data;
 	}
-
+	var rowData = [];
+	$('#addRowBtn').click(function() {
+		grid.appendRow(rowData)
+	})
 });
 
 
 </script>
 <style>
-	.datePicker {
-		width: 120px;
-	}
 	
 	.modal-content {
 		padding: 5px;
 	}
-	
-	.tui-calendar {
-		z-index: 1;
-	}
-	
+
 </style>
 </head>
 <body>
@@ -340,25 +334,27 @@ $(function(){
 						</button>
 					</div>
 					<div class="modal-body">
-						<form id="prdSearch" name="prdSearch" method="post" action="ProducePlanList.do" onsubmit="return false">
+						<form id="prdSearch" name="prdSearch" method="post" action="/prd/pln/ProducePlanList" onsubmit="return false">
 							<div class="form-group row">
 								<div class="col-md-3">계획일자</div>
 								<div class="col">
 									<div
 										class="tui-datepicker-input tui-datetime-input tui-has-focus">
-										<input type="text" id="datepicker-input" class="nowDate"
+										<input type="text" class="datepicker-input nowDate" id="startDate" name="startDate"
 											aria-label="Date-Time" /> <span class="tui-ico-date"></span>
 									</div>
-									<div id="wrapper" style="margin-top: -1px;"></div>
-									
+									<div class="wrapper" style="margin-top: -1px;"></div>
 								</div>
 								<span>~</span>
 								<div class="col">
-									<div>
-										<input type="text" class="datePicker nowDate" name="endDate"/>
+									<div
+										class="tui-datepicker-input tui-datetime-input tui-has-focus">
+										<input type="text" class="datepicker-input nowDate" id="endDate" name="endDate"
+											aria-label="Date-Time" /> <span class="tui-ico-date"></span>
 									</div>
+									<div class="wrapper" style="margin-top: -1px;"></div>
 								</div>
-								<div class="col-md-3"><button type="button" class="btn btn-primary" id="prdSearchBtn">검색</button></div>
+								<div class="col-md-3"><button type="button" class="btn btn-primary btn-sm"  id="prdSearchBtn">검색</button></div>
 							</div>
 						</form>
 						<div id="grid2"></div>
@@ -387,7 +383,14 @@ $(function(){
 							<table class="table" style="background-color: white;">
 								<tr>
 									<th>계획일자*</th>
-									<td><div><input type="text" class="datePicker"/></div></td>
+									<td>
+										<div
+											class="tui-datepicker-input tui-datetime-input tui-has-focus">
+											<input type="text" id="datepicker-input"
+												aria-label="Date-Time" /> <span class="tui-ico-date"></span>
+										</div>
+										<div id="wrapper" style="margin-top: -1px;"></div>
+									</td>
 								</tr>
 								<tr>
 									<th>생산계획명*</th>
@@ -412,7 +415,7 @@ $(function(){
 									<input type="text" class="datePicker nowDate" />
 								</div>
 								<div class="col">
-									<button type="submit" class="btn btn-primary">미생산 계획
+									<button type="submit" class="btn btn-primary btn-sm">미생산 계획
 										조회</button>
 								</div>
 							</div>
@@ -421,6 +424,10 @@ $(function(){
 				</form>
 			</div>
 			<div class="page-wrapper">
+			<div class="text-right">
+					<button type="button" class="btn btn-primary btn-sm" id="addRowBtn">추가</button>
+					<button type="button" class="btn btn-primary btn-sm" id="deleteRowBtn">삭제</button>
+				</div><br/>
 				<div class="row">
 					<div class="col-xl-12">
 						<div class="card">

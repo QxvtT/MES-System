@@ -1,10 +1,12 @@
 package mes.prd.pln.web;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,12 +67,10 @@ public class ProducePlanDController {
 	
     
     //생산계획 조회
-    @RequestMapping(value = "/prd/pln/ProducePlanList", method = RequestMethod.GET)
+    @RequestMapping(value = "/prd/pln/ProducePlanList")
     @ResponseBody
     public List<?> ajaxPrd(@ModelAttribute("prdVO") ProducePlanDVO prdVO) throws Exception {
-    	System.out.println("이름 : ");
     	List<?> prdList = producePlanDService.selectProducePlanList(prdVO);
-    	System.out.println(prdList);
     	return prdList;
     }
     
@@ -83,9 +83,7 @@ public class ProducePlanDController {
     @RequestMapping(value ="/prd/pln/ProducePlanDList", method = RequestMethod.GET)
     @ResponseBody
     public List<?> ajax(@ModelAttribute("searchVO") ProducePlanDVO searchVO) throws Exception {
-    	System.out.println("이름 : ");
     	List<?> list = producePlanDService.selectProducePlanDList(searchVO);
-    	System.out.println(list);
     	return list;
     }
     
