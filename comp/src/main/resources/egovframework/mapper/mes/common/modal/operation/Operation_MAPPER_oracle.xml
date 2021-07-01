@@ -15,7 +15,7 @@
 		
 		<if test="operCode != null and operCode != ''">
 		<![CDATA[	
-			oper_code < #{operCode}
+			where to_number(substr(oper_code,6)) >  to_number(substr(#{operCode},6))
 		]]>
 		</if>
 			<![CDATA[ 				
