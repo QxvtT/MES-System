@@ -81,12 +81,12 @@ $(function(){
 		}); // end ajax 
 		return data;
 	}
-	button.onclick = function(){
-		itmHisDNum = null;
-		operCode = $( 'input#operCode' ).val();
-		grid.resetData(getList());
-		console.log(operCode);
-	}
+// 	button.onclick = function(){
+// 		itmHisDNum = null;
+// 		operCode = $( 'input#operCode' ).val();
+// 		grid.resetData(getList());
+// 		console.log(operCode);
+// 	}
 	
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
@@ -98,13 +98,12 @@ $(function(){
 	    scrollY: true,
 	    bodyHeight: 200,
 	    data: getItemHisNumList(),
-	    rowHeaders: ['rowNum'],
+	    rowHeaders: ['rowNum','checkbox'],
 	    columns: [
 	    	{ header: '자재코드', name:'itmHisNum'},
 			{ header: '출고일자', name:'itmHisRdy'},
 			{ header: '업체명', name:'operName'},
-			{ header: '자재명', name:'itmName'},
-			{ header: '  ', name:'checkbox'}
+			{ header: '자재명', name:'itmName'}
 	    ]
 	});
 	function getItemHisNumList() {
@@ -178,12 +177,7 @@ $(function(){
 	
 	<button type="button" class="btn btn-info btn-sm"
 			id="searchHisNumBtn" data-toggle="modal" data-target="#myModal">검색</button>
-	<form id="frm" name="frm">
-		날짜<input type="date" id="bDate" name=""bDate"" ></input>~<input
-			type="date" id="aDate" name="aDate"></input><br> 업체<input
-			type="text" id="operCode" name="operCode"></input><br>
-		<button type="button" id="button" name="button">조회</button>
-	</form>
+
 
 	<form:form commandName="searchVO" name="listForm" id="listForm"
 		method="post">
