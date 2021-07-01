@@ -30,6 +30,10 @@ public class MachineVO extends OperationDefaultVO{
     
     private java.lang.String macSize;
     
+    
+    //스크롤용
+    private java.lang.String macCode1;
+    
   
 
  

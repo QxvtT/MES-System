@@ -61,7 +61,8 @@ $(function(){
 			async: false,
 			url : "ProcessList",
 			type : "get",
-			data : {prcCode: prcCode},
+			data : {prcCode: prcCode,
+					prcName: prcName},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
@@ -84,29 +85,7 @@ $(function(){
 	        c3: '2014-04-16'
 	      }
 	    ];
-	<%--
-	const datePicker = new tui.Grid({
-	      el: document.getElementById('datePicker'),
-	      scrollX: false,
-	      scrollY: false,
-	      data: gridData,
-	      columns: [
-	        {
-	          name: 'c1',
-	          editor: 'datePicker'
-	        },
-	        {
-	          name: 'c3',
-	          editor: {
-	            type: 'datePicker',
-	            options: {
-	              selectableRanges: [[new Date(2014, 3, 10), new Date(2014, 5, 20)]]
-	            }
-	          }
-	        }
-		]
-	}) // end const datePicker
-	--%>
+	
 	
 	$('.btn').click(function(){
 		$("#myModal").modal("toggle");
@@ -116,83 +95,17 @@ $(function(){
 		
 	})
 	
+	button.onclick = function(){
+		prcName = null;
+		prcCode = $('input#prcCode').val();
+		grid.resetData(getList());
+		
+	}
+	
 })
 
 
 
-
-
-<%--
-  $(function(){
-	  const dataSource = { 
-				api : { 
-				    readData : {  url : '${pageContext.request.contextPath}/prd/com/ProduceCommandDList' ,  method : 'GET'  }
-				},
-				contentType: 'application/json',
-				serializer(params) {
-					console.log("dd");
-					console.log(params);
-					return JSON.stringify(params);
-				}
-			} ;
-			
-		const grid = new tui.Grid({
-		    el: document.getElementById('grid'),
-		    data: dataSource,
-		    scrollX: false,
-		    scrollY: false,
-		    minBodyHeight: 30,
-		    rowHeaders: ['rowNum'],
-		    columns: [
-		    	{ header: 'PrdComDNum', name:'prdComDNum'},
-				{ header: 'PrdComNum', name:'prdComNum'},
-				{ header: 'MatCode', name:'matCode'},
-				{ header: 'LotNum', name:'lotNum'},
-				{ header: 'ItmCode', name:'itmCode'},
-				{ header: 'PrcFNo', name:'prcFNo'},
-				{ header: 'PrdComVol', name:'prdComVol'},
-				{ header: 'PrdComDDate', name:'prdComDDate'},
-				{ header: 'PrcComNo', name:'prcComNo'},
-				{ header: 'PrcComDiv', name:'prcComDiv'},
-				{ header: 'MatVol', name:'matVol'},
-				{ header: 'PrdComNote', name:'prdComNote'},
-				{ header: 'DivMatCode', name:'divMatCode'},
-				{ header: 'DivLotNum', name:'divLotNum'},
-				{ header: 'PrdPlanNum', name:'prdPlanNum'}
-		    ]
-		  }); // end const grid
-	  
-		  //console.log(grid.request('readData'));
-		  grid.request('readData');
- 
-  });
---%>
-
- 
-
-
-<!--
-/* 글 수정 화면 function */
-
-
-function fn_egov_select(prdComDNum) {
-	document.getElementById("listForm").prdComDNum.value = prdComDNum;
-   	document.getElementById("listForm").action = "<c:url value='/prd/com/updateProduceCommandDView.do'/>";
-   	document.getElementById("listForm").submit();
-}
-
-/* 글 등록 화면 function */
-function fn_egov_addView() {
-   	document.getElementById("listForm").action = "<c:url value='/prd/com/addProduceCommandDView.do'/>";
-   	document.getElementById("listForm").submit();		
-}
-
-/* pagination 페이지 링크 function */
-function fn_egov_link_page(pageNo){
-	document.getElementById("listForm").pageIndex.value = pageNo;
-	document.getElementById("listForm").action = "<c:url value='/prd/com/ProduceCommandDList.do'/>";
-   	document.getElementById("listForm").submit();
-}
 
  // -->
 </script>
@@ -217,13 +130,18 @@ function fn_egov_link_page(pageNo){
 										<div class="modal-header">
 											<h3 class="modal-title" id="exampleModalLabel" align="center">업체검색</h3>
 											<button class="close" type="button" data-dismiss="modal"
-												aria-label="Close">
-												&times;
-											</button>
+												aria-label="Close">&times;</button>
 										</div>
+										<div style="padding: 10px 10px 10px 10px">
+											<h4>공정코드</h4>
+											<input type="text" id="prcCode" name="prcCode"></input><br><br>
+													<button type="button" id="button" name="button">조회</button>
+													&nbsp;
+													<button type="reset">리셋</button>
+										</div>
+
 										<div class="form-group row"></div>
-										<div id="grid">
-										</div>
+										<div id="grid"></div>
 										<div class="modal-footer">
 											<button class="btn" type="button" data-dismiss="modal">선택</button>
 											<button class="btn" type="reset" data-dismiss="modal">취소</button>

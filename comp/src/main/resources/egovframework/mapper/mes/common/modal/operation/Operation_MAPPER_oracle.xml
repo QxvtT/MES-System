@@ -12,12 +12,22 @@
 
 		select *
 		from operation
-		
-		<if test="operCode != null and operCode != ''">
+
+		<where>
+			<if test="operCode != null and operCode != ''">
 		<![CDATA[	
-			where to_number(substr(oper_code,6)) >  to_number(substr(#{operCode},6))
+			to_number(substr(oper_code,6)) >  to_number(substr(#{operCode},6))
 		]]>
-		</if>
+			</if>
+			<if test="operName != null and operName != ''">
+							<![CDATA[	
+								and oper_name = #{operName}
+							]]>
+			</if>
+		</where>
+
+		order by oper_code
+		
 			<![CDATA[ 				
 		) A WHERE ROWNUM <= 10 )
 	]]>
@@ -40,12 +50,24 @@
 		select itm_code,
 		itm_name, itm_size
 		from item
-		
-		<if test="itmCode != null and itmCode != ''">
+
+		<where>
+			<if test="itmCode != null and itmCode != ''">
 							<![CDATA[	
-								and itm_code < ${itmCode}
+								to_number(substr(itm_code,6)) >  to_number(substr(#{itmCode},6))
 							]]>
-		</if>
+			</if>
+			<if test="itmName != null and itmName != ''">
+							<![CDATA[	
+								and itm_name = #{itmName}
+							]]>
+			</if>
+
+
+
+		</where>
+
+		order by itm_code
 			<![CDATA[					
 		) A WHERE ROWNUM <= 10 )
 	]]>
@@ -65,13 +87,22 @@
 		select prc_code,
 		prc_name, prc_note
 		from process
-		
-		<if test="prcCode != null and prcCode != ''">
+		<where>
+
+			<if test="prcName != null and prcName != ''">
 							<![CDATA[	
-								and prc_code < ${prcCode}
+								to_number(substr(prc_name,6)) >  to_number(substr(#{prcName},6))
 							]]>
-		</if>
-		
+			</if>
+			<if test="prcCode != null and prcCode != ''">
+							<![CDATA[	
+								and prc_code = #{prcCode}
+							]]>
+			</if>
+
+
+		</where>
+		order by prc_code
 			
 			<![CDATA[					
 		) A WHERE ROWNUM <= 10 )
@@ -91,12 +122,22 @@
 		select m.mat_code,
 		m.mat_name, m.mat_size, i.operation_name
 		from material m, item i
-		
-		<if test="matCode != null and matCode != ''">
+		<where>
+			<if test="matName != null and matName != ''">
 							<![CDATA[	
-								and mat_code < ${matCode}
+								to_number(substr(m.mat_name,6)) >  to_number(substr(#{ matName},6))
 							]]>
-		</if>
+			</if>
+
+			<if test="matCode != null and matCode != ''">
+							<![CDATA[	
+								and m.mat_code = #{matCode}
+							]]>
+			</if>
+		</where>
+
+
+		order by m.mat_code
 			
 			<![CDATA[					
 		) A WHERE ROWNUM <= 10 )
@@ -116,15 +157,28 @@
 		SELECT A.*, ROWNUM RNUM FROM (
 
 		select mac_code,
-		mac_name, mac_div, mac_size
+		mac_name, mac_div, mac_size, mac_code1
 		from machine
-		
-		<if test="macCode != null and macCode != ''">
+		<where>
+
+			<if test="macCode1 != null and macCode1 != ''">
 							<![CDATA[	
-								and mac_code < ${macCode}
+								to_number(substr(mac_code1,6)) >  to_number(substr(#{macCode1},6))
 							]]>
-		</if>
-			
+			</if>
+			<if test="macCode != null and macCode != ''">
+							<![CDATA[	
+								and mac_code = #{macCode}
+							]]>
+			</if>
+			<if test="macName != null and macName != ''">
+							<![CDATA[	
+								and mac_name = #{macName}
+							]]>
+			</if>
+
+		</where>
+		order by mac_code
 			<![CDATA[					
 		) A WHERE ROWNUM <= 10 )
 	]]>
