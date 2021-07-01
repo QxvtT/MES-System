@@ -60,7 +60,8 @@ $(function(){
 			async: false,
 			url : "ItemList",
 			type : "get",
-			data : {itmCode: itmCode},
+			data : {itmCode: itmCode,
+					itmName: itmName},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
@@ -91,6 +92,13 @@ $(function(){
 		});
 		
 	})
+	button.onclick = function(){
+		itmCode = null;
+		itmName = $('input#itmName').val();
+		grid.resetData(getList());
+		
+	}
+	
 	
 })
 
@@ -117,6 +125,13 @@ $(function(){
 											<h3 class="modal-title" id="exampleModalLabel" align="center">제품검색</h3>
 											<button class="close" type="button" data-dismiss="modal"
 												aria-label="Close">&times;</button>
+										</div>
+										<div style="padding: 10px 10px 10px 10px">
+											<h4>제품명</h4>
+											<input type="text" id="itmName" name="itmName"></input><br><br>
+											<button type="button" id="button" name="button">조회</button>
+											&nbsp;
+											<button type="reset">리셋</button>
 										</div>
 										<div class="form-group row"></div>
 										<div id="grid"></div>
