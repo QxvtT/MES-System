@@ -74,6 +74,8 @@ public interface MaterialStockMapper {
     
     public List<?> selectMatCodeList(MaterialStockVO searchVO) throws Exception; // 자재 코드 조회
     
+    public List<?> selectMatDivList(MaterialStockVO searchVO) throws Exception; // 자재 구분 리스트 불러오기
+    
     public int selectMaterialStockListTotCnt(MaterialStockDefaultVO searchVO);
 
 }
