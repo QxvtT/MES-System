@@ -12,10 +12,16 @@
 
 		select *
 		from operation
-			
-			<![CDATA[					
+		
+		<if test="operCode != null and operCode != ''">
+		<![CDATA[	
+			where to_number(substr(oper_code,6)) >  to_number(substr(#{operCode},6))
+		]]>
+		</if>
+			<![CDATA[ 				
 		) A WHERE ROWNUM <= 10 )
 	]]>
+
 	</select>
 
 
@@ -23,22 +29,30 @@
 
 
 
-	 <select id="selectItemList"
+
+
+	<select id="selectItemList"
 		parameterType="mes.common.modal.service.ItemVO"
 		resultType="mes.common.modal.service.ItemVO">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
-		select itm_code, itm_name, itm_size
+		select itm_code,
+		itm_name, itm_size
 		from item
 		
+		<if test="itmCode != null and itmCode != ''">
+							<![CDATA[	
+								and itm_code < ${itmCode}
+							]]>
+		</if>
 			<![CDATA[					
 		) A WHERE ROWNUM <= 10 )
 	]]>
 	</select>
 
 
- 
+
 
 
 
@@ -48,8 +62,16 @@
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
-		select prc_code, prc_name, prc_note
+		select prc_code,
+		prc_name, prc_note
 		from process
+		
+		<if test="prcCode != null and prcCode != ''">
+							<![CDATA[	
+								and prc_code < ${prcCode}
+							]]>
+		</if>
+		
 			
 			<![CDATA[					
 		) A WHERE ROWNUM <= 10 )
@@ -66,8 +88,15 @@
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
-		select m.mat_code, m.mat_name, m.mat_size, i.operation_name
+		select m.mat_code,
+		m.mat_name, m.mat_size, i.operation_name
 		from material m, item i
+		
+		<if test="matCode != null and matCode != ''">
+							<![CDATA[	
+								and mat_code < ${matCode}
+							]]>
+		</if>
 			
 			<![CDATA[					
 		) A WHERE ROWNUM <= 10 )
@@ -86,13 +115,19 @@
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
-		select mac_code, mac_name, mac_div, mac_size
+		select mac_code,
+		mac_name, mac_div, mac_size
 		from machine
+		
+		<if test="macCode != null and macCode != ''">
+							<![CDATA[	
+								and mac_code < ${macCode}
+							]]>
+		</if>
 			
 			<![CDATA[					
 		) A WHERE ROWNUM <= 10 )
 	]]>
 	</select>
-	<!--
- -->
+	<!-- -->
 </mapper>

@@ -39,7 +39,7 @@
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/style.css">
     <!-- tui-date-picker.css, tui-grid.css -->
-    <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tui/tui-date-picker.min.css">
 	<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css">
     <!-- custom.css -->
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/custom.css">

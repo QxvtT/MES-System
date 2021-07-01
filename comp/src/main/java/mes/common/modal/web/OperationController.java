@@ -56,8 +56,6 @@ public class OperationController {
             throws Exception {
     	
         List<?> operationList = operationService.selectOperationList(searchVO);
-        model.addAttribute("resultList", operationList);
-        
         return operationList;
     } 
     
