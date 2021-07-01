@@ -126,9 +126,53 @@ $(function(){
 		$("#myModal").on('shown.bs.modal', function () {
 			grid2.refreshLayout();
 		});
-		
-	})
+ 	})
 	
+	$(document).on('click', 'input[name=_checked]', function(){
+		var matCode = $("#modal-body").find('input[name="matCode"]').val();
+		console.log(matCode);
+	});
+	
+// 	// 검색 선택버튼 클릭시 체크된 Row의 값을 가져온다.
+// 	$("#matCodeSearch").click(function(){ 
+		
+// 		var rowData = new Array();
+// 		var tdArr = new Array();
+// 		var checkbox = $("input[name=_checked]:checked");
+		
+// 		// 체크된 체크박스 값을 가져온다
+// 		checkbox.each(function(i) {
+
+// 			// checkbox.parent() : checkbox의 부모는 <td>이다.
+// 			// checkbox.parent().parent() : <td>의 부모이므로 <tr>이다.
+// 			var tr = checkbox.parent().parent().eq(i);
+// 			var td = tr.children();
+			
+// 			// 체크된 row의 모든 값을 배열에 담는다.
+// 			rowData.push(tr.text());
+			
+// 			// td.eq(0)은 체크박스 이므로  td.eq(1)의 값부터 가져온다.
+// 			var no = td.eq(1).text()+", "
+// 			var userid = td.eq(2).text()+", ";
+// 			var name = td.eq(3).text()+", ";
+// 			var email = td.eq(4).text()+", ";
+			
+// 			// 가져온 값을 배열에 담는다.
+// 			tdArr.push(no);
+// 			tdArr.push(userid);
+// 			tdArr.push(name);
+// 			tdArr.push(email);
+			
+// 			//console.log("no : " + no);
+// 			//console.log("userid : " + userid);
+// 			//console.log("name : " + name);
+// 			//console.log("email : " + email);
+// 		});
+		
+// 		$("#ex3_Result1").html(" * 체크된 Row의 모든 데이터 = "+rowData);	
+// 		$("#ex3_Result2").html(tdArr);	
+// 	});
+
 })
 
 
@@ -160,12 +204,11 @@ $(function(){
 										</div>
 										<div class="modal-body">
 											<form id="matCodeSearch" name="matCodeSearch" method="post"
-												action="OrderNumList" onsubmit="return false">
+												action="matCodeList.do" onsubmit="return false">
 												<div class="form-group row">
 													<div class="col">
-														<input type="text" name="matCode" /> &nbsp;&nbsp; 주문번호
-														<input type="text" name="matName" />  &nbsp;&nbsp; 업체명
-														<input type="text" name="matName" />  &nbsp;&nbsp; 자재명
+														<input type="text" name="matCode" /> &nbsp;&nbsp; 자재코드
+														<input type="text" name="matName" disabled />  &nbsp;&nbsp; 자재명
 													</div>
 												</div>
 												<div class="col-md-3"><button type="button" class="btn btn-info btn-sm" id="matCodeSearch">검색</button></div>
