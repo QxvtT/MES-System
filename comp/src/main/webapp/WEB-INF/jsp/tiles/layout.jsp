@@ -38,6 +38,11 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/jquery.mCustomScrollbar.css">
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/style.css">
+    <!-- tui-date-picker.css, tui-grid.css -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css">
+	<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css">
+    <!-- custom.css -->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/custom.css">
     
     <!-- Required Jquery -->
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery/jquery.min.js "></script>
@@ -57,6 +62,10 @@
     <script src="${pageContext.request.contextPath}/assets/js/vertical/vertical-layout.min.js "></script>
 
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/script.js "></script>
+    
+    <!-- tui-date-picker, tui-grid js -->
+    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+	<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 </head>
 
 <body>
