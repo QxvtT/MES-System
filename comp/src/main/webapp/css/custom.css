@@ -6,7 +6,7 @@
 }
 
 /* tui 캘린더 생성시 다른 css에 묻힘 방지 */
-.tui-calendar {
+.tui-datepicker {
 	z-index: 100;
 }
 

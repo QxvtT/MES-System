@@ -15,7 +15,7 @@
 		
 		<if test="operCode != null and operCode != ''">
 		<![CDATA[	
-			and oper_code < ${operCode}
+			oper_code < #{operCode}
 		]]>
 		</if>
 			<![CDATA[ 				

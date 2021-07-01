@@ -22,22 +22,31 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-
+<style type="">
+	
+</style>
 <script type="text/javaScript" language="javascript" defer="defer">
 let matCode = null;
 $(function(){
-	$(document).ready(function () {
-        var datepicker = new tui.DatePicker('#wrapper',
+	var datepicker1 = new tui.DatePicker('#date1',
             {
             language: 'ko',
             date: new Date(),
             input: {
-                element: '#datepicker-input',
+                element: '#datepicker-input1',
                 format: 'yyyy-MM-dd'
             }
         });
-        
-    });
+	
+	var datepicker2 = new tui.DatePicker('#date2',
+            {
+            language: 'ko',
+            date: new Date(),
+            input: {
+                element: '#datepicker-input2',
+                format: 'yyyy-MM-dd'
+            }
+        });
 
 
 	const grid = new tui.Grid({
@@ -130,22 +139,25 @@ $(function(){
 <div class="row">
 	<div class="col-lg-12">
 		<div class="table">
-		<table class="">
+		<table class="table">
 			<tr>
 				<td>
 					<div class="d-inline-block align-middle">작업일자</div>
 				</td>
 				<td>
 					<div class="row align-items-center text-center col-lg-8">
-					    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-					        <input type="text" id="datepicker-input" aria-label="Date-Time" />
+					    <div class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+					        <input type="text" id="datepicker-input1" class=" form-control w-25" aria-label="Date-Time" name="matHisDate" value="${result.matHisDate }"/>
 					        <span class="tui-ico-date"></span>
 					    </div>
-					    <div id="wrapper" style="margin-top: -1px;"></div>
+					    <div id="date1" style="margin-top: -1px;"></div>
 
-						<input type="date" class="form-control w-25 ml-3" id="matHisDate" name="matHisDate" value="${result.matHisDate }" />
-						<label class="col-form-label text-center ml-3"> ~ </label>
-						<input type="date" class="form-control w-25 ml-3" id="matHisDate" name="matHisDate" value="${result.matHisDate }" />
+						<label class="col-form-label text-center"> ~ </label>
+						<div class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+					        <input type="text" id="datepicker-input2" class=" form-control w-25" aria-label="Date-Time" name="matHisDate" value="${result.matHisDate }"/>
+					        <span class="tui-ico-date"></span>
+					    </div>
+					    <div id="date2" style="margin-top: -1px;"></div>
 					</div>
 					<div class="col-lg-4">
 					</div>
@@ -158,10 +170,7 @@ $(function(){
 			 	<td>
 				 	<div class="row align-items-center text-center col-lg-8">
 						<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode" value="${result.matCode }"></input>
-						<input type="button" value="검색" class="btn btn-sm btn-primary waves-effect waves-light"></input>
-						<label class="col-form-label text-center ml-3"> ~ </label>
-						<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode" value="${result.matCode }"></input>
-						<input type="button" value="검색" class="btn btn-sm btn-primary waves-effect waves-light"></input>
+						<button type="button" class="btn btn-sm btn-primary waves-effect waves-light ml-3"><i class="ti-search"></i></button>
 					</div>
 					<div class="col-lg-4">
 					</div>

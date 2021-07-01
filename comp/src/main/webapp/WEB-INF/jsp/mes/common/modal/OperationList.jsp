@@ -22,13 +22,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<script
-	src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+
 <script type="text/javaScript" language="javascript" defer="defer">
 let operCode = null;
 let operName = null;
@@ -53,7 +47,10 @@ $(function(){
 	}); // end const grid
 	
 	grid.on('scrollEnd', () => {
-	    grid.appendRows(getList());
+		let nextList = getList();
+		if(nextList != null) {
+		    grid.appendRows(nextList);
+		}
 	  })
 	  
 	function getList() {
