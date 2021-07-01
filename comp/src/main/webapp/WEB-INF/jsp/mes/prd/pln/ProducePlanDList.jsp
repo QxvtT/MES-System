@@ -27,31 +27,10 @@
 	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
-<!--
-	/* 글 수정 화면 function */
-
-	function fn_egov_select(prdPlanDNum) {
-		document.getElementById("listForm").prdPlanDNum.value = prdPlanDNum;
-		document.getElementById("listForm").action = "<c:url value='/prd/pln/updateProducePlanDView.do'/>";
-		document.getElementById("listForm").submit();
-	}
-
-	/* 글 등록 화면 function */
-	function fn_egov_addView() {
-		document.getElementById("listForm").action = "<c:url value='/prd/pln/addProducePlanDView.do'/>";
-		document.getElementById("listForm").submit();
-	}
-
-	/* pagination 페이지 링크 function */
-	function fn_egov_link_page(pageNo) {
-		document.getElementById("listForm").pageIndex.value = pageNo;
-		document.getElementById("listForm").action = "<c:url value='/prd/pln/ProducePlanDList.do'/>";
-		document.getElementById("listForm").submit();
-	}
-// -->
-
 let prdPlanDNum = null;
 let prdNum = null;
+let prdName = null;
+let prdNote = null;
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -59,6 +38,7 @@ $(function(){
 	    scrollY: true,
 	    bodyHeight: 400,
 	    data: [],
+	    rowHeaders: ['checkbox'],
 	    columns: [
 			{ 
 	    		header: '제품코드', 
@@ -168,6 +148,8 @@ $(function(){
 		if(getKeyByValue(selectPrd, "prdNum") != null){
 			let prdNum = Object.values(selectPrd)[2];
 			$('#searchModal').modal("hide");
+			$('#prdName').val(prdName);
+			$('#prdNote').val(prdNote);
 			grid.resetData(getList());
 		}
 	});
@@ -187,7 +169,6 @@ $(function(){
 				if(result.length > 0) {
 					prdPlanDNum = result[result.length -1].prdPlanDNum;
 				}
-				console.log(result);
 				data = result;
 			} // end success
 		}); // end ajax 
@@ -202,37 +183,51 @@ $(function(){
 		grid.refreshLayout();
 	})
 	
-	/* $(".datePicker").datepicker({
-		changeMonth: true, 
-		changeYear: true, 
-		minDate: '-50y', 
-		nextText: '다음 달', 
-		prevText: '이전 달', 
-		yearRange: 'c-50:c+20', 
-		showButtonPanel: true, 
-		currentText: '오늘 날짜', 
-		closeText: '닫기', 
-		dateFormat: "yy-mm-dd", 
-		showMonthAfterYear: true,
-		showOn:"both", 
-		buttonImage:"${pageContext.request.contextPath}/assets/images/btn_calendar.png", 
-		buttonImageOnly:true,
-		dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'], 
-		monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
-	}); */
+	var today = new Date();
+	var preDay = new Date();
+	preDay.setDate(today.getDate() - 7);
 	
-	var datepicker = new tui.DatePicker('.wrapper',
-            {
-            language: 'ko',
-            date: new Date(),
-            input: {
-                element: '.datepicker-input',
-                format: 'yyyy-MM-dd'
-            }
-    });
-	
-	$("#prevDate").datepicker("setDate", '-7D');
-	$(".nowDate").datepicker("setDate", 'today');
+	function setDatePicker(){
+	  	var datepicker = new tui.DatePicker('#wrapper', {
+	  		 language: 'ko',
+	         date: new Date(),
+	         input: {
+	             element: '#datepicker-input',
+	             format: 'yyyy-MM-dd'
+	         }
+	    });
+		
+	    var picker = tui.DatePicker.createRangePicker({
+	        startpicker: {
+	        	language: 'ko',
+	            date: today,
+	            input: '#startDate',
+	            container: '#startDate-container'
+	        },
+	        endpicker: {
+	        	language: 'ko',
+	            date: today,
+	            input: '#endDate',
+	            container: '#endDate-container'
+	        }
+	    });
+	    
+	    var picker2 = tui.DatePicker.createRangePicker({
+	        startpicker: {
+	        	language: 'ko',
+	            date: preDay,
+	            input: '#unpStartDate',
+	            container: '#unpStartDate-container'
+	        },
+	        endpicker: {
+	        	language: 'ko',
+	            date: today,
+	            input: '#unpEndDate',
+	            container: '#unpEndDate-container'
+	        }
+	    });
+	}
+	setDatePicker();
 	
 	$('#searchBtn').click(function(){
 		$('#searchModal').modal('toggle');
@@ -244,11 +239,10 @@ $(function(){
 	$('#resetBtn').click(function(){
 		$('#master').each(function() {
 			this.reset();
-			$("#prevDate").datepicker("setDate", '-7D');
-			$(".nowDate").datepicker("setDate", 'today');
+			grid.clear();
+			setDatePicker();
 		});
 	});
-	
 	
 	$('#prdSearchBtn').click(function() {
 		startDate = $('#startDate').val();
@@ -274,11 +268,14 @@ $(function(){
 					prdNum = result[result.length -1].prdNum;
 				}
 				console.log(result);
+				prdName = result[0].prdName;
+				prdNote = result[0].prdNote;
 				data = result;
 			} // end success
 		}); // end ajax 
 		return data;
 	}
+	
 	var rowData = [];
 	$('#addRowBtn').click(function() {
 		grid.appendRow(rowData)
@@ -340,19 +337,17 @@ $(function(){
 								<div class="col">
 									<div
 										class="tui-datepicker-input tui-datetime-input tui-has-focus">
-										<input type="text" class="datepicker-input nowDate" id="startDate" name="startDate"
-											aria-label="Date-Time" /> <span class="tui-ico-date"></span>
+										<input id="startDate" name="startDate" type="text" aria-label="Date"/>
+											<span class="tui-ico-date"></span>
+											<div id="startDate-container" style="margin-left: -1px;"></div>
 									</div>
-									<div class="wrapper" style="margin-top: -1px;"></div>
-								</div>
-								<span>~</span>
-								<div class="col">
+									<span>~</span>
 									<div
 										class="tui-datepicker-input tui-datetime-input tui-has-focus">
-										<input type="text" class="datepicker-input nowDate" id="endDate" name="endDate"
-											aria-label="Date-Time" /> <span class="tui-ico-date"></span>
+										<input id="endDate" name="endDate" type="text" aria-label="Date"/>
+											<span class="tui-ico-date"></span>
+											<div id="endDate-container" style="margin-left: -1px;"></div>
 									</div>
-									<div class="wrapper" style="margin-top: -1px;"></div>
 								</div>
 								<div class="col-md-3"><button type="button" class="btn btn-primary btn-sm"  id="prdSearchBtn">검색</button></div>
 							</div>
@@ -387,18 +382,18 @@ $(function(){
 										<div
 											class="tui-datepicker-input tui-datetime-input tui-has-focus">
 											<input type="text" id="datepicker-input"
-												aria-label="Date-Time" /> <span class="tui-ico-date"></span>
+												aria-label="Date-Time"/> <span class="tui-ico-date"></span>
 										</div>
 										<div id="wrapper" style="margin-top: -1px;"></div>
 									</td>
 								</tr>
 								<tr>
 									<th>생산계획명*</th>
-									<td><input type="text" id="prd_name" /></td>
+									<td><input type="text" id="prdName" /></td>
 								</tr>
 								<tr>
 									<th>특기사항</th>
-									<td><input type="text" id="prd_note" /></td>
+									<td><input type="text" id="prdNote" /></td>
 								</tr>
 							</table>
 						</div>
@@ -407,12 +402,18 @@ $(function(){
 							<h5>미생산 계획 검색</h5>
 							<div>납기일자</div>
 							<div class="row">
-								<div class="col">
-									<input type="text" class="datePicker" id="prevDate" />
+								<div
+									class="tui-datepicker-input tui-datetime-input tui-has-focus">
+									<input id="unpStartDate" name="unpStartDate" type="text"
+										aria-label="Date" /> <span class="tui-ico-date"></span>
+									<div id="unpStartDate-container" style="margin-left: -1px;"></div>
 								</div>
 								<span>~</span>
-								<div class="col">
-									<input type="text" class="datePicker nowDate" />
+								<div
+									class="tui-datepicker-input tui-datetime-input tui-has-focus">
+									<input id="unpEndDate" name="unpEndDate" type="text"
+										aria-label="Date" /> <span class="tui-ico-date"></span>
+									<div id="unpEndDate-container" style="margin-left: -1px;"></div>
 								</div>
 								<div class="col">
 									<button type="submit" class="btn btn-primary btn-sm">미생산 계획
