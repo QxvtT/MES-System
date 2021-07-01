@@ -33,7 +33,8 @@
 let itmHisDNum = null;
 let aDate = null;
 let bDate = null;
-let operCode = null;
+let operName = null;
+let itmCode = null;
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -43,13 +44,12 @@ $(function(){
 	    data: getList(),
 	    rowHeaders: ['rowNum'],
 	    columns: [
-	    	{ header: '전표번호', name:'itmHisNum'},
-			{ header: '주문번호', name:'ordNum'},
-			{ header: '구분', name:'itmDiv'},
-			{ header: '출고일자', name:'itmHisRdy'},
-			{ header: '특이사항', name:'itmNote'},
+	    	{ header: '출고일자', name:'itmHisRdy'},
+	    	{ header: '업체명', name:'operName'},
+	    	{ header: '자재LOT_NO', name:'lotNum'},
 			{ header: '제품코드', name:'itmCode'},
-			{ header: '자재LOT_NO', name:'lotNum'},
+			{ header: '제품명', name:'itmName'},
+			{ header: '주문번호', name:'ordNum'},
 			{ header: '수량', name:'itmVol'},
 			{ header: '단가', name:'itmPrice'},
 			{ header: '금액', name:'totalPrice'},
@@ -67,7 +67,10 @@ $(function(){
 			url : "ItemHistoryList",
 			type : "get",
 			data : {
-  				operCode: operCode,
+  				aDate : aDate,
+  				bDate : bDate,
+  				operName : operName,
+  				itmCode : itmCode,
   				itmHisDNum : itmHisDNum
 				},
 			dataType: "json",
@@ -81,74 +84,19 @@ $(function(){
 		}); // end ajax 
 		return data;
 	}
-// 	button.onclick = function(){
-// 		itmHisDNum = null;
-// 		operCode = $( 'input#operCode' ).val();
-// 		grid.resetData(getList());
-// 		console.log(operCode);
-// 	}
-	
+ 	button.onclick = function(){
+ 		itmHisDNum = null;
+ 		aDate = $( 'input#aDate' ).val();
+ 		bDate = $( 'input#bDate' ).val();
+ 		operName = $( 'input#operName' ).val();
+ 		itmCode = $( 'input#itmCode' ).val();
+ 		grid.resetData(getList());
+ 		console.log(operCode);
+ 	}
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
 	   });
-	
-	const grid2 = new tui.Grid({
-		el: document.getElementById('grid2'),
-	    scrollX: false,
-	    scrollY: true,
-	    bodyHeight: 200,
-	    data: getItemHisNumList(),
-	    rowHeaders: ['rowNum','checkbox'],
-	    columns: [
-	    	{ header: '자재코드', name:'itmHisNum'},
-			{ header: '출고일자', name:'itmHisRdy'},
-			{ header: '업체명', name:'operName'},
-			{ header: '자재명', name:'itmName'}
-	    ]
-	});
-	function getItemHisNumList() {
-		itmHisDNum = null;
-		console.log('tttt');
-		let data2;
-		$.ajax({
-			async: false,
-			url : "ItemHisNumList",
-			type : "get",
-			data : {
-				aDate : aDate,
-  				bDate : bDate,
-				itmHisDNum: itmHisDNum
-				},
-			dataType: "json",
-			success : function(result){
-				if(result.length > 0) {
-					itmHisDNum = result[result.length -1].itmHisDNum;
-				}
-				console.log(result);
-				data2 = result;
-			} // end success
-		}); // end ajax 
-		return data2;
-	} 
-	$('#searchHisNumBtn').click(function(){
-		$("#myModal").modal("toggle");
-		$("#myModal").on('shown.bs.modal', function () {
-			console.log(aDate);
-			grid2.refreshLayout(getItemHisNumList());
-		});
-	});
-	
-	HisNumSearch.onclick = function(){
-		itmHisDNum = null;
-		bDate = $("#modal-body").find('input[name="bDate"]').val();
-		aDate = $("#modal-body").find('input[name="aDate"]').val();
-		grid2.resetData(getItemHisNumList());
-		console.log(bDate);
-		console.log('aaaaa');
-	}
 })
-
-
 </script>
 </head>
 <body>
@@ -174,11 +122,13 @@ $(function(){
 	</div>
 	<!-- Page-header end -->
 	
-	
-	<button type="button" class="btn btn-info btn-sm"
-			id="searchHisNumBtn" data-toggle="modal" data-target="#myModal">검색</button>
-
-
+	<form id="frm" name ="frm">
+		날짜<input type="date" id="abate" name = "bDate"/> ~ <input type="date" id="aDate" name = "aDate"/> <br>
+		업체명 <input type="text" id="operName" name = "operName"/><br>
+		제품코드 <input type="text" id="itmCode" name = "itmCode"/><br>
+		
+		<button type="button" class="btn btn-info btn-sm" id="button">검색</button>
+	</form>
 	<form:form commandName="searchVO" name="listForm" id="listForm"
 		method="post">
 		<input type="hidden" name="itmHisDNum" />
@@ -209,40 +159,8 @@ $(function(){
 
 
 
-	<!-- 출고번호 검색 모달 -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" id="exampleModalLabel">출고 검색</h4>
-					<button class="close" type="button" data-dismiss="modal"
-						aria-label="Close">
-						&times;
-					</button>
-				</div>
-				<div class="modal-body" id= "modal-body" name ="modal-body">
-					<form id="matCodeSearch" name="matCodeSearch" method="post"
-						action="OrderNumList" onsubmit="return false">
-						<div class="form-group row">
-							<div class="col" id="test">
-								출고일자<input type="date" name="bDate"/>~<input type="date" name="aDate"/>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<button type="button" class="btn btn-info btn-sm"
-								id="HisNumSearch" name ="HisNumSearch">검색</button>
-						</div>
-					</form>
-					<br />
-					<div id="grid2"></div>
-				</div>
-				<div class="modal-footer">
-					<a class="btn" id="modalY" href="#">예</a>
-					<button class="btn" type="button" data-dismiss="modal">아니요</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 </body>
 </html>
+
+

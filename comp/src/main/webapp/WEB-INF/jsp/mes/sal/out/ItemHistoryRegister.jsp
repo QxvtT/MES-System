@@ -6,17 +6,17 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
- * @Class Name : ItemHistoryRegister.jsp
- * @Description : ItemHistory Register 화면
- * @Modification Information
- * 
- * @author seongwon
- * @since 2021-06-29
- * @version 1.0
- * @see
- *  
- * Copyright (C) All right reserved.
- */
+* @Class Name : ItemHistoryRegister.jsp
+* @Description : ItemHistory Register 화면
+* @Modification Information
+* 
+* @author seongwon
+* @since 2021-06-29
+* @version 1.0
+* @see
+*  
+* Copyright (C) All right reserved.
+*/
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -67,8 +67,9 @@ let itmHisDNum = null;
 // 모달 검색 
 let aDate = null;
 let bDate = null;
-let operName = null;
-let timName= null;
+let test = null;
+
+let str = '';
 
 $(function(){
 	const grid = new tui.Grid({
@@ -106,6 +107,7 @@ $(function(){
 			data : {
   				 itmHisDNum : itmHisDNum
   				,ordNum : ordNum
+  				,str : str
 				},
 			dataType: "json",
 			success : function(result){
@@ -120,8 +122,10 @@ $(function(){
 	}
 	button.onclick = function(){
 		itmHisDNum = null;
+		test = null;
 		ordNum = $( 'input#ordNum' ).val();
 		grid.resetData(getList());
+		grid2.resetData(getItemHisNumList());
 
 	}
 	$('#mobile-collapse').click(function() {
@@ -130,56 +134,84 @@ $(function(){
 	
 // 	모달
 	const grid2 = new tui.Grid({
+		
 		el: document.getElementById('grid2'),
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
-	    data: getOrderNumList(),
+	    data: getItemHisNumList(),
 	    rowHeaders: ['rowNum', 'checkbox'],
 	    columns: [
-			{ header: '주문번호', name:'ordNum'},
+			 { header: '출고일자', name:'itmHisRdy'}
+			,{ header: '전표번호', name:'itmHisNum'}
+			,{ header: '업체명', name:'operName'}
+			,{ header: '자재명', name:'itmName'}
+			,{ header: '비고', name:'itmNoteD'}
 	    ]
 	});
-
-	function getOrderNumList() {
-		let data;
+	function getItemHisNumList() {
+		if(test ==null && itmHisDNum !=null) {
+		itmHisDNum = null;
+		test = 'test';
+		}
+		let data2;
 		$.ajax({
 			async: false,
-			url : "OrderNumList",
+			url : "ItemHisNumList",
 			type : "get",
 			data : {
-				ordDeliveryDate : ordDeliveryDate
-				,operName : operName
-				,itmName : itmName
-				,ordDNum : ordDNum
+				 aDate : aDate
+				,bDate : bDate
+				,itmHisDNum: itmHisDNum
 				},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					ordDNum = result[result.length -1].ordDNum;
+					itmHisDNum = result[result.length -1].itmHisDNum;
 				}
 				console.log(result);
-				data = result;
+				data2 = result;
 			} // end success
 		}); // end ajax 
-		return data;
+		return data2;
 	} 
 	
 	grid2.on('scrollEnd', () => {
-	    grid.appendRows(getList());
+	    grid2.appendRows(getItemHisNumList());
 	  })
-	$('#ordNumSearch').click(function(){
-		
-		console.log(itmName);
+	  
+	$('#searchHisBtn').click(function(){
 		$("#myModal").on('shown.bs.modal', function () {
-			ordDeliveryDate = $( 'input#ordNum' ).val();
-			operName = $( 'input#operName' ).val();
-			itmName = $( 'input#itmName' ).val();
 			grid2.refreshLayout();
 		});
-		
+	})
+	ordNumSearch.onclick = function(){
+		console.log('test')
+		itmHisDNum = null;
+		aDate = $(".modal-body").find('input[name="aDate"]').val();
+		console.log(aDate)
+		bDate = $(".modal-body").find('input[name="bDate"]').val();
+		grid2.resetData(getItemHisNumList());
+	}
+	modalY.onclick=function() {
+		itmHisDNum = null;
+		test = null;
+		str = '';
+		for(let i =0; i<grid2.getCheckedRows().length; i++) {
+			if(i == grid2.getCheckedRows().length-1){
+				str = str + grid2.getCheckedRows()[i]['itmHisNum'];
+			}
+			else{
+				str = str + grid2.getCheckedRows()[i]['itmHisNum']+"' , '";
+			}
+		}
+		console.log(str);
+		console.log('======================');
+	grid.resetData(getList());
+	grid2.resetData(getItemHisNumList());
+	}
 })
-}
+
 
 </script>
 </head>
@@ -205,61 +237,13 @@ $(function(){
 		</div>
 	</div>
 	<!-- Page-header end -->
-	<button type="button" class="btn btn-info btn-sm" id="searchMatBtn"
+	<button type="button" class="btn btn-info btn-sm" id="searchHisBtn"
 		data-toggle="modal" data-target="#myModal">검색</button>
-
-	<!-- 주문코드 검색 모달 -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" id="exampleModalLabel">주문번호 검색</h4>
-					<button class="close" type="button" data-dismiss="modal"
-						aria-label="Close">
-						&times;
-					</button>
-				</div>
-				<div class="modal-body">
-					<form id="matCodeSearch" name="OrderNumList" method="post"
-						action="matCodeList.do" onsubmit="return false">
-						<div class="form-group row">
-							<div class="col">
-								납기일자<input type="date" name="ordNum" /> ~ <input type="date"
-									name="ordNum" /><br> 업체명
-								<input type="text" name="operName" /> <br> 자재명
-								<input type="text" name="itmName" /> <br>
-							</div>
-						</div>
-						<div class="col-md-3">
-							<button type="button" class="btn btn-info btn-sm"
-								id="ordNumSearch">검색</button>
-						</div>
-					</form>
-					<br />
-					<div id="grid2"></div>
-				</div>
-				<div class="modal-footer">
-					<a class="btn" id="modalY" href="#">예</a>
-					<button class="btn" type="button" data-dismiss="modal">아니요</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- 주쿤코드 검색 모달 종료-->
-
 
 	<form:form commandName="itemHistoryVO" name="detailForm"
 		id="detailForm">
 		<div id="content_pop">
-			<!-- 타이틀 -->
-			<div id="title">
-				<ul>
-					<li><img src="<c:url value='/images//title_dot.gif'/>" alt="" />
-					<c:out value="${registerFlag}" /></li>
-				</ul>
-			</div>
-			<!-- // 타이틀 -->
+		
 			<form id="frm" name="frm">
 				<div id="table">
 					<table width="100%" border="1" cellpadding="0" cellspacing="0">
@@ -275,49 +259,11 @@ $(function(){
 										readonly="true" /></td>
 							</tr>
 						</c:if>
-
 						<tr>
 							<th>ORD_NUM</th>
-							<td><input type="text" name="ordNum" id="ordNum"></input> <a
+							<td><input type="text" name="ordNum" id="ordNum" value = "${ItemHistoryVO.ordNum }"/> <a
 								href="SearchOrder.do">조회</a></td>
 						</tr>
-
-						<!-- 		<tr> -->
-						<!-- 			<th>특기사항</th> -->
-						<!-- 			<td> -->
-						<!-- 				<input type="text" name ="itmNote" id = "itmNote" ></input> -->
-						<!-- 			</td> -->
-						<!-- 		</tr>	 -->
-						<!-- 		<tr> -->
-						<!-- 			<th>itmCode</th> -->
-						<!-- 			<td> -->
-						<!-- 				<input type="text" name ="itmCode" id = "itmCode" ></input> -->
-						<!-- 			</td> -->
-						<!-- 		</tr>	 -->
-						<!-- 		<tr> -->
-						<!-- 			<th>수량</th> -->
-						<!-- 			<td> -->
-						<!-- 				<input type="text" name ="itmVol" id = "itmVol" ></input> -->
-						<!-- 			</td> -->
-						<!-- 		</tr>	 -->
-						<!-- 		<tr> -->
-						<!-- 			<th>로트</th> -->
-						<!-- 			<td> -->
-						<!-- 				<input type="text" name ="lotNum" id = "lotNum" ></input> -->
-						<!-- 			</td> -->
-						<!-- 		</tr>	 -->
-						<!-- 		<tr> -->
-						<!-- 			<th>가격</th> -->
-						<!-- 			<td> -->
-						<!-- 				<input type="text" name ="itmPrice" id = "itmPrice" ></input> -->
-						<!-- 			</td> -->
-						<!-- 		</tr>	 -->
-						<!-- 		<tr> -->
-						<!-- 			<th>비고</th> -->
-						<!-- 			<td> -->
-						<!-- 				<input type="text" name ="itmNoteD" id = "itmNoteD" ></input> -->
-						<!-- 			</td> -->
-						<!-- 		</tr>	 -->
 					</table>
 					<button type="button" id="button" name="button">조회</button>
 				</div>
@@ -349,25 +295,7 @@ $(function(){
 					</div>
 				</div>
 			</form:form>
-			<div id="sysbtn">
-				<ul>
-					<li><span class="btn_blue_l"><a
-							href="javascript:fn_egov_selectList();">List</a><img
-							src="<c:url value='/images//btn_bg_r.gif'/>" alt="" /></span></li>
-					<li><span class="btn_blue_l"><a
-							href="javascript:fn_egov_save();"><c:out
-									value='${registerFlag}' /></a><img
-							src="<c:url value='/images//btn_bg_r.gif'/>" alt="" /></span></li>
-					<c:if test="${registerFlag == '수정'}">
-						<li><span class="btn_blue_l"><a
-								href="javascript:fn_egov_delete();">삭제</a><img
-								src="<c:url value='/images//btn_bg_r.gif'/>" alt="" /></span></li>
-					</c:if>
-					<li><span class="btn_blue_l"><a
-							href="javascript:document.detailForm.reset();">Reset</a><img
-							src="<c:url value='/images//btn_bg_r.gif'/>" alt="" /></span></li>
-				</ul>
-			</div>
+			
 		</div>
 		<!-- 검색조건 유지 -->
 		<input type="hidden" name="searchCondition"
@@ -377,8 +305,45 @@ $(function(){
 		<input type="hidden" name="pageIndex"
 			value="<c:out value='${searchVO.pageIndex}'/>" />
 	</form:form>
+
+
+	<!-- 주문코드 검색 모달 -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="exampleModalLabel">출고리스트검색</h4>
+					<button class="close" type="button" data-dismiss="modal"aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body" >
+						<div class="form-group row">
+							<div class="col">
+								납기일자<input type="date" name="bDate" /> ~ <input type="date" name="aDate" /><br> 
+							</div>
+						</div>
+						<div class="col-md-3">
+							<button type="button" class="btn btn-info btn-sm" id="ordNumSearch">검색</button>
+						</div>
+					<br />
+					<div id="grid2"></div>
+				</div>
+				<div class="modal-footer">
+					<a class="btn" id="modalY" data-dismiss="modal">예</a>
+					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 주쿤코드 검색 모달 종료-->
+
+
 </body>
 </html>
+
+
 
 
 

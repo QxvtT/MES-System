@@ -1,6 +1,6 @@
 package mes.sal.out.service;
 
-import java.sql.Date;
+import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -65,6 +65,8 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     private java.lang.String operName;
     
     private java.math.BigDecimal totalPrice;
+    
+    private java.lang.String str;
     
 	
     
