@@ -59,7 +59,7 @@
 				]]>
 	</select>
 	
-	<select id="selectMatStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
+	<select id="selectMatStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="mes.mat.stc.service.MaterialStockVO">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
 				select b.* , nvl(c.MAT_HIS_D_VOL, 0) as out
@@ -68,32 +68,31 @@ SELECT * FROM (
 				      m.mat_div, 
 				      sa.MAT_SAFE_STOCK, 
 				      st.mat_vol, 
-				      (sa.mat_safe_stock - st.mat_vol) as short, 
+				      (sa.mat_safe_stock - st.mat_vol) as mShort, 
 				      nvl(mhd.mat_his_d_vol, 0) as mat_his_d_vol
 				from material m, material_safe sa, material_stock st, material_history mh, material_history_d mhd
 				where m.mat_code=sa.mat_code 
 				  AND M.MAT_CODE=ST.MAT_CODE 
 				  and m.mat_code=mhd.mat_code 
 				  and mh.mat_his_num=mhd.mat_his_num 
-				  and MH.mat_his_div='입고' 
-				  and m.mat_code between '0001' and '0003'
+				  and MH.mat_his_div='입고'
+			  	<if test="str != null and str != ''"> AND
+				  	<![CDATA[
+					M.MAT_CODE IN ('${str}')
+					]]>
+				</if>
 				  and mh.mat_his_date BETWEEN TO_DATE('2021-06-09', 'YYYY-MM-DD') AND TO_DATE('2021-06-24', 'YYYY-MM-DD')
 				  ) b left outer join
 				  (select mat_code, MAT_HIS_D_VOL from material_history_d mhd, material_history mh
 				  where mh.mat_his_num=mhd.mat_his_num 
 				  and mh.mat_his_div='출고' 
-				  and mhd.mat_code between '0001' and '0003'
+			  	<if test="str != null and str != ''"> AND
+				  	<![CDATA[
+					MHD.MAT_CODE IN ('${str}')
+					]]>
+				</if>
 				  and mh.mat_his_date BETWEEN TO_DATE('2021-06-09', 'YYYY-MM-DD') AND TO_DATE('2021-06-24', 'YYYY-MM-DD')) c
 				  on c.mat_code = b.mat_code
-				<if test="searchKeyword != null and searchKeyword != ''">
-					<if test="searchCondition == 0">AND
-						M.MAT_NAME = #{searchKeyword}
-					</if>
-					<if test="searchCondition == 1">AND
-						M.MAT_CODE LIKE '%' || #{searchKeyword} || '%'
-					</if>
-				</if>   
-		
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )
@@ -156,20 +155,20 @@ SELECT * FROM (
 	<select id="selectMatCodeList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-			SELECT M.MAT_CODE, 
-			       M.MAT_NAME, 
-			       M.MAT_SIZE, 
-			       M.MAT_UNIT
-			FROM MATERIAL M
+			SELECT MAT_CODE, 
+			       MAT_NAME, 
+			       MAT_SIZE, 
+			       MAT_UNIT
+			FROM MATERIAL
 		<where>
 			<if test="matCode != null and matCode != ''">
 				<![CDATA[		
-					M.MAT_CODE = #{matCode} 
+					MAT_CODE = #{matCode} 
 				]]>
 			</if>
 			<if test="matName != null and matName != ''"> 
 				<![CDATA[		
-					AND M.MAT_NAME LIKE '%' || #{matName} || '%'
+					AND MAT_NAME LIKE '%' || #{matName} || '%'
 				]]>
 			</if>
 		</where>

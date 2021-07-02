@@ -82,5 +82,7 @@
     <!-- choose one from above and alias it to the name Spring expects -->
     <alias name="local.MultiCommonsMultipartResolver" alias="multipartResolver" />
     <!-- <alias name="spring.RegularCommonsMultipartResolver" alias="multipartResolver" /> -->
+    
+    <bean id="excelView" class="egovframework.test.egov.util.ExcelView" />
 
 </beans>

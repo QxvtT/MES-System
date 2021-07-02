@@ -49,7 +49,7 @@ $(function(){
 			{ header: '입고량', name:'matHisDVol'},
  			{ header: '출고량', name:'out'},
 			{ header: '현재고', name:'matVol'},
-			{ header: '미달량', name:'short'},
+			{ header: '미달량', name:'mShort'},
 // 			{ header: '특기사항', name:''},
 	    ]
 	}); // end const grid
@@ -116,6 +116,8 @@ $(function(){
 	   });
 	   
 	$('#searchMatBtn').click(function(){
+		grid2.clear();
+		grid2.resetData(getMatCodeList());
 		$("#myModal").modal("toggle");
 		$("#myModal").on('shown.bs.modal', function () {
 			grid2.refreshLayout();
@@ -137,28 +139,30 @@ $(function(){
 		grid2.resetData(getMatCodeList());
 	}
 	
-// 	$(document).on('click', 'input[name=_checked]', function(){
-// 		var matCode = $("#modal-body").find('input[name="matCode"]').val();
-// 		console.log(matCode);
-// 	});
-
-// 	$(function(){
-// 		var today = new Date();
-// 	    var picker = tui.DatePicker.createRangePicker({
-// 	        startpicker: {
-// 	            date: today,
-// 	            input: '#startpicker-input',
-// 	            container: '#startpicker-container'
-// 	        },
-// 	        endpicker: {
-// 	            date: today,
-// 	            input: '#endpicker-input',
-// 	            container: '#endpicker-container'
-// 	        },
-// 	        language: 'ko'
-	        
-// 	    });
-// 	})
+	modalY.onclick=function() {
+		matCode = null;
+		matName = null;
+		test = null;
+		str = '';
+		for(let i =0; i<grid2.getCheckedRows().length; i++) {
+			if(i == grid2.getCheckedRows().length-1){
+				str = str + grid2.getCheckedRows()[i]['matCode'];
+			}
+			else{
+				str = str + grid2.getCheckedRows()[i]['matCode']+"' , '";
+			}
+		}
+		console.log(str);
+		console.log('======================');
+	grid.resetData(getList());
+	grid2.resetData(getMatCodeList());
+	document.getElementById("matCode").value=matCode;
+	document.getElementById("matName").value=matName;
+	}
+	
+	resetBtn.onclick=function(){
+		grid.clear();
+	}
 	
 })
 
@@ -175,48 +179,6 @@ $(function(){
 						<div class="col-xl-12">
 							<div id="datePicker"></div>
 
-							<!-- 자재 검색 모달 -->
-							<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-								aria-labelledby="exampleModalLabel" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h4 class="modal-title" id="exampleModalLabel">자재 검색</h4>
-											<button class="close" type="button" data-dismiss="modal"
-												aria-label="Close">
-												&times;
-											</button>
-										</div>
-										<div class="modal-body">
-											<form id="matCodeSearch" name="matCodeSearch" method="post"
-												action="matCodeList.do" onsubmit="return false">
-												<div class="form-group row">
-													<div class="col">
-														<input type="text" id="matCode" name="matCode" />
-														&nbsp;
-														&nbsp;
-														자재코드 <input type="text" id="matName" name="matName" />
-														&nbsp;
-														&nbsp;
-														자재명
-													</div>
-												</div>
-												<div class="col-md-3">
-													<button type="button" class="btn btn-info btn-sm"
-														id="searchMatCodeBtn">검색</button>
-												</div>
-											</form>
-											<br />
-											<div id="grid2"></div>
-										</div>
-										<div class="modal-footer">
-											<a class="btn" id="modalY" href="#">예</a>
-											<button class="btn" type="button" data-dismiss="modal">아니요</button>
-										</div>
-									</div>
-								</div>
-							</div>
-
 							<!-- 타이틀 -->
 							<div id="title" class="card-header">
 								<h3>자재 재고 조회</h3>
@@ -229,39 +191,25 @@ $(function(){
 									id="matHisDate" name="matHisDate" value=${result.matHisDate } />
 							</div>
 							<br />
-							<div>
+							<div id="matDiv">
 								자재코드 <input type="text" id="matCode" name="matCode"
-									value=${result.matCode }></input>
-								&nbsp;
-								&nbsp;
+								></input> &nbsp; &nbsp;
 								<button type="button" class="btn btn-info btn-sm"
 									id="searchMatBtn" name="searchMatBtn" data-toggle="modal"
 									data-target="#myModal">검색</button>
-								&nbsp;
-								&nbsp;
-								~
-								&nbsp;
-								&nbsp;
-								<input type="text" id="matCode" name="matCode"
-									value=${result.matCode }></input>
-								&nbsp;
-								&nbsp;
+								&nbsp; &nbsp; ~ &nbsp; &nbsp; <input type="text" id="matName"
+									name="matName" ></input> &nbsp; &nbsp;
 								<button type="button" class="btn btn-info btn-sm"
 									id="searchMatBtn" data-toggle="modal" data-target="#myModal">검색</button>
-								&nbsp;
-								&nbsp;
-								&nbsp;
-								&nbsp;
-								&nbsp;
-								&nbsp;
-								자재구분
-								&nbsp;
-								&nbsp;
+								&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 자재구분 &nbsp; &nbsp;
 							</div>
 							<br />
 							<div>
 								<button class="btn btn-info btn-sm" onclick="location.href=''">조회</button>
-								<input class="btn btn-info btn-sm" type="reset" value="리셋"></input>
+								<input id="resetBtn" class="btn btn-info btn-sm" type="reset" value="리셋"></input>
+									<form action="/examples/test/excelDown.do" method="post">
+									   <input type="submit" value='엑셀 다운로드'>
+									</form>
 							</div>
 							<br />
 							<div id="grid"></div>
@@ -270,6 +218,51 @@ $(function(){
 				</div>
 			</div>
 		</div>
+		
+		<!-- 검색조건 유지 -->
+		<input type="hidden" name="searchCondition"
+			value="<c:out value='${searchVO.searchCondition}'/>" />
+		<input type="hidden" name="searchKeyword"
+			value="<c:out value='${searchVO.searchKeyword}'/>" />
+		<input type="hidden" name="pageIndex"
+			value="<c:out value='${searchVO.pageIndex}'/>" />
 	</form:form>
+
+	<!-- 자재 검색 모달 -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="exampleModalLabel">자재 검색</h4>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="matCodeSearch" name="matCodeSearch" method="post"
+						action="matCodeList.do" onsubmit="return false">
+						<div class="form-group row">
+							<div class="col">
+								<input type="text" id="matCode" name="matCode" /> 자재코드 <input
+									type="text" id="matName" name="matName" /> 자재명
+							</div>
+						</div>
+						<div class="col-md-3">
+							<button type="button" class="btn btn-info btn-sm"
+								id="searchMatCodeBtn">검색</button>
+						</div>
+					</form>
+					<br />
+					<div id="grid2"></div>
+				</div>
+				<div class="modal-footer">
+					<a class="btn" id="modalY" data-dismiss="modal">예</a>
+					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

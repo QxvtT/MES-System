@@ -15,6 +15,32 @@ package mes.mat.stc.service;
 public class MaterialStockVO extends MaterialDefaultVO{
     private static final long serialVersionUID = 1L;
     
+    private java.lang.String out;
+    
+    private java.lang.String mShort;
+    
+    public java.lang.String getOut() {
+		return out;
+	}
+
+	public void setOut(java.lang.String out) {
+		this.out = out;
+	}
+
+	public java.lang.String getmShort() {
+		return mShort;
+	}
+
+	public void setmShort(java.lang.String mShort) {
+		this.mShort = mShort;
+	}
+
+	public void setMatMaxStock(java.lang.String matMaxStock) {
+		this.matMaxStock = matMaxStock;
+	}
+
+	private java.lang.String str;
+    
     /** mat_code */
     private java.lang.String matCode;
     
@@ -476,5 +502,13 @@ public class MaterialStockVO extends MaterialDefaultVO{
     public void setMatOrdNote(java.lang.String matOrdNote) {
         this.matOrdNote = matOrdNote;
     }
+
+	public java.lang.String getStr() {
+		return str;
+	}
+
+	public void setStr(java.lang.String str) {
+		this.str = str;
+	}
     
 }
