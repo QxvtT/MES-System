@@ -96,20 +96,24 @@
 						WHERE PRD_PLAN_D_NUM=#{prdPlanDNum}
 				]]>
 	</select>
-	
+
 	<select id="selectProducePlanDList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.pln.service.ProducePlanDVO">
-SELECT * FROM (
-	SELECT A.*, ROWNUM RNUM FROM (
-				SELECT *
-				FROM pd
-				WHERE PRD_NUM = #{prdNum} 
-				ORDER BY 
-				PRD_PLAN_D_NUM DESC
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+		SELECT *
+		FROM pd
+		WHERE PRD_NUM = #{prdNum}
+		ORDER BY
+		PRD_PLAN_D_NUM DESC
 		
 		<![CDATA[					
-	) A WHERE ROWNUM <= 10
-)
-]]>
+		) A WHERE ROWNUM <= 10
+	)
+	]]>
 	</select>	
+	
+	<select id="selectItemList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.pln.service.ProducePlanDVO">
+		SELECT * FROM item
+	</select>
 
 </mapper>

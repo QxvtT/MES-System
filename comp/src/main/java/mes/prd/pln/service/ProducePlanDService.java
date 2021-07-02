@@ -65,5 +65,7 @@ public interface ProducePlanDService {
     int selectProducePlanDListTotCnt(ProducePlanDDefaultVO searchVO);
 
 	List<?> selectProducePlanList(ProducePlanDVO prdVO) throws Exception;
+	
+	List<?> selectItemList(ProducePlanDVO itmVO) throws Exception;
     
 }

@@ -66,7 +66,7 @@ public class ProducePlanDController {
     protected EgovPropertyService propertiesService;
 	
     
-    //생산계획 조회
+    //생산계획 ajax
     @RequestMapping(value = "/prd/pln/ProducePlanList")
     @ResponseBody
     public List<?> ajaxPrd(@ModelAttribute("prdVO") ProducePlanDVO prdVO) throws Exception {
@@ -74,12 +74,32 @@ public class ProducePlanDController {
     	return prdList;
     }
     
+    //제품 List
+    @RequestMapping(value = "/prd/pln/ItemList")
+    @ResponseBody
+    public List<?> ajaxItemList(@ModelAttribute("itmVO") ProducePlanDVO itmVO) throws Exception {
+    	List<?> itemList = producePlanDService.selectItemList(itmVO);
+    	return itemList;
+    }
+    
+	/*
+	 * // 제품 Select
+	 * 
+	 * @RequestMapping(value = "/prd/pln/SelectItem")
+	 * 
+	 * @ResponseBody public List<?> ajaxSelectItem(@ModelAttribute("itmVO")
+	 * ProducePlanDVO itmVO) throws Exception { return
+	 * producePlanDService.selectItem(itmVO);; }
+	 */
+    
     /**
 	 * PRODUCE_PLAN_D 목록을 조회한다. (pageing)
 	 * @param searchVO - 조회할 정보가 담긴 ProducePlanDDefaultVO
 	 * @return "/producePlanD/ProducePlanDList"
 	 * @exception Exception
 	 */
+    
+    //생산계획 디테일 조회 ajax 처리
     @RequestMapping(value ="/prd/pln/ProducePlanDList", method = RequestMethod.GET)
     @ResponseBody
     public List<?> ajax(@ModelAttribute("searchVO") ProducePlanDVO searchVO) throws Exception {

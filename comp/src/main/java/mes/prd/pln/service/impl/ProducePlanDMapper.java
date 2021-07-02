@@ -72,6 +72,9 @@ public interface ProducePlanDMapper {
 	 * @exception
 	 */
     public int selectProducePlanDListTotCnt(ProducePlanDDefaultVO searchVO);
+    
+    //제품테이블 조회
+    public List<?> selectItemList(ProducePlanDVO itmVO) throws Exception;
 
 
 }

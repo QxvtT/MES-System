@@ -32,6 +32,32 @@ let prdNum = null;
 let prdName = null;
 let prdNote = null;
 $(function(){
+	
+	class CustomTextEditor {
+		  constructor(props) {
+		    const el = document.createElement('input');
+
+		    el.type = 'text';
+		    el.name = 'itmCode'
+		    el.value = String(props.value);
+
+		    this.el = el;
+		  }
+
+		  getElement() {
+		    return this.el;
+		  }
+
+		  getValue() {
+		    return this.el.value;
+		  }
+
+		  mounted() {
+		    this.el.select();
+		  }
+		}
+	
+	// 생산계획 디테일 그리드
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
 	    scrollX: false,
@@ -44,7 +70,13 @@ $(function(){
 	    		header: '제품코드', 
 	    		name:'itmCode',
 	    		align: 'center',
-	    		editor: 'text'
+	    		editor: {
+	    			type: CustomTextEditor,
+	    	        options: {
+	    	          myCustomOptions: {
+	    	        	  }// end of myCustomOptions
+	    	        }//end of options
+	    		}
 	    	},
 			{ 
 	    		header: '제품명', 
@@ -107,8 +139,9 @@ $(function(){
 	    		editor: 'text'
 	    	}
 	    ]
-	}); // end const grid
+	}); 
 	
+	// 생산계획 마스터 테이블(조회시 사용)
 	const grid2 = new tui.Grid({
 	    el: document.getElementById('grid2'),
 	    scrollX: false,
@@ -137,12 +170,40 @@ $(function(){
 	    		align: 'center'
 	    		}
 	    ]
-	}); // end const grid
+	});
+
 	
+	// 제품코드를 입력할 때 제품명 확인을 위한 모달에 사용되는 그리드
+	const grid3 = new tui.Grid({
+	    el: document.getElementById('grid3'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: getItemList(),
+	    rowHeaders: [{
+	            type: 'checkbox',
+	            header: ' '
+	    }],
+	    columns: [
+	    	{ 
+	    		header: '제품코드', 
+	    		name:'itmCode',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '제품명', 
+	    		name:'itmName',
+	    		align: 'center'
+	    		}
+	    ]
+	}); 
+	
+	// 조회 모달에서 계획번호 cell만 선택하기 위해 조건문에서 사용되는 함수
 	function getKeyByValue(object, value) {
 		return Object.keys(object).find(key => object[key] === value);
 	}
 	
+	// 조회된 리스트에서 특정 생산계획의 계획번호를 더블클릭 시 cell의 계획번호 값을 가져와서 디테일테이블 select 후 생산계획 디테일 그리드에 적용
 	grid2.on('dblclick', () => { 
 		var selectPrd = grid2.getFocusedCell();
 		if(getKeyByValue(selectPrd, "prdNum") != null){
@@ -154,6 +215,34 @@ $(function(){
 		}
 	});
 	
+	// 조회 모달창 선택 날짜에 해당되는 생산계획 마스터 테이블 Select 데이터
+	function getPrdList() {
+		grid2.clear();
+		let data;
+		$.ajax({
+			async: false,
+			url : "ProducePlanList",
+			type : "get",
+			data : {
+				startDate : startDate,
+				endDate : endDate,
+				prdNum: prdNum
+				},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					prdNum = result[result.length -1].prdNum;
+				}
+				console.log(result);
+				prdName = result[0].prdName;
+				prdNote = result[0].prdNote;
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	
+	// 조회에서 선택한 생산계획 디테일 테이블 Select 데이터
 	function getList() {
 		let data;
 		$.ajax({
@@ -175,18 +264,56 @@ $(function(){
 		return data;
 	}
 	
-	grid.on('scrollEnd', () => {
-	    grid.appendRows(getList());
-	  })
-	  
-	$('#mobile-collapse').click(function() {
-		grid.refreshLayout();
-	})
+	// 제품코드 입력 모달창 제품 테이블 Select 데이터
+	function getItemList() {
+		let itmCode = null;
+		let data;
+		$.ajax({
+			async: false,
+			url : "ItemList",
+			type : "get",
+			data : {
+				itmCode : itmCode
+				},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					itmCode = result[result.length -1].itmCode;
+				}
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
 	
+	// 선택한 제품코드 값만 받아오기
+	function selectItem() {
+		let itmCode = null;
+		let data;
+		$.ajax({
+			async: false,
+			url : "SelectItem",
+			type : "get",
+			data : {
+				itmCode : itmCode
+				},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					itmCode = result[result.length -1].itmCode;
+				}
+				data = result;
+			} // end success
+		}); // end ajax
+		return data;
+	}
+	
+	// toast datePicker 관련 Script
 	var today = new Date();
 	var preDay = new Date();
 	preDay.setDate(today.getDate() - 7);
 	
+	// 새자료 버튼 사용시 날짜 정보가 공란이 되는 것을 막기 위해 리셋시 함수로 실행함
 	function setDatePicker(){
 	  	var datepicker = new tui.DatePicker('#wrapper', {
 	  		 language: 'ko',
@@ -227,8 +354,19 @@ $(function(){
 	        }
 	    });
 	}
-	setDatePicker();
+	setDatePicker(); // 페이지 생성시 날짜 입력창 세팅
 	
+	// 해당 그리드 스크롤 형태로 변경
+	grid.on('scrollEnd', () => {
+	    grid.appendRows(getList());
+	  })
+	
+	// 사이드메뉴 접고 펼 때 그리드 깨짐 방지를 위한 그리드 새로고침
+	$('#mobile-collapse').click(function() {
+		grid.refreshLayout();
+	})
+	
+	// 조회버튼 클릭 이벤트, 모달창 오픈 그리드 refreshLayout 적용으로 바로 불러옴
 	$('#searchBtn').click(function(){
 		$('#searchModal').modal('toggle');
 		$('#searchModal').on('shown.bs.modal', function(){
@@ -236,6 +374,14 @@ $(function(){
 		});
 	});
 	
+	// 조회 모달창의 검색 버튼 이벤트, 선택한 startDate와 endDate 값을 getPrdList에 넘겨 해당 날짜의 생산계획만 검색
+	$('#prdSearchBtn').click(function() {
+		startDate = $('#startDate').val();
+		endDate = $('#endDate').val();
+		grid2.resetData(getPrdList());
+	});
+	
+	// 새자료 버튼 클릭 이벤트, 마스터 Form과 디테일 그리드 데이터 remove, 날짜 정보 초기화를 위한 setDatePicker();
 	$('#resetBtn').click(function(){
 		$('#master').each(function() {
 			this.reset();
@@ -244,43 +390,50 @@ $(function(){
 		});
 	});
 	
-	$('#prdSearchBtn').click(function() {
-		startDate = $('#startDate').val();
-		endDate = $('#endDate').val();
-		grid2.resetData(getPrdList());
-	});
-	
-	function getPrdList() {
-		grid2.clear();
-		let data;
-		$.ajax({
-			async: false,
-			url : "ProducePlanList",
-			type : "get",
-			data : {
-				startDate : startDate,
-				endDate : endDate,
-				prdNum: prdNum
-				},
-			dataType: "json",
-			success : function(result){
-				if(result.length > 0) {
-					prdNum = result[result.length -1].prdNum;
-				}
-				console.log(result);
-				prdName = result[0].prdName;
-				prdNote = result[0].prdNote;
-				data = result;
-			} // end success
-		}); // end ajax 
-		return data;
-	}
-	
+	// 추가 버튼 클릭 이벤트, 그리드 row 생성 미완성
 	var rowData = [];
 	$('#addRowBtn').click(function() {
 		grid.appendRow(rowData)
 	})
-});
+	
+	// 제품코드 입력란 더블클릭 시 제품코드별 제품명을 볼 수 있는 모달창 생성
+	grid.on('dblclick', () => {
+		var selectItm = grid.getFocusedCell();
+		if(getKeyByValue(selectItm, "itmCode") != null){
+			$('#itmModal').modal('toggle');
+			$('#itmModal').on('shown.bs.modal', function(){
+				grid3.refreshLayout();
+			});
+		}
+	});
+	
+	// 제품코드 모달창 단일 체크 구현
+	grid3.on('check', (e) => {
+		let rows = grid3.getCheckedRowKeys();
+		if(rows.length > 1) {
+			for(let i in rows){
+				if(e.rowKey != rows[i]){
+					grid3.uncheck(rows[i]);
+				}
+			}
+		}
+	});
+	
+	
+	
+	// 제품코드 모달창 제품코드 더블클릭 시 디테일 테이블 로우 데이터 값 수정
+	grid3.on('dblclick', (e) => {
+		var selectItm = grid.getFocusedCell();
+		if(getKeyByValue(selectItm, "itmCode") != null){
+			$('#itmModal').modal("hide");
+			var a = getItemList();
+			console.log(a);
+			//$('input[name=itmCode]').val();
+		}
+	});
+	
+	
+}); 
 
 
 </script>
@@ -318,51 +471,6 @@ $(function(){
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
 		<br />
-		<!-- 조회 Modal-->
-		<div class="modal fade" id="searchModal" tabindex="-1"
-			role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h3 class="modal-title" id="exampleModalLabel">생산계획 조회</h3>
-						<button class="close" type="button" data-dismiss="modal"
-							aria-label="Close">
-							&times;
-						</button>
-					</div>
-					<div class="modal-body">
-						<form id="prdSearch" name="prdSearch" method="post" action="/prd/pln/ProducePlanList" onsubmit="return false">
-							<div class="form-group row">
-								<div class="col-md-3">계획일자</div>
-								<div class="col">
-									<div
-										class="tui-datepicker-input tui-datetime-input tui-has-focus">
-										<input id="startDate" name="startDate" type="text" aria-label="Date"/>
-											<span class="tui-ico-date"></span>
-											<div id="startDate-container" style="margin-left: -1px;"></div>
-									</div>
-									<span>~</span>
-									<div
-										class="tui-datepicker-input tui-datetime-input tui-has-focus">
-										<input id="endDate" name="endDate" type="text" aria-label="Date"/>
-											<span class="tui-ico-date"></span>
-											<div id="endDate-container" style="margin-left: -1px;"></div>
-									</div>
-								</div>
-								<div class="col-md-3"><button type="button" class="btn btn-primary btn-sm"  id="prdSearchBtn">검색</button></div>
-							</div>
-						</form>
-						<div id="grid2"></div>
-					</div>
-					<div class="modal-footer">
-						<a class="btn" id="modalY" href="#">예</a>
-						<button class="btn" type="button" data-dismiss="modal">아니요</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
 		<div class="main-body">
 			<div class="page-wrapper">
 				<div class="text-right">
@@ -435,6 +543,76 @@ $(function(){
 							<div id="grid" />
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 조회 Modal-->
+	<div class="modal fade" id="searchModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="exampleModalLabel">생산계획 조회</h3>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="prdSearch" name="prdSearch" method="post"
+						action="/prd/pln/ProducePlanList" onsubmit="return false">
+						<div class="form-group row">
+							<div class="col-md-3">계획일자</div>
+							<div class="col">
+								<div
+									class="tui-datepicker-input tui-datetime-input tui-has-focus">
+									<input id="startDate" name="startDate" type="text"
+										aria-label="Date" /> <span class="tui-ico-date"></span>
+									<div id="startDate-container" style="margin-left: -1px;"></div>
+								</div>
+								<span>~</span>
+								<div
+									class="tui-datepicker-input tui-datetime-input tui-has-focus">
+									<input id="endDate" name="endDate" type="text"
+										aria-label="Date" /> <span class="tui-ico-date"></span>
+									<div id="endDate-container" style="margin-left: -1px;"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<button type="button" class="btn btn-primary btn-sm"
+									id="prdSearchBtn">검색</button>
+							</div>
+						</div>
+					</form>
+					<div id="grid2"></div>
+				</div>
+				<div class="modal-footer">
+					<a class="btn" id="modalY" href="#">예</a>
+					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 제품코드 선택 모달 -->
+	<div class="modal fade" id="itmModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="myModalLabel">제품 조회</h3>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="grid3"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary">확인</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
 				</div>
 			</div>
 		</div>

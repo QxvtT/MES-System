@@ -118,6 +118,11 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
     public int selectProducePlanDListTotCnt(ProducePlanDDefaultVO searchVO) {
 		return producePlanDDAO.selectProducePlanDListTotCnt(searchVO);
 	}
+    
+    // 제품테이블 조회
+	public List<?> selectItemList(ProducePlanDVO itmVO) throws Exception {
+		return producePlanDDAO.selectItemList(itmVO);
+	}
 
 	
     
