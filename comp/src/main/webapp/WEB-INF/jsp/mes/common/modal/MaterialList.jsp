@@ -30,10 +30,10 @@
 	src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
-let matCode1 = null;
+let matCode = null;
 let matName = null;
 let matSize = null;
-let operationName = null;
+let operName = null;
 
 $(function(){
 	const material = new tui.Grid({
@@ -48,7 +48,7 @@ $(function(){
 	    	{ header: '자재코드', name:'matCode'},
 			{ header: '자재명', name:'matName'},
 			{ header: '규격', name:'matSize'},
-			{ header: '거래처', name:'operationName'}
+			{ header: '업체명', name:'operName'}
 	    ]
 	}); // end const grid
 	
@@ -64,8 +64,7 @@ $(function(){
 			url : "${pageContext.request.contextPath}/MaterialList",
 			type : "get",
 			data : {matCode: matCode,
-					matName: matName,
-					matCode1: matCode1},
+					matName: matName},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
