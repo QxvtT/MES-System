@@ -1,6 +1,6 @@
 package mes.mat.in.service;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
 
 import lombok.Data;
 import mes.mat.stc.service.MaterialDefaultVO;
@@ -24,6 +24,9 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     /** 작업일자 검색 **/
     private java.lang.String matHisDateS;
     private java.lang.String matHisDateE;
+    /** 자재코드 검색 **/
+    private java.lang.String matCodes;
+    private List<String> matCodeList;
     
     /** mat_code */
     private java.lang.String matCode;

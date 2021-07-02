@@ -123,9 +123,9 @@
 		m.mat_name, m.mat_size, i.operation_name
 		from material m, item i
 		<where>
-			<if test="matName != null and matName != ''">
+			<if test="matCode1 != null and matCode1 != ''">
 							<![CDATA[	
-								to_number(substr(m.mat_name,6)) >  to_number(substr(#{ matName},6))
+								to_number(m.mat_code) <  to_number(#{ matCode1})
 							]]>
 			</if>
 

@@ -1,5 +1,7 @@
 package mes.mat.in.web;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -19,9 +21,6 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 import mes.mat.in.service.MaterialHistoryDefaultVO;
 import mes.mat.in.service.MaterialHistoryService;
 import mes.mat.in.service.MaterialHistoryVO;
-import mes.mat.in.service.impl.MaterialHistoryServiceImpl;
-import mes.mat.stc.service.MaterialStockDefaultVO;
-import mes.mat.stc.service.MaterialStockVO;
 
 /**
  * @Class Name : MaterialHistoryController.java
@@ -74,6 +73,17 @@ public class MaterialHistoryController {
     @ResponseBody
     public List<?> ajaxMatInList(MaterialHistoryVO searchVO) throws Exception {
     	System.out.println(searchVO.toString());
+    	searchVO.setMatCodeList(null);
+    	//자재 코드 다중선택 처리
+    	if(searchVO.getMatCodes() != null && searchVO.getMatCodes() != "") {
+			String[] rowList = searchVO.getMatCodes().split(",");
+			for(int i = 0; i < rowList.length; i++) {
+				rowList[i] = rowList[i].trim();
+			}
+			List<String> al = new ArrayList<String>();
+			al = Arrays.asList(rowList);
+			searchVO.setMatCodeList(al);
+    	}
     	List<?> list = materialHistoryService.selectMatInList(searchVO);
     	
     	System.out.println("a");
