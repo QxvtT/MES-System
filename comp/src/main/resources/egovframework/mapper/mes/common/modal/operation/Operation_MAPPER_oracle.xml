@@ -120,12 +120,13 @@
 		SELECT A.*, ROWNUM RNUM FROM (
 
 		select m.mat_code,
-		m.mat_name, m.mat_size, i.operation_name
-		from material m, item i
-		<where>
-			<if test="matName != null and matName != ''">
+		m.mat_name, m.mat_size, o.oper_name
+		from material m, operation o
+		where m.oper_code = o.oper_code
+		
+			<if test="matCode1 != null and matCode1 != ''">
 							<![CDATA[	
-								to_number(substr(m.mat_name,6)) >  to_number(substr(#{ matName},6))
+								to_number(m.mat_code) >  to_number(#{ matCode})
 							]]>
 			</if>
 
@@ -134,7 +135,7 @@
 								and m.mat_code = #{matCode}
 							]]>
 			</if>
-		</where>
+		
 
 
 		order by m.mat_code

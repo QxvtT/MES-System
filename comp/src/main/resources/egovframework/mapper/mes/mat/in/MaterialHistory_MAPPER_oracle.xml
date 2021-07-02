@@ -51,7 +51,7 @@
 				]]>
 	</select>
 	
-	<select id="selectMatInList" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="egovMap">
+	<select id="selectMatInList" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
 				SELECT MH.MAT_HIS_DATE, 
@@ -72,8 +72,14 @@ SELECT * FROM (
 			     <if test="matHisDateS != null and matHisDateS != '' and matHisDateE != null and matHisDateE != ''">
 			      	AND MH.MAT_HIS_DATE BETWEEN TO_DATE(#{matHisDateS}, 'YYYY-MM-DD') AND TO_DATE(#{matHisDateE}, 'YYYY-MM-DD')
 			     </if>
-			     <if test="matCode != null and matCode != ''">
-				      AND M.MAT_CODE IN (${matCode})
+			     <if test="matCodeList != null">
+			     <if test="matCodeList.size != 0">
+				      AND M.MAT_CODE IN 
+			     	<foreach item="item" index="index" collection="matCodeList"
+					      open="(" separator="," close=")">
+					        #{item}
+					</foreach>
+			     </if>
 			     </if>
 			     <if test="operCode != null and operCode != ''">
 				      AND O.OPER_CODE IN (${operCode})

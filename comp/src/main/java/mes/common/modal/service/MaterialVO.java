@@ -30,7 +30,8 @@ public class MaterialVO extends OperationDefaultVO{
     private java.lang.String matSize;
     
 
-    
+    //스크롤용
+    private java.lang.String matCode1;
   
 
  

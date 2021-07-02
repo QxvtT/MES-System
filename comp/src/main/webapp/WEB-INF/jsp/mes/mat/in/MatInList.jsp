@@ -27,7 +27,9 @@
 let matHisDateS = null;
 let matHisDateE = null;
 let matCode = null;
+let matCodes = null;
 let operCode = null;
+
 $(function(){
 	let today = new Date();
     let picker = tui.DatePicker.createRangePicker({
@@ -79,6 +81,7 @@ $(function(){
 			url : "MatInList",
 			type : "get",
 			data : {matCode: matCode,
+					matCodes: matCodes,
 					matHisDateS: matHisDateS,
 					matHisDateE: matHisDateE
 					},
@@ -161,18 +164,7 @@ $(function(){
 		return data;
 	}
 	
-	$('#mobile-collapse').click(function() {
-	      grid.refreshLayout();
-	   });
-	   
-	$('#searchMatBtn').click(function(){
-		console.log("aaaaaa");
-		$("#searchMatModal").modal("toggle");
-		$("#searchMatModal").on('shown.bs.modal', function () {
-			grid2.refreshLayout();
-		});
-		
-	})
+	
 	
 	$('#searchOperBtn').click(function(){
 		$("#searchOperModal").modal("toggle");
@@ -188,10 +180,17 @@ $(function(){
 		console.log(grid.getCheckedRows());
 		matHisDateS = $('#startpicker-input').val();
 		matHisDateE = $('#endpicker-input').val();
-		matCode = $('#matCode').val();
+		matCodes = $('#matCode').val();
+		console.log(matCodes);
 		operCode = $('#operCode').val();
 		grid.resetData(getList());
 	});
+	
+	$('#mobile-collapse').click(function() {
+	      grid.refreshLayout();
+	   });
+	   
+	
 })
 
 
@@ -290,11 +289,21 @@ $(function(){
 							<!-- end 업체 검색 모달 -->
 							--%>
 							
+							
 							<!-- 타이틀 -->
 							<div id="title" class="mb-4">
 								<h3>자재 입고 조회</h3>
 							</div>
 							<!-- // 타이틀 -->
+							<div class="row">
+								<div class="col-sm-6"></div>
+								<div class="col-sm-6 text-right">
+									<div class="btn-group">
+										<button type="button" id="testBtn" class="btn waves-effect waves-light btn-primary btn-outline-primary"> 조회 </button>
+										<input type="reset" value=" 리셋 " class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
+									</div>
+								</div>
+							</div>
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="table">
@@ -332,8 +341,8 @@ $(function(){
 											 	<div class="row align-items-center text-center col-lg-8">
 													<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode" value="${result.matCode }"></input>
 													<input type="text" class="form-control w-25 ml-3" id="matName" name="matName" value="${result.matName }" readonly></input>
-													<button type="button" class="btn btn-sm btn-primary waves-effect waves-light ml-3"
-														id="searchMatBtn" data-toggle="modal" data-target="#searchMatModal">검색</button>
+													<c:import url="/MaterialList.page"/>
+													
 												</div>
 												<div class="col-lg-4">
 												</div>
@@ -359,15 +368,8 @@ $(function(){
 								</div>
 							</div>
 							
-							<div class="row">
-								<div class="col-sm-6"></div>
-								<div class="col-sm-6 text-right">
-									<div class="btn-group">
-										<button type="button" id="testBtn" class="btn waves-effect waves-light btn-primary btn-outline-primary"> 조회 </button>
-										<input type="reset" value=" 리셋 " class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
-									</div>
-								</div>
-							</div>
+							<div style="height: 50px"></div>
+							
 							<div class="form-group row">
 								<div class="col-sm-12">
 									<div id="grid"></div>
