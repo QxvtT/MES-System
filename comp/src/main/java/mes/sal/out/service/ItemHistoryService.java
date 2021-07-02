@@ -57,8 +57,12 @@ public interface ItemHistoryService {
 	 * @exception Exception
 	 */
     List selectItemHistoryList(ItemHistoryVO searchVO) throws Exception;
+    
     List ItemHisNumList(ItemHistoryVO searchVO) throws Exception;
     
+    List ItemHistoryRegist(ItemHistoryVO searchVO) throws Exception;
+    
+    void ItemHistoryUpdate(ItemHistoryVO searchVO) throws Exception;
     /**
 	 * ITEM_HISTORY 총 갯수를 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO

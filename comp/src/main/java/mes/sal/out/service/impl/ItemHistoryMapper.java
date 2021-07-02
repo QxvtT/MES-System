@@ -38,7 +38,8 @@ public interface ItemHistoryMapper {
 	 * @exception Exception
 	 */
     public void updateItemHistory(ItemHistoryVO vo) throws Exception;
-
+    public void ItemHistoryUpdate(ItemHistoryVO vo) throws Exception;
+    
     /**
 	 * ITEM_HISTORY을 삭제한다.
 	 * @param vo - 삭제할 정보가 담긴 ItemHistoryVO
@@ -63,7 +64,8 @@ public interface ItemHistoryMapper {
 	 */
     public List<?> selectItemHistoryList(ItemHistoryDefaultVO searchVO) throws Exception;
     public List<?> ItemHisNumList(ItemHistoryDefaultVO searchVO) throws Exception;
-
+    public List<?> ItemHistoryRegist(ItemHistoryDefaultVO searchVO) throws Exception;
+    
     /**
 	 * ITEM_HISTORY 총 갯수를 조회한다.
 	 * @param searchMap - 조회할 정보가 담긴 Map

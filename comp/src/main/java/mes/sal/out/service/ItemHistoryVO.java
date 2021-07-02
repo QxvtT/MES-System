@@ -14,58 +14,83 @@ import lombok.NoArgsConstructor;
  * @since 2021-06-29
  * @version 1.0
  * @see
- * 
- *      Copyright (C) All right reserved.
+ *  
+ *  Copyright (C)  All right reserved.
  */
 @Data
 @NoArgsConstructor
-public class ItemHistoryVO extends ItemHistoryDefaultVO {
-	private static final long serialVersionUID = 1L;
-
-	/** ITM_HIS_NUM */
-	private java.lang.String itmHisNum;
-
-	/** ORD_NUM */
-	private java.lang.String ordNum;
-
-	/** ITM_DIV */
-	private java.lang.String itmDiv;
-
-	/** ITM_HIS_RDY */
-	private java.lang.String itmHisRdy;
-
-	/** ITM_NOTE */
-	private java.lang.String itmNote;
-
-	/** itm_history_d */
-
-	/** ITM_HIS_D_NUM */
-	private java.math.BigDecimal itmHisDNum;
-
-	/** ITM_CODE */
-	private java.lang.String itmCode;
-	private java.lang.String itmName;
-
-	/** ITM_VOL */
-	private java.math.BigDecimal itmVol;
-
-	/** LOT_NUM */
-	private java.lang.String lotNum;
-
-	/** ITM_PRICE */
-	private java.math.BigDecimal itmPrice;
-
-	/** ITM_NOTE */
-	private java.lang.String itmNoteD;
-
-	private java.lang.String aDate;
-	private java.lang.String bDate;
-
-	private java.lang.String operCode;
-	private java.lang.String operName;
-
-	private java.math.BigDecimal totalPrice;
-
-	private java.lang.String str;
-
+public class ItemHistoryVO extends ItemHistoryDefaultVO{
+    private static final long serialVersionUID = 1L;
+    
+    /** itm_history_M */
+    
+    /** 전표번호*/
+    private java.lang.String itmHisNum;
+    /** 주문번호 */
+    private java.lang.String ordNum;
+    
+    /** 구분(출고,반품) */
+    private java.lang.String itmDiv;
+    
+    /** 준비일자 */
+    private java.lang.String itmHisRdy;
+    
+    /** 마스터-특이사항 */
+    private java.lang.String itmNote;
+    
+    /** itm_history_d */
+    
+    /** 디테일일련번호 */
+    private java.math.BigDecimal itmHisDNum;
+    
+    /** 제품코드-제품명 */
+    private java.lang.String itmCode;
+    private java.lang.String itmName;
+    
+    /** 수량 */
+    private java.math.BigDecimal itmVol;
+    
+    /** LOT_NUM */
+    private java.lang.String lotNum;
+    
+    /** 단가 */
+    private java.math.BigDecimal itmPrice;
+    
+    /** 재품재고 */
+    private java.math.BigDecimal itmStock;
+    /** 규격 */
+    private java.lang.String itmSize;
+    /** 단위 */
+    private java.lang.String itmUnit;
+    
+    
+    
+    /** 디테일-비고 */
+    private java.lang.String itmNoteD;
+    /** 기간검색 bDate ~ aDate */
+    private java.lang.String aDate;
+    private java.lang.String bDate;
+    /** 업체코드-업체명 */
+    private java.lang.String operCode;
+    private java.lang.String operName;
+    /** 제품금액 수량*단가*/
+    private java.math.BigDecimal totalPrice;
+    /** 중복검색 sql  */
+    private java.lang.String str;
+    
+    /** 기출고량  */
+    private java.math.BigDecimal ordOutVol;
+    /** 미출고량  */
+    private java.math.BigDecimal itmNoutVol;
+    /** 주문량  */
+    private java.math.BigDecimal ordVol;
+   
+    
+    
+    
+	
+    
+   
+    
 }
+
