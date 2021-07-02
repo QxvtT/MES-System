@@ -61,8 +61,9 @@ function fn_egov_save() {
 
 }
 // 전체주문페이지 
-let ordNum = null;
 let itmHisDNum = null;
+let itmHisRdy = null;
+let operCode = null;
 
 // 모달 검색 
 let aDate = null;
@@ -70,6 +71,13 @@ let bDate = null;
 let test = null;
 
 let str = '';
+let number = 0;
+
+let data;
+
+let oldVal;
+let newVal;
+
 
 $(function(){
 	const grid = new tui.Grid({
@@ -77,20 +85,23 @@ $(function(){
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
-	    data: getList(),
+	    data: null,
 	    rowHeaders: ['rowNum'],
 	    columns: [
-	    	{ header: '전표번호', name:'itmHisNum'},
+			{ header: '제품코드', name:'itmCode',editor:"text"},
+			{ header: '제품명', name:'itmName'},
+			{ header: '규격', name:'itmSize'},
+			{ header: '단위', name:'itmUnit'},
 			{ header: '주문번호', name:'ordNum'},
-			{ header: '구분', name:'itmDiv'},
-			{ header: '출고일자', name:'itmHisRdy'},
-			{ header: '특이사항', name:'itmNote'},
-			{ header: '제품코드', name:'itmCode'},
-			{ header: '자재LOT_NO', name:'lotNum'},
-			{ header: '수량', name:'itmVol'},
-			{ header: '단가', name:'itmPrice'},
-			{ header: '금액', name:'totalPrice'},
-			{ header: '비고', name:'itmNoteD'}
+			{ header: '주문량', name:'ordVol'},
+			{ header: '기출고량', name:'ordOutVol'},
+			{ header: '미출고량', name:'itmNoutVol'},
+			{ header: '출고량', name:'itmVol',editor:"text"},
+			{ header: '현재고', name:'itmStock'},
+			{ header: '자재LOT_NO', name:'lotNum',editor:"text"},
+			{ header: '단가', name:'itmPrice',editor:"text"},
+			{ header: '금액', name:'totalPrice',editor:"text"},
+			{ header: '비고', name:'itmNoteD',editor:"text"}
 	    ]
 	}); // end const grid
 	
@@ -99,14 +110,14 @@ $(function(){
 	  })
 	  
 	function getList() { 
-		let data;
 		$.ajax({
 			async: false, 
-			url : "ItemHistoryList",
+			url : "ItemHistoryRegist",
 			type : "get",
 			data : {
   				 itmHisDNum : itmHisDNum
-  				,ordNum : ordNum
+  				,itmHisRdy : itmHisRdy
+  				,operCode : operCode
   				,str : str
 				},
 			dataType: "json",
@@ -115,17 +126,30 @@ $(function(){
 					itmHisDNum = result[result.length -1].itmHisDNum;
 				}
 				console.log(result);
+				if(result.length !=0){
+				$( 'input#itmHisRdy' ).val(result[0]['itmHisRdy']);
+				$( 'input#operCode' ).val(result[0]['operCode']);
+				$( 'input#itmNote' ).val(result[0]['itmNote']);
+				$( 'input#itmHisNum' ).val(result[0]['itmHisNum']);
+				$( 'input#operName' ).val(result[0]['operName']);
+				}
 				data = result;
+				number = result.length;
+				console.log(number);
 			} // end success
 		}); // end ajax 
 		return data;
 	}
+		
+	//조회버튼
 	button.onclick = function(){
 		itmHisDNum = null;
 		test = null;
 		ordNum = $( 'input#ordNum' ).val();
+		
 		grid.resetData(getList());
 		grid2.resetData(getItemHisNumList());
+		
 
 	}
 	$('#mobile-collapse').click(function() {
@@ -146,7 +170,9 @@ $(function(){
 			,{ header: '전표번호', name:'itmHisNum'}
 			,{ header: '업체명', name:'operName'}
 			,{ header: '자재명', name:'itmName'}
-			,{ header: '비고', name:'itmNoteD'}
+			,{ header: '비고', name:'itmNoteD' }
+			
+			
 	    ]
 	});
 	function getItemHisNumList() {
@@ -171,6 +197,7 @@ $(function(){
 				}
 				console.log(result);
 				data2 = result;
+				
 			} // end success
 		}); // end ajax 
 		return data2;
@@ -209,7 +236,39 @@ $(function(){
 		console.log('======================');
 	grid.resetData(getList());
 	grid2.resetData(getItemHisNumList());
+	
 	}
+	
+	insert.onclick = function() {
+		grid.appendRow();
+	}
+	
+	save.onclick = function() {
+			$.ajax({
+				async: false, 
+				url : "ItemHistoryUpdate",
+				type : "get",
+				data : grid.getData(),
+				dataType: "json",
+				success : 
+					console.log("success")
+				}) // end success
+			}
+		if(grid.getData().length!=number){
+			for(let i=0; i<number; i++){
+				$.ajax({
+					async: false, 
+					url : "ItemHistoryInsert",
+					type : "get",
+					data : grid.getData()[i],
+					dataType: "json",
+					success : 
+						console.log(i+"success")
+					}) // end success
+				}
+			}
+		}
+	
 })
 
 
@@ -260,10 +319,27 @@ $(function(){
 							</tr>
 						</c:if>
 						<tr>
-							<th>ORD_NUM</th>
-							<td><input type="text" name="ordNum" id="ordNum" value = "${ItemHistoryVO.ordNum }"/> <a
-								href="SearchOrder.do">조회</a></td>
+							<th>출고일자</th>
+							<td><input type="date" name="itmHisRdy" id="itmHisRdy" value = "${ItemHistoryVO.ordNum }"/>
 						</tr>
+						<tr>
+							<th>고객사</th>
+							<td><input type="text" name="operCode" id="operCode" value = "${ItemHistoryVO.ordNum }"/>
+						</tr>
+						<tr>
+							<th>특이사항</th>
+							<td><input type="text" name="itmNote" id="itmNote" value = "${ItemHistoryVO.ordNum }"/>
+						</tr>
+						<tr>
+							<th>출고번호</th>
+							<td><input type="text" name="itmHisNum" id="itmHisNum" readonly="readonly" value = "${ItemHistoryVO.ordNum }"/>
+						</tr>
+						<tr>
+							<th>고객사명</th>
+							<td><input type="text" name="operName" id="operName"  readonly="readonly"   value = "${ItemHistoryVO.ordNum }"/>
+						</tr>
+						
+						
 					</table>
 					<button type="button" id="button" name="button">조회</button>
 				</div>
@@ -281,6 +357,10 @@ $(function(){
 										<div id="title" class="card-header">
 											<ul>
 												<li>List</li>
+												<div align="right">
+													<button type="button" id="insert">추가</button>
+													<button type="button" id="save">저장</button>
+												</div>
 											</ul>
 										</div>
 

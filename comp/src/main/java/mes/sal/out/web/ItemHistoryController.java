@@ -7,7 +7,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -71,10 +74,23 @@ public class ItemHistoryController {
     @ResponseBody
     public List<?> ItemHisNumList(ItemHistoryVO searchVO ) throws Exception {
     	
-        List<?> ItemHistoryList = itemHistoryService.ItemHisNumList(searchVO);
-        return ItemHistoryList;
+        List<?> ItemHisNumList = itemHistoryService.ItemHisNumList(searchVO);
+        return ItemHisNumList;
     }
-
+    @RequestMapping(value="/ItemHistoryRegist", method=RequestMethod.GET)
+    @ResponseBody
+    public List<?> ItemHistoryRegist(ItemHistoryVO searchVO ) throws Exception {
+    	
+        List<?> ItemHistoryRegist = itemHistoryService.ItemHistoryRegist(searchVO);
+        return ItemHistoryRegist;
+    }
+    
+    @RequestMapping(value="/ItemHistoryUpdate", method=RequestMethod.GET)
+    public void test(ItemHistoryVO searchVO ) throws Exception {
+       itemHistoryService.ItemHistoryUpdate(searchVO);
+    }
+    
+    
     
     @RequestMapping("/addItemHistoryView.do")
     public String addItemHistoryView(
@@ -82,6 +98,8 @@ public class ItemHistoryController {
             throws Exception {
         return "sal/out/ItemHistoryRegister.page";
     }
+    
+    
     
     @RequestMapping("/addItemHistory.do")
     public String addItemHistory(
