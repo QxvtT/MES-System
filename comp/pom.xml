@@ -602,20 +602,6 @@
 			<version>1.18.10</version>
 			<scope>provided</scope>
 		</dependency>
-	
-		<!-- POI -->
-		<dependency>
-			<groupId>egovframework.rte</groupId>
-			<artifactId>egovframework.rte.fdl.excel</artifactId>
-			<version>${egovframework.rte.version}</version>
-		</dependency>
-
-		<!-- XML스키마를 자바클래스로 생성하는 라이브러리 -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.xmlbeans</groupId> -->
-<!-- 			<artifactId>xmlbeans</artifactId> -->
-<!-- 			<version>2.4.0</version> -->
-<!-- 		</dependency> -->
 
 	</dependencies>
 
