@@ -152,19 +152,28 @@ SELECT * FROM (
 <!-- 		from material -->
 <!-- 	</select> -->
 	
+	<!-- 자재 코드 모달 검색 -->
 	<select id="selectMatCodeList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-			select m.mat_code, m.mat_name, m.mat_size, m.mat_unit 
-			from material m
-			<if test="searchKeyword != null and searchKeyword != ''">
-					<if test="searchCondition == 0">AND
-						M.MAT_CODE = #{searchKeyword}
-					</if>
-					<if test="searchCondition == 1">AND
-						M.MAT_CODE LIKE '%' || #{searchKeyword} || '%'
-					</if>
-				</if>   
+			SELECT M.MAT_CODE, 
+			       M.MAT_NAME, 
+			       M.MAT_SIZE, 
+			       M.MAT_UNIT
+			FROM MATERIAL M
+		<where>
+			<if test="matCode != null and matCode != ''">
+				<![CDATA[		
+					M.MAT_CODE = #{matCode} 
+				]]>
+			</if>
+			<if test="matName != null and matName != ''"> 
+				<![CDATA[		
+					AND M.MAT_NAME LIKE '%' || #{matName} || '%'
+				]]>
+			</if>
+		</where>
+			      
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )

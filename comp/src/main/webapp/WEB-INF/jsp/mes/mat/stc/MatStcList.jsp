@@ -31,6 +31,7 @@
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
 let matCode = null;
+let matName = null;
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -90,24 +91,17 @@ $(function(){
 	    ]
 	}); // end const grid2
 	
-// 	grid2.on('check', (ev) => {
-// 		  alert(`check: ${ev.rowKey}`);
-// 		});
-
-// 	grid2.on('uncheck', (ev) => {
-// 		  alert(`uncheck: ${ev.rowKey}`);
-// 		});
-	
 	function getMatCodeList() {
 		let data;
 		$.ajax({
 			async: false,
 			url : "MatCodeList",
 			type : "get",
-			data : {matCode: matCode},
+			data : {matCode: matCode, matName: matName},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
+					matName = result[result.length -1].matName;
 					matCode = result[result.length -1].matCode;
 				}
 				console.log(result);
@@ -126,56 +120,47 @@ $(function(){
 		$("#myModal").on('shown.bs.modal', function () {
 			grid2.refreshLayout();
 		});
- 	})
+	})
 	
-	$(document).on('click', 'input[name=_checked]', function(){
-		var matCode = $("#modal-body").find('input[name="matCode"]').val();
-		console.log(matCode);
-	});
+	searchMatCodeBtn.onclick = function(){
+		matCode = null;
+		matName = null;
+		
+		console.log('test')
+		
+		matCode = $(".modal-body").find('input[name="matCode"]').val();	
+		console.log(matCode)
+		
+		matName = $(".modal-body").find('input[name="matName"]').val();
+		console.log(matName)
+		
+		grid2.resetData(getMatCodeList());
+	}
 	
-// 	// 검색 선택버튼 클릭시 체크된 Row의 값을 가져온다.
-// 	$("#matCodeSearch").click(function(){ 
-		
-// 		var rowData = new Array();
-// 		var tdArr = new Array();
-// 		var checkbox = $("input[name=_checked]:checked");
-		
-// 		// 체크된 체크박스 값을 가져온다
-// 		checkbox.each(function(i) {
-
-// 			// checkbox.parent() : checkbox의 부모는 <td>이다.
-// 			// checkbox.parent().parent() : <td>의 부모이므로 <tr>이다.
-// 			var tr = checkbox.parent().parent().eq(i);
-// 			var td = tr.children();
-			
-// 			// 체크된 row의 모든 값을 배열에 담는다.
-// 			rowData.push(tr.text());
-			
-// 			// td.eq(0)은 체크박스 이므로  td.eq(1)의 값부터 가져온다.
-// 			var no = td.eq(1).text()+", "
-// 			var userid = td.eq(2).text()+", ";
-// 			var name = td.eq(3).text()+", ";
-// 			var email = td.eq(4).text()+", ";
-			
-// 			// 가져온 값을 배열에 담는다.
-// 			tdArr.push(no);
-// 			tdArr.push(userid);
-// 			tdArr.push(name);
-// 			tdArr.push(email);
-			
-// 			//console.log("no : " + no);
-// 			//console.log("userid : " + userid);
-// 			//console.log("name : " + name);
-// 			//console.log("email : " + email);
-// 		});
-		
-// 		$("#ex3_Result1").html(" * 체크된 Row의 모든 데이터 = "+rowData);	
-// 		$("#ex3_Result2").html(tdArr);	
+// 	$(document).on('click', 'input[name=_checked]', function(){
+// 		var matCode = $("#modal-body").find('input[name="matCode"]').val();
+// 		console.log(matCode);
 // 	});
 
+// 	$(function(){
+// 		var today = new Date();
+// 	    var picker = tui.DatePicker.createRangePicker({
+// 	        startpicker: {
+// 	            date: today,
+// 	            input: '#startpicker-input',
+// 	            container: '#startpicker-container'
+// 	        },
+// 	        endpicker: {
+// 	            date: today,
+// 	            input: '#endpicker-input',
+// 	            container: '#endpicker-container'
+// 	        },
+// 	        language: 'ko'
+	        
+// 	    });
+// 	})
+	
 })
-
-
 
 </script>
 </head>
@@ -207,12 +192,21 @@ $(function(){
 												action="matCodeList.do" onsubmit="return false">
 												<div class="form-group row">
 													<div class="col">
-														<input type="text" name="matCode" /> &nbsp;&nbsp; 자재코드
-														<input type="text" name="matName" disabled />  &nbsp;&nbsp; 자재명
+														<input type="text" id="matCode" name="matCode" />
+														&nbsp;
+														&nbsp;
+														자재코드 <input type="text" id="matName" name="matName" />
+														&nbsp;
+														&nbsp;
+														자재명
 													</div>
 												</div>
-												<div class="col-md-3"><button type="button" class="btn btn-info btn-sm" id="matCodeSearch">검색</button></div>
-											</form><br/>
+												<div class="col-md-3">
+													<button type="button" class="btn btn-info btn-sm"
+														id="searchMatCodeBtn">검색</button>
+												</div>
+											</form>
+											<br />
 											<div id="grid2"></div>
 										</div>
 										<div class="modal-footer">
@@ -222,7 +216,6 @@ $(function(){
 									</div>
 								</div>
 							</div>
-
 
 							<!-- 타이틀 -->
 							<div id="title" class="card-header">
@@ -242,7 +235,8 @@ $(function(){
 								&nbsp;
 								&nbsp;
 								<button type="button" class="btn btn-info btn-sm"
-									id="searchMatBtn" name="searchMatBtn" data-toggle="modal" data-target="#myModal">검색</button>
+									id="searchMatBtn" name="searchMatBtn" data-toggle="modal"
+									data-target="#myModal">검색</button>
 								&nbsp;
 								&nbsp;
 								~
@@ -254,6 +248,15 @@ $(function(){
 								&nbsp;
 								<button type="button" class="btn btn-info btn-sm"
 									id="searchMatBtn" data-toggle="modal" data-target="#myModal">검색</button>
+								&nbsp;
+								&nbsp;
+								&nbsp;
+								&nbsp;
+								&nbsp;
+								&nbsp;
+								자재구분
+								&nbsp;
+								&nbsp;
 							</div>
 							<br />
 							<div>
@@ -262,6 +265,11 @@ $(function(){
 							</div>
 							<br />
 							<div id="grid"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</form:form>
 </body>
 </html>

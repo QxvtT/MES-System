@@ -73,7 +73,7 @@ public class MaterialHistoryController {
     @RequestMapping(value="/mat/in/MatInList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajaxMatInList(MaterialHistoryVO searchVO) throws Exception {
-    	
+    	System.out.println(searchVO.toString());
     	List<?> list = materialHistoryService.selectMatInList(searchVO);
     	
     	System.out.println("a");

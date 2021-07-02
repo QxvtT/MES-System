@@ -69,9 +69,15 @@ SELECT * FROM (
 				      AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
 				      AND M.OPER_CODE = O.OPER_CODE
 				      AND MH.MAT_HIS_DIV='입고'
-				      AND MH.MAT_HIS_DATE BETWEEN TO_DATE('2021-06-09', 'YYYY-MM-DD') AND TO_DATE('2021-06-25', 'YYYY-MM-DD')
-				      AND M.MAT_CODE BETWEEN '0001' AND '0003'
-				      AND O.OPER_CODE BETWEEN 'oper-01' AND 'oper-10'
+			     <if test="matHisDateS != null and matHisDateS != '' and matHisDateE != null and matHisDateE != ''">
+			      	AND MH.MAT_HIS_DATE BETWEEN TO_DATE(#{matHisDateS}, 'YYYY-MM-DD') AND TO_DATE(#{matHisDateE}, 'YYYY-MM-DD')
+			     </if>
+			     <if test="matCode != null and matCode != ''">
+				      AND M.MAT_CODE IN (${matCode})
+			     </if>
+			     <if test="operCode != null and operCode != ''">
+				      AND O.OPER_CODE IN (${operCode})
+			     </if>
 				<if test="searchKeyword != null and searchKeyword != ''">
 					<if test="searchCondition == 0">AND
 						M.MAT_NAME = #{searchKeyword}
