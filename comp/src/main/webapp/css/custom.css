@@ -14,6 +14,16 @@
 .tui-calendar td, .tui-calendar th {
     border-top: 0px;
     height: 39px;
-    text-align: center;
+    padding: 0px;
+    vertical-align: middle;
+    line-height: 1.15;
    
+}
+.tui-calendar thead td, .tui-calendar thead th {
+	border-bottom: 0px;
+	vertical-align: middle;
+}
+
+.tui-calendar .tui-calendar-header {
+	border-bottom: 0px;
 }

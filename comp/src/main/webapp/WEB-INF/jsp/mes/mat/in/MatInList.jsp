@@ -55,9 +55,9 @@ $(function(){
 	    scrollY: true,
 	    bodyHeight: 200,
 	    data: getList(),
-	    rowHeaders: ['checkbox'],
+	    rowHeaders: ['rowNum'],
 	    columns: [
-	    	{ header: '입고일자', name:'matHisDate', editor: {type: 'datePicker'}},
+	    	{ header: '입고일자', name:'matHisDate', editor: {type: 'datePicker', options: {language: 'ko'}}},
 	    	{ header: '자재코드', name:'matCode'},
 			{ header: '자재명', name:'matName'},
 			{ header: '규격', name:'matSize'},
@@ -341,7 +341,9 @@ $(function(){
 											 	<div class="row align-items-center text-center col-lg-8">
 													<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode" value="${result.matCode }"></input>
 													<input type="text" class="form-control w-25 ml-3" id="matName" name="matName" value="${result.matName }" readonly></input>
-													<c:import url="/MaterialList.page"/>
+													<%--<jsp:include page="/MaterialList.page" />
+													<c:import url="/MaterialList.page"/> --%>
+													<%@ include file="/WEB-INF/jsp/mes/common/modal/MaterialList.jsp" %>
 													
 												</div>
 												<div class="col-lg-4">
