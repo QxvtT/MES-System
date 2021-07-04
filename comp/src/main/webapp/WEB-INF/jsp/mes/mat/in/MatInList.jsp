@@ -189,7 +189,7 @@ $(function(){
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
 	   });
-	   
+	
 	
 })
 

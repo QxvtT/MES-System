@@ -55,13 +55,21 @@ public interface ProduceCommandDMapper {
     public ProduceCommandDVO selectProduceCommandD(ProduceCommandDVO vo) throws Exception;
 
     /**
-	 * PRODUCE_COMMAND_D 목록을 조회한다.
+	 * PRODUCE_COMMAND 목록을 조회한다. 조회할 작업지시 선택용
 	 * @param searchMap - 조회할 정보가 담긴 Map
 	 * @return PRODUCE_COMMAND_D 목록
 	 * @exception Exception
 	 */
-    public List<?> selectProduceCommandDList(ProduceCommandDDefaultVO searchVO) throws Exception;
+    /** 작업지시 조회 */
+    public List<?> selectProduceCommandList(ProduceCommandDVO searchVO) throws Exception;
 
+    /** 작업지시디테일 조회 */
+	public List<?> selectProduceCommandDList(ProduceCommandDVO searchVO) throws Exception;
+	
+	/** 작업지시자재 조회 */
+	public List<?> selectProduceCommandMatList(ProduceCommandDVO searchVO) throws Exception;
+	
+	
     /**
 	 * PRODUCE_COMMAND_D 총 갯수를 조회한다.
 	 * @param searchMap - 조회할 정보가 담긴 Map

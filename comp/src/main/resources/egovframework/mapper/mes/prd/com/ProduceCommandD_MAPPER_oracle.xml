@@ -4,22 +4,6 @@
 <mapper
 	namespace="mes.prd.com.service.impl.ProduceCommandDMapper">
 
-
-	<resultMap id="produceCommandD"
-		type="mes.prd.com.service.ProduceCommandDVO">
-		<result property="prdDate" column="PRD_DATE" />
-		<result property="operName" column="OPER_NAME" />
-		<result property="itmCode" column="ITM_CODE" />
-		<result property="itmName" column="ITM_NAME" />
-		<result property="ordNum" column="ORD_NUM" />
-		<result property="ordDeliveryDate" column="ORD_DELIVERY_DATE" />
-		<result property="prdWorkVol" column="ORD_VOL" />
-		<result property="prdPlanDate" column="PRD_WORK_VOL" />
-		<result property="prdNo" column="PRD_PLAN_DATE" />
-		<result property="matVol" column="PRD_NO" />
-		<result property="prdDNote" column="PRD_D_NOTE" />
-	</resultMap>
-
 	<insert id="insertProduceCommandD">
 		<![CDATA[
 			INSERT INTO PRODUCE_COMMAND_D 
@@ -85,7 +69,7 @@
 				]]>
 	</delete>
 
-	<select id="selectProduceCommandD" resultMap="produceCommandD">
+	<select id="selectProduceCommandD" resultType="mes.prd.com.service.ProduceCommandDVO">
 		<![CDATA[
 			SELECT
 				PRD_COM_D_NUM
@@ -107,45 +91,75 @@
 						WHERE PRD_COM_D_NUM=#{prdComDNum}
 				]]>
 	</select>
-
-	<select id="selectProduceCommandDList"
-		parameterType="mes.prd.com.service.ProduceCommandDVO"
-		resultType="egovMap">
 	
-		<if test="prdComDNum != null">
+	<!-- 작업지시 조회 -->
+	<select id="selectProduceCommandList"
+		parameterType="mes.prd.com.service.ProduceCommandDVO"
+		resultType="mes.prd.com.service.ProduceCommandDVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+		select * from PRODUCE_COMMAND
+		<where>
+		<if test="prdComNum1 != null and prdComNum1 != ''">
 				<![CDATA[	
-					and Prd_Com_D_Num < #{prdComDNum}
+					Prd_Com_Num < #{prdComNum1}
 				]]>
 		</if>
-		<if test="searchKeyword != null and searchKeyword != ''">
-			<if test="searchCondition == 0">AND
-				PRD_COM_D_NUM = #{searchKeyword}
-			</if>
-			<if test="searchCondition == 1">AND
-				PRD_COM_NUM LIKE '%' || #{searchKeyword} || '%'
-			</if>
-		</if>
+		</where>
 		ORDER BY
-		PRD_COM_D_NUM DESC
+		PRD_COM_NUM DESC
 		
 		<![CDATA[					
-	) A WHERE ROWNUM <= 10
-)
-]]>
+		) A WHERE ROWNUM <= 10)
+		]]>
 	</select>
-	<select id="selectProduceCommandDListTotCnt"
-		parameterType="mes.prd.com.service.ProduceCommandDVO" resultType="int">
-		SELECT COUNT(*) totcnt
-		FROM PRODUCE_COMMAND_D
-		WHERE 1=1
-		<if test="searchKeyword != null and searchKeyword != ''">
-			<if test="searchCondition == 0">AND
-				PRD_COM_D_NUM = #{searchKeyword}
-			</if>
-			<if test="searchCondition == 1">AND
-				PRD_COM_NUM LIKE '%' || #{searchKeyword} || '%'
-			</if>
+	
+	<!-- 작업지시디테일 조회 -->
+	<select id="selectProduceCommandDList"
+		parameterType="mes.prd.com.service.ProduceCommandDVO"
+		resultType="mes.prd.com.service.ProduceCommandDVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+		select C.*, I.itm_name, OD.ord_num, OM.ord_delivery_date, 
+		OD.ord_vol, I.itm_day_output
+		from PRODUCE_COMMAND_d C, item I, order_d OD, order_m  OM
+		where  c.itm_code = i.itm_code
+        and c.ord_d_num = od.ord_d_num
+        and od.ord_num = om.ord_num
+        and C.prd_com_num = #{prdComNum}
+		<if test="prdComDNum1 != null and prdComDNum1 != ''">
+				<![CDATA[	
+					and Prd_Com_D_Num > #{prdComDNum1}
+				]]>
 		</if>
+		ORDER BY
+		PRD_COM_D_NUM
+		
+		<![CDATA[					
+		) A WHERE ROWNUM <= 10)
+		]]>
+	</select>
+	
+	<!-- 작업지시자재 조회 -->
+	<select id="selectProduceCommandMatList"
+		parameterType="mes.prd.com.service.ProduceCommandDVO"
+		resultType="mes.prd.com.service.ProduceCommandDVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+		select *
+		from PRODUCE_COMMAND_MAT
+		where prd_com_d_num = #{prdComDNum}
+		<if test="prdComDNum1 != null and prdComDNum1 != ''">
+				<![CDATA[	
+					and Prd_Com_Mat_Num > #{prdComMatNum}
+				]]>
+		</if>
+		ORDER BY
+		PRD_COM_MAT_NUM
+		
+		<![CDATA[					
+		) A WHERE ROWNUM <= 10)
+		]]>
 	</select>
 
 </mapper>

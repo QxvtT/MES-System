@@ -52,19 +52,39 @@ public class ProduceCommandDController {
 	 * @return "/produceCommandD/ProduceCommandDList"
 	 * @exception Exception
 	 */
-    
-	@RequestMapping(value ="/prd/com/ProduceCommandDList", method=RequestMethod.GET)
+    /** 작업지시 조회 */
+	@RequestMapping(value ="/ProduceCommandList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajax(ProduceCommandDVO searchVO) throws Exception {
 		
     	System.out.println("이름 : ");
-    	List<?> list = produceCommandDService.selectProduceCommandDList(searchVO);
+    	List<?> list = produceCommandDService.selectProduceCommandList(searchVO);
     	System.out.println(list);
     	return list;
     }
 	
+	/** 작업지시디테일 조회 */
+	@RequestMapping(value ="/ProduceCommandDList", method=RequestMethod.GET)
+	@ResponseBody
+	public List<?> ajaxSelectProduceCommandDList(ProduceCommandDVO searchVO) throws Exception {
+		System.out.println("이름 : ");
+		List<?> list = produceCommandDService.selectProduceCommandDList(searchVO);
+		System.out.println(list);
+		return list;
+	}
+	
+	/** 작업지시자재 조회 */
+	@RequestMapping(value ="/ProduceCommandMatList", method=RequestMethod.GET)
+	@ResponseBody
+	public List<?> ajaxSelectProduceCommandMatList(ProduceCommandDVO searchVO) throws Exception {
+		System.out.println("이름 : ");
+		List<?> list = produceCommandDService.selectProduceCommandMatList(searchVO);
+		System.out.println(list);
+		return list;
+	}
+	
 	@RequestMapping(value="/ProduceCommandDList.do")
-    public String selectProduceCommandDList(@ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, 
+    public String produceCommandDList(ProduceCommandDVO searchVO, 
     		ModelMap model)
             throws Exception {
 		return "prd/com/ProduceCommandDList.page";
@@ -127,15 +147,15 @@ public class ProduceCommandDController {
 	 * 에 따라 produceCommandDVO
 	 * model.addAttribute(selectProduceCommandD(produceCommandDVO, searchVO));
 	 * return "prd/com/ProduceCommandDRegister.page"; }
-	 */
+	 
     @RequestMapping("/prd/com/selectProduceCommandD.do")
     public @ModelAttribute("produceCommandDVO")
     ProduceCommandDVO selectProduceCommandD(
             ProduceCommandDVO produceCommandDVO,
             @ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO) throws Exception {
         return produceCommandDService.selectProduceCommandD(produceCommandDVO);
-    }
-
+    }*/
+	
     @RequestMapping("/prd/com/updateProduceCommandD.do")
     public String updateProduceCommandD(
             ProduceCommandDVO produceCommandDVO,

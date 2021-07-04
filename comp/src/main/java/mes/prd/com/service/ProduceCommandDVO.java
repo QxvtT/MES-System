@@ -1,5 +1,7 @@
 package mes.prd.com.service;
 
+import lombok.Data;
+
 /**
  * @Class Name : ProduceCommandDVO.java
  * @Description : ProduceCommandD VO class
@@ -12,141 +14,100 @@ package mes.prd.com.service;
  *  
  *  Copyright (C)  All right reserved.
  */
+@Data
 public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     private static final long serialVersionUID = 1L;
     
-    /** PRD_COM_D_NUM */
-    private java.math.BigDecimal prdDate;
+    /** 작업지시 관리에서 grid1 조회용 */
     
-    /** PRD_COM_NUM */
-    private java.lang.String operName;
+    /** 스크롤용 지시번호 */
+    private java.lang.String prdComNum1;
     
-    /** MAT_CODE */
+    /** 스크롤용 일련번호 */
+    private java.lang.String prdComDNum1;
+    
+    /** 지시번호 */
+    private java.lang.String prdComNum;
+    /** 지시일자 */
+    private java.lang.String prdComDate;
+    /** 작업지시명 */
+    private java.lang.String prdComName;
+    /** 특기사항(=비고) */
+    private java.lang.String prdComNote;
+    
+    
+    /** 일련번호 */
+    private java.math.BigDecimal prdComDNum;
+    
+    /** 계획일련번호 */
+    private java.math.BigDecimal prdPlanDNum;
+    
+    /** 제품코드 */
     private java.lang.String itmCode;
     
-    /** LOT_NUM */
-    private java.math.BigDecimal itmName;
+    /** 제품명*/
+    private java.lang.String itmName;
     
-    /** ITM_CODE */
+    /** 작업구분(정상,재작업) */
+    private java.lang.String prcComDiv;
+    
+    /** 주문일련번호  --주문번호,납기일자, 주문량 */
+    private java.math.BigDecimal ordDNum;
+    
+    /** 주문번호 */
     private java.lang.String ordNum;
     
-    /** PRC_F_NO */
-    private java.math.BigDecimal ordDeliveryDate;
+    /** 납기일자 */
+    private java.lang.String ordDeliveryDate;
     
-    /** PRD_COM_VOL */
+    /** 주문량 */
     private java.math.BigDecimal ordVol;
     
-    /** PRD_COM_D_DATE */
-    private java.sql.Date prdWorkVol;
+    /** 지시량 */
+    private java.math.BigDecimal prdComVol;
     
-    /** PRC_COM_NO */
-    private java.math.BigDecimal prdPlanDate;
+    /** 일생산량(제품테이블) */
+    private java.math.BigDecimal itmDayOutput;
     
-    /** PRC_COM_DIV */
-    private java.lang.String prdNo;
+    /** 작업일자 */
+    private java.lang.String prdComDDate;
     
-    /** MAT_VOL */
+    /** 작업순서 */
+    private java.math.BigDecimal prcComNo;
+    
+    /** 비고 */
+    private java.lang.String prdComDNote;
+    
+    
+    /** 제품 한줄별로 자재코드에 맞는 자재로트번호 및 사용 수량 */
+    
+    /** 지시자재일련번호 스크롤용 */
+    private java.math.BigDecimal prdComMatNum;
+    
+    /** 자재코드 */
+    private java.lang.String matCode;
+    
+    /** LOT_NUM */
+    private java.math.BigDecimal lotNum;
+    
+    /** 자재수량 */
     private java.math.BigDecimal matVol;
     
-    /** PRD_COM_NOTE */
-    private java.lang.String prdDNote;
+    /** 자재비고 */
+    private java.lang.String prdComMatNote;
+    
+    
+    /** 제품 한줄별로 공정흐름  */
+    
+    /** 순서 */
+    private java.math.BigDecimal prcFNo;
+    
+    /** 공정코드 */
+    private java.lang.String prcCode;
+    
+    
 
-	public java.math.BigDecimal getPrdDate() {
-		return prdDate;
-	}
-
-	public void setPrdDate(java.math.BigDecimal prdDate) {
-		this.prdDate = prdDate;
-	}
-
-	public java.lang.String getOperName() {
-		return operName;
-	}
-
-	public void setOperName(java.lang.String operName) {
-		this.operName = operName;
-	}
-
-	public java.lang.String getItmCode() {
-		return itmCode;
-	}
-
-	public void setItmCode(java.lang.String itmCode) {
-		this.itmCode = itmCode;
-	}
-
-	public java.math.BigDecimal getItmName() {
-		return itmName;
-	}
-
-	public void setItmName(java.math.BigDecimal itmName) {
-		this.itmName = itmName;
-	}
-
-	public java.lang.String getOrdNum() {
-		return ordNum;
-	}
-
-	public void setOrdNum(java.lang.String ordNum) {
-		this.ordNum = ordNum;
-	}
-
-	public java.math.BigDecimal getOrdDeliveryDate() {
-		return ordDeliveryDate;
-	}
-
-	public void setOrdDeliveryDate(java.math.BigDecimal ordDeliveryDate) {
-		this.ordDeliveryDate = ordDeliveryDate;
-	}
-
-	public java.math.BigDecimal getOrdVol() {
-		return ordVol;
-	}
-
-	public void setOrdVol(java.math.BigDecimal ordVol) {
-		this.ordVol = ordVol;
-	}
-
-	public java.sql.Date getPrdWorkVol() {
-		return prdWorkVol;
-	}
-
-	public void setPrdWorkVol(java.sql.Date prdWorkVol) {
-		this.prdWorkVol = prdWorkVol;
-	}
-
-	public java.math.BigDecimal getPrdPlanDate() {
-		return prdPlanDate;
-	}
-
-	public void setPrdPlanDate(java.math.BigDecimal prdPlanDate) {
-		this.prdPlanDate = prdPlanDate;
-	}
-
-	public java.lang.String getPrdNo() {
-		return prdNo;
-	}
-
-	public void setPrdNo(java.lang.String prdNo) {
-		this.prdNo = prdNo;
-	}
-
-	public java.math.BigDecimal getMatVol() {
-		return matVol;
-	}
-
-	public void setMatVol(java.math.BigDecimal matVol) {
-		this.matVol = matVol;
-	}
-
-	public java.lang.String getPrdDNote() {
-		return prdDNote;
-	}
-
-	public void setPrdDNote(java.lang.String prdDNote) {
-		this.prdDNote = prdDNote;
-	}
-
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}

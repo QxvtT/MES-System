@@ -41,6 +41,8 @@
     <!-- tui-date-picker.css, tui-grid.css -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tui/tui-date-picker.min.css">
 	<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css">
+	<!-- jquery toast message css -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/toast/jquery.toast.min.css" />
     <!-- custom.css -->
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/custom.css">
     
@@ -66,6 +68,9 @@
     <!-- tui-date-picker, tui-grid js -->
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 	<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+	
+	<!-- jquery toast message js -->
+	<script src="${pageContext.request.contextPath}/js/toast/jquery.toast.min.js"></script>
 </head>
 
 <body>
