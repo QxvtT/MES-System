@@ -55,14 +55,14 @@ $(function(){
 			async: false,
 			url : "${pageContext.request.contextPath}/MaterialList",
 			type : "get",
-			data : {matCode: matCode1,
+			data : {matCode: matCode,
 					matName: matName},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
 					matCode1 = result[result.length -1].matCode1;
 				}
-				console.log(result);
+				console.log(matCode1);
 				data = result;
 			} // end success
 		}); // end ajax 
@@ -83,8 +83,9 @@ $(function(){
 	})
 	
 	button.onclick = function(){
-		matName = null;
+		matCode = null;
 		matCode = $('input#matCodeM').val();
+		console.log(matCode);
 		material.resetData(getMaterialList());
 		
 	}

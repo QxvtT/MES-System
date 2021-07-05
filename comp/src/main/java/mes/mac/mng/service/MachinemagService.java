@@ -1,8 +1,8 @@
 package mes.mac.mng.service;
 
 import java.util.List;
-import mes.mac.mng.service.MachineDefaultVO;
-import mes.mac.mng.service.MachineVO;
+import mes.mac.mng.service.MachinemagDefaultVO;
+import mes.mac.mng.service.MachinemagVO;
 
 /**
  * @Class Name : MachineService.java
@@ -16,7 +16,7 @@ import mes.mac.mng.service.MachineVO;
  *  
  *  Copyright (C)  All right reserved.
  */
-public interface MachineService {
+public interface MachinemagService {
 	
 	/**
 	 * MACHINE을 등록한다.
@@ -24,7 +24,7 @@ public interface MachineService {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-    String insertMachine(MachineVO vo) throws Exception;
+    String insertMachine(MachinemagVO vo) throws Exception;
     
     /**
 	 * MACHINE을 수정한다.
@@ -32,7 +32,7 @@ public interface MachineService {
 	 * @return void형
 	 * @exception Exception
 	 */
-    void updateMachine(MachineVO vo) throws Exception;
+    void updateMachine(MachinemagVO vo) throws Exception;
     
     /**
 	 * MACHINE을 삭제한다.
@@ -40,7 +40,7 @@ public interface MachineService {
 	 * @return void형 
 	 * @exception Exception
 	 */
-    void deleteMachine(MachineVO vo) throws Exception;
+    void deleteMachine(MachinemagVO vo) throws Exception;
     
     /**
 	 * MACHINE을 조회한다.
@@ -48,7 +48,7 @@ public interface MachineService {
 	 * @return 조회한 MACHINE
 	 * @exception Exception
 	 */
-    MachineVO selectMachine(MachineVO vo) throws Exception;
+    MachinemagVO selectMachine(MachinemagVO vo) throws Exception;
     
     /**
 	 * MACHINE 목록을 조회한다.
@@ -56,7 +56,7 @@ public interface MachineService {
 	 * @return MACHINE 목록
 	 * @exception Exception
 	 */
-    List selectMachineList(MachineDefaultVO searchVO) throws Exception;
+    List selectMachineList(MachinemagDefaultVO searchVO) throws Exception;
     
     /**
 	 * MACHINE 총 갯수를 조회한다.
@@ -64,6 +64,6 @@ public interface MachineService {
 	 * @return MACHINE 총 갯수
 	 * @exception
 	 */
-    int selectMachineListTotCnt(MachineDefaultVO searchVO);
+    int selectMachineListTotCnt(MachinemagDefaultVO searchVO);
     
 }

@@ -17,9 +17,9 @@ import org.springframework.web.bind.support.SessionStatus;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
-import mes.mac.mng.service.MachineService;
-import mes.mac.mng.service.MachineDefaultVO;
-import mes.mac.mng.service.MachineVO;
+import mes.mac.mng.service.MachinemagService;
+import mes.mac.mng.service.MachinemagDefaultVO;
+import mes.mac.mng.service.MachinemagVO;
 
 /**
  * @Class Name : MachineController.java
@@ -35,11 +35,11 @@ import mes.mac.mng.service.MachineVO;
  */
 
 @Controller
-@SessionAttributes(types = MachineVO.class)
-public class MachineController {
+@SessionAttributes(types = MachinemagVO.class)
+public class MachinemagController {
 
 	@Resource(name = "machineService")
-	private MachineService machineService;
+	private MachinemagService machineService;
 
 	/** EgovPropertyService */
 	@Resource(name = "propertiesService")
@@ -54,7 +54,7 @@ public class MachineController {
 	 */
 	@RequestMapping(value = "/machine/MachineList.do")
 	@ResponseBody
-	public List<?> ajaxselectMachineList(MachineDefaultVO searchVO, ModelMap model)
+	public List<?> ajaxselectMachineList(MachinemagDefaultVO searchVO, ModelMap model)
 			throws Exception {
 
 		List<?> machineList = machineService.selectMachineList(searchVO);
@@ -63,13 +63,13 @@ public class MachineController {
 	}
 
 	@RequestMapping("/machine/addMachineView.do")
-	public String addMachineView(@ModelAttribute("searchVO") MachineDefaultVO searchVO, Model model) throws Exception {
-		model.addAttribute("machineVO", new MachineVO());
+	public String addMachineView(@ModelAttribute("searchVO") MachinemagDefaultVO searchVO, Model model) throws Exception {
+		model.addAttribute("machineVO", new MachinemagVO());
 		return "/machine/MachineRegister";
 	}
 
 	@RequestMapping("/machine/addMachine.do")
-	public String addMachine(MachineVO machineVO, @ModelAttribute("searchVO") MachineDefaultVO searchVO,
+	public String addMachine(MachinemagVO machineVO, @ModelAttribute("searchVO") MachinemagDefaultVO searchVO,
 			SessionStatus status) throws Exception {
 		machineService.insertMachine(machineVO);
 		status.setComplete();
@@ -78,8 +78,8 @@ public class MachineController {
 
 	@RequestMapping("/machine/updateMachineView.do")
 	public String updateMachineView(@RequestParam("macCode") java.lang.String macCode,
-			@ModelAttribute("searchVO") MachineDefaultVO searchVO, Model model) throws Exception {
-		MachineVO machineVO = new MachineVO();
+			@ModelAttribute("searchVO") MachinemagDefaultVO searchVO, Model model) throws Exception {
+		MachinemagVO machineVO = new MachinemagVO();
 		machineVO.setMacCode(macCode);
 		// 변수명은 CoC 에 따라 machineVO
 		model.addAttribute(selectMachine(machineVO, searchVO));
@@ -87,13 +87,13 @@ public class MachineController {
 	}
 
 	@RequestMapping("/machine/selectMachine.do")
-	public @ModelAttribute("machineVO") MachineVO selectMachine(MachineVO machineVO,
-			@ModelAttribute("searchVO") MachineDefaultVO searchVO) throws Exception {
+	public @ModelAttribute("machineVO") MachinemagVO selectMachine(MachinemagVO machineVO,
+			@ModelAttribute("searchVO") MachinemagDefaultVO searchVO) throws Exception {
 		return machineService.selectMachine(machineVO);
 	}
 
 	@RequestMapping("/machine/updateMachine.do")
-	public String updateMachine(MachineVO machineVO, @ModelAttribute("searchVO") MachineDefaultVO searchVO,
+	public String updateMachine(MachinemagVO machineVO, @ModelAttribute("searchVO") MachinemagDefaultVO searchVO,
 			SessionStatus status) throws Exception {
 		machineService.updateMachine(machineVO);
 		status.setComplete();
@@ -101,7 +101,7 @@ public class MachineController {
 	}
 
 	@RequestMapping("/machine/deleteMachine.do")
-	public String deleteMachine(MachineVO machineVO, @ModelAttribute("searchVO") MachineDefaultVO searchVO,
+	public String deleteMachine(MachinemagVO machineVO, @ModelAttribute("searchVO") MachinemagDefaultVO searchVO,
 			SessionStatus status) throws Exception {
 		machineService.deleteMachine(machineVO);
 		status.setComplete();

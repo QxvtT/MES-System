@@ -16,7 +16,7 @@ import lombok.Data;
  */
 
 @Data
-public class MachineVO extends MachineDefaultVO{
+public class MachinemagVO extends MachinemagDefaultVO{
     private static final long serialVersionUID = 1L;
     
     /** MAC_CODE */

@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import mes.mac.mng.service.MachineDefaultVO;
-import mes.mac.mng.service.MachineService;
-import mes.mac.mng.service.MachineVO;
+import mes.mac.mng.service.MachinemagDefaultVO;
+import mes.mac.mng.service.MachinemagService;
+import mes.mac.mng.service.MachinemagVO;
 /**
  * @Class Name : MachineServiceImpl.java
  * @Description : Machine Business Implement class
@@ -26,13 +26,13 @@ import mes.mac.mng.service.MachineVO;
  */
 
 @Service("machineService")
-public class MachineServiceImpl extends EgovAbstractServiceImpl implements
-        MachineService {
+public class MachinemagServiceImpl extends EgovAbstractServiceImpl implements
+        MachinemagService {
         
-    private static final Logger LOGGER = LoggerFactory.getLogger(MachineServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MachinemagServiceImpl.class);
 
     @Resource(name="machineMapper")
-    private MachineMapper machineDAO;
+    private MachinemagMapper machineDAO;
     
     //@Resource(name="machineDAO")
     //private MachineDAO machineDAO;
@@ -47,7 +47,7 @@ public class MachineServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-    public String insertMachine(MachineVO vo) throws Exception {
+    public String insertMachine(MachinemagVO vo) throws Exception {
     	LOGGER.debug(vo.toString());
     	
     	/** ID Generation Service */
@@ -67,7 +67,7 @@ public class MachineServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return void형
 	 * @exception Exception
 	 */
-    public void updateMachine(MachineVO vo) throws Exception {
+    public void updateMachine(MachinemagVO vo) throws Exception {
         machineDAO.updateMachine(vo);
     }
 
@@ -77,7 +77,7 @@ public class MachineServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return void형 
 	 * @exception Exception
 	 */
-    public void deleteMachine(MachineVO vo) throws Exception {
+    public void deleteMachine(MachinemagVO vo) throws Exception {
         machineDAO.deleteMachine(vo);
     }
 
@@ -87,8 +87,8 @@ public class MachineServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return 조회한 MACHINE
 	 * @exception Exception
 	 */
-    public MachineVO selectMachine(MachineVO vo) throws Exception {
-        MachineVO resultVO = machineDAO.selectMachine(vo);
+    public MachinemagVO selectMachine(MachinemagVO vo) throws Exception {
+        MachinemagVO resultVO = machineDAO.selectMachine(vo);
         if (resultVO == null)
             throw processException("info.nodata.msg");
         return resultVO;
@@ -100,7 +100,7 @@ public class MachineServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return MACHINE 목록
 	 * @exception Exception
 	 */
-    public List<?> selectMachineList(MachineDefaultVO searchVO) throws Exception {
+    public List<?> selectMachineList(MachinemagDefaultVO searchVO) throws Exception {
         return machineDAO.selectMachineList(searchVO);
     }
 
@@ -110,7 +110,7 @@ public class MachineServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return MACHINE 총 갯수
 	 * @exception
 	 */
-    public int selectMachineListTotCnt(MachineDefaultVO searchVO) {
+    public int selectMachineListTotCnt(MachinemagDefaultVO searchVO) {
 		return machineDAO.selectMachineListTotCnt(searchVO);
 	}
     

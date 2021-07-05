@@ -15,7 +15,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *  
  *  Copyright (C)  All right reserved.
  */
-public class MachineDefaultVO implements Serializable {
+public class MachinemagDefaultVO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
