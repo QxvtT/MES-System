@@ -56,13 +56,14 @@ $(function(){
 	    	{ header: '주문일련번호', name:'ordDNum', hidden: true},
 			{ header: '자재코드', name:'matCode', hidden: true},
 			{ header: '자재명', name:'matName', hidden: true},
+			{ header: '업체명', name:'operName', hidden: true},
 			{ header: '제품코드', name:'itmCode'},
 			{ header: '구분', name:'prcComDiv'},
 			{ header: '주문번호', name:'ordNum'},
 			{ header: '납기일자', name:'ordDeliveryDate'},
 			{ header: '주문량', name:'ordVol'},
-			{ header: '기지시량', name:'yComVol'},
-			{ header: '미지시량', name:'nComVol'},
+			{ header: '기지시량', name:'yesComVol'},
+			{ header: '미지시량', name:'noComVol'},
 			{ header: '지시량', name:'prdComVol'},
 			{ header: 'UPH', name:'uph'},
 			{ header: '일생산량', name:'itmDayOutput'},
@@ -174,12 +175,14 @@ $(function(){
 	
 	//작업지시 조회모달에서 더블클릭시 조회할 지시 선택하는 기능
 	function selectCom(e) {
+		prdComDNum1 = null;
 		if(myToast != null) myToast.reset();
 		prdComNum = grid2.getValue(e.rowKey,'prdComNum');
 		$('#prdComNum').val(prdComNum);
 		$('#prdComDate').val(grid2.getValue(e.rowKey,'prdComDate'));
 		$('#prdComName').val(grid2.getValue(e.rowKey,'prdComName'));
 		$('#prdComNote').val(grid2.getValue(e.rowKey,'prdComNote'));
+		$('#operName').val(grid2.getValue(e.rowKey,'operName'));
 		
 		grid.resetData(getList());
 		$('#myModal').modal('hide');
@@ -202,6 +205,7 @@ $(function(){
 	
 	$('#modalComY').click(() => {
 		let e = grid2.getFocusedCell();
+		console.log("클릭: ");
 		console.log(e);
 		if(e.rowKey != null) {
 			selectCom(e);
@@ -256,6 +260,8 @@ $(function(){
 	grid.on('dblclick', (e) => {
 		prdComDNum = grid.getValue(e.rowKey,'prdComDNum');
 		itmCode = grid.getValue(e.rowKey,'itmCode');
+		prdComMatNum = null;
+		prcFNo = null;
 		gridMat.resetData(getComMatList());
 		gridFlow.resetData(getFlowList());
 		$('#itmCode').val(grid.getValue(e.rowKey,'itmCode'));
@@ -263,6 +269,7 @@ $(function(){
 		$('#prdComVol').val(grid.getValue(e.rowKey,'prdComVol'));
 		$('#matCode').val(grid.getValue(e.rowKey,'matCode'));
 		$('#matName').val(grid.getValue(e.rowKey,'matName'));
+		$('#operName').val(grid.getValue(e.rowKey,'operName'));
 	});
 	
 	//공정흐름조회 그리드

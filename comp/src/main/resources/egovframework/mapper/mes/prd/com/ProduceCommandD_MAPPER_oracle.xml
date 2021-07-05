@@ -119,17 +119,22 @@
 		parameterType="mes.prd.com.service.ProduceCommandDVO"
 		resultType="mes.prd.com.service.ProduceCommandDVO">
 		
-		
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-		select C.*, I.itm_name, OD.ord_num, OM.ord_delivery_date, 
-		OD.ord_vol, I.itm_day_output, M.mat_name
-		from PRODUCE_COMMAND_d C, item I, order_d OD, order_m  OM, material M
-		where  c.itm_code = i.itm_code
-        and c.ord_d_num = od.ord_d_num (+)
-        and od.ord_num = om.ord_num (+)
-        and c.mat_code = m.mat_code
-        and C.prd_com_num = #{prdComNum}
+		select A.* ,(B.yes_Com_Vol - a.prd_com_vol) as yes_Com_Vol,
+		        a.ord_vol - (B.yes_Com_Vol - a.prd_com_vol) - a.ord_out_vol as no_Com_Vol,
+		        a.itm_day_output/8 as UPH, a.prd_com_vol/a.itm_day_output as day_Num
+		from(select C.*, I.itm_name, M.mat_name, OD.ord_num, OM.ord_delivery_date, OM.oper_name,
+		      OD.ord_vol, OD.ord_out_vol, I.itm_day_output
+		      from PRODUCE_COMMAND_d C, item I, order_d OD, order_m  OM, material M
+		      where  c.itm_code = i.itm_code
+		      	and i.mat_code = m.mat_code
+		        and c.ord_d_num = od.ord_d_num (+)
+		        and od.ord_num = om.ord_num (+)) A, 
+		        (select ord_d_num, sum(prd_com_vol) as yes_Com_Vol
+		        from produce_command_d
+		        group by ord_d_num) B
+		where a.ord_d_num = b.ord_d_num
 		<if test="prdComDNum1 != null and prdComDNum1 != ''">
 				<![CDATA[	
 					and Prd_Com_D_Num > #{prdComDNum1}

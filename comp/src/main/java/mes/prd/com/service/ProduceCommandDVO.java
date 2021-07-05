@@ -57,17 +57,32 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     /** 주문번호 */
     private java.lang.String ordNum;
     
+    /** 업체명 */
+    private java.lang.String operName;
+    
     /** 납기일자 */
     private java.lang.String ordDeliveryDate;
     
     /** 주문량 */
     private java.math.BigDecimal ordVol;
     
+    /** 기지시량 */
+    private java.math.BigDecimal yesComVol;
+    
+    /** 미지시량 */
+    private java.math.BigDecimal noComVol;
+    
     /** 지시량 */
     private java.math.BigDecimal prdComVol;
     
+    /** UPH */
+    private java.math.BigDecimal uph;
+    
     /** 일생산량(제품테이블) */
     private java.math.BigDecimal itmDayOutput;
+    
+    /** 일수 */
+    private java.math.BigDecimal dayNum;
     
     /** 작업일자 */
     private java.lang.String prdComDDate;
