@@ -126,7 +126,7 @@
 		
 			<if test="matCode1 != null and matCode1 != ''">
 							<![CDATA[	
-								to_number(m.mat_code) >  to_number(#{ matCode})
+								to_number(m.mat_code) >  to_number(#{ matCode1})
 							]]>
 			</if>
 

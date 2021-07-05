@@ -24,9 +24,8 @@
 <title>목록</title>
 
 <script type="text/javaScript" language="javascript" defer="defer">
-
+let matCodeM = null;
 let matCode1 = null;
-let matName = null;
 
 $(function(){
 	const material = new tui.Grid({
@@ -56,14 +55,14 @@ $(function(){
 			async: false,
 			url : "${pageContext.request.contextPath}/MaterialList",
 			type : "get",
-			data : {matCode: matCode1,
-					matName: matName},
+			data : {matCode: matCodeM,
+					matCode1: matCode1},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
 					matCode1 = result[result.length -1].matCode1;
 				}
-				console.log(matCode1);
+				console.log(matCodeM);
 				data = result;
 			} // end success
 		}); // end ajax 
@@ -83,10 +82,10 @@ $(function(){
 		
 	})
 	
-	button.onclick = function(){
-		matCode = null;
-		matCode = $('input#matCodeM').val();
-		console.log(matCode);
+	button1.onclick = function(){
+		matCodeM = null;
+		matCodeM = $('input#matCodeM').val();
+		console.log(matCodeM);
 		material.resetData(getMaterialList());
 		
 	}
@@ -117,7 +116,7 @@ $(function(){
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>자재코드</h4>
 					<input type="text" id="matCodeM" name="matCode"></input><br><br>
-					<button type="button" id="button" name="button">조회</button> &nbsp;
+					<button type="button" id="button1" name="button">조회</button> &nbsp;
 						<button type="reset">리셋</button>
 				</div>
 				<div class="form-group row"></div>

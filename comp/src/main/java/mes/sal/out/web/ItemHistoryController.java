@@ -1,16 +1,16 @@
 package mes.sal.out.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
+import lombok.Data;
+import mes.sal.out.service.GridDataVO;
 import mes.sal.out.service.ItemHistoryDefaultVO;
 import mes.sal.out.service.ItemHistoryService;
 import mes.sal.out.service.ItemHistoryVO;
@@ -35,6 +37,7 @@ import mes.sal.out.service.ItemHistoryVO;
  *  
  *  Copyright (C)  All right reserved.
  */
+
 
 @Controller
 @SessionAttributes(types=ItemHistoryVO.class)
@@ -53,6 +56,8 @@ public class ItemHistoryController {
 	 * @return "/itemHistory/ItemHistoryList"
 	 * @exception Exception
 	 */
+    
+    
     
     
     @RequestMapping(value="/ItemHistoryList", method=RequestMethod.GET)
@@ -74,21 +79,40 @@ public class ItemHistoryController {
     @ResponseBody
     public List<?> ItemHisNumList(ItemHistoryVO searchVO ) throws Exception {
     	
-        List<?> ItemHisNumList = itemHistoryService.ItemHisNumList(searchVO);
+        List<?> ItemHisNumList = itemHistoryService.itemHisNumList(searchVO);
         return ItemHisNumList;
     }
-    @RequestMapping(value="/ItemHistoryRegist", method=RequestMethod.GET)
+    @RequestMapping(value="/ItemHistoryRegist")
     @ResponseBody
     public List<?> ItemHistoryRegist(ItemHistoryVO searchVO ) throws Exception {
     	
-        List<?> ItemHistoryRegist = itemHistoryService.ItemHistoryRegist(searchVO);
+        List<?> ItemHistoryRegist = itemHistoryService.itemHistoryRegist(searchVO);
         return ItemHistoryRegist;
     }
     
-    @RequestMapping(value="/ItemHistoryUpdate", method=RequestMethod.GET)
-    public void test(ItemHistoryVO searchVO ) throws Exception {
-       itemHistoryService.ItemHistoryUpdate(searchVO);
-    }
+    @RequestMapping(value="/ItemHistoryUpdate")
+  public void ItemHistoryUpdate(@RequestBody GridDataVO gridData) throws Exception {
+    	
+     itemHistoryService.itemHistoryUpdate(gridData);
+  } 
+    
+    
+//    @RequestMapping(value="/ItemHistoryUpdate")
+//    public void ItemHistoryUpdate(ItemHistoryVO searchVO ) throws Exception {
+//    	System.out.println(searchVO.getItmVol());
+//       itemHistoryService.ItemHistoryUpdate(searchVO);
+//    } 
+//    @RequestMapping(value="/ItemHistoryNewInsert")
+//    public void ItemHistoryNewInsert(ItemHistoryVO searchVO ) throws Exception {
+//    	System.out.println(searchVO.getItmVol());
+//       itemHistoryService.ItemHistoryNewInsert(searchVO);
+//    }
+//    
+//    @RequestMapping(value="/ItemHistoryInsert")
+//    public void ItemHistoryInsert(ItemHistoryVO searchVO ) throws Exception {
+//    	System.out.println(searchVO.getItmVol()); 
+//       itemHistoryService.InsertItemHistory(searchVO);
+//    }
     
     
     
@@ -101,15 +125,7 @@ public class ItemHistoryController {
     
     
     
-    @RequestMapping("/addItemHistory.do")
-    public String addItemHistory(
-            ItemHistoryVO itemHistoryVO,
-            @ModelAttribute("searchVO") ItemHistoryDefaultVO searchVO, SessionStatus status)
-            throws Exception {
-        itemHistoryService.insertItemHistory(itemHistoryVO);
-        status.setComplete();
-        return "redirect:/ItemHistoryList.do";
-    }
+
     
     @RequestMapping("/updateItemHistoryView.do")
     public String updateItemHistoryView(

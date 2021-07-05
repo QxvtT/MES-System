@@ -1,8 +1,6 @@
 package mes.sal.out.service;
 
 import java.util.List;
-import mes.sal.out.service.ItemHistoryDefaultVO;
-import mes.sal.out.service.ItemHistoryVO;
 
 /**
  * @Class Name : ItemHistoryService.java
@@ -57,12 +55,13 @@ public interface ItemHistoryService {
 	 */
     List selectItemHistoryList(ItemHistoryVO searchVO) throws Exception;
     
-    List ItemHisNumList(ItemHistoryVO searchVO) throws Exception;
+    List itemHisNumList(ItemHistoryVO searchVO) throws Exception;
     
-    List ItemHistoryRegist(ItemHistoryVO searchVO) throws Exception;
+    List itemHistoryRegist(ItemHistoryVO searchVO) throws Exception;
     
-    void ItemHistoryUpdate(ItemHistoryVO searchVO) throws Exception;
-    void InsertItemHistory(ItemHistoryVO searchVO) throws Exception;
+    void insertItemHistory(ItemHistoryVO searchVO) throws Exception;
+    
+    void itemHistoryUpdate(GridDataVO gridData) throws Exception;
     
     /**
 	 * ITEM_HISTORY 총 갯수를 조회한다.
