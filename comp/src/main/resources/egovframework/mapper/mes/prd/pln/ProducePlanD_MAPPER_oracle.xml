@@ -115,5 +115,9 @@
 	<select id="selectItemList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.pln.service.ProducePlanDVO">
 		SELECT * FROM item
 	</select>
-
+	
+	<select id="selectItem" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.pln.service.ProducePlanDVO">
+		SELECT * FROM ITEM WHERE ITM_CODE = #{itmCode}
+	</select>
+		
 </mapper>

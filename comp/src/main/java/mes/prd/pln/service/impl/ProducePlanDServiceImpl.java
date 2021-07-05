@@ -124,6 +124,13 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 		return producePlanDDAO.selectItemList(itmVO);
 	}
 
+	public ProducePlanDVO selectItem(ProducePlanDVO itmVO) throws Exception {
+		ProducePlanDVO resultVO = producePlanDDAO.selectItem(itmVO);
+		if(resultVO == null)
+			throw processException("info.nodata.msg");
+		return resultVO;
+	}
+
 	
     
 }

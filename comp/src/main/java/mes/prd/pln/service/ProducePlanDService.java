@@ -67,5 +67,7 @@ public interface ProducePlanDService {
 	List<?> selectProducePlanList(ProducePlanDVO prdVO) throws Exception;
 	
 	List<?> selectItemList(ProducePlanDVO itmVO) throws Exception;
+
+	ProducePlanDVO selectItem(ProducePlanDVO itmVO) throws Exception;
     
 }

@@ -31,31 +31,8 @@ let prdPlanDNum = null;
 let prdNum = null;
 let prdName = null;
 let prdNote = null;
+let itmCode = null;
 $(function(){
-	
-	class CustomTextEditor {
-		  constructor(props) {
-		    const el = document.createElement('input');
-
-		    el.type = 'text';
-		    el.name = 'itmCode'
-		    el.value = String(props.value);
-
-		    this.el = el;
-		  }
-
-		  getElement() {
-		    return this.el;
-		  }
-
-		  getValue() {
-		    return this.el.value;
-		  }
-
-		  mounted() {
-		    this.el.select();
-		  }
-		}
 	
 	// 생산계획 디테일 그리드
 	const grid = new tui.Grid({
@@ -70,13 +47,9 @@ $(function(){
 	    		header: '제품코드', 
 	    		name:'itmCode',
 	    		align: 'center',
-	    		editor: {
-	    			type: CustomTextEditor,
-	    	        options: {
-	    	          myCustomOptions: {
-	    	        	  }// end of myCustomOptions
-	    	        }//end of options
-	    		}
+	    		validation: {
+	    	        required: true
+	    	      }
 	    	},
 			{ 
 	    		header: '제품명', 
@@ -107,6 +80,13 @@ $(function(){
 	    		header: '작업량', 
 	    		name:'prdWorkVol',
 	    		align: 'center',
+	    		editor: 'text',
+	    		validation: {
+	    	        required: true
+	    	    },
+	    	    onAfterChange(e) {
+	    	    	grid.setValue(e['rowKey'], 'prdPerDay', (e['value']/grid.getValue(e['rowKey'], 'itmDayOutput')));
+	    	    }	    	      
 	    	},
 			{ 
 	    		header: '일생산량', 
@@ -114,7 +94,8 @@ $(function(){
 	    		align: 'center'
 	    	},
 			{ 
-	    		header: '생산일수', 
+	    		header: '생산일수',
+	    		name: 'prdPerDay',
 	    		align: 'center'
 	    	},
 			{ 
@@ -198,23 +179,6 @@ $(function(){
 	    ]
 	}); 
 	
-	// 조회 모달에서 계획번호 cell만 선택하기 위해 조건문에서 사용되는 함수
-	function getKeyByValue(object, value) {
-		return Object.keys(object).find(key => object[key] === value);
-	}
-	
-	// 조회된 리스트에서 특정 생산계획의 계획번호를 더블클릭 시 cell의 계획번호 값을 가져와서 디테일테이블 select 후 생산계획 디테일 그리드에 적용
-	grid2.on('dblclick', () => { 
-		var selectPrd = grid2.getFocusedCell();
-		if(getKeyByValue(selectPrd, "prdNum") != null){
-			let prdNum = Object.values(selectPrd)[2];
-			$('#searchModal').modal("hide");
-			$('#prdName').val(prdName);
-			$('#prdNote').val(prdNote);
-			grid.resetData(getList());
-		}
-	});
-	
 	// 조회 모달창 선택 날짜에 해당되는 생산계획 마스터 테이블 Select 데이터
 	function getPrdList() {
 		grid2.clear();
@@ -233,7 +197,6 @@ $(function(){
 				if(result.length > 0) {
 					prdNum = result[result.length -1].prdNum;
 				}
-				console.log(result);
 				prdName = result[0].prdName;
 				prdNote = result[0].prdNote;
 				data = result;
@@ -287,8 +250,7 @@ $(function(){
 	}
 	
 	// 선택한 제품코드 값만 받아오기
-	function selectItem() {
-		let itmCode = null;
+	function selectItem(itmCode) {
 		let data;
 		$.ajax({
 			async: false,
@@ -299,14 +261,17 @@ $(function(){
 				},
 			dataType: "json",
 			success : function(result){
-				if(result.length > 0) {
-					itmCode = result[result.length -1].itmCode;
-				}
+				console.log(result)
+				grid.setValue(rowKey, 'itmCode', result.itmCode);
+				grid.setValue(rowKey, 'itmName', result.itmName);
+				grid.setValue(rowKey, 'matCode', result.matCode);
+				grid.setValue(rowKey, 'itmDayOutput', result.itmDayOutput);
 				data = result;
 			} // end success
 		}); // end ajax
 		return data;
 	}
+	//grid.setValue(0, 'itmCode', '0001');
 	
 	// toast datePicker 관련 Script
 	var today = new Date();
@@ -316,8 +281,8 @@ $(function(){
 	// 새자료 버튼 사용시 날짜 정보가 공란이 되는 것을 막기 위해 리셋시 함수로 실행함
 	function setDatePicker(){
 	  	var datepicker = new tui.DatePicker('#wrapper', {
+	         date: today,
 	  		 language: 'ko',
-	         date: new Date(),
 	         input: {
 	             element: '#datepicker-input',
 	             format: 'yyyy-MM-dd'
@@ -326,32 +291,32 @@ $(function(){
 		
 	    var picker = tui.DatePicker.createRangePicker({
 	        startpicker: {
-	        	language: 'ko',
 	            date: today,
 	            input: '#startDate',
 	            container: '#startDate-container'
 	        },
 	        endpicker: {
-	        	language: 'ko',
 	            date: today,
 	            input: '#endDate',
 	            container: '#endDate-container'
-	        }
+	        },
+	        language: 'ko',
+	        type: 'date',
+	        format: 'yyyy-MM-dd'
 	    });
 	    
 	    var picker2 = tui.DatePicker.createRangePicker({
 	        startpicker: {
-	        	language: 'ko',
 	            date: preDay,
 	            input: '#unpStartDate',
 	            container: '#unpStartDate-container'
 	        },
 	        endpicker: {
-	        	language: 'ko',
 	            date: today,
 	            input: '#unpEndDate',
 	            container: '#unpEndDate-container'
-	        }
+	        },
+	        language: 'ko'
 	    });
 	}
 	setDatePicker(); // 페이지 생성시 날짜 입력창 세팅
@@ -381,6 +346,23 @@ $(function(){
 		grid2.resetData(getPrdList());
 	});
 	
+	// 조회 모달에서 계획번호 cell만 선택하기 위해 조건문에서 사용되는 함수
+	function getKeyByValue(object, value) {
+		return Object.keys(object).find(key => object[key] === value);
+	}
+	
+	// 조회된 리스트에서 특정 생산계획의 계획번호를 더블클릭 시 cell의 계획번호 값을 가져와서 디테일테이블 select 후 생산계획 디테일 그리드에 적용
+	grid2.on('dblclick', () => { 
+		var selectPrd = grid2.getFocusedCell();
+		if(getKeyByValue(selectPrd, "prdNum") != null){
+			let prdNum = Object.values(selectPrd)[2];
+			$('#searchModal').modal("hide");
+			$('#prdName').val(prdName);
+			$('#prdNote').val(prdNote);
+			grid.resetData(getList());
+		}
+	});
+	
 	// 새자료 버튼 클릭 이벤트, 마스터 Form과 디테일 그리드 데이터 remove, 날짜 정보 초기화를 위한 setDatePicker();
 	$('#resetBtn').click(function(){
 		$('#master').each(function() {
@@ -397,11 +379,13 @@ $(function(){
 	})
 	
 	// 제품코드 입력란 더블클릭 시 제품코드별 제품명을 볼 수 있는 모달창 생성
-	grid.on('dblclick', () => {
+	let rowKey = null;
+	grid.on('dblclick', (e) => {
 		var selectItm = grid.getFocusedCell();
 		if(getKeyByValue(selectItm, "itmCode") != null){
 			$('#itmModal').modal('toggle');
 			$('#itmModal').on('shown.bs.modal', function(){
+				rowKey = e['rowKey'];
 				grid3.refreshLayout();
 			});
 		}
@@ -419,19 +403,34 @@ $(function(){
 		}
 	});
 	
-	
-	
 	// 제품코드 모달창 제품코드 더블클릭 시 디테일 테이블 로우 데이터 값 수정
 	grid3.on('dblclick', (e) => {
 		var selectItm = grid.getFocusedCell();
 		if(getKeyByValue(selectItm, "itmCode") != null){
 			$('#itmModal').modal("hide");
-			var a = getItemList();
-			console.log(a);
-			//$('input[name=itmCode]').val();
+			let selectItm = grid3.getFocusedCell();
+			itmCode = selectItm.value;
+			console.log(itmCode);
+			selectItem(itmCode);
 		}
 	});
+
+	$('#deleteRowBtn').click(function(){
+		grid.clear();
+	})
 	
+	$('#saveBtn').click(function(){
+		let gridData = grid.getModifiedRows()
+		gridData = JSON.stringify(gridData);
+		$.ajax({
+			async: false,
+			url : "/ajax/create",
+			type : "post",
+			data : gridData,
+			dataType: "json",
+			success : console.log(gridData)
+		});
+	})
 	
 }); 
 
@@ -467,7 +466,9 @@ $(function(){
 			</div>
 		</div>
 	</div>
+
 	
+
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
 		<br />

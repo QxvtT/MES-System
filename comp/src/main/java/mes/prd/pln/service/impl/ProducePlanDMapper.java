@@ -76,5 +76,7 @@ public interface ProducePlanDMapper {
     //제품테이블 조회
     public List<?> selectItemList(ProducePlanDVO itmVO) throws Exception;
 
+	public ProducePlanDVO selectItem(ProducePlanDVO itmVO) throws Exception;
+
 
 }
