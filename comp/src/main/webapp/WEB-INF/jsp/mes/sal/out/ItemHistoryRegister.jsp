@@ -92,7 +92,6 @@ $(function(){
 			{ header: '제품명', name:'itmName'},
 			{ header: '규격', name:'itmSize'},
 			{ header: '단위', name:'itmUnit'},
-			{ header: '주문번호', name:'ordNum'},
 			{ header: '주문량', name:'ordVol'},
 			{ header: '기출고량', name:'ordOutVol'},
 			{ header: '미출고량', name:'itmNoutVol'},
@@ -132,6 +131,7 @@ $(function(){
 						$( 'input#itmNote' ).val(result[0]['itmNote']);
 						$( 'input#itmHisNum' ).val(result[0]['itmHisNum']);
 						$( 'input#operName' ).val(result[0]['operName']);
+						$( 'input#ordNum' ).val(result[0]['ordNum']);
 						}
 						data = result;
 						number = result.length;
@@ -243,36 +243,88 @@ $(function(){
 	}
 	
 	save.onclick = function() {
-		console.log(grid.getData().length);
-		console.log(number);
-		for(let i = 0; i <number; i++){
-			$.ajax({
+
+
+		console.log(grid.getModifiedRows({}));
+		let gridData = grid.getModifiedRows({});
+		gridData["itemHistoryVO"] ={
+									itmHisRdy : $("#itmHisRdy").val()
+								   ,ordNum : $("#ordNum").val()
+								   ,itmHisNum : $("#itmHisNum").val()
+								   ,operCode : $("#operCode").val()
+								   ,itmNote : $("#itmNote").val()
+									}
+		$.ajax({
 				async: false, 
 				url : "ItemHistoryUpdate",
-				type : "get",
-				data : grid.getData()[i],
+				type : "post",
+				data : JSON.stringify(gridData),
 				dataType: "json",
-				success : console.log("update"+i+"success")
-				}); // end ajax
-		}
-		if(grid.getData().length!=number){
-				console.log('ttttttttttt');
-			for(let i=number; i<number+1; i++){
-				$.ajax({
-					async: false, 
-					url : "ItemHistoryInsert",
-					type : "get",
-					data : grid.getData()[i],
-					dataType: "json",
-					success : 
-						console.log(i+"success")
-					}); // end success
-				}
-			}
-		itmHisDNum = null;
+				contentType:"application/json",
+				success : console.log("updatesuccess")
+				});
 		grid.resetData(getList());
+		
+		
+// 		if(number != 0){
+// 			for(let i = 0; i <number; i++){
+// 				$.ajax({
+// 					async: false, 
+// 					url : "ItemHistoryUpdate",
+// 					type : "get",
+// 					data : grid.getData()[i],
+// 					dataType: "json",
+// 					success : console.log("update"+i+"success")
+// 					}); // end ajax
+// 			}
+// 			if(grid.getData().length!=number){
+// 				for(let i=number; i<number+1; i++){
+// 					$.ajax({
+// 						async: false, 
+// 						url : "ItemHistoryInsert",
+// 						type : "get",
+// 						data : grid.getData()[i],
+// 						dataType: "json",
+// 						success : 
+// 							console.log(i+"success")
+// 						}); // end success
+// 					}
+// 				itmHisDNum = null;
+// 				grid.resetData(getList());
+// 				}
+			
+// 		}
+// 		else {
+// 			let queryString = $("#frm").serialize();
+// 			console.log(queryString["ordNum"]);
+
+// 			for(let i =0; i<grid.getData().length; i++){
+	
+// 			$.ajax({
+// 				async: false, 
+// 				url : "ItemHistoryNewInsert",
+// 				type : "get",
+// 				data :  {list :grid.getData()[i]
+// 						,\
+// 					},
+						
+// 				dataType: "json",
+// 				success : 
+// 					console.log(i+"success")
+// 				});
+// 			}
+// 		}
+		
+// 	}
+// 	reset.onclick = function() {
+// 		grid.restore();
 	}
 	
+	
+	$('#ordNum').on('dblclick', () => { 
+		$('#ordNum').val('SO2106300026');
+		
+	});
 	
 })
 
@@ -301,15 +353,12 @@ $(function(){
 		</div>
 	</div>
 	<!-- Page-header end -->
-	<button type="button" class="btn btn-info btn-sm" id="searchHisBtn"
-		data-toggle="modal" data-target="#myModal">검색</button>
-
-	<form:form commandName="itemHistoryVO" name="detailForm"
-		id="detailForm">
-		<div id="content_pop">
-		
+	
 			<form id="frm" name="frm">
+			
 				<div id="table">
+					<button type="button" class="btn btn-info btn-sm" id="searchHisBtn" data-toggle="modal" data-target="#myModal">검색</button>&nbsp;
+					<button type="reset" class="btn btn-info btn-sm" id= "reset">새자료</button>
 					<table width="100%" border="1" cellpadding="0" cellspacing="0">
 						<colgroup>
 							<col width="150" />
@@ -327,20 +376,24 @@ $(function(){
 							<td><input type="date" name="itmHisRdy" id="itmHisRdy"/>
 						</tr>
 						<tr>
-							<th>고객사</th>
-							<td><input type="text" name="operCode" id="operCode" />
-						</tr>
-						<tr>
-							<th>특이사항</th>
-							<td><input type="text" name="itmNote" id="itmNote" />
+							<th>주문번호</th>
+							<td><input type="text" name="ordNum" id="ordNum" readonly="readonly"/>
 						</tr>
 						<tr>
 							<th>출고번호</th>
 							<td><input type="text" name="itmHisNum" id="itmHisNum" readonly="readonly"/>
 						</tr>
 						<tr>
+							<th>고객사코드</th>
+							<td><input type="text" name="operCode" id="operCode" />
+						</tr>
+						<tr>
 							<th>고객사명</th>
 							<td><input type="text" name="operName" id="operName"  readonly="readonly" />
+						</tr>
+						<tr>
+							<th>특이사항</th>
+							<td><input type="text" name="itmNote" id="itmNote" />
 						</tr>
 						
 						
@@ -348,9 +401,7 @@ $(function(){
 					<button type="button" id="button" name="button">조회</button>
 				</div>
 			</form>
-			<form:form commandName="searchVO" name="listForm" id="listForm"
-				method="post">
-				<input type="hidden" name="itmHisDNum" />
+
 				<div class="pcoded-inner-content">
 					<div class="main-body">
 						<div class="page-wrapper">
@@ -377,18 +428,8 @@ $(function(){
 							</div>
 						</div>
 					</div>
-				</div>
-			</form:form>
 			
 		</div>
-		<!-- 검색조건 유지 -->
-		<input type="hidden" name="searchCondition"
-			value="<c:out value='${searchVO.searchCondition}'/>" />
-		<input type="hidden" name="searchKeyword"
-			value="<c:out value='${searchVO.searchKeyword}'/>" />
-		<input type="hidden" name="pageIndex"
-			value="<c:out value='${searchVO.pageIndex}'/>" />
-	</form:form>
 
 
 	<!-- 주문코드 검색 모달 -->

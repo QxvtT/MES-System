@@ -2,77 +2,119 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mes.sal.out.service.impl.ItemHistoryMapper">
-	
 
-	<resultMap id="itemHistory" type="mes.sal.out.service.ItemHistoryVO">
+
+	<resultMap id="itemHistory"
+		type="mes.sal.out.service.ItemHistoryVO">
 		<result property="itmHisNum" column="ITM_HIS_NUM" />
 		<result property="ordNum" column="ORD_NUM" />
 		<result property="itmDiv" column="ITM_DIV" />
 		<result property="itmHisRdy" column="ITM_HIS_RDY" />
 		<result property="itmNote" column="ITM_NOTE" />
 	</resultMap>
-	<update id="ItemHistoryUpdate">
-		update item_history_d
-		set 
-		    itm_vol = ${itmVol}
-		   ,itm_code = #{itmCode}
-		   ,lot_num = #{lotNum}
-		   ,itm_price = #{itmPrice}
-	
+	<update id="updateItemHistory">
+		declare
+			oldVol number;
+			changeVol number;
+			v_ord_num order_m.ord_num%type;
+		begin
+			    select itm_vol into oldVol
+			    from item_history_d
+			    where itm_his_d_num = #{itmHisDNum};
+			    
+			    select ord_num into v_ord_num
+			    from item_history where itm_his_num = #{itmHisNum};
+			    
+			    changeVol := #{itmVol}-oldVol;
+			    
+			    update item_history_d
+					set 
+					    itm_vol = #{itmVol}
+					   ,itm_code = #{itmCode}
+					   ,lot_num = #{lotNum}
+					   ,itm_price = #{itmPrice}
+			        where itm_his_d_num = #{itmHisDNum};
+			        
+			    update order_d
+			    set ord_out_vol = ord_out_vol+changeVol
+			    where ord_num = v_ord_num and
+			    itm_code = #{itmCode};
+			    
+			    update item_stock
+			    set itm_vol = itm_vol - changeVol
+			    where itm_stc_num = #{lotNum} and
+			    itm_code = #{itmCode};
+			
+			end;
 	</update>
 	<insert id="insertItemHistory">
-		<![CDATA[
 			declare
-				itmnum varchar(50) :='ITH'||to_char(sysdate,'yyMMdd')||to_char(item_his_seq.nextval,'FM0000');
+		        v_ord_num order_m.ord_num%type;
 			begin
- 				INSERT INTO item_history 
-					VALUES ( itmnum
-				  			, #{ordNum}
-				  			, '출고'
-				  			, sysdate
-                			, #{itmNote});
+
+            select ord_num into v_ord_num
+            from item_history where itm_his_num = #{itmHisNum};
+            
 				insert into item_history_d
     				values
           					(item_history_d_seq.nextval
-          					, itmnum
+          					, #{itmHisNum}
           					, #{itmCode}
-          					, ${itmVol}
+          					, #{itmVol}
           					, #{lotNum}
           					, #{itmPrice}
           					, #{itmNoteD});
         		update item_stock 
-        		set itm_vol = itm_vol- ${itmVol}
+        		set itm_vol = itm_vol- #{itmVol}
        					 where 	itm_stc_num = #{lotNum}
         						and   itm_code = #{itmCode};
         
         		update order_d
-        			set ord_out_vol = ord_out_vol+${itmVol}
-        				where ord_num = #{ordNum} 
-        				and itm_code = #{itmCode};
-          					
+        			set ord_out_vol = ord_out_vol+#{itmVol}
+        				where ord_num =  v_ord_num 
+        				and itm_code = #{itmCode};	
 					end;
-		]]>
 	</insert>
-	
-	<update id="updateItemHistory">
-		<![CDATA[
-			UPDATE ITEM_HISTORY
-			SET ITM_HIS_NUM=#{itmHisNum}
-				, ORD_NUM=#{ordNum}
-				, ITM_DIV=#{itmDiv}
-				, ITM_HIS_RDY=#{itmHisRdy}
-				, ITM_NOTE=#{itmNote}
-						WHERE ITM_HIS_NUM=#{itmHisNum}
-				]]>
-	</update>
-	
+	<insert id="ItemHistoryNewInsert">
+			declare
+		         v_itmnum varchar(50) :='ITH'||to_char(sysdate,'yyMMdd')||to_char(item_his_seq.nextval,'FM0000');
+			begin
+				INSERT INTO item_history 
+					VALUES ( v_itmnum
+				  			, #{ordNum}
+				  			, '출고'
+				  			, #{itmHisRdy}
+                			, #{itmNote});
+				insert into item_history_d
+    				values
+          					(item_history_d_seq.nextval
+          					, #{itmHisNum}
+          					, #{itmCode}
+          					, #{itmVol}
+          					, #{lotNum}
+          					, #{itmPrice}
+          					, #{itmNoteD});
+        		update item_stock 
+        		set itm_vol = itm_vol- #{itmVol}
+       					 where 	itm_stc_num = #{lotNum}
+        						and   itm_code = #{itmCode};
+        
+        		update order_d
+        			set ord_out_vol = ord_out_vol+#{itmVol}
+        				where ord_num =  #{ordNum} 
+        				and itm_code = #{itmCode};	
+					end;
+	</insert>
+
+
+
 	<delete id="deleteItemHistory">
 		<![CDATA[
 			DELETE FROM ITEM_HISTORY 
 						WHERE ITM_HIS_NUM=#{itmHisNum}
 				]]>
 	</delete>
-	
+
 	<select id="selectItemHistory" resultMap="itemHistory">
 		<![CDATA[
 			SELECT
@@ -85,165 +127,172 @@
 						WHERE ITM_HIS_NUM=#{itmHisNum}
 				]]>
 	</select>
-	
-	<select id="selectItemHistoryList" parameterType="mes.sal.out.service.ItemHistoryVO" resultType="mes.sal.out.service.ItemHistoryVO">
-SELECT * FROM (
-	SELECT A.*, ROWNUM RNUM FROM (
-					select 		to_char(i.itm_his_rdy,'yyyy-MM-dd') as itm_his_rdy 
-						       ,od.oper_name
-						       , id.lot_num
-						       ,id.itm_code
-						       ,item.itm_name
-						       ,od.ord_num
-						       ,id.itm_vol
-						       ,id.itm_price
-						       ,(id.itm_vol*id.itm_price) as total_price
-						       , id.itm_note_d
-						       , id.itm_his_d_num
-						       , i.itm_note
-						       ,i.itm_his_num
-						       ,i.itm_div
-					from item_history i , item_history_d id ,order_m od, item
-					where i.itm_his_num = id.itm_his_num and
-					      i.ord_num = od.ord_num and
-					      i.itm_div ='출고' and
-					      id.itm_code = item.itm_code
-					<if test="itmHisDNum != null">
+
+	<select id="selectItemHistoryList"
+		parameterType="mes.sal.out.service.ItemHistoryVO"
+		resultType="mes.sal.out.service.ItemHistoryVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+		select to_char(i.itm_his_rdy,'yyyy-MM-dd') as itm_his_rdy
+		,od.oper_name
+		, id.lot_num
+		,id.itm_code
+		,item.itm_name
+		,od.ord_num
+		,id.itm_vol
+		,id.itm_price
+		,(id.itm_vol*id.itm_price) as total_price
+		, id.itm_note_d
+		, id.itm_his_d_num
+		, i.itm_note
+		,i.itm_his_num
+		,i.itm_div
+		from item_history i , item_history_d id ,order_m od, item
+		where i.itm_his_num = id.itm_his_num and
+		i.ord_num = od.ord_num and
+		i.itm_div ='출고' and
+		id.itm_code = item.itm_code
+		<if test="itmHisDNum != null">
 						<![CDATA[	
 							and id.ITM_HIS_D_NUM < #{itmHisDNum}
 						]]>
-					</if>
-					<if test = "aDate != null and aDate != '' and bDate != null and bDate !=''">and 
+		</if>
+		<if
+			test="aDate != null and aDate != '' and bDate != null and bDate !=''">
+			and  
 	        				<![CDATA[			    			
-	            			to_date(i.ITM_HIS_RDY,'yyyy-MM-dd') >= to_date(#{bDate} ,'yyyy-MM-dd') and
-	            			to_date(i.ITM_HIS_RDY,'yyyy-MM-dd') <= to_date(#{aDate} ,'yyyy-MM-dd')
+	            			i.ITM_HIS_RDY >= to_date(#{bDate} ,'yyyy-MM-dd') and  
+	            			i.ITM_HIS_RDY <= to_date(#{aDate} ,'yyyy-MM-dd')
 	            			]]>
-	           		 </if>
-	           		 <if test = "operName !=null and operName !=''">and 
-	           		  od.oper_name = #{operName}
-	           		 </if>
-	           		 <if test = "itmCode !=null and itmCode !=''">and 
-	           		  id.itm_code = #{itmCode}
-	           		 </if>
-	           		
-				ORDER BY 
-				id.itm_his_d_num DESC
+		</if>
+		<if test="operName !=null and operName !=''">and
+			od.oper_name = #{operName}
+		</if>
+		<if test="itmCode !=null and itmCode !=''">and
+			id.itm_code = #{itmCode}
+		</if>
+
+		ORDER BY
+		id.itm_his_d_num DESC
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )
 ]]>
 	</select>
-	
-	<select id="ItemHistoryRegist" parameterType="mes.sal.out.service.ItemHistoryVO" resultType="mes.sal.out.service.ItemHistoryVO">
-SELECT * FROM (
-	SELECT A.*, ROWNUM RNUM FROM (
-					select to_char(i.itm_his_rdy,'yyyy-MM-dd') as itm_his_rdy
-					      , i.itm_his_num
-					      , o.oper_code
-					      , o.oper_name
-					      , i.itm_note
-					      , id.itm_code
-					      , item.itm_name
-					      , item.itm_size
-					      , item.itm_unit
-					      , o.ord_num
-					      , od.ord_vol
-					      , (select sum(id.itm_vol) from item_history_d id, item_history i
-					            where id.itm_his_num = i.itm_his_num
-					            group by i.ord_num) as ord_out_vol
-					      , id.itm_vol
-					      , (od.ord_vol-(select sum(id.itm_vol) from item_history_d id, item_history i
-					                     where id.itm_his_num = i.itm_his_num
-					                     group by i.ord_num)-id.itm_vol) as itm_nout_vol
-					      , its.itm_vol as itm_stock
-					      , id.lot_num
-					      , id.itm_price
-					      , (id.itm_vol*id.itm_price) total_price
-					      , id.itm_note_d
-					      , id.itm_his_d_num
-					from item_history i, item_history_d id, order_m o, order_d od, item, item_stock its
-					where i.itm_his_num = id.itm_his_num and
-					      i.ord_num = o.ord_num  and
-					      i.ord_num = od.ord_num and
-					      item.itm_code = its.itm_code and
-					      item.itm_code = od.itm_code
-					<if test="itmHisDNum != null">
+
+	<select id="ItemHistoryRegist"
+		parameterType="mes.sal.out.service.ItemHistoryVO"
+		resultType="mes.sal.out.service.ItemHistoryVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+		select to_char(i.itm_his_rdy,'yyyy-MM-dd') as itm_his_rdy
+		, i.itm_his_num
+		, o.oper_code
+		, o.oper_name
+		, i.itm_note
+		, id.itm_code
+		, item.itm_name
+		, item.itm_size
+		, item.itm_unit
+		, o.ord_num
+		, od.ord_vol
+		, (select sum(id.itm_vol) from item_history_d id, item_history i
+		where id.itm_his_num = i.itm_his_num
+		group by i.ord_num) as ord_out_vol
+		, id.itm_vol
+		, (od.ord_vol-(select sum(id.itm_vol) from item_history_d id,
+		item_history i
+		where id.itm_his_num = i.itm_his_num
+		group by i.ord_num)-id.itm_vol) as itm_nout_vol
+		, its.itm_vol as itm_stock
+		, id.lot_num
+		, id.itm_price
+		, (id.itm_vol*id.itm_price) total_price
+		, id.itm_note_d
+		, id.itm_his_d_num
+		from item_history i, item_history_d id, order_m o, order_d od, item,
+		item_stock its
+		where i.itm_his_num = id.itm_his_num and
+		i.ord_num = o.ord_num and
+		i.ord_num = od.ord_num and
+		item.itm_code = its.itm_code and
+		item.itm_code = od.itm_code
+		<if test="itmHisDNum != null">
 						<![CDATA[	
 							and id.ITM_HIS_D_NUM < #{itmHisDNum}
 						]]>
-					</if>
-					<if test = "itmHisRdy != null and itmHisRdy != ''">and 
+		</if>
+		<if test="itmHisRdy != null and itmHisRdy != ''">and 
 	        				<![CDATA[			    			
-	            			to_date(i.ITM_HIS_RDY,'yyyy-MM-dd') = to_date(#{bDate} ,'yyyy-MM-dd')
+	            			i.ITM_HIS_RDY = to_date(#{bDate} ,'yyyy-MM-dd')
 	            			]]>
-	           		 </if>
-	           		 <if test = "operCode !=null and operCode !=''">and 
-	           		  od.oper_code = #{operCode}
-	           		 </if>
-	           		 <if test = "itmCode !=null and itmCode !=''">and 
-	           		  id.itm_code = #{itmCode}
-	           		 </if>
-	           		  <if test = "str !=null and str !=''"> and
-	           		 id.itm_his_num IN ('${str}')
-	           		 </if>
-				ORDER BY 
-				id.itm_his_d_num DESC
+		</if>
+		<if test="operCode !=null and operCode !=''">and
+			od.oper_code = #{operCode}
+		</if>
+		<if test="itmCode !=null and itmCode !=''">and
+			id.itm_code = #{itmCode}
+		</if>
+		<if test="str !=null and str !=''"> and
+			id.itm_his_num IN ('${str}')
+		</if>
+		ORDER BY
+		id.itm_his_d_num desc
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )
 ]]>
 	</select>
-	
-	
-	
-	
-	
-	<select id="ItemHisNumList" parameterType="mes.sal.out.service.ItemHistoryVO" resultType="mes.sal.out.service.ItemHistoryVO">
-SELECT * FROM (
-	SELECT A.*, ROWNUM RNUM FROM (
-            select     i.itm_his_rdy,
-                       i.itm_his_num,
-				       o.oper_name,
-				       item.itm_name,
-                       id.itm_note_d,
-				       id.itm_his_d_num
-				from item_history i, item_history_d id, order_m o, item 
-				where i.itm_his_num = id.itm_his_num and
-				      i.ord_num = o.ord_num and
-				      id.itm_code = item.itm_code
-					<if test="itmHisDNum != null">
-						<![CDATA[	
-							and id.ITM_HIS_D_NUM < #{itmHisDNum}
-						]]>
-					</if>
-					<if test = "aDate != null and aDate != '' and bDate != null and bDate !=''">and 
+
+	<select id="ItemHisNumList"
+		parameterType="mes.sal.out.service.ItemHistoryVO"
+		resultType="mes.sal.out.service.ItemHistoryVO">
+		SELECT * FROM (
+			SELECT A.*, ROWNUM RNUM FROM (
+				select 
+					to_char(i.itm_his_rdy,'yyyy-MM-dd') as itm_his_rdy
+					,i.itm_his_num
+					,o.oper_name
+					,i.itm_note
+					,rownum as ITM_HIS_D_NUM
+				from item_history i, order_m o
+				where
+						i.ord_num = o.ord_num 
+			<if test="itmHisDNum != null">
+				<![CDATA[	
+					and id.ITM_HIS_D_NUM < #{itmHisDNum}
+				]]>
+			</if>
+		<if
+			test="aDate != null and aDate != '' and bDate != null and bDate !=''">and 
 	        				<![CDATA[			    			
 	            			i.ITM_HIS_RDY >= to_date(#{bDate} ,'yyyy-MM-dd') and
 	            			i.ITM_HIS_RDY <= to_date(#{aDate} ,'yyyy-MM-dd')
 	            			]]>
-	           		 </if>
-				ORDER BY 
-				id.ITM_HIS_D_NUM DESC
+		</if>
+		ORDER BY
+		i.itm_his_rdy desc
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )
 
 ]]>
 	</select>
-	
-		
-	<select id="selectItemHistoryListTotCnt" parameterType="mes.sal.out.service.ItemHistoryVO" resultType="int">
-			SELECT COUNT(*) totcnt
-			FROM ITEM_HISTORY
-			WHERE 1=1
-			<if test="searchKeyword != null and searchKeyword != ''">
-				<if test="searchCondition == 0">AND
-					ITM_HIS_NUM = #{searchKeyword}
-				</if>
-				<if test="searchCondition == 1">AND
-					ORD_NUM LIKE '%' || #{searchKeyword} || '%'
-				</if>
+
+
+	<select id="selectItemHistoryListTotCnt"
+		parameterType="mes.sal.out.service.ItemHistoryVO" resultType="int">
+		SELECT COUNT(*) totcnt
+		FROM ITEM_HISTORY
+		WHERE 1=1
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<if test="searchCondition == 0">AND
+				ITM_HIS_NUM = #{searchKeyword}
 			</if>
+			<if test="searchCondition == 1">AND
+				ORD_NUM LIKE '%' || #{searchKeyword} || '%'
+			</if>
+		</if>
 	</select>
 
 </mapper>

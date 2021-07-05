@@ -29,7 +29,6 @@ public interface ItemHistoryMapper {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-    public void insertItemHistory(ItemHistoryVO vo) throws Exception;
 
     /**
 	 * ITEM_HISTORY을 수정한다.
@@ -37,9 +36,9 @@ public interface ItemHistoryMapper {
 	 * @return void형
 	 * @exception Exception
 	 */
+    public void insertItemHistory(ItemHistoryVO vo) throws Exception;
     public void updateItemHistory(ItemHistoryVO vo) throws Exception;
-    public void ItemHistoryUpdate(ItemHistoryVO vo) throws Exception;
-    
+    public void deleteItemHistory(ItemHistoryVO vo) throws Exception;
     
     
     /**
@@ -48,7 +47,6 @@ public interface ItemHistoryMapper {
 	 * @return void형 
 	 * @exception Exception
 	 */
-    public void deleteItemHistory(ItemHistoryVO vo) throws Exception;
 
     /**
 	 * ITEM_HISTORY을 조회한다.

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import mes.sal.out.service.GridDataVO;
 import mes.sal.out.service.ItemHistoryDefaultVO;
 import mes.sal.out.service.ItemHistoryService;
 import mes.sal.out.service.ItemHistoryVO;
@@ -91,15 +92,35 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
     public List<?> selectItemHistoryList(ItemHistoryVO searchVO) throws Exception {
         return itemHistoryDAO.selectItemHistoryList(searchVO);
     }
-    public List<?> ItemHisNumList(ItemHistoryVO searchVO) throws Exception {
+    public List<?> itemHisNumList(ItemHistoryVO searchVO) throws Exception {
         return itemHistoryDAO.ItemHisNumList(searchVO);
     }
-    public List<?> ItemHistoryRegist(ItemHistoryVO searchVO) throws Exception {
+    public List<?> itemHistoryRegist(ItemHistoryVO searchVO) throws Exception {
         return itemHistoryDAO.ItemHistoryRegist(searchVO);
     }
     
-    public void ItemHistoryUpdate(ItemHistoryVO searchVO) throws Exception {
-        itemHistoryDAO.ItemHistoryUpdate(searchVO);
+    public void itemHistoryUpdate(GridDataVO gridData) throws Exception {
+        if(gridData.getUpdatedRows() != null) {
+        	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
+        		itemHistoryDAO.updateItemHistory(gridData.getUpdatedRows().get(i));
+        	}
+        }
+        if(gridData.getCreatedRows() != null) {
+        	for(int i =0; i<gridData.getCreatedRows().size(); i++) {
+        		ItemHistoryVO vo= gridData.getCreatedRows().get(i);
+        		vo.setOrdNum(gridData.getItemHistoryVO().getOrdNum());
+        		vo.setItmHisNum(gridData.getItemHistoryVO().getItmHisNum());
+        		vo.setItmHisRdy(gridData.getItemHistoryVO().getItmHisRdy());
+        		vo.setItmNote(gridData.getItemHistoryVO().getItmNote());
+        		vo.setOperCode(gridData.getItemHistoryVO().getOperCode());
+        		itemHistoryDAO.insertItemHistory(vo);
+        	}
+        }
+        if(gridData.getDeletedRows() != null) {
+        	for(int i =0; i<gridData.getDeletedRows().size(); i++) {
+        		itemHistoryDAO.deleteItemHistory(gridData.getDeletedRows().get(i));
+        	}
+        }
     }
     
     public void InsertItemHistory(ItemHistoryVO searchVO) throws Exception {
@@ -117,6 +138,16 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
 	 */
     public int selectItemHistoryListTotCnt(ItemHistoryDefaultVO searchVO) {
 		return itemHistoryDAO.selectItemHistoryListTotCnt(searchVO);
+	}
+
+
+
+
+
+	@Override
+	public void insertItemHistory(ItemHistoryVO searchVO) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
     
 }
