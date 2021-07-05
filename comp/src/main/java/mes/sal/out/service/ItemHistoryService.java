@@ -24,7 +24,6 @@ public interface ItemHistoryService {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-    String insertItemHistory(ItemHistoryVO vo) throws Exception;
     
     /**
 	 * ITEM_HISTORY을 수정한다.
@@ -63,6 +62,8 @@ public interface ItemHistoryService {
     List ItemHistoryRegist(ItemHistoryVO searchVO) throws Exception;
     
     void ItemHistoryUpdate(ItemHistoryVO searchVO) throws Exception;
+    void InsertItemHistory(ItemHistoryVO searchVO) throws Exception;
+    
     /**
 	 * ITEM_HISTORY 총 갯수를 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO

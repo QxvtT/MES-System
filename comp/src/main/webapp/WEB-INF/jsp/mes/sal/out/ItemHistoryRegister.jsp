@@ -122,21 +122,20 @@ $(function(){
 				},
 			dataType: "json",
 			success : function(result){
-				if(result.length > 0) {
-					itmHisDNum = result[result.length -1].itmHisDNum;
-				}
-				console.log(result);
-				if(result.length !=0){
-				$( 'input#itmHisRdy' ).val(result[0]['itmHisRdy']);
-				$( 'input#operCode' ).val(result[0]['operCode']);
-				$( 'input#itmNote' ).val(result[0]['itmNote']);
-				$( 'input#itmHisNum' ).val(result[0]['itmHisNum']);
-				$( 'input#operName' ).val(result[0]['operName']);
-				}
-				data = result;
-				number = result.length;
-				console.log(number);
-			} // end success
+						if(result.length > 0) {
+							itmHisDNum = result[result.length -1].itmHisDNum;
+							}
+						console.log(result);
+						if(result.length !=0){
+						$( 'input#itmHisRdy' ).val(result[0]['itmHisRdy']);
+						$( 'input#operCode' ).val(result[0]['operCode']);
+						$( 'input#itmNote' ).val(result[0]['itmNote']);
+						$( 'input#itmHisNum' ).val(result[0]['itmHisNum']);
+						$( 'input#operName' ).val(result[0]['operName']);
+						}
+						data = result;
+						number = result.length;
+						} // end success
 		}); // end ajax 
 		return data;
 	}
@@ -169,8 +168,7 @@ $(function(){
 			 { header: '출고일자', name:'itmHisRdy'}
 			,{ header: '전표번호', name:'itmHisNum'}
 			,{ header: '업체명', name:'operName'}
-			,{ header: '자재명', name:'itmName'}
-			,{ header: '비고', name:'itmNoteD' }
+			,{ header: '비고', name:'itmNote' }
 			
 			
 	    ]
@@ -189,6 +187,7 @@ $(function(){
 				 aDate : aDate
 				,bDate : bDate
 				,itmHisDNum: itmHisDNum
+				
 				},
 			dataType: "json",
 			success : function(result){
@@ -244,18 +243,21 @@ $(function(){
 	}
 	
 	save.onclick = function() {
+		console.log(grid.getData().length);
+		console.log(number);
+		for(let i = 0; i <number; i++){
 			$.ajax({
 				async: false, 
 				url : "ItemHistoryUpdate",
 				type : "get",
-				data : grid.getData(),
+				data : grid.getData()[i],
 				dataType: "json",
-				success : 
-					console.log("success")
-				}) // end success
-			}
+				success : console.log("update"+i+"success")
+				}); // end ajax
+		}
 		if(grid.getData().length!=number){
-			for(let i=0; i<number; i++){
+				console.log('ttttttttttt');
+			for(let i=number; i<number+1; i++){
 				$.ajax({
 					async: false, 
 					url : "ItemHistoryInsert",
@@ -264,10 +266,13 @@ $(function(){
 					dataType: "json",
 					success : 
 						console.log(i+"success")
-					}) // end success
+					}); // end success
 				}
 			}
-		}
+		itmHisDNum = null;
+		grid.resetData(getList());
+	}
+	
 	
 })
 
@@ -314,29 +319,28 @@ $(function(){
 						<c:if test="${registerFlag == '수정'}">
 							<tr>
 								<th>ITM_HIS_NUM *</th>
-								<td><form:input path="itmHisNum" cssClass="essentiality"
-										readonly="true" /></td>
+								<td><input type ="text" name ="itmHisNum" id = "itmHisNum"/></td>
 							</tr>
 						</c:if>
 						<tr>
 							<th>출고일자</th>
-							<td><input type="date" name="itmHisRdy" id="itmHisRdy" value = "${ItemHistoryVO.ordNum }"/>
+							<td><input type="date" name="itmHisRdy" id="itmHisRdy"/>
 						</tr>
 						<tr>
 							<th>고객사</th>
-							<td><input type="text" name="operCode" id="operCode" value = "${ItemHistoryVO.ordNum }"/>
+							<td><input type="text" name="operCode" id="operCode" />
 						</tr>
 						<tr>
 							<th>특이사항</th>
-							<td><input type="text" name="itmNote" id="itmNote" value = "${ItemHistoryVO.ordNum }"/>
+							<td><input type="text" name="itmNote" id="itmNote" />
 						</tr>
 						<tr>
 							<th>출고번호</th>
-							<td><input type="text" name="itmHisNum" id="itmHisNum" readonly="readonly" value = "${ItemHistoryVO.ordNum }"/>
+							<td><input type="text" name="itmHisNum" id="itmHisNum" readonly="readonly"/>
 						</tr>
 						<tr>
 							<th>고객사명</th>
-							<td><input type="text" name="operName" id="operName"  readonly="readonly"   value = "${ItemHistoryVO.ordNum }"/>
+							<td><input type="text" name="operName" id="operName"  readonly="readonly" />
 						</tr>
 						
 						

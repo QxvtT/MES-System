@@ -41,7 +41,7 @@ $(function(){
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
-	    data: getList(),
+	    data: null,
 	    rowHeaders: ['rowNum'],
 	    columns: [
 	    	{ header: '출고일자', name:'itmHisRdy'},
@@ -91,7 +91,9 @@ $(function(){
  		operName = $( 'input#operName' ).val();
  		itmCode = $( 'input#itmCode' ).val();
  		grid.resetData(getList());
- 		console.log(operCode);
+ 		console.log(bDate);
+ 		console.log(aDate);
+ 		console.log(itmHisDNum);
  	}
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
@@ -123,7 +125,7 @@ $(function(){
 	<!-- Page-header end -->
 	
 	<form id="frm" name ="frm">
-		날짜<input type="date" id="abate" name = "bDate"/> ~ <input type="date" id="aDate" name = "aDate"/> <br>
+		날짜<input type="date" id="bDate" name = "bDate"/> ~ <input type="date" id="aDate" name = "aDate"/> <br>
 		업체명 <input type="text" id="operName" name = "operName"/><br>
 		제품코드 <input type="text" id="itmCode" name = "itmCode"/><br>
 		
