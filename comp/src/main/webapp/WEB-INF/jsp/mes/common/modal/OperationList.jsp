@@ -21,22 +21,53 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>목록</title>
 
+</head>
+<body>
+	<button type="button" class="btn btn-info btn-sm"
+		id="searchOperBtn" data-toggle="modal" data-target="#operModal">클릭</button>
+
+	<div class="modal fade" id="operModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="exampleModalLabel">업체검색</h3>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div style="padding: 10px 10px 10px 10px">
+					<h4>업체명</h4>
+					<input type="text" id="operName1" name="operName"></input><br><br>
+					<button type="button" id="button" name="button">조회</button> &nbsp;
+						<button type="reset">리셋</button>
+				</div>
+
+				<div class="form-group row"></div>
+				<div id="operation"></div>
+				<div class="modal-footer">
+					<button class="btn" type="button" data-dismiss="modal">선택</button>
+					<button class="btn" type="reset" data-dismiss="modal">취소</button>
+				</div>
+			</div>
+		</div>
+	</div>
 <script type="text/javaScript" language="javascript" defer="defer">
-let operCode = null;
+let operCode1 = null;
 let operName = null;
 let operId = null;
 let operPhone = null;
 
-$(function(){
-	const grid = new tui.Grid({
-	    el: document.getElementById('grid'),
+console.log("aaaa");
+	const operation = new tui.Grid({
+	    el: document.getElementById('operation'),
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
 	    rowWidth: 100,
-	    data: getList(),
+	    data: getOperationList(),
 	    rowHeaders: ['rowNum','checkbox'],
 	    columns: [
 	    	{ header: '업체코드', name:'operCode'},
@@ -46,25 +77,25 @@ $(function(){
 	    ]
 	}); // end const grid
 	
-	grid.on('scrollEnd', () => {
-		let nextList = getList();
+	operation.on('scrollEnd', () => {
+		let nextList = getOperationList();
 		if(nextList != null) {
-		    grid.appendRows(nextList);
+			operation.appendRows(nextList);
 		}
 	  })
 	  
-	function getList() {
+	function getOperationList() {
 		let data;
 		$.ajax({
 			async: false,
-			url : "OperationList",
+			url : "${pageContext.request.contextPath}/OperationList",
 			type : "get",
 			data : {operName: operName,
-					operCode: operCode},
+					operCode: operCode1},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					operCode = result[result.length -1].operCode;
+					operCode1 = result[result.length -1].operCode;
 				}
 				console.log(result);
 				data = result;
@@ -74,84 +105,30 @@ $(function(){
 	}
 	
 	$('#mobile-collapse').click(function() {
-		grid.refreshLayout();
+		operation.refreshLayout();
 	});
 	
-	const gridData = [
-	      {
-	        c1: '1992/03/25',
-	        c3: '2014-04-16'
-	      }
-	    ];
-	
-	$('.btn').click(function(){
-		$("#myModal").modal("toggle");
-		$("#myModal").on('shown.bs.modal', function () {
-			grid.refreshLayout();
+	$('#searchOperBtn').click(function(){
+		$("#operModal").modal("toggle");
+		$("#operModal").on('shown.bs.modal', function () {
+			operation.refreshLayout();
 		});
 		
 	})
 	
 	button.onclick = function(){
-		operCode = null;
-		operName = $('input#operName').val();
-		grid.resetData(getList());
+		operCode1 = null;
+		operName = $('input#operName1').val();
+		operation.resetData(getOperationList());
 		
 	}
 
 
-})
+
 
 
 
 
 </script>
-</head>
-<body>
-	<form:form commandName="searchVO" name="listForm" id="listForm"
-		method="post">
-		<input type="hidden" name="prdComDNum" />
-		<div class="pcoded-inner-content">
-			<div class="main-body">
-				<div class="page-wrapper">
-					<div class="row">
-						<div class="col-xl-12">
-							<div id="datePicker"></div>
-							<button type="button" class="btn btn-info btn-sm"
-								id="searchComBtn" data-toggle="modal" data-target="#myModal">클릭</button>
-
-							<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-								aria-labelledby="exampleModalLabel" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h3 class="modal-title" id="exampleModalLabel">업체검색</h3>
-											<button class="close" type="button" data-dismiss="modal"
-												aria-label="Close">
-												&times;
-											</button>
-										</div>
-										<div style="padding: 10px 10px 10px 10px">
-											<h4>업체명</h4>
-											<input type="text" id="operName" name="operName"></input><br><br>
-											<button type="button" id="button" name="button">조회</button> &nbsp;
-												<button type="reset">리셋</button>
-										</div>
-
-										<div class="form-group row"></div>
-										<div id="grid"></div>
-										<div class="modal-footer">
-											<button class="btn" type="button" data-dismiss="modal">선택</button>
-											<button class="btn" type="reset" data-dismiss="modal">취소</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</form:form>
 </body>
 </html>

@@ -358,8 +358,11 @@ $(function(){
 											 	<div class="row align-items-center text-center col-lg-8">
 													<input type="text" class="form-control w-25 ml-3" id="operCode" name="operCode" value="${result.operCode }"></input>
 													<input type="text" class="form-control w-25 ml-3" id="operName" name="operName" value="${result.operName }" readonly></input>
-													<button type="button" class="btn btn-sm btn-primary waves-effect waves-light ml-3"
+													<%-- <button type="button" class="btn btn-sm btn-primary waves-effect waves-light ml-3"
 														id="searchOperBtn" data-toggle="modal" data-target="#searchOperModal">검색</button>
+														<c:import url="/OperationList.page"/> --%>
+													<%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>
+													
 												</div>
 												<div class="col-lg-4">
 												</div>

@@ -22,18 +22,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<script
-	src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+
 <script type="text/javaScript" language="javascript" defer="defer">
-let matCode = null;
+let matCode1 = null;
 let matName = null;
-let matSize = null;
-let operName = null;
 
 $(function(){
 	const material = new tui.Grid({
@@ -57,13 +49,13 @@ $(function(){
 	  })
 	  
 	function getMaterialList() {
-		matCode = null;
+		matCode1 = null;
 		let data;
 		$.ajax({
 			async: false,
 			url : "${pageContext.request.contextPath}/MaterialList",
 			type : "get",
-			data : {matCode: matCode,
+			data : {matCode: matCode1,
 					matName: matName},
 			dataType: "json",
 			success : function(result){
