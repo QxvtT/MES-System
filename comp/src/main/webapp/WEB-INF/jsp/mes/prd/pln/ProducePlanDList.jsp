@@ -28,6 +28,7 @@
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
 let prdPlanDNum = null;
+let prdDate = null;
 let prdNum = null;
 let prdName = null;
 let prdNote = null;
@@ -261,7 +262,6 @@ $(function(){
 				},
 			dataType: "json",
 			success : function(result){
-				console.log(result)
 				grid.setValue(rowKey, 'itmCode', result.itmCode);
 				grid.setValue(rowKey, 'itmName', result.itmName);
 				grid.setValue(rowKey, 'matCode', result.matCode);
@@ -271,7 +271,6 @@ $(function(){
 		}); // end ajax
 		return data;
 	}
-	//grid.setValue(0, 'itmCode', '0001');
 	
 	// toast datePicker 관련 Script
 	var today = new Date();
@@ -284,7 +283,7 @@ $(function(){
 	         date: today,
 	  		 language: 'ko',
 	         input: {
-	             element: '#datepicker-input',
+	             element: '#prdDate',
 	             format: 'yyyy-MM-dd'
 	         }
 	    });
@@ -355,7 +354,8 @@ $(function(){
 	grid2.on('dblclick', () => { 
 		var selectPrd = grid2.getFocusedCell();
 		if(getKeyByValue(selectPrd, "prdNum") != null){
-			let prdNum = Object.values(selectPrd)[2];
+			prdNum = Object.values(selectPrd)[2];
+			console.log(prdNum);
 			$('#searchModal').modal("hide");
 			$('#prdName').val(prdName);
 			$('#prdNote').val(prdNote);
@@ -410,7 +410,6 @@ $(function(){
 			$('#itmModal').modal("hide");
 			let selectItm = grid3.getFocusedCell();
 			itmCode = selectItm.value;
-			console.log(itmCode);
 			selectItem(itmCode);
 		}
 	});
@@ -420,17 +419,63 @@ $(function(){
 	})
 	
 	$('#saveBtn').click(function(){
+		console.log(grid.getRowCount());
+		prdName = $('#prdName').val();
+		if(prdName == null || prdName == ""){
+			$('#prdName').focus();
+			let myToast = null;
+			//토스트메시지 테스트
+			myToast = $.toast({ 
+				  text : "생산계획명을 입력해주세요.", 
+				  showHideTransition : 'slide',  // It can be plain, fade or slide
+				  bgColor : 'tomato',              // Background color for toast
+				  textColor : 'white',            // text color
+				  allowToastClose : false,       // Show the close button or not
+				  hideAfter : 2000,              // `false` to make it sticky or time in miliseconds to hide after
+				  stack : 5,                     // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
+				  textAlign : 'center',            // Alignment of text i.e. left, right, center
+				  position : 'top-center'       // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
+				});
+			return false;
+		}
+		
+		for(let i = 0; i < grid.getRowCount(); i++){
+			console.log(grid.getValue(i, 'prdPlanDate'));
+			if(grid.getValue(i, 'prdPlanDate') == null || grid.getValue(i, 'prdPlanDate') == ""){
+				let myToast = null;
+				//토스트메시지 테스트
+				myToast = $.toast({ 
+					  text : "작업일자가 비어있습니다.", 
+					  showHideTransition : 'slide',  // It can be plain, fade or slide
+					  bgColor : 'tomato',              // Background color for toast
+					  textColor : 'white',            // text color
+					  allowToastClose : false,       // Show the close button or not
+					  hideAfter : 2000,              // `false` to make it sticky or time in miliseconds to hide after
+					  stack : 5,                     // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
+					  textAlign : 'center',            // Alignment of text i.e. left, right, center
+					  position : 'top-center'       // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
+					});
+				return false;
+			}
+		}
+		
 		let gridData = grid.getModifiedRows()
-		gridData = JSON.stringify(gridData);
+		gridData['producePlanDVO'] = {
+			prdDate : $('#prdDate').val(),
+			prdName : $('#prdName').val(),
+			prdNote : $('#prdNote').val(),
+			prdNum : prdNum
+		}
 		$.ajax({
 			async: false,
-			url : "/ajax/create",
+			url : "ProducePlanUpdate",
 			type : "post",
-			data : gridData,
+			data : JSON.stringify(gridData),
 			dataType: "json",
-			success : console.log(gridData)
+			contentType:"application/json",
+			success: console.log(JSON.stringify(gridData))
 		});
-	})
+	})// end of saveBtn
 	
 }); 
 
@@ -490,7 +535,7 @@ $(function(){
 									<td>
 										<div
 											class="tui-datepicker-input tui-datetime-input tui-has-focus">
-											<input type="text" id="datepicker-input"
+											<input type="text" id="prdDate" name="prdDate" 
 												aria-label="Date-Time"/> <span class="tui-ico-date"></span>
 										</div>
 										<div id="wrapper" style="margin-top: -1px;"></div>

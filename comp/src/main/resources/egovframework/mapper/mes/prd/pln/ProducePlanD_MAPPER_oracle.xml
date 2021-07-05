@@ -60,16 +60,12 @@
 	<update id="updateProducePlanD">
 		<![CDATA[
 			UPDATE PRODUCE_PLAN_D
-			SET PRD_PLAN_D_NUM=#{prdPlanDNum}
-				, PRD_NUM=#{prdNum}
-				, ITM_CODE=#{itmCode}
+			SET   ITM_CODE=#{itmCode}
 				, PRD_WORK_VOL=#{prdWorkVol}
 				, PRD_PLAN_DATE=#{prdPlanDate}
 				, PRD_NO=#{prdNo}
-				, PRD_NOTE=#{prdNote}
-				, COM_CHK=#{comChk}
-				, ORD_NUM=#{ordNum}
-						WHERE PRD_PLAN_D_NUM=#{prdPlanDNum}
+				, PRD_D_NOTE=#{prdDNote}
+						WHERE PRD_NUM=#{prdNum}
 				]]>
 	</update>
 	

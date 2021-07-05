@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import mes.prd.pln.service.GridData;
 import mes.prd.pln.service.ProducePlanDDefaultVO;
 import mes.prd.pln.service.ProducePlanDService;
 import mes.prd.pln.service.ProducePlanDVO;
+import mes.sal.out.service.ItemHistoryVO;
 /**
  * @Class Name : ProducePlanDServiceImpl.java
  * @Description : ProducePlanD Business Implement class
@@ -47,18 +49,8 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-    public String insertProducePlanD(ProducePlanDVO vo) throws Exception {
-    	LOGGER.debug(vo.toString());
-    	
-    	/** ID Generation Service */
-    	//TODO 해당 테이블 속성에 따라 ID 제너레이션 서비스 사용
-    	//String id = egovIdGnrService.getNextStringId();
-    	//vo.setId(id);
-    	LOGGER.debug(vo.toString());
-    	
-    	producePlanDDAO.insertProducePlanD(vo);
-    	//TODO 해당 테이블 정보에 맞게 수정    	
-        return null;
+    public void insertProducePlanD(ProducePlanDVO vo) throws Exception {
+        producePlanDDAO.insertProducePlanD(vo);
     }
 
     /**
@@ -130,6 +122,29 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 			throw processException("info.nodata.msg");
 		return resultVO;
 	}
+
+	// cud 통합
+	public void producePlanUpdate(GridData gridData) throws Exception {
+        if(gridData.getUpdatedRows() != null) {
+        	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
+        		producePlanDDAO.updateProducePlanD(gridData.getUpdatedRows().get(i));
+        	}
+        }
+        if(gridData.getCreatedRows() != null) {
+        	for(int i =0; i<gridData.getCreatedRows().size(); i++) {
+        		ProducePlanDVO vo= gridData.getCreatedRows().get(i);
+        		vo.setPrdDate(gridData.getProducePlanDVO().getPrdDate());
+        		vo.setPrdName(gridData.getProducePlanDVO().getPrdName());
+        		vo.setPrdNote(gridData.getProducePlanDVO().getPrdNote());      		
+        		producePlanDDAO.insertProducePlanD(vo);
+        	}
+        }
+        if(gridData.getDeletedRows() != null) {
+        	for(int i =0; i<gridData.getDeletedRows().size(); i++) {
+        		producePlanDDAO.deleteProducePlanD(gridData.getDeletedRows().get(i));
+        	}
+        }
+    }
 
 	
     

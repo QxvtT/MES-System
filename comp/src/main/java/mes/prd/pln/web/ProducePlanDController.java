@@ -1,8 +1,6 @@
 package mes.prd.pln.web;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -10,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
-import lombok.Data;
+import mes.prd.pln.service.GridData;
 import mes.prd.pln.service.ProducePlanDDefaultVO;
 import mes.prd.pln.service.ProducePlanDService;
 import mes.prd.pln.service.ProducePlanDVO;
@@ -36,26 +33,11 @@ import mes.prd.pln.service.ProducePlanDVO;
  * 
  *      Copyright (C) All right reserved.
  */
-@Data
-class GridData {
-	List<ProducePlanDVO> updatedRows;
-	List<ProducePlanDVO> createRows;
-	List<ProducePlanDVO> deletedRows;
-}
 
 @Controller
 //@SessionAttributes(types=ProducePlanDVO.class)
 public class ProducePlanDController {
 
-	@PutMapping(value = "/ajax/create")
-	@ResponseBody
-	public Map<String, Object> create(@RequestParam GridData gridData) {
-		System.out.println(gridData.createRows);
-		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("result", true);
-		data.put("data", gridData.createRows);
-		return data;
-	}
 
 	@Resource(name = "producePlanDService")
 	private ProducePlanDService producePlanDService;
@@ -63,6 +45,12 @@ public class ProducePlanDController {
 	/** EgovPropertyService */
 	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertiesService;
+
+	//CRUD
+	@RequestMapping(value="/prd/pln/ProducePlanUpdate")
+	public void producePlanUpdate(@RequestBody GridData gridData) throws Exception {
+		producePlanDService.producePlanUpdate(gridData);
+	} 
 
 	// 생산계획 ajax
 	@RequestMapping(value = "/prd/pln/ProducePlanList")

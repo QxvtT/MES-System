@@ -22,7 +22,7 @@ public interface ProducePlanDService {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-    String insertProducePlanD(ProducePlanDVO vo) throws Exception;
+    void insertProducePlanD(ProducePlanDVO vo) throws Exception;
     
     /**
 	 * PRODUCE_PLAN_D을 수정한다.
@@ -69,5 +69,7 @@ public interface ProducePlanDService {
 	List<?> selectItemList(ProducePlanDVO itmVO) throws Exception;
 
 	ProducePlanDVO selectItem(ProducePlanDVO itmVO) throws Exception;
+
+	void producePlanUpdate(GridData gridData) throws Exception;
     
 }
