@@ -30,7 +30,17 @@ let prdComNum1 = null;
 let prdComNum = null;
 let prdComMatNum = null;
 let prdComDNum = null;
+let itmCode = null;
+let prcFNo = null;
 $(function(){
+	var datepicker = new tui.DatePicker('#date', {
+        date: new Date(),
+        language: 'ko',
+        input: {
+            element: '#prdComDate',
+            format: 'yyyy-MM-dd'
+        }
+    });
 	
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -44,6 +54,8 @@ $(function(){
 	    	{ header: '일련번호', name:'prdComDNum', hidden: true},
 	    	{ header: '계획일련번호', name:'prdPlanDNum', hidden: true},
 	    	{ header: '주문일련번호', name:'ordDNum', hidden: true},
+			{ header: '자재코드', name:'matCode', hidden: true},
+			{ header: '자재명', name:'matName', hidden: true},
 			{ header: '제품코드', name:'itmCode'},
 			{ header: '구분', name:'prcComDiv'},
 			{ header: '주문번호', name:'ordNum'},
@@ -89,6 +101,7 @@ $(function(){
 	
 	$('#mobile-collapse').click(function() {
 		grid.refreshLayout();
+		gridMat.refreshLayout();
 	});
 	
 	
@@ -105,11 +118,9 @@ $(function(){
             input: '#endpicker-input',
             container: '#endpicker-container'
         },
-        language: 'ko',
-        type: 'date',
-        format: 'yyyy-MM-dd'
-  
+        language: 'ko'
     });
+ 
     
 	const grid2 = new tui.Grid({
 	    el: document.getElementById('grid2'),
@@ -162,9 +173,14 @@ $(function(){
 	})
 	
 	//작업지시 조회모달에서 더블클릭시 조회할 지시 선택하는 기능
-	grid2.on('dblclick', (e) => {
+	function selectCom(e) {
 		if(myToast != null) myToast.reset();
 		prdComNum = grid2.getValue(e.rowKey,'prdComNum');
+		$('#prdComNum').val(prdComNum);
+		$('#prdComDate').val(grid2.getValue(e.rowKey,'prdComDate'));
+		$('#prdComName').val(grid2.getValue(e.rowKey,'prdComName'));
+		$('#prdComNote').val(grid2.getValue(e.rowKey,'prdComNote'));
+		
 		grid.resetData(getList());
 		$('#myModal').modal('hide');
 		//토스트메시지 테스트
@@ -179,6 +195,17 @@ $(function(){
 			  textAlign : 'center',            // Alignment of text i.e. left, right, center
 			  position : 'top-center'       // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
 			});
+	}
+	grid2.on('dblclick', (e) => {
+		selectCom(e);
+	});
+	
+	$('#modalComY').click(() => {
+		let e = grid2.getFocusedCell();
+		console.log(e);
+		if(e.rowKey != null) {
+			selectCom(e);
+		}
 	});
 	//작업지시 조회용 모달//
 	
@@ -225,41 +252,64 @@ $(function(){
 	}
 	//행에서 쓸 자재로트//
 	
-	//grid 행 더블클릭시 자재조회
+	//grid 행 더블클릭시 자재조회 및 공정흐름조회
 	grid.on('dblclick', (e) => {
 		prdComDNum = grid.getValue(e.rowKey,'prdComDNum');
-		console.log(prdComDNum);
+		itmCode = grid.getValue(e.rowKey,'itmCode');
 		gridMat.resetData(getComMatList());
+		gridFlow.resetData(getFlowList());
+		$('#itmCode').val(grid.getValue(e.rowKey,'itmCode'));
+		$('#itmName').val(grid.getValue(e.rowKey,'itmName'));
+		$('#prdComVol').val(grid.getValue(e.rowKey,'prdComVol'));
+		$('#matCode').val(grid.getValue(e.rowKey,'matCode'));
+		$('#matName').val(grid.getValue(e.rowKey,'matName'));
 	});
+	
+	//공정흐름조회 그리드
+	const gridFlow = new tui.Grid({
+	    el: document.getElementById('gridFlow'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    rowWidth: 100,
+	    data: null,
+	    rowHeaders: ['rowNum'],
+	    columns: [
+			{ header: '순서', name:'prcFNo', hidden: true},
+			{ header: '공정코드', name:'prcCode', hidden: true},
+			{ header: '공정명', name:'prcName'},
+			{ header: '비고', name:'prcFExplain'}
+	    ]
+	}); // end const gridFlow
+	
+	gridFlow.on('scrollEnd', () => {
+		gridFlow.appendRows(getFlowList());
+	  })
+	  
+	function getFlowList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "ProduceCommandFlowList",
+			type : "get",
+			data : {itmCode: itmCode,
+					prcFNo: prcFNo
+					},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					prcFNo = result[result.length -1].prcFNo;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	//공정흐름조회 그리드//
 	
 })
 
-
-
-<!--
-/* 글 수정 화면 function */
-
-
-function fn_egov_select(prdComDNum) {
-	document.getElementById("listForm").prdComDNum.value = prdComDNum;
-   	document.getElementById("listForm").action = "<c:url value='/prd/com/updateProduceCommandDView.do'/>";
-   	document.getElementById("listForm").submit();
-}
-
-/* 글 등록 화면 function */
-function fn_egov_addView() {
-   	document.getElementById("listForm").action = "<c:url value='/prd/com/addProduceCommandDView.do'/>";
-   	document.getElementById("listForm").submit();		
-}
-
-/* pagination 페이지 링크 function */
-function fn_egov_link_page(pageNo){
-	document.getElementById("listForm").pageIndex.value = pageNo;
-	document.getElementById("listForm").action = "<c:url value='/prd/com/ProduceCommandDList.do'/>";
-   	document.getElementById("listForm").submit();
-}
-
- // -->
 </script>
 </head>
 <body>
@@ -269,7 +319,6 @@ function fn_egov_link_page(pageNo){
 <div class="page-wrapper">
 <div class="row">
 <div class="col-xl-12">
-
 
 	<!-- 작업지시서 검색 모달 -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
@@ -292,7 +341,6 @@ function fn_egov_link_page(pageNo){
 					        <span class="tui-ico-date"></span>
 					        <div id="startpicker-container" style="margin-left: -1px;"></div>
 					    </div>
-					    <div id="date1" class="d-inline-block" style="margin-top: -1px;"></div>
 	
 						<label class="col-form-label text-center"> ~ </label>
 						<div class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3 d-inline-block">
@@ -300,14 +348,13 @@ function fn_egov_link_page(pageNo){
 					        <span class="tui-ico-date"></span>
 					        <div id="endpicker-container" style="margin-left: -1px;"></div>
 					    </div>
-					    <div id="date2" class="d-inline-block" style="margin-top: -1px;"></div>
 					    <button type="button" id="searchPlnBtn"
 							class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
 					</div>
 				</div>	
 				<div id="grid2"></div>
 				<div class="modal-footer">
-					<a class="btn" id="modalY" href="#">예</a>
+					<a class="btn" id="modalComY">예</a>
 					<button class="btn" type="button" data-dismiss="modal">아니요</button>
 				</div>
 			</div>
@@ -315,8 +362,8 @@ function fn_egov_link_page(pageNo){
 	</div>
   
 
-
-
+<form:form commandName="produceCommandDVO" name="detailForm" id="detailForm" >
+	<input type="hidden" id ="prdComNum" name="prdComNum"/>
 	<!-- 타이틀 -->
 	<div id="title" class="mb-4">
 		<h3>생산 지시 관리</h3>
@@ -343,11 +390,10 @@ function fn_egov_link_page(pageNo){
 					<td>
 						<div class="row align-items-center text-center col-lg-12">
 						    <div class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-						        <input type="text" id="startpicker-input" class=" form-control w-25" aria-label="Date-Time" name="matHisDate"/>
+						        <input type="text" id="prdComDate" name="prdComDate" class=" form-control w-25" aria-label="Date-Time"/>
 						        <span class="tui-ico-date"></span>
-						        <div id="startpicker-container" style="margin-left: -1px;"></div>
 						    </div>
-						    <div id="date1" style="margin-top: -1px;"></div>
+						    <div id="date" style="margin-top: -1px;"></div>
 						</div>
 					</td>
 				</tr>
@@ -357,7 +403,7 @@ function fn_egov_link_page(pageNo){
 				 	</td>
 				 	<td>
 					 	<div class="row align-items-center text-center col-lg-12">
-							<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode"></input>
+							<input type="text" class="form-control w-25 ml-3" id="prdComName" name="prdComName"></input>
 						</div>
 					</td>
 				</tr>
@@ -367,7 +413,7 @@ function fn_egov_link_page(pageNo){
 				 	</td>
 				 	<td>
 					 	<div class="row align-items-center text-center col-lg-12">
-							<input type="text" class="form-control ml-3" id="operCode" name="operCode"></input>
+							<input type="text" class="form-control ml-3" id="prdComNote" name="prdComNote"></input>
 						</div>
 					</td>
 				</tr>
@@ -393,11 +439,41 @@ function fn_egov_link_page(pageNo){
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-6">
-			<div id="gridMat"></div>
+		<div class="col-xl-6 col-lg-12">
+			<label class="ml-3 d-inline">제품코드</label>
+			<input type="text" class="form-control ml-3 d-inline" id="itmCode" name="itmCode" style="width:100px" readonly></input>
+			<label class="ml-3 d-inline">제품명</label>
+			<input type="text" class="form-control ml-3 d-inline" id="itmName" name="itmName" style="width:100px" readonly></input>
+		</div>
+		<div class="col-xl-6 col-lg-12">
 		</div>
 	</div>
-	
+	<div class="row">
+		<div class="col-xl-6 col-lg-12">
+			<label class="ml-3 d-inline">자재코드</label>
+			<input type="text" class="form-control ml-3 d-inline" id="matCode" name="matCode" style="width:100px" readonly></input>
+			<label class="ml-3 d-inline">자재명</label>
+			<input type="text" class="form-control ml-3 d-inline" id="matName" name="matName" style="width:100px" readonly></input>
+			<button type="button" id="searchMatLotBtn"
+								class="btn btn-sm btn-primary waves-effect waves-light ml-3">검색</button>
+		</div>
+		<div class="col-xl-6 col-lg-12">
+			<label class="ml-3  d-inline">고객사명</label>
+			<input type="text" class="form-control ml-3  d-inline" id="operName" name="operName" style="width:100px" readonly></input>
+			<label class="ml-3  d-inline">지시량</label>
+			<input type="text" class="form-control ml-3  d-inline" id="prdComVol" name="prdComVol" style="width:100px" readonly></input>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xl-6 col-lg-12">
+			<div id="gridMat"></div>
+		</div>
+		<div class="col-xl-6 col-lg-12">
+			<div id="gridFlow"></div>
+		</div>
+	</div>
+
+</form:form>	
 
 </div>
 </div>

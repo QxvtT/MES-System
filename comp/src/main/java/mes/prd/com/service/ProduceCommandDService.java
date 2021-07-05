@@ -63,6 +63,9 @@ public interface ProduceCommandDService {
     /** 작업지시자재 조회 */
     List selectProduceCommandMatList(ProduceCommandDVO searchVO) throws Exception;
 	
+    /** 작업지시공정흐름 조회 */
+    List selectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception;
+
     /**
 	 * PRODUCE_COMMAND_D 총 갯수를 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO

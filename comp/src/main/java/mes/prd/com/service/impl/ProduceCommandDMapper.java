@@ -69,6 +69,8 @@ public interface ProduceCommandDMapper {
 	/** 작업지시자재 조회 */
 	public List<?> selectProduceCommandMatList(ProduceCommandDVO searchVO) throws Exception;
 	
+	/** 작업지시공정흐름 조회 */
+	public List<?> selectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception;
 	
     /**
 	 * PRODUCE_COMMAND_D 총 갯수를 조회한다.

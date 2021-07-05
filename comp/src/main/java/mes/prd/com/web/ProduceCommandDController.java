@@ -83,6 +83,16 @@ public class ProduceCommandDController {
 		return list;
 	}
 	
+	/** 작업지시공정흐름 조회 */
+	@RequestMapping(value ="/ProduceCommandFlowList", method=RequestMethod.GET)
+	@ResponseBody
+	public List<?> ajaxSelectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception {
+		System.out.println("이름 : ");
+		List<?> list = produceCommandDService.selectProduceCommandFlowList(searchVO);
+		System.out.println(list);
+		return list;
+	}
+	
 	@RequestMapping(value="/ProduceCommandDList.do")
     public String produceCommandDList(ProduceCommandDVO searchVO, 
     		ModelMap model)

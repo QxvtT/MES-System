@@ -98,7 +98,7 @@
 		resultType="mes.prd.com.service.ProduceCommandDVO">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-		select * from PRODUCE_COMMAND
+		select prd_Com_Num , TO_CHAR(prd_Com_Date, 'yyyy/MM/dd') as prd_Com_Date, prd_Com_Name, prd_Com_Note from PRODUCE_COMMAND
 		<where>
 		<if test="prdComNum1 != null and prdComNum1 != ''">
 				<![CDATA[	
@@ -118,14 +118,17 @@
 	<select id="selectProduceCommandDList"
 		parameterType="mes.prd.com.service.ProduceCommandDVO"
 		resultType="mes.prd.com.service.ProduceCommandDVO">
+		
+		
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 		select C.*, I.itm_name, OD.ord_num, OM.ord_delivery_date, 
-		OD.ord_vol, I.itm_day_output
-		from PRODUCE_COMMAND_d C, item I, order_d OD, order_m  OM
+		OD.ord_vol, I.itm_day_output, M.mat_name
+		from PRODUCE_COMMAND_d C, item I, order_d OD, order_m  OM, material M
 		where  c.itm_code = i.itm_code
-        and c.ord_d_num = od.ord_d_num
-        and od.ord_num = om.ord_num
+        and c.ord_d_num = od.ord_d_num (+)
+        and od.ord_num = om.ord_num (+)
+        and c.mat_code = m.mat_code
         and C.prd_com_num = #{prdComNum}
 		<if test="prdComDNum1 != null and prdComDNum1 != ''">
 				<![CDATA[	
@@ -156,6 +159,28 @@
 		</if>
 		ORDER BY
 		PRD_COM_MAT_NUM
+		
+		<![CDATA[					
+		) A WHERE ROWNUM <= 10)
+		]]>
+	</select>
+	
+	<!-- 작업지시공정흐름 조회 -->
+	<select id="selectProduceCommandFlowList"
+		parameterType="mes.prd.com.service.ProduceCommandDVO"
+		resultType="mes.prd.com.service.ProduceCommandDVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+		select f.*, p.prc_name
+		from process_flow F, process P
+		where f.prc_code = p.prc_code
+		and itm_code = #{itmCode}
+		<if test="prcFNo != null and prcFNo != ''">
+			<![CDATA[	
+				and prc_f_no > #{prcFNo}
+			]]>
+		</if>
+		ORDER BY prc_f_no
 		
 		<![CDATA[					
 		) A WHERE ROWNUM <= 10)

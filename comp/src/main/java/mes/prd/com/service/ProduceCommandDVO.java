@@ -78,14 +78,17 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     /** 비고 */
     private java.lang.String prdComDNote;
     
+    /** 자재코드 */
+    private java.lang.String matCode;
+    
+    /** 자재명 */
+    private java.lang.String matName;
+    
     
     /** 제품 한줄별로 자재코드에 맞는 자재로트번호 및 사용 수량 */
     
     /** 지시자재일련번호 스크롤용 */
     private java.math.BigDecimal prdComMatNum;
-    
-    /** 자재코드 */
-    private java.lang.String matCode;
     
     /** LOT_NUM */
     private java.math.BigDecimal lotNum;
@@ -104,6 +107,12 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     
     /** 공정코드 */
     private java.lang.String prcCode;
+    
+    /** 공정명 */
+    private java.lang.String prcName;
+    
+    /** 공정비고 */
+    private java.lang.String prcFExplain;
     
     
 
