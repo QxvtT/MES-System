@@ -32,6 +32,8 @@ public class MaterialVO extends OperationDefaultVO{
 
     //스크롤용
     private java.lang.String matCode1;
+    
+    //
   
 
  

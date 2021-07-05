@@ -24,6 +24,7 @@
 <title>목록</title>
 
 <script type="text/javaScript" language="javascript" defer="defer">
+
 let matCode1 = null;
 let matName = null;
 
@@ -55,7 +56,7 @@ $(function(){
 			async: false,
 			url : "${pageContext.request.contextPath}/MaterialList",
 			type : "get",
-			data : {matCode: matCode,
+			data : {matCode: matCode1,
 					matName: matName},
 			dataType: "json",
 			success : function(result){
