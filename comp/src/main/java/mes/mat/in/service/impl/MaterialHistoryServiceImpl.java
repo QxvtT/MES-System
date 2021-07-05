@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
+import mes.mat.in.service.GridDataVO;
 import mes.mat.in.service.MaterialHistoryDefaultVO;
 import mes.mat.in.service.MaterialHistoryService;
 import mes.mat.in.service.MaterialHistoryVO;
@@ -42,46 +43,6 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
     /** ID Generation */
     //@Resource(name="{egovMaterialHistoryIdGnrService}")    
     //private EgovIdGnrService egovIdGnrService;
-
-	/**
-	 * MATERIAL_HISTORY을 등록한다.
-	 * @param vo - 등록할 정보가 담긴 MaterialHistoryVO
-	 * @return 등록 결과
-	 * @exception Exception
-	 */
-    public String insertMaterialHistory(MaterialHistoryVO vo) throws Exception {
-    	LOGGER.debug(vo.toString());
-    	
-    	/** ID Generation Service */
-    	//TODO 해당 테이블 속성에 따라 ID 제너레이션 서비스 사용
-    	//String id = egovIdGnrService.getNextStringId();
-    	//vo.setId(id);
-    	LOGGER.debug(vo.toString());
-    	
-    	materialHistoryDAO.insertMaterialHistory(vo);
-    	//TODO 해당 테이블 정보에 맞게 수정    	
-        return null;
-    }
-
-    /**
-	 * MATERIAL_HISTORY을 수정한다.
-	 * @param vo - 수정할 정보가 담긴 MaterialHistoryVO
-	 * @return void형
-	 * @exception Exception
-	 */
-    public void updateMaterialHistory(MaterialHistoryVO vo) throws Exception {
-        materialHistoryDAO.updateMaterialHistory(vo);
-    }
-
-    /**
-	 * MATERIAL_HISTORY을 삭제한다.
-	 * @param vo - 삭제할 정보가 담긴 MaterialHistoryVO
-	 * @return void형 
-	 * @exception Exception
-	 */
-    public void deleteMaterialHistory(MaterialHistoryVO vo) throws Exception {
-        materialHistoryDAO.deleteMaterialHistory(vo);
-    }
 
     /**
 	 * MATERIAL_HISTORY을 조회한다.
@@ -125,5 +86,27 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
     public int selectMaterialHistoryListTotCnt(MaterialHistoryDefaultVO searchVO) {
 		return materialHistoryDAO.selectMaterialHistoryListTotCnt(searchVO);
 	}
-    
+
+	@Override
+	public void updateMatIn(GridDataVO gridDataVO) throws Exception {
+		if(gridDataVO.getUpdatedRows() != null) {
+			for(int i =0; i<gridDataVO.getUpdatedRows().size(); i++) {
+				materialHistoryDAO.updateMatIn(gridDataVO.getUpdatedRows().get(i));
+			}
+		}
+		if(gridDataVO.getUpdatedRows() != null) {
+			for(int i = 0; i<gridDataVO.getUpdatedRows().size(); i++) {
+				MaterialHistoryVO matVO = gridDataVO.getCreatedRows().get(i);
+				matVO.setMatHisDate(gridDataVO.getMaterialStockVO().getMatHisDate());
+				matVO.setMatOutOper(gridDataVO.getMaterialStockVO().getMatOutOper());
+				materialHistoryDAO.insertMatIn(matVO);
+			}
+		}
+		if(gridDataVO.getUpdatedRows() != null) {
+			for(int i = 0; i<gridDataVO.getUpdatedRows().size(); i++) {
+				materialHistoryDAO.deleteMatIn(gridDataVO.getDeletedRows().get(i));
+			}
+		}
+	}
+
 }

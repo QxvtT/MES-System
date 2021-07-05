@@ -2,39 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mes.mat.in.service.impl.MaterialHistoryMapper">
-
-	<insert id="insertMaterialHistory">
-		<![CDATA[
-			INSERT INTO MATERIAL_HISTORY 
-				( MAT_HIS_NUM
-				  , MAT_HIS_DIV
-				  , MAT_HIS_DATE
-				  , MAT_OUT
-				  , MAT_HIS_VOL )
-			VALUES ( #{matHisNum}
-				  , #{matHisDiv}
-				  , #{matHisDate}
-				  , #{matOut}
-				  , #{matHisVol} )
-		]]>
+	
+	<!-- 자재 입고 등록 -->
+	<insert id="insertMatIn">
+		
 	</insert>
 	
-	<update id="updateMaterialHistory">
-		<![CDATA[
-			UPDATE MATERIAL_HISTORY
-			SET MAT_HIS_NUM=#{matHisNum}
-				, MAT_HIS_DIV=#{matHisDiv}
-				, MAT_HIS_DATE=#{matHisDate}
-				, MAT_OUT=#{matOut}
-				, MAT_HIS_VOL=#{matHisVol}
-						WHERE MAT_HIS_NUM=#{matHisNum}
-				]]>
+	<!-- 자재 입고 수정 -->
+	<update id="updateMatIn">
+		<![CDATA[			
+		UPDATE MATERIAL_HISTORY_D
+		SET  MAT_CODE = #{matCode}
+			,MAT_HIS_D_VOL = #{matHisDVol}
+			,MAT_HIS_PRICE = #{matHisPrice}
+		WHERE MAT_HIS_D_NUM = #{matHisDNum}
+		]]>
 	</update>
 	
-	<delete id="deleteMaterialHistory">
+	<!-- 자재 입고 삭제 -->
+	<delete id="deleteMatIn">
 		<![CDATA[
-			DELETE FROM MATERIAL_HISTORY 
-						WHERE MAT_HIS_NUM=#{matHisNum}
+			DELETE FROM MATERIAL_HISTORY_D MHD 
+			WHERE EXISTS
+			    (SELECT 1 FROM MATERIAL_HISTORY MH 
+			     WHERE MHD.MAT_HIS_NUM = MH.MAT_HIS_NUM
+			     AND MHD.MAT_HIS_NUM = #{matHisNum}
+			     AND MH.MAT_HIS_NUM = #{matHisNum}
+			     AND MH.MAT_HIS_DIV = '입고')
 				]]>
 	</delete>
 	
@@ -63,7 +57,8 @@ SELECT * FROM (
 				       MHD.MAT_HIS_D_VOL, 
 				       MHD.MAT_HIS_PRICE, 
 				       (MHD.MAT_HIS_D_VOL * MHD.MAT_HIS_PRICE) AS AMOUNT, 
-				       MHD.LOT_NO
+				       MHD.LOT_NO,
+				       MHD.MAT_HIS_NUM
 				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_HISTORY MH, OPERATION O
 				WHERE M.MAT_CODE = MHD.MAT_CODE 
 				      AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM

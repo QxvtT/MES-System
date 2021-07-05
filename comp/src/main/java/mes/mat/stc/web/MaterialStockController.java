@@ -1,6 +1,7 @@
 package mes.mat.stc.web;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -9,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
+import lombok.Data;
 import mes.mat.stc.service.MaterialStockDefaultVO;
 import mes.mat.stc.service.MaterialStockService;
 import mes.mat.stc.service.MaterialStockVO;
@@ -33,10 +37,27 @@ import mes.mat.stc.service.MaterialStockVO;
  *      Copyright (C) All right reserved.
  */
 
+@Data
+class GridData{
+	List<MaterialStockVO> updatedRows;
+	List<MaterialStockVO> createdRows;
+	List<MaterialStockVO> deletedRows;
+}
+
 @Controller
 //@SessionAttributes(types=MaterialStockVO.class)
 public class MaterialStockController {
-
+	
+//	@PutMapping(value = "")
+//	@ResponseBody
+//	public Map updateMatIn(@RequestBody GridData gridData) {
+//		System.out.println();
+//		
+//		Map<String, object>
+//		
+//		return data;
+//	}
+	
 	@Resource(name = "materialStockService")
 	private MaterialStockService materialStockService;
 

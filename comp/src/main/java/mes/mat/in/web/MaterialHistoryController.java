@@ -2,7 +2,9 @@ package mes.mat.in.web;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,9 +22,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
+import lombok.Data;
+import mes.mat.in.service.GridDataVO;
 import mes.mat.in.service.MaterialHistoryDefaultVO;
 import mes.mat.in.service.MaterialHistoryService;
 import mes.mat.in.service.MaterialHistoryVO;
+import mes.mat.stc.service.MaterialStockVO;
 
 /**
  * @Class Name : MaterialHistoryController.java
@@ -39,7 +46,7 @@ import mes.mat.in.service.MaterialHistoryVO;
 @SessionAttributes(types=MaterialHistoryVO.class)
 public class MaterialHistoryController {
 
-    @Resource(name = "materialHistoryService")
+	@Resource(name = "materialHistoryService")
     private MaterialHistoryService materialHistoryService;
     
     /** EgovPropertyService */
@@ -53,6 +60,7 @@ public class MaterialHistoryController {
 	 * @exception Exception
 	 */
     
+    // 자재 입고 관리 조회
     @RequestMapping(value="/mat/in/MatInMng", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajaxMatInMng(MaterialHistoryVO searchVO) throws Exception {
@@ -69,6 +77,8 @@ public class MaterialHistoryController {
     	return "mat/in/MatInMng.page";
     } // end 자재 입고 관리 조회
     
+    
+    //자재 입고 조회
     @RequestMapping(value="/mat/in/MatInList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajaxMatInList(MaterialHistoryVO searchVO) throws Exception {
@@ -96,6 +106,7 @@ public class MaterialHistoryController {
     	return "mat/in/MatInList.page";
     } // end 자재 입고 조회
     
+    // 자재 출고 관리 조회
     @RequestMapping(value="/mat/in/MatOutMng", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajaxMatOutMng(MaterialHistoryVO searchVO) throws Exception {
@@ -112,22 +123,18 @@ public class MaterialHistoryController {
     	return "mat/in/MatOutMng.page";
     } // end 자재 출고 관리 조회
     
+    // 자재 입고 CUD
+    @RequestMapping("/mat/in/updateMatIn")
+    public void updateMatIn(@RequestBody GridDataVO gridDataVO) throws Exception{
+    	materialHistoryService.updateMatIn(gridDataVO);
+    }
+    
     @RequestMapping("/materialHistory/addMaterialHistoryView.do")
     public String addMaterialHistoryView(
             @ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO, Model model)
             throws Exception {
         model.addAttribute("materialHistoryVO", new MaterialHistoryVO());
         return "/materialHistory/MaterialHistoryRegister";
-    }
-    
-    @RequestMapping("/materialHistory/addMaterialHistory.do")
-    public String addMaterialHistory(
-            MaterialHistoryVO materialHistoryVO,
-            @ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO, SessionStatus status)
-            throws Exception {
-        materialHistoryService.insertMaterialHistory(materialHistoryVO);
-        status.setComplete();
-        return "forward:/materialHistory/MaterialHistoryList.do";
     }
     
     @RequestMapping("/materialHistory/updateMaterialHistoryView.do")
@@ -148,26 +155,6 @@ public class MaterialHistoryController {
             MaterialHistoryVO materialHistoryVO,
             @ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO) throws Exception {
         return materialHistoryService.selectMaterialHistory(materialHistoryVO);
-    }
-
-    @RequestMapping("/materialHistory/updateMaterialHistory.do")
-    public String updateMaterialHistory(
-            MaterialHistoryVO materialHistoryVO,
-            @ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO, SessionStatus status)
-            throws Exception {
-        materialHistoryService.updateMaterialHistory(materialHistoryVO);
-        status.setComplete();
-        return "forward:/materialHistory/MaterialHistoryList.do";
-    }
-    
-    @RequestMapping("/materialHistory/deleteMaterialHistory.do")
-    public String deleteMaterialHistory(
-            MaterialHistoryVO materialHistoryVO,
-            @ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO, SessionStatus status)
-            throws Exception {
-        materialHistoryService.deleteMaterialHistory(materialHistoryVO);
-        status.setComplete();
-        return "forward:/materialHistory/MaterialHistoryList.do";
     }
 
 }
