@@ -101,8 +101,8 @@ $(function(){
 				operName = operName + operation.getCheckedRows()[i]['operName']
 			}
 			else{
-				operCode2 = operCode2 + operation.getCheckedRows()[i]['operCode']+"' , '";
-				operName = operName + operation.getCheckedRows()[i]['operName']+"' , '";
+				operCode2 = operCode2 + operation.getCheckedRows()[i]['operCode']+" , ";
+				operName = operName + operation.getCheckedRows()[i]['operName']+" , ";
 			}	
 		}
 		console.log(operCode2);
