@@ -125,7 +125,7 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
 	        	
         	}
         	else {
-        		DateFormat dateFormat = new SimpleDateFormat("yyMMdd");
+        		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         		Date date = gridData.getItemHistoryVO().getItmHisRdy();      
         		String dateToStr = dateFormat.format(date);
         		int a =getCount(gridData.getItemHistoryVO())+1;
