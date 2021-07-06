@@ -18,7 +18,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class MachinemagDefaultVO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	/** 검색조건 */
     private String searchCondition = "";
     
