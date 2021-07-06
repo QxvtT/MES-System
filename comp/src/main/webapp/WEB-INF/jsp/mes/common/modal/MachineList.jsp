@@ -22,28 +22,21 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<script
-	src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+
 <script type="text/javaScript" language="javascript" defer="defer">
-let macCode = null;
-let macName = null;
-let macDiv = null;
-let macSize = null;
+let macCodeM = null;
 let macCode1 = null;
+let macCode2;
+let macName;
 
 $(function(){
-	const grid = new tui.Grid({
-	    el: document.getElementById('grid'),
+	const machine = new tui.Grid({
+	    el: document.getElementById('machine'),
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
 	    rowWidth: 100,
-	    data: getList(),
+	    data: getMachineList(),
 	    rowHeaders: ['rowNum','checkbox'],
 	    columns: [
 	    	{ header: '설비코드', name:'macCode'},
@@ -53,23 +46,22 @@ $(function(){
 	    ]
 	}); // end const grid
 	
-	grid.on('scrollEnd', () => {
-	    grid.appendRows(getList());
+	machine.on('scrollEnd', () => {
+		machine.appendRows(getMachineList());
 	  })
 	  
-	function getList() {
+	function getMachineList() {
 		let data;
 		$.ajax({
 			async: false,
-			url : "MachineList",
+			url : "${pageContext.request.contextPath}/MachineList",
 			type : "get",
-			data : {macCode: macCode,
-					macName: macName,
+			data : {macCode: macCodeM,
 					macCode1: macCode1},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					macCode1 = result[result.length -1].macCode1;
+					macCode1 = result[result.length -1].macCode;
 				}
 				console.log(result);
 				data = result;
@@ -79,32 +71,43 @@ $(function(){
 	}
 	
 	$('#mobile-collapse').click(function() {
-		grid.refreshLayout();
+		machine.refreshLayout();
 	});
 	
-	const gridData = [
-	      {
-	        c1: '1992/03/25',
-	        c3: '2014-04-16'
-	      }
-	    ];
+
 	
-	
-	$('.btn').click(function(){
-		$("#myModal").modal("toggle");
-		$("#myModal").on('shown.bs.modal', function () {
-			grid.refreshLayout();
+
+	$('#searchMacBtn').click(function(){
+		$("#macModal").modal("toggle");
+		$("#macModal").on('shown.bs.modal', function () {
+			machine.refreshLayout();
 		});
 		
 	})
 	
-	button.onclick = function(){
-		macDiv = null;
-		macCode = $('input#macCode').val();
-		macName = $('input#macName').val();
-		grid.resetData(getList());
+	buttonM.onclick = function(){
+		macCode1 = null;
+		macCodeM = $('input#macCodeM').val();
+		machine.resetData(getMachineList());
 		
 	}
+	
+	$('#choiceM').click(function(){
+		macCode2 = '';
+		macName = '';
+		for(let i = 0; i<machine.getCheckedRows().length; i++){
+			if(i == machine.getCheckedRows().length-1){
+				macCode2 = macCode2 + machine.getCheckedRows()[i]['macCode']
+				macName = macName + machine.getCheckedRows()[i]['macName']
+			}
+			else{
+				macCode2 = macCode2 + operation.getCheckedRows()[i]['macCode']+" , ";
+				macName = macName + operation.getCheckedRows()[i]['macName']+" , ";
+			}	
+		}
+		$('input[id="macCode"]').val(macCode2);
+		$('input[id="macName"]').val(macName);
+	});
 	
 })
 
@@ -116,51 +119,34 @@ $(function(){
 </script>
 </head>
 <body>
-	<form:form commandName="searchVO" name="listForm" id="listForm"
-		method="post">
-		<input type="hidden" name="prdComDNum" />
-		<div class="pcoded-inner-content">
-			<div class="main-body">
-				<div class="page-wrapper">
-					<div class="row">
-						<div class="col-xl-12">
-							<div id="datePicker"></div>
-							<button type="button" class="btn btn-info btn-sm"
-								id="searchComBtn" data-toggle="modal" data-target="#myModal">조회(검색팝업)</button>
+	<button type="button" class="btn btn-info btn-sm" id="searchMacBtn"
+		data-toggle="modal" data-target="#macModal">검색</button>
 
-							<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-								aria-labelledby="exampleModalLabel" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h3 class="modal-title" id="exampleModalLabel" align="center">업체검색</h3>
-											<button class="close" type="button" data-dismiss="modal"
-												aria-label="Close">
-												&times;
-											</button>
-										</div>
-										<div style="padding: 10px 10px 10px 10px">
-											<h4>설비</h4>
-											<input type="text" id="macCode" name="macCode"></input><br><br>
-											<h4>설비</h4>
-											<input type="text" id="macName" name="macName"></input><br>
-											<button type="button" id="button" name="button">조회</button> &nbsp;
-												<button type="reset">리셋</button>
-										</div>
-										<div class="form-group row"></div>
-										<div id="grid"></div>
-										<div class="modal-footer">
-											<button class="btn" id="choiceM" name="choiceM" type="button" data-dismiss="modal">선택</button>
-											<button class="btn" type="reset" data-dismiss="modal">취소</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+	<div class="modal fade" id="macModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="exampleModalLabel" align="center">설비검색</h3>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">&times;</button>
+				</div>
+				<div style="padding: 10px 10px 10px 10px">
+					<h4>설비</h4>
+					<input type="text" id="macCodeM" name="macCode"></input><br> <br>
+					
+					<button type="button" id="buttonM" name="button">조회</button>
+					&nbsp;
+					<button type="reset">리셋</button>
+				</div>
+				<div class="form-group row"></div>
+				<div id="machine"></div>
+				<div class="modal-footer">
+					<button class="btn" id="choiceM" name="choiceM" type="button"
+						data-dismiss="modal">선택</button>
+					<button class="btn" type="reset" data-dismiss="modal">취소</button>
 				</div>
 			</div>
 		</div>
-	</form:form>
 </body>
 </html>

@@ -29,8 +29,8 @@
 		order by oper_code
 		
 			<![CDATA[ 				
-		) A WHERE ROWNUM <= 10 )
-	]]>
+		) A WHERE ROWNUM <= 10 )		
+		]]>
 
 	</select>
 
@@ -91,7 +91,7 @@
 
 			<if test="prcCode1 != null and prcCode1 != ''">
 							<![CDATA[	
-								to_number(m.prc_code) >  to_number(#{ prcCode1})
+										prc_code >  #{prcCode1}
 							]]>
 			</if>
 			<if test="prcCode != null and prcCode != ''">
@@ -127,7 +127,7 @@
 
 		<if test="matCode1 != null and matCode1 != ''">
 							<![CDATA[	
-								to_number(m.mat_code) >  to_number(#{ matCode1})
+									m.mat_code >  #{matCode1}
 							]]>
 		</if>
 
@@ -159,13 +159,13 @@
 		SELECT A.*, ROWNUM RNUM FROM (
 
 		select mac_code,
-		mac_name, mac_div, mac_size, mac_code1
+		mac_name, mac_div, mac_size
 		from machine
 		<where>
 
 			<if test="macCode1 != null and macCode1 != ''">
 							<![CDATA[	
-								to_number(substr(mac_code1,6)) >  to_number(substr(#{macCode1},6))
+								mac_code >  #{macCode1}
 							]]>
 			</if>
 			<if test="macCode != null and macCode != ''">
@@ -173,11 +173,7 @@
 								and mac_code = #{macCode}
 							]]>
 			</if>
-			<if test="macName != null and macName != ''">
-							<![CDATA[	
-								and mac_name = #{macName}
-							]]>
-			</if>
+			
 
 		</where>
 		order by mac_code

@@ -27,6 +27,8 @@
 <script type="text/javaScript" language="javascript" defer="defer">
 let itmCode1 = null;
 let itmNameM = null;
+let itmCode2;
+let itmName;
 
 
 $(function(){
@@ -73,12 +75,6 @@ $(function(){
 		item.refreshLayout();
 	});
 	
-	const gridData = [
-	      {
-	        c1: '1992/03/25',
-	        c3: '2014-04-16'
-	      }
-	    ];
 	
 	$('.btn').click(function(){
 		$("#myModal").modal("toggle");
@@ -93,6 +89,24 @@ $(function(){
 		item.resetData(getItemList());
 		
 	}
+	$('#choiceI').click(function(){
+		test = null;
+		itmCode2 = '';
+		itmName = '';
+		for(let i = 0; i<item.getCheckedRows().length; i++){
+			if(i == item.getCheckedRows().length-1){
+				itmCode2 = itmCode2 + item.getCheckedRows()[i]['itmCode']
+				itmName = itmName + item.getCheckedRows()[i]['itmName']
+			}
+			else{
+				itmCode2 = itmCode2 + item.getCheckedRows()[i]['itmCode']+" , ";
+				itmName = itmName + item.getCheckedRows()[i]['itmName']+" , ";
+			}	
+		}
+		
+		$('input[id="itmCode"]').val(itmCode2);
+		$('input[id="itmName"]').val(itmName);
+	});
 	
 	
 })
@@ -100,47 +114,34 @@ $(function(){
 </script>
 </head>
 <body>
-		<input type="hidden" name="prdComDNum" />
-		<div class="pcoded-inner-content">
-			<div class="main-body">
-				<div class="page-wrapper">
-					<div class="row">
-						<div class="col-xl-12">
-							<div id="datePicker"></div>
-							<button type="button" class="btn btn-info btn-sm"
-								id="searchComBtn" data-toggle="modal" data-target="#myModal">조회(검색팝업)</button>
 
-							<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-								aria-labelledby="exampleModalLabel" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h3 class="modal-title" id="exampleModalLabel" align="center">제품검색</h3>
-											<button class="close" type="button" data-dismiss="modal"
-												aria-label="Close">&times;</button>
-										</div>
-										<div style="padding: 10px 10px 10px 10px">
-											<h4>제품명</h4>
-											<input type="text" id="itmNameM" name="itmName"></input><br>
-											<br>
-											<button type="button" id="buttonI" name="button">조회</button>
-											&nbsp;
-											<button type="reset">리셋</button>
-										</div>
-										<div class="form-group row"></div>
-										<div id="item"></div>
-										<div class="modal-footer">
-											<button class="btn" id="choiceI" name="choiceI" type="button" data-dismiss="modal">선택</button>
-											<button class="btn" type="reset" data-dismiss="modal">취소</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+	<button type="button" class="btn btn-info btn-sm" id="searchComBtn"
+		data-toggle="modal" data-target="#myModal">검색</button>
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="exampleModalLabel" align="center">제품검색</h3>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">&times;</button>
+				</div>
+				<div style="padding: 10px 10px 10px 10px">
+					<h4>제품명</h4>
+					<input type="text" id="itmNameM" name="itmName"></input><br> <br>
+					<button type="button" id="buttonI" name="button">조회</button>
+					&nbsp;
+					<button type="reset">리셋</button>
+				</div>
+				<div class="form-group row"></div>
+				<div id="item"></div>
+				<div class="modal-footer">
+					<button class="btn" id="choiceI" name="choiceI" type="button"
+						data-dismiss="modal">선택</button>
+					<button class="btn" type="reset" data-dismiss="modal">취소</button>
 				</div>
 			</div>
 		</div>
-
 </body>
 </html>

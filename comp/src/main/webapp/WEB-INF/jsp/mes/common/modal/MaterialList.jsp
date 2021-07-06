@@ -26,6 +26,8 @@
 <script type="text/javaScript" language="javascript" defer="defer">
 let matCodeM = null;
 let matCode1 = null;
+let matCode2;
+let matName;
 
 $(function(){
 	const material = new tui.Grid({
@@ -40,7 +42,7 @@ $(function(){
 	    	{ header: '자재코드', name:'matCode'},
 			{ header: '자재명', name:'matName'},
 			{ header: '규격', name:'matSize'},
-			{ header: '업체명', name:'operName'}
+			{ header: '업체명', name:'matName'}
 	    ]
 	}); // end const grid
 	
@@ -60,7 +62,7 @@ $(function(){
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					matCode1 = result[result.length -1].matCode1;
+					matCode1 = result[result.length -1].matCode;
 				}
 				console.log(matCodeM);
 				data = result;
@@ -82,13 +84,32 @@ $(function(){
 		
 	})
 	
-	buttonM.onclick = function(){
-		matCodeM = null;
+	buttonMat.onclick = function(){
+		matCode1 = null;
 		matCodeM = $('input#matCodeM').val();
 		console.log(matCodeM);
 		material.resetData(getMaterialList());
 		
 	}
+	
+	$('#choiceMat').click(function(){
+		test = null;
+		matCode2 = '';
+		matName = '';
+		for(let i = 0; i<material.getCheckedRows().length; i++){
+			if(i == material.getCheckedRows().length-1){
+				matCode2 = matCode2 + material.getCheckedRows()[i]['matCode']
+				matName = matName + material.getCheckedRows()[i]['matName']
+			}
+			else{
+				matCode2 = matCode2 + material.getCheckedRows()[i]['matCode']+" , ";
+				matName = matName + material.getCheckedRows()[i]['matName']+" , ";
+			}	
+		}
+		
+		$('input[id="matCode"]').val(matCode2);
+		$('input[id="matName"]').val(matName);
+	});
 	
 })
 
@@ -103,7 +124,7 @@ $(function(){
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3 class="modal-title" id="exampleModalLabel" align="center">업체검색</h3>
+					<h3 class="modal-title" id="exampleModalLabel" align="center">자재검색</h3>
 					<button class="close" type="button" data-dismiss="modal"
 						aria-label="Close">
 						&times;
@@ -112,7 +133,7 @@ $(function(){
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>자재코드</h4>
 					<input type="text" id="matCodeM" name="matCode"></input><br><br>
-					<button type="button" id="buttonM" name="button">조회</button> &nbsp;
+					<button type="button" id="buttonMat" name="button">조회</button> &nbsp;
 						<button type="reset">리셋</button>
 				</div>
 				<div class="form-group row"></div>

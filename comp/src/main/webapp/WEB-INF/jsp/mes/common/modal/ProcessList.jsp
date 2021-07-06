@@ -27,6 +27,8 @@
 
 let prcCodeM = null;
 let prcCode1 = null;
+let prcCode2;
+let prcName;
 
 $(function(){
 	const process = new tui.Grid({
@@ -60,7 +62,7 @@ $(function(){
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					prcCode1 = result[result.length -1].prcCode1;
+					prcCode1 = result[result.length -1].prcCode;
 				}
 				console.log(result);
 				data = result;
@@ -74,11 +76,9 @@ $(function(){
 	});
 	
 
-	
-	
-	$('.serchPrcBtn').click(function(){
-		$("#serchPrcModal").modal("toggle");
-		$("#serchPrcModal").on('shown.bs.modal', function () {
+	$('#serchPrcBtn').click(function(){
+		$("#serchPrcModal").modal("toggle"); //toggle modal 열고 닫고
+		$("#serchPrcModal").on('shown.bs.modal', function () { // modal 열렸을때 이벤트 실행
 			process.refreshLayout();
 		});
 		
@@ -86,11 +86,31 @@ $(function(){
 	
 	
 	buttonP.onclick = function(){
-		prcCodeM = null;
+		prcCode1 = null;
 		prcCodeM = $('input#prcCodeM').val();
 		process.resetData(getProcessList());
 		
 	}
+	$('#choiceP').click(function(){
+		test = null;
+		prcCode2 = '';
+		prcName = '';
+		for(let i = 0; i<process.getCheckedRows().length; i++){
+			if(i == process.getCheckedRows().length-1){
+				prcCode2 = prcCode2 + process.getCheckedRows()[i]['prcCode']
+				prcName = prcName + process.getCheckedRows()[i]['prcName']
+			}
+			else{
+				prcCode2 = prcCode2 + process.getCheckedRows()[i]['prcCode']+" , ";
+				prcName = prcName + process.getCheckedRows()[i]['prcName']+" , ";
+			}	
+		}
+		
+		$('input[id="prcCode"]').val(prcCode2);
+		$('input[id="prcName"]').val(prcName);
+	});
+
+	
 	
 })
 
@@ -103,14 +123,14 @@ $(function(){
 <body>
 
 	<button type="button" class="btn btn-info btn-sm" id="serchPrcBtn"
-		data-toggle="modal" data-target="#myModal">조회(검색팝업)</button>
+		data-toggle="modal" data-target="#serchPrcModal">검색</button>
 
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+	<div class="modal fade" id="serchPrcModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3 class="modal-title" id="exampleModalLabel" align="center">업체검색</h3>
+					<h3 class="modal-title" id="exampleModalLabel" align="center">공정검색</h3>
 					<button class="close" type="button" data-dismiss="modal"
 						aria-label="Close">&times;</button>
 				</div>
