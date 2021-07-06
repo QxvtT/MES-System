@@ -16,14 +16,11 @@
 		declare
 			oldVol number;
 			changeVol number;
-			v_ord_num order_m.ord_num%type;
 		begin
 			    select itm_vol into oldVol
 			    from item_history_d
 			    where itm_his_d_num = #{itmHisDNum};
-			    
-			    select ord_num into v_ord_num
-			    from item_history where itm_his_num = #{itmHisNum};
+
 			    
 			    changeVol := #{itmVol}-oldVol;
 			    
@@ -37,7 +34,7 @@
 			        
 			    update order_d
 			    set ord_out_vol = ord_out_vol+changeVol
-			    where ord_num = v_ord_num and
+			    where ord_num = #{ordNum} and
 			    itm_code = #{itmCode};
 			    
 			    update item_stock
@@ -49,42 +46,7 @@
 	</update>
 	<insert id="insertItemHistory">
 			declare
-		        v_ord_num order_m.ord_num%type;
 			begin
-
-            select ord_num into v_ord_num
-            from item_history where itm_his_num = #{itmHisNum};
-            
-				insert into item_history_d
-    				values
-          					(item_history_d_seq.nextval
-          					, #{itmHisNum}
-          					, #{itmCode}
-          					, #{itmVol}
-          					, #{lotNum}
-          					, #{itmPrice}
-          					, #{itmNoteD});
-        		update item_stock 
-        		set itm_vol = itm_vol- #{itmVol}
-       					 where 	itm_stc_num = #{lotNum}
-        						and   itm_code = #{itmCode};
-        
-        		update order_d
-        			set ord_out_vol = ord_out_vol+#{itmVol}
-        				where ord_num =  v_ord_num 
-        				and itm_code = #{itmCode};	
-					end;
-	</insert>
-	<insert id="ItemHistoryNewInsert">
-			declare
-		         v_itmnum varchar(50) :='ITH'||to_char(sysdate,'yyMMdd')||to_char(item_his_seq.nextval,'FM0000');
-			begin
-				INSERT INTO item_history 
-					VALUES ( v_itmnum
-				  			, #{ordNum}
-				  			, '출고'
-				  			, #{itmHisRdy}
-                			, #{itmNote});
 				insert into item_history_d
     				values
           					(item_history_d_seq.nextval
@@ -105,13 +67,61 @@
         				and itm_code = #{itmCode};	
 					end;
 	</insert>
+	<insert id="itemHistoryMaster">
+				INSERT INTO item_history 
+					VALUES ( #{itmHisNum}
+				  			, #{ordNum}
+				  			, '출고'
+				  			, #{itmHisRdy}
+                			, #{itmNote})
+	</insert>
+	
+	<insert id="itemHistoryNewInsert">
+			begin
+				insert into item_history_d
+    				values
+          					(item_history_d_seq.nextval
+          					, #{itmHisNum}
+          					, #{itmCode}
+          					, #{itmVol}
+          					, #{lotNum}
+          					, #{itmPrice}
+          					, #{itmNoteD});
+        		update item_stock 
+        		set itm_vol = itm_vol- #{itmVol}
+       					 where 	itm_stc_num = #{lotNum}
+        						and   itm_code = #{itmCode};
+        
+        		update order_d
+        			set ord_out_vol = ord_out_vol+#{itmVol}
+        				where ord_num =  #{ordNum} 
+        				and itm_code = #{itmCode};	
+					end;
+					
+	</insert>
 
 
 
 	<delete id="deleteItemHistory">
 		<![CDATA[
-			DELETE FROM ITEM_HISTORY 
-						WHERE ITM_HIS_NUM=#{itmHisNum}
+			declare
+				itmVol item_history_d.itm_vol%type := #{itmVol};
+				
+			begin
+				DELETE FROM ITEM_HISTORY_D
+						WHERE ITM_HIS_D_NUM=#{itmHisDNum};
+                
+                
+        	update item_stock 
+        		set itm_vol = itm_vol+ #{itmVol}
+       					 where 	itm_stc_num = #{lotNum}
+        						and   itm_code = #{itmCode};
+        
+        		update order_d
+        			set ord_out_vol = ord_out_vol-#{itmVol}
+        				where ord_num =  #{ordNum} 
+        				and itm_code = #{itmCode};	
+					end;
 				]]>
 	</delete>
 
@@ -185,7 +195,7 @@
 		resultType="mes.sal.out.service.ItemHistoryVO">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-		select to_char(i.itm_his_rdy,'yyyy-MM-dd') as itm_his_rdy
+		select to_char(i.itm_his_rdy+1,'yyyy-MM-dd') as itm_his_rdy
 		, i.itm_his_num
 		, o.oper_code
 		, o.oper_name
@@ -250,7 +260,7 @@
 		SELECT * FROM (
 			SELECT A.*, ROWNUM RNUM FROM (
 				select 
-					to_char(i.itm_his_rdy,'yyyy-MM-dd') as itm_his_rdy
+					to_char(i.itm_his_rdy+1,'yyyy-MM-dd') as itm_his_rdy
 					,i.itm_his_num
 					,o.oper_name
 					,i.itm_note
@@ -260,7 +270,7 @@
 						i.ord_num = o.ord_num 
 			<if test="itmHisDNum != null">
 				<![CDATA[	
-					and id.ITM_HIS_D_NUM < #{itmHisDNum}
+					and rownum < #{itmHisDNum}
 				]]>
 			</if>
 		<if
@@ -293,6 +303,13 @@
 				ORD_NUM LIKE '%' || #{searchKeyword} || '%'
 			</if>
 		</if>
+	</select>
+	
+	
+	<select id="getCount" parameterType="mes.sal.out.service.ItemHistoryVO" resultType="int">
+		select count(*) from item_history
+		where to_char(itm_his_rdy,'yyyy-MM-dd') = to_char(#{itmHisRdy},'yyyy-MM-dd')
+		
 	</select>
 
 </mapper>

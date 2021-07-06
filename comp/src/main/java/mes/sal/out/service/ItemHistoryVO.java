@@ -2,6 +2,8 @@ package mes.sal.out.service;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,7 +35,8 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     private java.lang.String itmDiv;
     
     /** 준비일자 */
-    private java.lang.String itmHisRdy;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private java.sql.Date itmHisRdy;
     
     /** 마스터-특이사항 */
     private java.lang.String itmNote;
@@ -42,6 +45,7 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     
     /** 디테일일련번호 */
     private java.math.BigDecimal itmHisDNum;
+    private java.math.BigDecimal count;
     
     /** 제품코드-제품명 */
     private java.lang.String itmCode;

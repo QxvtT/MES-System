@@ -1,5 +1,9 @@
 package mes.sal.out.service.impl;
 
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -99,6 +103,7 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
         return itemHistoryDAO.ItemHistoryRegist(searchVO);
     }
     
+    
     public void itemHistoryUpdate(GridDataVO gridData) throws Exception {
         if(gridData.getUpdatedRows() != null) {
         	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
@@ -106,15 +111,43 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
         	}
         }
         if(gridData.getCreatedRows() != null) {
-        	for(int i =0; i<gridData.getCreatedRows().size(); i++) {
-        		ItemHistoryVO vo= gridData.getCreatedRows().get(i);
-        		vo.setOrdNum(gridData.getItemHistoryVO().getOrdNum());
-        		vo.setItmHisNum(gridData.getItemHistoryVO().getItmHisNum());
-        		vo.setItmHisRdy(gridData.getItemHistoryVO().getItmHisRdy());
-        		vo.setItmNote(gridData.getItemHistoryVO().getItmNote());
-        		vo.setOperCode(gridData.getItemHistoryVO().getOperCode());
-        		itemHistoryDAO.insertItemHistory(vo);
+        	if(gridData.getItemHistoryVO().getItmHisNum()!=null && gridData.getItemHistoryVO().getItmHisNum()!="") {
+	        	
+        		for(int i =0; i<gridData.getCreatedRows().size(); i++) {
+	        		ItemHistoryVO vo= gridData.getCreatedRows().get(i);
+	        		vo.setOrdNum(gridData.getItemHistoryVO().getOrdNum());
+	        		vo.setItmHisNum(gridData.getItemHistoryVO().getItmHisNum());
+	        		vo.setItmHisRdy(gridData.getItemHistoryVO().getItmHisRdy());
+	        		vo.setItmNote(gridData.getItemHistoryVO().getItmNote());
+	        		vo.setOperCode(gridData.getItemHistoryVO().getOperCode());
+	        			itemHistoryDAO.insertItemHistory(vo);
+	        	}
+	        	
         	}
+        	else {
+        		DateFormat dateFormat = new SimpleDateFormat("yyMMdd");
+        		Date date = gridData.getItemHistoryVO().getItmHisRdy();      
+        		String dateToStr = dateFormat.format(date);
+        		int a =getCount(gridData.getItemHistoryVO())+1;
+        		System.out.println("시발련아!!");
+        		System.out.println(a);
+        		String num = String.format("%04d", a);
+        		String result = "ITH"+dateToStr+num;
+        		for(int i =0; i<gridData.getCreatedRows().size(); i++) {
+	        		ItemHistoryVO vo= gridData.getCreatedRows().get(i);
+	        		vo.setItmHisNum(result);
+	        		vo.setOrdNum(gridData.getItemHistoryVO().getOrdNum());
+	        		vo.setItmHisRdy(gridData.getItemHistoryVO().getItmHisRdy());
+	        		vo.setItmNote(gridData.getItemHistoryVO().getItmNote());
+	        		vo.setOperCode(gridData.getItemHistoryVO().getOperCode());
+	        		if(i ==0) {
+	        			itemHistoryDAO.itemHistoryMaster(vo);
+	        		}
+	        		itemHistoryDAO.itemHistoryNewInsert(vo);
+	        	}
+        		
+        	}
+        		
         }
         if(gridData.getDeletedRows() != null) {
         	for(int i =0; i<gridData.getDeletedRows().size(); i++) {
@@ -140,14 +173,14 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
 		return itemHistoryDAO.selectItemHistoryListTotCnt(searchVO);
 	}
 
-
-
-
-
 	@Override
-	public void insertItemHistory(ItemHistoryVO searchVO) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public int getCount(ItemHistoryVO searchVO) {
+		return  itemHistoryDAO.getCount(searchVO);
 	}
     
+
+
+	
+
+
 }

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mes.prd.res.service.impl.ProcessResultMapper">
+	
+
+	<resultMap id="processResult" type="mes.prd.res.service.ProcessResultVO">
+		<result property="movNum" column="MOV_NUM" />
+		<result property="prdComNum" column="PRD_COM_NUM" />
+		<result property="itmCode" column="ITM_CODE" />
+		<result property="lotNum" column="LOT_NUM" />
+		<result property="prcComVol" column="PRC_COM_VOL" />
+		<result property="prcBckVol" column="PRC_BCK_VOL" />
+	</resultMap>
+	
+	<insert id="insertProcessResult">
+		<![CDATA[
+			INSERT INTO PROCESS_RESULT 
+				( MOV_NUM
+				  , PRD_COM_NUM
+				  , ITM_CODE
+				  , LOT_NUM
+				  , PRC_COM_VOL
+				  , PRC_BCK_VOL )
+			VALUES ( #{movNum}
+				  , #{prdComNum}
+				  , #{itmCode}
+				  , #{lotNum}
+				  , #{prcComVol}
+				  , #{prcBckVol} )
+		]]>
+	</insert>
+	
+	<update id="updateProcessResult">
+		<![CDATA[
+			UPDATE PROCESS_RESULT
+			SET MOV_NUM=#{movNum}
+				, PRD_COM_NUM=#{prdComNum}
+				, ITM_CODE=#{itmCode}
+				, LOT_NUM=#{lotNum}
+				, PRC_COM_VOL=#{prcComVol}
+				, PRC_BCK_VOL=#{prcBckVol}
+						WHERE MOV_NUM=#{movNum}
+				]]>
+	</update>
+	
+	<delete id="deleteProcessResult">
+		<![CDATA[
+			DELETE FROM PROCESS_RESULT 
+						WHERE MOV_NUM=#{movNum}
+				]]>
+	</delete>
+	
+	<select id="selectProcessResult" resultMap="processResult">
+		<![CDATA[
+			SELECT
+				MOV_NUM
+				, PRD_COM_NUM
+				, ITM_CODE
+				, LOT_NUM
+				, PRC_COM_VOL
+				, PRC_BCK_VOL
+			FROM PROCESS_RESULT
+						WHERE MOV_NUM=#{movNum}
+				]]>
+	</select>
+	
+	<select id="selectProcessResultList" parameterType="mes.prd.res.service.ProcessResultVO" resultType="mes.prd.res.service.ProcessResultVO">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM (
+				select rownum
+				       ,to_char(pc.prd_com_date,'yyyy-MM-dd') as prd_com_date
+				       ,pc.prd_com_num
+				       ,pcd.itm_code
+				       ,item.itm_name
+				       ,pr.prc_com_vol
+				       ,pr.prc_bck_vol
+				from produce_command pc, produce_command_d pcd, process_result pr, item
+				where pc.prd_com_num = pr.prd_com_num and
+				      pc.prd_com_num = pcd.prd_com_num and
+				      item.itm_code=pcd.itm_code
+				      <if test="rowNum != null">
+						<![CDATA[	
+							and rownum < #{rowNum}
+						]]>
+		</if>
+		<![CDATA[					
+	) A WHERE ROWNUM <=10
+)
+]]>
+	</select>	
+	<select id="selectProcessResultListTotCnt" parameterType="mes.prd.res.service.ProcessResultVO" resultType="int">
+			SELECT COUNT(*) totcnt
+			FROM PROCESS_RESULT
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 0">AND
+					MOV_NUM = #{searchKeyword}
+				</if>
+				<if test="searchCondition == 1">AND
+					PRD_COM_NUM LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>
+	</select>
+
+</mapper>

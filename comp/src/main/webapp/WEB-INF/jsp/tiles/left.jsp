@@ -186,7 +186,7 @@
 						class="waves-effect waves-dark"> <span class="pcoded-micon"><i
 								class="ti-angle-right"></i></span> <span class="pcoded-mtext">생산 모니터링</span> <span class="pcoded-mcaret"></span>
 					</a></li>
-					<li class=" "><a href=""
+					<li class=" "><a href="ProcessResultList.do"
 						class="waves-effect waves-dark"> <span class="pcoded-micon"><i
 								class="ti-angle-right"></i></span> <span class="pcoded-mtext">공정실적 관리</span> <span class="pcoded-mcaret"></span>
 					</a></li>

@@ -37,8 +37,12 @@ public interface ItemHistoryMapper {
 	 * @exception Exception
 	 */
     public void insertItemHistory(ItemHistoryVO vo) throws Exception;
+    public void itemHistoryNewInsert(ItemHistoryVO vo) throws Exception;
     public void updateItemHistory(ItemHistoryVO vo) throws Exception;
     public void deleteItemHistory(ItemHistoryVO vo) throws Exception;
+    public void itemHistoryMaster(ItemHistoryVO vo) throws Exception;
+    
+    
     
     
     /**
@@ -73,5 +77,6 @@ public interface ItemHistoryMapper {
 	 * @exception
 	 */
     public int selectItemHistoryListTotCnt(ItemHistoryDefaultVO searchVO);
+    public int getCount(ItemHistoryDefaultVO searchVO);
 
 }

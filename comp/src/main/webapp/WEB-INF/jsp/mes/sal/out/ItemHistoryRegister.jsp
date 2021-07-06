@@ -38,28 +38,7 @@
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 
 <script type="text/javaScript" language="javascript" defer="defer">
-/* 글 목록 화면 function */
-function fn_egov_selectList() {
-   	document.getElementById("detailForm").action = "<c:url value='/ItemHistoryList.do'/>";
-   	document.getElementById("detailForm").submit();		
-}
 
-/* 글 삭제 function */
-function fn_egov_delete() {
-   	document.getElementById("detailForm").action = "<c:url value='/deleteItemHistory.do'/>";
-   	document.getElementById("detailForm").submit();		
-}
-
-/* 글 등록 function */
-function fn_egov_save() {	
-	frm = document.getElementById("detailForm");
-
-	/* TODO Validation기능 보완 */
-	
-  	frm.action = "<c:url value="${registerFlag == '등록' ? '/addItemHistory.do' : '/updateItemHistory.do'}"/>";
-    frm.submit();
-
-}
 // 전체주문페이지 
 let itmHisDNum = null;
 let itmHisRdy = null;
@@ -86,7 +65,7 @@ $(function(){
 	    scrollY: true,
 	    bodyHeight: 200,
 	    data: null,
-	    rowHeaders: ['rowNum'],
+	    rowHeaders: ['rowNum','checkbox'],
 	    columns: [
 			{ header: '제품코드', name:'itmCode',editor:"text"},
 			{ header: '제품명', name:'itmName'},
@@ -243,8 +222,8 @@ $(function(){
 	}
 	
 	save.onclick = function() {
-
-
+		itmHisDNum = null;
+		test = null;
 		console.log(grid.getModifiedRows({}));
 		let gridData = grid.getModifiedRows({});
 		gridData["itemHistoryVO"] ={
@@ -263,61 +242,10 @@ $(function(){
 				contentType:"application/json",
 				success : console.log("updatesuccess")
 				});
-		grid.resetData(getList());
+		
+		grid2.resetData(getItemHisNumList());
 		
 		
-// 		if(number != 0){
-// 			for(let i = 0; i <number; i++){
-// 				$.ajax({
-// 					async: false, 
-// 					url : "ItemHistoryUpdate",
-// 					type : "get",
-// 					data : grid.getData()[i],
-// 					dataType: "json",
-// 					success : console.log("update"+i+"success")
-// 					}); // end ajax
-// 			}
-// 			if(grid.getData().length!=number){
-// 				for(let i=number; i<number+1; i++){
-// 					$.ajax({
-// 						async: false, 
-// 						url : "ItemHistoryInsert",
-// 						type : "get",
-// 						data : grid.getData()[i],
-// 						dataType: "json",
-// 						success : 
-// 							console.log(i+"success")
-// 						}); // end success
-// 					}
-// 				itmHisDNum = null;
-// 				grid.resetData(getList());
-// 				}
-			
-// 		}
-// 		else {
-// 			let queryString = $("#frm").serialize();
-// 			console.log(queryString["ordNum"]);
-
-// 			for(let i =0; i<grid.getData().length; i++){
-	
-// 			$.ajax({
-// 				async: false, 
-// 				url : "ItemHistoryNewInsert",
-// 				type : "get",
-// 				data :  {list :grid.getData()[i]
-// 						,\
-// 					},
-						
-// 				dataType: "json",
-// 				success : 
-// 					console.log(i+"success")
-// 				});
-// 			}
-// 		}
-		
-// 	}
-// 	reset.onclick = function() {
-// 		grid.restore();
 	}
 	
 	
@@ -326,6 +254,11 @@ $(function(){
 		
 	});
 	
+	deleteItm.onclick = function() {
+		grid.removeCheckedRows()
+		console.log(grid.removeCheckedRows());
+		
+	}
 })
 
 
@@ -358,6 +291,7 @@ $(function(){
 			
 				<div id="table">
 					<button type="button" class="btn btn-info btn-sm" id="searchHisBtn" data-toggle="modal" data-target="#myModal">검색</button>&nbsp;
+					<button type="button" class="btn btn-info btn-sm" id="save">저장</button>
 					<button type="reset" class="btn btn-info btn-sm" id= "reset">새자료</button>
 					<table width="100%" border="1" cellpadding="0" cellspacing="0">
 						<colgroup>
@@ -414,7 +348,7 @@ $(function(){
 												<li>List</li>
 												<div align="right">
 													<button type="button" id="insert">추가</button>
-													<button type="button" id="save">저장</button>
+													<button type="button" id="deleteItm">삭제</button>
 												</div>
 											</ul>
 										</div>

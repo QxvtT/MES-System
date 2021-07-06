@@ -59,7 +59,6 @@ public interface ItemHistoryService {
     
     List itemHistoryRegist(ItemHistoryVO searchVO) throws Exception;
     
-    void insertItemHistory(ItemHistoryVO searchVO) throws Exception;
     
     void itemHistoryUpdate(GridDataVO gridData) throws Exception;
     
@@ -70,5 +69,8 @@ public interface ItemHistoryService {
 	 * @exception
 	 */
     int selectItemHistoryListTotCnt(ItemHistoryDefaultVO searchVO);
+    int getCount(ItemHistoryVO searchVO);
     
 }
+
+
