@@ -27,6 +27,8 @@
 <script type="text/javaScript" language="javascript" defer="defer">
 let operCode1 = null;
 let operNameM = null;
+let operCode2;
+let operName;
 
 $(function(){
 	const operation = new tui.Grid({
@@ -87,6 +89,28 @@ $(function(){
 		operation.resetData(getOperationList());
 		
 	}
+	
+	// 모달의 선택 버튼 클릭 시 부모창의 input 칸에 선택한 값 들어감
+	$('#choiceO').click(function(){
+		test = null;
+		operCode2 = '';
+		operName = '';
+		for(let i = 0; i<operation.getCheckedRows().length; i++){
+			if(i == operation.getCheckedRows().length-1){
+				operCode2 = operCode2 + operation.getCheckedRows()[i]['operCode']
+				operName = operName + operation.getCheckedRows()[i]['operName']
+			}
+			else{
+				operCode2 = operCode2 + operation.getCheckedRows()[i]['operCode']+"' , '";
+				operName = operName + operation.getCheckedRows()[i]['operName']+"' , '";
+			}	
+		}
+		console.log(operCode2);
+		console.log(operName);
+		console.log("---");
+		$('input[id="operCode"]').val(operCode2);
+		$('input[id="operName"]').val(operName);
+	});
 
 
 })

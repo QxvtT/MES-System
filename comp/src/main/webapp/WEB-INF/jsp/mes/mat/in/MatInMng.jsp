@@ -35,7 +35,6 @@ let operCode = null;
 let matHisDate = null;
 let number = 0;
 let data;
-let str = null;
 
 $(function(){
 	
@@ -246,8 +245,8 @@ $(function(){
 							</div>
 							<br />
 							<div>
-								입고업체 * <input type="text" id="operCode" name="operCodeS"></input>
-								<input type="text" id="operCode" name="operCodeE"></input>
+								입고업체 * <input type="text" id="operCode" name="operCode"></input>
+								<input type="text" id="operName" name="operName"></input>
 								<%@ include
 									file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
 							</div>
