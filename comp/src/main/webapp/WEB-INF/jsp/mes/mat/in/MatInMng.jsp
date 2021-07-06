@@ -33,7 +33,9 @@
 let matCode = null;
 let operCode = null;
 let matHisDate = null;
+let number = 0;
 let data;
+let str = null;
 
 $(function(){
 	
@@ -116,10 +118,11 @@ $(function(){
 				}
 				console.log(result);
 				if(result.length != 0){
-					$('input#matHisDate'.val())
-					,$('input#matOutOper'.val())
+// 					$('input#matHisDate').val(result[0]['matHisDate']);
+					$('input#matOutOper').val(result[0]['matOutOper']);
 				}
 				data = result;
+				number = result.length;
 			} // end success
 		}); // end ajax 
 		return data;
@@ -129,13 +132,13 @@ $(function(){
 	      grid.refreshLayout();
 	   });
 	   
-	$('#searchMatBtn').click(function(){
-		$("#myModal").modal("toggle");
-		$("#myModal").on('shown.bs.modal', function () {
-			grid.refreshLayout();
-		});
+// 	$('#searchMatBtn').click(function(){
+// 		$("#myModal").modal("toggle");
+// 		$("#myModal").on('shown.bs.modal', function () {
+// 			grid.refreshLayout();
+// 		});
 		
-	})
+// 	})
 	
 	// 추가 버튼 클릭 이벤트, 그리드 row 생성 미완성
 	var rowData = [];
@@ -161,8 +164,8 @@ $(function(){
 		let gridData = grid.getModifiedRows({});
 		
 		gridData["materialHistoryVO"]={
-				matHisDate : $("#matHisDate").val()
-				,matOutOper : $("#matOutOper").val()
+// 				matHisDate : $("#matHisDate").val()
+				matOutOper : $("#matOutOper").val()
 				}
 		
 		$.ajax({
@@ -183,50 +186,13 @@ $(function(){
 		grid.clear();
 	}
 	
-	function getMatHisNumList(){
-		if(test == null && matHisNum != null){
-			matHisNum = null;
-			test = 'test';
-			}
-		let data2;
-		$.ajax({
-			async: false,
-			url: "matHisNumList",
-			type: "get",
-			data : {
-				operCode: operCode,
-				matHisNum : matHisNum
-				},
-			dataType: "json",
-			success : function(result){
-				if(result.length > 0){
-					matHisNum = result[result.length-1].matHisNum;
-				}
-				cnosole.log(result);
-				data2 = result;
-			}//end success
-			
-		});// end ajax
-		return data2;
-	}
-	
-	
-	modalY.onclick=function(){
+	searchBtn.onclick = function(){
 		matHisNum = null;
 		test = null;
-		str = '';
-		for(let i = 0; i<grid2.getCheckedRows().length; i++){
-			if(i == grid2.getCheckedRows().length-1){
-				str = str + grid2.getcheckedRows()[i]['matHisNum']
-			}
-			else{
-				str = str + grid2.getcheckedRows()[i]['matHisNum']+"' , '";
-			}	
-		}
-		console.log(str);
-		console.log("---");
-	grid.resetData(getList());
-	grid2.resetData(getMatHisNumList());
+		
+		grid.resetData(getList());
+		operation.resetData(getOperationList());
+		
 	}
 	
 })
@@ -275,7 +241,8 @@ $(function(){
 							</div>
 							<!-- // 타이틀 -->
 							<div>
-								입고일자 * <input type="date" id="matHisDate" name="matHisDate" />
+								입고일자 * <input type="date" id="matHisDateS" name="matHisDateS" />
+								~ <input type="date" id="matHisDateE" name="matHisDateE" />
 							</div>
 							<br />
 							<div>
@@ -286,7 +253,7 @@ $(function(){
 							</div>
 							<br />
 							<div>
-								<button type="button" class="btn btn-info btn-sm">조회</button>
+								<button id="searchBtn" type="button" class="btn btn-info btn-sm">조회</button>
 								<input id="resetBtn" class="btn btn-info btn-sm" type="reset"
 									value="리셋"></input>
 								<button type="button" id="matInSaveBtn" name="matInSaveBtn"
@@ -317,5 +284,24 @@ $(function(){
 			</div>
 		</div>
 	</form:form>
+	<script>
+// 	$('#choiceO').click(function(){
+// 		matHisNum = null;
+// 		test = null;
+// 		str = '';
+// 		for(let i = 0; i<operation.getCheckedRows().length; i++){
+// 			if(i == operation.getCheckedRows().length-1){
+// 				str = str + operation.getCheckedRows()[i]['matHisNum']
+// 			}
+// 			else{
+// 				str = str + operation.getCheckedRows()[i]['matHisNum']+"' , '";
+// 			}	
+// 		}
+// 		console.log(str);
+// 		console.log("---");
+// 	grid.resetData(getList());
+// 	operation.resetData(getOperationList());
+// 	});
+	</script>
 </body>
 </html>

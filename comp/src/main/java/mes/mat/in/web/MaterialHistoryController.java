@@ -27,6 +27,7 @@ import mes.mat.in.service.GridDataVO;
 import mes.mat.in.service.MaterialHistoryDefaultVO;
 import mes.mat.in.service.MaterialHistoryService;
 import mes.mat.in.service.MaterialHistoryVO;
+import mes.mat.stc.service.MaterialDefaultVO;
 import mes.mat.stc.service.MaterialStockVO;
 
 /**
@@ -60,16 +61,21 @@ public class MaterialHistoryController {
 	 * @exception Exception
 	 */
     
+    
+    // 자재 입고 CUD
+    @RequestMapping("/mat/in/updateMatIn")
+    public void updateMatIn(@RequestBody GridDataVO gridDataVO) throws Exception{
+    	materialHistoryService.updateMatIn(gridDataVO);
+    }
+    
     // 자재 입고 관리 조회
     @RequestMapping(value="/mat/in/MatInMng", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajaxMatInMng(MaterialHistoryVO searchVO) throws Exception {
-    	
-    	List<?> list = materialHistoryService.selectMatInMng(searchVO);
-    	
+    	List<?> selectMatInMng = materialHistoryService.selectMatInMng(searchVO);
     	System.out.println("a");
-    	System.out.println(list);
-    	return list;
+    	System.out.println(selectMatInMng);
+    	return selectMatInMng;
     }
     
     @RequestMapping("/mat/in/MatInMng.do")
@@ -122,12 +128,6 @@ public class MaterialHistoryController {
     public String selectMatOutMng(@ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO, ModelMap model) throws Exception{
     	return "mat/in/MatOutMng.page";
     } // end 자재 출고 관리 조회
-    
-    // 자재 입고 CUD
-    @RequestMapping("/mat/in/updateMatIn")
-    public void updateMatIn(@RequestBody GridDataVO gridDataVO) throws Exception{
-    	materialHistoryService.updateMatIn(gridDataVO);
-    }
     
     @RequestMapping("/materialHistory/addMaterialHistoryView.do")
     public String addMaterialHistoryView(

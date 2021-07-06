@@ -21,6 +21,7 @@ import mes.mat.stc.service.MaterialDefaultVO;
 public class MaterialHistoryVO extends MaterialDefaultVO{
     private static final long serialVersionUID = 1L;
     
+    private java.math.BigDecimal amount;
     /** 작업일자 검색 **/
     private java.lang.String matHisDateS;
     private java.lang.String matHisDateE;

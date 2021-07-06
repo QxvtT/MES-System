@@ -64,8 +64,12 @@ SELECT * FROM (
 				      AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
 				      AND M.OPER_CODE = O.OPER_CODE
 				      AND MH.MAT_HIS_DIV='입고'
-			     <if test="matHisDateS != null and matHisDateS != '' and matHisDateE != null and matHisDateE != ''">
-			      	AND MH.MAT_HIS_DATE BETWEEN TO_DATE(#{matHisDateS}, 'YYYY-MM-DD') AND TO_DATE(#{matHisDateE}, 'YYYY-MM-DD')
+			     <if test="matHisDateS != null and matHisDateS != '' and matHisDateE != null and matHisDateE != ''"> AND
+			     <![CDATA[			    			
+	            			MH.MAT_HIS_DATE >= TO_DATE(#{matHisDateS} ,'yyyy-MM-dd') and  
+	            			MH.MAT_HIS_DATE <= TO_DATE(#{matHisDateE} ,'yyyy-MM-dd')
+	            			]]>
+<!-- 			      	MH.MAT_HIS_DATE BETWEEN TO_DATE(#{matHisDateS}, 'YYYY-MM-DD') AND TO_DATE(#{matHisDateE}, 'YYYY-MM-DD') -->
 			     </if>
 			     <if test="matCodeList != null">
 			     <if test="matCodeList.size != 0">
@@ -130,29 +134,41 @@ SELECT * FROM (
 	<select id="selectMatInMng" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="egovMap">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
-				SELECT M.MAT_CODE,
+				SELECT MH.MAT_HIS_DATE, 
+				       M.MAT_CODE, 
 				       M.MAT_NAME,
-				       M.MAT_SIZE,
-				       M.MAT_UNIT,
-				       MO.MAT_COM_NUM,
-				       MHD.MAT_HIS_D_VOL,
-				       MHD.MAT_HIS_PRICE,
+				       M.MAT_SIZE, 
+				       MHD.MAT_OUT_OPER,
+				       MHD.MAT_COM_NUM,
+				       MHD.MAT_HIS_D_VOL, 
+				       MHD.MAT_HIS_PRICE, 
 				       (MHD.MAT_HIS_D_VOL * MHD.MAT_HIS_PRICE) AS AMOUNT, 
 				       MHD.LOT_NO,
-				       MS.MAT_VOL,
-				       MO.OPER_CODE
-				FROM MATERIAL M, 
-				     MATERIAL_ORDER MO, 
-				     MATERIAL_HISTORY_D MHD, 
-				     MATERIAL_HISTORY MH, 
-				     MATERIAL_STOCK MS
-				WHERE M.MAT_CODE = MO.MAT_CODE
-				  AND MHD.MAT_CODE = M.MAT_CODE
-				  AND MS.MAT_CODE = M.MAT_CODE
-				  AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
-				  AND MH.MAT_HIS_DIV='입고'
-				  AND MH.MAT_HIS_DATE BETWEEN TO_DATE('2021-06-09', 'YYYY-MM-DD') AND TO_DATE('2021-06-25', 'YYYY-MM-DD')
-				  AND MO.OPER_CODE = 'oper-01'
+				       MHD.MAT_HIS_NUM
+				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_HISTORY MH, OPERATION O
+				WHERE M.MAT_CODE = MHD.MAT_CODE 
+				      AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
+				      AND M.OPER_CODE = O.OPER_CODE
+				      AND MH.MAT_HIS_DIV='입고'
+			     <if test="matHisDateS != null and matHisDateS != '' and matHisDateE != null and matHisDateE != ''"> AND
+			     <![CDATA[			    			
+	            			MH.MAT_HIS_DATE >= TO_DATE(#{matHisDateS} ,'yyyy-MM-dd') and  
+	            			MH.MAT_HIS_DATE <= TO_DATE(#{matHisDateE} ,'yyyy-MM-dd')
+	            			]]>
+<!-- 			      	MH.MAT_HIS_DATE BETWEEN TO_DATE(#{matHisDateS}, 'YYYY-MM-DD') AND TO_DATE(#{matHisDateE}, 'YYYY-MM-DD') -->
+			     </if>
+			     <if test="matCodeList != null">
+			     <if test="matCodeList.size != 0">
+				      AND M.MAT_CODE IN 
+			     	<foreach item="item" index="index" collection="matCodeList"
+					      open="(" separator="," close=")">
+					        #{item}
+					</foreach>
+			     </if>
+			     </if>
+			     <if test="operCode != null and operCode != ''">
+				      AND O.OPER_CODE IN (${operCode})
+			     </if>
 				<if test="searchKeyword != null and searchKeyword != ''">
 					<if test="searchCondition == 0">AND
 						M.MAT_NAME = #{searchKeyword}
