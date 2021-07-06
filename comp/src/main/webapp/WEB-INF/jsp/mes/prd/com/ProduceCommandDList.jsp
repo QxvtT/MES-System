@@ -49,7 +49,7 @@ $(function(){
 	    bodyHeight: 200,
 	    rowWidth: 100,
 	    data: null,
-	    rowHeaders: ['rowNum'],
+	    rowHeaders: ['checkbox'],
 	    columns: [
 	    	{ header: '일련번호', name:'prdComDNum', hidden: true},
 	    	{ header: '계획일련번호', name:'prdPlanDNum', hidden: true},
@@ -57,20 +57,29 @@ $(function(){
 			{ header: '자재코드', name:'matCode', hidden: true},
 			{ header: '자재명', name:'matName', hidden: true},
 			{ header: '업체명', name:'operName', hidden: true},
-			{ header: '제품코드', name:'itmCode'},
-			{ header: '구분', name:'prcComDiv'},
+			{ header: '제품코드', name:'itmCode', editor: 'text'},
+			{ header: '제품이름', name:'itmName'},
+			{ header: '구분', name:'prcComDiv', editor: 'text'},
 			{ header: '주문번호', name:'ordNum'},
 			{ header: '납기일자', name:'ordDeliveryDate'},
 			{ header: '주문량', name:'ordVol'},
 			{ header: '기지시량', name:'yesComVol'},
 			{ header: '미지시량', name:'noComVol'},
-			{ header: '지시량', name:'prdComVol'},
+			{ header: '지시량', name:'prdComVol', editor: 'text'},
 			{ header: 'UPH', name:'uph'},
 			{ header: '일생산량', name:'itmDayOutput'},
 			{ header: '일수', name:'dayNum'},
-			{ header: '작업일자', name:'prdComDDate'},
-			{ header: '작업순서', name:'prcComNo'},
-			{ header: '비고', name:'prdComDNote'}
+			{ header: '작업일자', name:'prdComDDate1', 
+				editor: {
+		            type: 'datePicker',
+		            options: {
+		              format: 'yyyy-MM-dd',
+		              language: 'ko'
+		            }
+      			}	
+			},
+			{ header: '작업순서', name:'prcComNo', editor: 'text'},
+			{ header: '비고', name:'prdComDNote', editor: 'text'}
 	    ]
 	}); // end const grid
 	
@@ -100,10 +109,18 @@ $(function(){
 		return data;
 	}
 	
-	$('#mobile-collapse').click(function() {
-		grid.refreshLayout();
-		gridMat.refreshLayout();
-	});
+	//메인그리드 행 추가
+	insertBtn.onclick = function() {
+		grid.appendRow();
+	}
+	
+	//메인그리드 행 삭제
+	deleteBtn.onclick = function() {
+		grid.removeCheckedRows(true);
+		
+	}
+	
+	
 	
 	
 	//작업지시 조회용 모달
@@ -224,9 +241,10 @@ $(function(){
 	    rowHeaders: ['checkbox'],
 	    columns: [
 			{ header: '지시자재일련번호', name:'prdComMatNum', hidden: true},
+			{ header: '순번', name:'prdComMatO'},
 			{ header: '자재LOT NO', name:'lotNum'},
-			{ header: '수량', name:'matVol'},
-			{ header: '비고', name:'prdComMatNote'}
+			{ header: '수량', name:'matVol', editor: 'text'},
+			{ header: '비고', name:'prdComMatNote', editor: 'text'}
 	    ]
 	}); // end const grid2
 	
@@ -315,6 +333,38 @@ $(function(){
 	}
 	//공정흐름조회 그리드//
 	
+	$('#mobile-collapse').click(function() {
+		grid.refreshLayout();
+		gridMat.refreshLayout();
+		gridFlow.refreshLayout();
+	});
+	
+	//작업지시 수정 및 생성
+	saveBtn.onclick = function(){
+		let gridData = grid.getModifiedRows({});
+		console.log(gridData);
+
+		gridData["produceCommandDVO"] ={
+									prdComNum : $('#prdComNum').val(),
+									prdComDate : $('#prdComDate').val(),
+									prdComName : $('#prdComName').val(),
+									prdComNote : $('#prdComNote').val()
+									}
+		$.ajax({
+				async: false, 
+				url : "ProduceCommandUpdate",
+				type : "post",
+				data : JSON.stringify(gridData),
+				dataType: "json",
+				contentType:"application/json",
+				success : console.log("updatesuccess")
+				});
+		
+		prdComDNum1 = null;
+		grid.resetData(getList());
+
+	}
+	
 })
 
 </script>
@@ -326,7 +376,7 @@ $(function(){
 <div class="page-wrapper">
 <div class="row">
 <div class="col-xl-12">
-
+	<button type="button" id="test1">test</button>
 	<!-- 작업지시서 검색 모달 -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 				aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -378,16 +428,17 @@ $(function(){
 	<!-- // 타이틀 -->
 	
 	<div class="row">
-		<div class="col-sm-6"></div>
-		<div class="col-sm-6 text-right">
+		<div class="col-sm-12 text-right">
 			<div class="btn-group">
 				<button type="button" id="searchComBtn" class="btn waves-effect waves-light btn-primary btn-outline-primary" data-toggle="modal" data-target="#myModal"> 조회 </button>
 				<input type="reset" value=" 리셋 " class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
+				<input type="button" id="saveBtn" value=" 저장 " class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
+				<input type="button" value=" 삭제 " class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
 			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-6" style="z-index: 200">
 			<div class="table">
 			<table class="table">
 				<tr>
@@ -438,10 +489,17 @@ $(function(){
 		</div>
 	</div>
 	
-	<div style="height: 50px"></div>
+	<div class="row" style="height: 50px">
+		<div class="col-sm-6">
+		</div>
+		<div class="col-sm-6 text-right">
+			<button class="btn btn-sm btn-primary waves-effect waves-light ml-3" type="button" id="insertBtn">추가</button>
+			<button class="btn btn-sm btn-primary waves-effect waves-light ml-3" type="button" id="deleteBtn">삭제</button>
+		</div>
+	</div>
 	
 	<div class="row">
-		<div class="col-sm-12">
+		<div class="col-sm-12" style="z-index: 100">
 			<div id="grid"></div>
 		</div>
 	</div>
@@ -456,13 +514,17 @@ $(function(){
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xl-6 col-lg-12">
-			<label class="ml-3 d-inline">자재코드</label>
-			<input type="text" class="form-control ml-3 d-inline" id="matCode" name="matCode" style="width:100px" readonly></input>
-			<label class="ml-3 d-inline">자재명</label>
-			<input type="text" class="form-control ml-3 d-inline" id="matName" name="matName" style="width:100px" readonly></input>
-			<button type="button" id="searchMatLotBtn"
-								class="btn btn-sm btn-primary waves-effect waves-light ml-3">검색</button>
+		<div class="col-xl-6 col-lg-12 row">
+			<div class="col-sm-11" style="padding-right: 0px">
+				<label class="ml-3 d-inline">자재코드</label>
+				<input type="text" class="form-control ml-3 d-inline" id="matCode" name="matCode" style="width:100px" readonly></input>
+				<label class="ml-3 d-inline">자재명</label>
+				<input type="text" class="form-control ml-3 d-inline" id="matName" name="matName" style="width:100px" readonly></input>
+			</div>
+			<div class="col-sm-1 text-right" style="padding-left: 0px">
+				<button type="button" id="searchMatLotBtn"
+								class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
+			</div>
 		</div>
 		<div class="col-xl-6 col-lg-12">
 			<label class="ml-3  d-inline">고객사명</label>

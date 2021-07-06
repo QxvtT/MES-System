@@ -87,6 +87,9 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     /** 작업일자 */
     private java.lang.String prdComDDate;
     
+    /** 작업일자 (yyyy-MM-dd)*/
+    private java.lang.String prdComDDate1;
+    
     /** 작업순서 */
     private java.math.BigDecimal prcComNo;
     
@@ -104,6 +107,9 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     
     /** 지시자재일련번호 스크롤용 */
     private java.math.BigDecimal prdComMatNum;
+    
+    /** 순번 */
+    private java.math.BigDecimal prdComMatO;
     
     /** LOT_NUM */
     private java.math.BigDecimal lotNum;

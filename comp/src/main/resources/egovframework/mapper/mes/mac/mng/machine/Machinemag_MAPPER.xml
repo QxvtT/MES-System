@@ -77,7 +77,7 @@
 				]]>
 	</delete>
 	
-	<select id="selectMachine" resultType="mes.common.modal.service.MachinemagVO">
+	<select id="selectMachine" resultType="mes.mac.mng.service.MachinemagVO">
 		<![CDATA[
 			SELECT
 				MAC_CODE

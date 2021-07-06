@@ -36,6 +36,7 @@ public interface ProduceCommandDMapper {
 	 * @return void형
 	 * @exception Exception
 	 */
+    public void updateProduceCommand(ProduceCommandDVO vo) throws Exception;
     public void updateProduceCommandD(ProduceCommandDVO vo) throws Exception;
 
     /**

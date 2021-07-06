@@ -2,6 +2,7 @@ package mes.prd.com.service.impl;
 
 import java.util.List;
 
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import mes.prd.com.service.GridDataVO;
 import mes.prd.com.service.ProduceCommandDDefaultVO;
 import mes.prd.com.service.ProduceCommandDService;
 import mes.prd.com.service.ProduceCommandDVO;
@@ -118,6 +120,36 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
     /** 작업지시공정흐름 조회 */
     public List<?> selectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception {
     	return produceCommandDDAO.selectProduceCommandFlowList(searchVO);
+    }
+    
+    /** 작업지시 update */
+    public void produceCommandUpdate(GridDataVO gridData) throws Exception {
+    	if(gridData.getProduceCommandDVO().getPrdComNum() != null && gridData.getProduceCommandDVO().getPrdComNum() != "") {
+    		produceCommandDDAO.updateProduceCommand(gridData.getProduceCommandDVO());
+    	}
+        if(gridData.getUpdatedRows() != null) {
+        	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
+        		produceCommandDDAO.updateProduceCommandD(gridData.getUpdatedRows().get(i));
+        	}
+        }
+        if(gridData.getCreatedRows() != null) {
+        	if(gridData.getProduceCommandDVO().getPrdComNum()!=null && gridData.getProduceCommandDVO().getPrdComNum()!="") {
+        		
+        		for(int i =0; i<gridData.getCreatedRows().size(); i++) {
+        			ProduceCommandDVO vo= gridData.getCreatedRows().get(i);
+        			vo.setPrdComNum(gridData.getProduceCommandDVO().getPrdComNum());
+            		produceCommandDDAO.insertProduceCommandD(vo);
+            	}
+        	} else {
+        		ProduceCommandDVO vo= null;
+        	}
+        	
+        }
+        if(gridData.getDeletedRows() != null) {
+        	for(int i =0; i<gridData.getDeletedRows().size(); i++) {
+        		produceCommandDDAO.deleteProduceCommandD(gridData.getDeletedRows().get(i));
+        	}
+        }
     }
     
     /**

@@ -3,94 +3,6 @@
 
 <mapper
 	namespace="mes.prd.com.service.impl.ProduceCommandDMapper">
-
-	<insert id="insertProduceCommandD">
-		<![CDATA[
-			INSERT INTO PRODUCE_COMMAND_D 
-				( PRD_COM_D_NUM
-				  , PRD_COM_NUM
-				  , MAT_CODE
-				  , LOT_NUM
-				  , ITM_CODE
-				  , PRC_F_NO
-				  , PRD_COM_VOL
-				  , PRD_COM_D_DATE
-				  , PRC_COM_NO
-				  , PRC_COM_DIV
-				  , MAT_VOL
-				  , PRD_COM_NOTE
-				  , DIV_MAT_CODE
-				  , DIV_LOT_NUM
-				  , PRD_PLAN_NUM )
-			VALUES ( #{prdComDNum}
-				  , #{prdComNum}
-				  , #{matCode}
-				  , #{lotNum}
-				  , #{itmCode}
-				  , #{prcFNo}
-				  , #{prdComVol}
-				  , #{prdComDDate}
-				  , #{prcComNo}
-				  , #{prcComDiv}
-				  , #{matVol}
-				  , #{prdComNote}
-				  , #{divMatCode}
-				  , #{divLotNum}
-				  , #{prdPlanNum} )
-		]]>
-	</insert>
-
-	<update id="updateProduceCommandD">
-		<![CDATA[
-			UPDATE PRODUCE_COMMAND_D
-			SET PRD_COM_D_NUM=#{prdComDNum}
-				, PRD_COM_NUM=#{prdComNum}
-				, MAT_CODE=#{matCode}
-				, LOT_NUM=#{lotNum}
-				, ITM_CODE=#{itmCode}
-				, PRC_F_NO=#{prcFNo}
-				, PRD_COM_VOL=#{prdComVol}
-				, PRD_COM_D_DATE=#{prdComDDate}
-				, PRC_COM_NO=#{prcComNo}
-				, PRC_COM_DIV=#{prcComDiv}
-				, MAT_VOL=#{matVol}
-				, PRD_COM_NOTE=#{prdComNote}
-				, DIV_MAT_CODE=#{divMatCode}
-				, DIV_LOT_NUM=#{divLotNum}
-				, PRD_PLAN_NUM=#{prdPlanNum}
-						WHERE PRD_COM_D_NUM=#{prdComDNum}
-				]]>
-	</update>
-
-	<delete id="deleteProduceCommandD">
-		<![CDATA[
-			DELETE FROM PRODUCE_COMMAND_D 
-						WHERE PRD_COM_D_NUM=#{prdComDNum}
-				]]>
-	</delete>
-
-	<select id="selectProduceCommandD" resultType="mes.prd.com.service.ProduceCommandDVO">
-		<![CDATA[
-			SELECT
-				PRD_COM_D_NUM
-				, PRD_COM_NUM
-				, MAT_CODE
-				, LOT_NUM
-				, ITM_CODE
-				, PRC_F_NO
-				, PRD_COM_VOL
-				, PRD_COM_D_DATE
-				, PRC_COM_NO
-				, PRC_COM_DIV
-				, MAT_VOL
-				, PRD_COM_NOTE
-				, DIV_MAT_CODE
-				, DIV_LOT_NUM
-				, PRD_PLAN_NUM
-			FROM PRODUCE_COMMAND_D
-						WHERE PRD_COM_D_NUM=#{prdComDNum}
-				]]>
-	</select>
 	
 	<!-- 작업지시 조회 -->
 	<select id="selectProduceCommandList"
@@ -98,7 +10,7 @@
 		resultType="mes.prd.com.service.ProduceCommandDVO">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-		select prd_Com_Num , TO_CHAR(prd_Com_Date, 'yyyy/MM/dd') as prd_Com_Date, prd_Com_Name, prd_Com_Note from PRODUCE_COMMAND
+		select prd_Com_Num , TO_CHAR(prd_Com_Date, 'yyyy-MM-dd') as prd_Com_Date, prd_Com_Name, prd_Com_Note from PRODUCE_COMMAND
 		<where>
 		<if test="prdComNum1 != null and prdComNum1 != ''">
 				<![CDATA[	
@@ -124,17 +36,18 @@
 		select A.* ,(B.yes_Com_Vol - a.prd_com_vol) as yes_Com_Vol,
 		        a.ord_vol - (B.yes_Com_Vol - a.prd_com_vol) - a.ord_out_vol as no_Com_Vol,
 		        a.itm_day_output/8 as UPH, a.prd_com_vol/a.itm_day_output as day_Num
-		from(select C.*, I.itm_name, M.mat_name, OD.ord_num, OM.ord_delivery_date, OM.oper_name,
+		from(select C.*, TO_CHAR(C.prd_com_d_date, 'yyyy-MM-dd') as prd_com_d_date1, I.itm_name, M.mat_name, OD.ord_num, OM.ord_delivery_date, OM.oper_name,
 		      OD.ord_vol, OD.ord_out_vol, I.itm_day_output
 		      from PRODUCE_COMMAND_d C, item I, order_d OD, order_m  OM, material M
-		      where  c.itm_code = i.itm_code
+		      where c.prd_com_num = #{prdComNum}
+		      	and c.itm_code = i.itm_code
 		      	and i.mat_code = m.mat_code
 		        and c.ord_d_num = od.ord_d_num (+)
 		        and od.ord_num = om.ord_num (+)) A, 
 		        (select ord_d_num, sum(prd_com_vol) as yes_Com_Vol
 		        from produce_command_d
 		        group by ord_d_num) B
-		where a.ord_d_num = b.ord_d_num
+		where a.ord_d_num = b.ord_d_num (+)
 		<if test="prdComDNum1 != null and prdComDNum1 != ''">
 				<![CDATA[	
 					and Prd_Com_D_Num > #{prdComDNum1}
@@ -191,5 +104,57 @@
 		) A WHERE ROWNUM <= 10)
 		]]>
 	</select>
+	
+	<!-- 작업지시 grid 행 insert -->
+	<insert id="insertProduceCommandD">
+		declare
+		v_matCode item.mat_code%type;
+		begin
+			select mat_code into v_matCode
+			from item
+			where itm_code = #{itmCode};
+		
+			insert into Produce_Command_D
+				(prd_com_d_num, prd_com_num, itm_code, mat_code, prd_com_vol, prd_com_d_date, prc_com_no, prc_com_div, prd_com_d_note) 
+				values(
+					Produce_Command_D_seq.nextval,
+					#{prdComNum},
+					#{itmCode},
+					v_matCode,
+					#{prdComVol},
+					to_date(#{prdComDDate1},'YYYY-MM-DD'),
+					#{prcComNo},
+					#{prcComDiv},
+					#{prdComDNote}
+				);
+			end;
+	</insert>
+	
+	<!-- 작업지시 master update -->
+	<update id="updateProduceCommand">
+		update Produce_Command set 
+			prd_com_date = to_date(#{prdComDate},'yyyy-MM-dd'),
+			prd_com_name = #{prdComName},
+			prd_com_note = #{prdComNote}
+		where prd_com_num = #{prdComNum}
+	</update>
+	
+	<!-- 작업지시 grid 행 update -->
+	<update id="updateProduceCommandD">
+		update Produce_Command_D set 
+			itm_code = #{itmCode},
+			prd_com_vol = #{prdComVol},
+			prd_com_d_date = to_date(#{prdComDDate1},'YYYY-MM-DD'),
+			prc_com_no = #{prcComNo},
+			prc_com_div = #{prcComDiv},
+			prd_com_d_note = #{prdComDNote}
+		where prd_com_d_num = #{prdComDNum}
+	</update>
+	
+	<!-- 작업지시 grid 행 delete -->
+	<delete id="deleteProduceCommandD">
+		delete from Produce_Command_D 
+		where prd_com_d_num = #{prdComDNum}
+	</delete>
 
 </mapper>

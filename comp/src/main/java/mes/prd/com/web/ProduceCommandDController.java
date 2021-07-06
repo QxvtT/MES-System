@@ -2,6 +2,7 @@ package mes.prd.com.web;
 
 import java.util.List;
 
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+import mes.prd.com.service.GridDataVO;
 import mes.prd.com.service.ProduceCommandDDefaultVO;
 import mes.prd.com.service.ProduceCommandDService;
 import mes.prd.com.service.ProduceCommandDVO;
@@ -99,6 +101,14 @@ public class ProduceCommandDController {
             throws Exception {
 		return "prd/com/ProduceCommandDList.page";
 	}
+	
+	@RequestMapping(value="/ProduceCommandUpdate")
+	@ResponseBody
+	public void ProduceCommandUpdate(@RequestBody GridDataVO gridData) throws Exception {
+	    	
+		produceCommandDService.produceCommandUpdate(gridData);
+	}
+	
     /*
     @RequestMapping(value="/prd/com/ProduceCommandDList.do")
     public String selectProduceCommandDList(@ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, 
@@ -164,7 +174,7 @@ public class ProduceCommandDController {
             ProduceCommandDVO produceCommandDVO,
             @ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO) throws Exception {
         return produceCommandDService.selectProduceCommandD(produceCommandDVO);
-    }*/
+    }
 	
     @RequestMapping("/prd/com/updateProduceCommandD.do")
     public String updateProduceCommandD(
@@ -184,6 +194,6 @@ public class ProduceCommandDController {
         produceCommandDService.deleteProduceCommandD(produceCommandDVO);
         status.setComplete();
         return "forward:/prd/com/ProduceCommandDList.do";
-    }
+    }*/
 
 }
