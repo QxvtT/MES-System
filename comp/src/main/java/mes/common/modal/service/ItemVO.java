@@ -26,6 +26,8 @@ public class ItemVO extends OperationDefaultVO{
     private java.lang.String itmName;
 
     private java.lang.String itmSize;
+    
+    private java.lang.String itmCode1;
 
 
 

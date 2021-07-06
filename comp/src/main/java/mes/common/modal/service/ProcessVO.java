@@ -31,6 +31,8 @@ public class ProcessVO extends OperationDefaultVO{
 
     private java.lang.String prcNote;
     
+    private java.lang.String prcCode1;
+    
  
   
 

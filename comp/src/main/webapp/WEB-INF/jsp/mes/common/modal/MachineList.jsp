@@ -150,7 +150,7 @@ $(function(){
 										<div class="form-group row"></div>
 										<div id="grid"></div>
 										<div class="modal-footer">
-											<button class="btn" type="button" data-dismiss="modal">선택</button>
+											<button class="btn" id="choiceM" name="choiceM" type="button" data-dismiss="modal">선택</button>
 											<button class="btn" type="reset" data-dismiss="modal">취소</button>
 										</div>
 									</div>

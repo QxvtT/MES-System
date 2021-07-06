@@ -82,7 +82,7 @@ $(function(){
 		
 	})
 	
-	button1.onclick = function(){
+	buttonM.onclick = function(){
 		matCodeM = null;
 		matCodeM = $('input#matCodeM').val();
 		console.log(matCodeM);
@@ -91,10 +91,6 @@ $(function(){
 	}
 	
 })
-
-
-
-
 
 </script>
 </head>
@@ -116,14 +112,14 @@ $(function(){
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>자재코드</h4>
 					<input type="text" id="matCodeM" name="matCode"></input><br><br>
-					<button type="button" id="button1" name="button">조회</button> &nbsp;
+					<button type="button" id="buttonM" name="button">조회</button> &nbsp;
 						<button type="reset">리셋</button>
 				</div>
 				<div class="form-group row"></div>
 				<div id="material">
 				</div>
 				<div class="modal-footer">
-				<button class="btn" type="button" data-dismiss="modal">선택</button>
+				<button class="btn"  id="choiceMat" name="choiceMat" type="button" data-dismiss="modal">선택</button>
 					<button class="btn" type="reset" data-dismiss="modal">취소</button>
 				</div>
 			</div>

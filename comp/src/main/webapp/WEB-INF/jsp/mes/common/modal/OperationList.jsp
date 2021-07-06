@@ -46,7 +46,7 @@ $(function(){
 	}); // end const grid
 	
 	operation.on('scrollEnd', () => {
-		operation.appendRows(getMaterialList());
+		operation.appendRows(getOperationList());
 	  })
 	  
 	function getOperationList() {
@@ -56,11 +56,11 @@ $(function(){
 			url : "${pageContext.request.contextPath}/OperationList",
 			type : "get",
 			data : {operName: operNameM,
-					operCode: operCode1},
+					operCode1: operCode1},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					operCode1 = result[result.length -1].operCode1;
+					operCode1 = result[result.length -1].operCode;
 				}
 				console.log(result);
 				data = result;
@@ -81,8 +81,8 @@ $(function(){
 		
 	})
 	
-	button.onclick = function(){
-		operNameM = null;
+	buttonO.onclick = function(){
+		operCode1 = null;
 		operNameM = $('input#operNameM').val();
 		operation.resetData(getOperationList());
 		
@@ -113,14 +113,14 @@ $(function(){
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>업체명</h4>
 					<input type="text" id="operNameM" name="operName"></input><br><br>
-							<button type="button" id="button" name="button">조회</button> &nbsp;
+							<button type="button" id="buttonO" name="button">조회</button> &nbsp;
 							<button type="reset">리셋</button>
 				</div>
 
 				<div class="form-group row"></div>
 				<div id="operation"></div>
 				<div class="modal-footer">
-					<button class="btn" type="button" data-dismiss="modal">선택</button>
+					<button class="btn" id="choiceO" name="choiceO" type="button" data-dismiss="modal" >선택</button>
 					<button class="btn" type="reset" data-dismiss="modal">취소</button>
 				</div>
 			</div>

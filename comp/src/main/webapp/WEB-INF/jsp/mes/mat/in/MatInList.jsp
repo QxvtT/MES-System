@@ -191,7 +191,7 @@ $(function(){
 										</tr>
 										<tr>
 											<td>
-										 		<label class="col-form-label text-center">업체코드</label>
+										 		<label class="col-form-label text-cen3ter">업체코드</label>
 										 	</td>
 										 	<td>
 											 	<div class="row align-items-center text-center col-lg-8">

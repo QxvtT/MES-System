@@ -29,6 +29,8 @@ public class OperationVO extends OperationDefaultVO{
     
     private java.lang.String operPhone;
     
+    private java.lang.String operCode1;
+    
   
     
   

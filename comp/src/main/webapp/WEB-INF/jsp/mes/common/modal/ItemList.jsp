@@ -19,29 +19,24 @@
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<title>목록</title>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<script
-	src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+
 <script type="text/javaScript" language="javascript" defer="defer">
-let itmCode = null;
-let itmName = null;
-let itmSize = null;
+let itmCode1 = null;
+let itmNameM = null;
+
 
 $(function(){
-	const grid = new tui.Grid({
-	    el: document.getElementById('grid'),
+	const item = new tui.Grid({
+	    el: document.getElementById('item'),
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
 	    rowWidth: 100,
-	    data: getList(),
+	    data: getItemList(),
 	    rowHeaders: ['rowNum','checkbox'],
 	    columns: [
 	    	{ header: '제품코드', name:'itmCode'},
@@ -50,22 +45,22 @@ $(function(){
 	    ]
 	}); // end const grid
 	
-	grid.on('scrollEnd', () => {
-	    grid.appendRows(getList());
+	item.on('scrollEnd', () => {
+		item.appendRows(getItemList());
 	  })
 	  
-	function getList() {
+	function getItemList() {
 		let data;
 		$.ajax({
 			async: false,
-			url : "ItemList",
+			url : "${pageContext.request.contextPath}/ItemList",
 			type : "get",
-			data : {itmCode: itmCode,
-					itmName: itmName},
+			data : {itmName: itmNameM,
+					itmCode1: itmCode1},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					itmCode = result[result.length -1].itmCode;
+					itmCode1 = result[result.length -1].itmCode;
 				}
 				console.log(result);
 				data = result;
@@ -75,7 +70,7 @@ $(function(){
 	}
 	
 	$('#mobile-collapse').click(function() {
-		grid.refreshLayout();
+		item.refreshLayout();
 	});
 	
 	const gridData = [
@@ -88,14 +83,14 @@ $(function(){
 	$('.btn').click(function(){
 		$("#myModal").modal("toggle");
 		$("#myModal").on('shown.bs.modal', function () {
-			grid.refreshLayout();
+			item.refreshLayout();
 		});
 		
 	})
-	button.onclick = function(){
-		itmCode = null;
-		itmName = $('input#itmName').val();
-		grid.resetData(getList());
+	buttonI.onclick = function(){
+		itmCode1 = null;
+		itmNameM = $('input#itmNameM').val();
+		item.resetData(getItemList());
 		
 	}
 	
@@ -105,8 +100,6 @@ $(function(){
 </script>
 </head>
 <body>
-	<form:form commandName="searchVO" name="listForm" id="listForm"
-		method="post">
 		<input type="hidden" name="prdComDNum" />
 		<div class="pcoded-inner-content">
 			<div class="main-body">
@@ -128,15 +121,16 @@ $(function(){
 										</div>
 										<div style="padding: 10px 10px 10px 10px">
 											<h4>제품명</h4>
-											<input type="text" id="itmName" name="itmName"></input><br><br>
-											<button type="button" id="button" name="button">조회</button>
+											<input type="text" id="itmNameM" name="itmName"></input><br>
+											<br>
+											<button type="button" id="buttonI" name="button">조회</button>
 											&nbsp;
 											<button type="reset">리셋</button>
 										</div>
 										<div class="form-group row"></div>
-										<div id="grid"></div>
+										<div id="item"></div>
 										<div class="modal-footer">
-											<button class="btn" type="button" data-dismiss="modal">선택</button>
+											<button class="btn" id="choiceI" name="choiceI" type="button" data-dismiss="modal">선택</button>
 											<button class="btn" type="reset" data-dismiss="modal">취소</button>
 										</div>
 									</div>
@@ -147,6 +141,6 @@ $(function(){
 				</div>
 			</div>
 		</div>
-	</form:form>
+
 </body>
 </html>

@@ -22,26 +22,20 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<script
-	src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+
 <script type="text/javaScript" language="javascript" defer="defer">
-let prcCode = null;
-let prcName = null;
-let prcNote = null;
+
+let prcCodeM = null;
+let prcCode1 = null;
 
 $(function(){
-	const grid = new tui.Grid({
-	    el: document.getElementById('grid'),
+	const process = new tui.Grid({
+	    el: document.getElementById('process'),
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
 	    rowWidth: 100,
-	    data: getList(),
+	    data: getProcessList(),
 	    rowHeaders: ['rowNum','checkbox'],
 	    columns: [
 	    	{ header: '공정코드', name:'prcCode'},
@@ -51,22 +45,22 @@ $(function(){
 	    ]
 	}); // end const grid
 	
-	grid.on('scrollEnd', () => {
-	    grid.appendRows(getList());
+	process.on('scrollEnd', () => {
+		process.appendRows(getProcessList());
 	  })
 	  
-	function getList() {
+	function getProcessList() {
 		let data;
 		$.ajax({
 			async: false,
-			url : "ProcessList",
+			url : "${pageContext.request.contextPath}/ProcessList",
 			type : "get",
-			data : {prcCode: prcCode,
-					prcName: prcName},
+			data : {prcCode: prcCodeM,
+					prcCode1: prcCode1},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					prcCode = result[result.length -1].prcCode;
+					prcCode1 = result[result.length -1].prcCode1;
 				}
 				console.log(result);
 				data = result;
@@ -76,29 +70,25 @@ $(function(){
 	}
 	
 	$('#mobile-collapse').click(function() {
-		grid.refreshLayout();
+		process.refreshLayout();
 	});
 	
-	const gridData = [
-	      {
-	        c1: '1992/03/25',
-	        c3: '2014-04-16'
-	      }
-	    ];
+
 	
 	
-	$('.btn').click(function(){
-		$("#myModal").modal("toggle");
-		$("#myModal").on('shown.bs.modal', function () {
-			grid.refreshLayout();
+	$('.serchPrcBtn').click(function(){
+		$("#serchPrcModal").modal("toggle");
+		$("#serchPrcModal").on('shown.bs.modal', function () {
+			process.refreshLayout();
 		});
 		
 	})
 	
-	button.onclick = function(){
-		prcName = null;
-		prcCode = $('input#prcCode').val();
-		grid.resetData(getList());
+	
+	buttonP.onclick = function(){
+		prcCodeM = null;
+		prcCodeM = $('input#prcCodeM').val();
+		process.resetData(getProcessList());
 		
 	}
 	
@@ -111,49 +101,35 @@ $(function(){
 </script>
 </head>
 <body>
-	<form:form commandName="searchVO" name="listForm" id="listForm"
-		method="post">
-		<input type="hidden" name="prdComDNum" />
-		<div class="pcoded-inner-content">
-			<div class="main-body">
-				<div class="page-wrapper">
-					<div class="row">
-						<div class="col-xl-12">
-							<div id="datePicker"></div>
-							<button type="button" class="btn btn-info btn-sm"
-								id="searchComBtn" data-toggle="modal" data-target="#myModal">조회(검색팝업)</button>
 
-							<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-								aria-labelledby="exampleModalLabel" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h3 class="modal-title" id="exampleModalLabel" align="center">업체검색</h3>
-											<button class="close" type="button" data-dismiss="modal"
-												aria-label="Close">&times;</button>
-										</div>
-										<div style="padding: 10px 10px 10px 10px">
-											<h4>공정코드</h4>
-											<input type="text" id="prcCode" name="prcCode"></input><br><br>
-													<button type="button" id="button" name="button">조회</button>
-													&nbsp;
-													<button type="reset">리셋</button>
-										</div>
+	<button type="button" class="btn btn-info btn-sm" id="serchPrcBtn"
+		data-toggle="modal" data-target="#myModal">조회(검색팝업)</button>
 
-										<div class="form-group row"></div>
-										<div id="grid"></div>
-										<div class="modal-footer">
-											<button class="btn" type="button" data-dismiss="modal">선택</button>
-											<button class="btn" type="reset" data-dismiss="modal">취소</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="exampleModalLabel" align="center">업체검색</h3>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">&times;</button>
+				</div>
+				<div style="padding: 10px 10px 10px 10px">
+					<h4>공정코드</h4>
+					<input type="text" id="prcCodeM" name="prcCode"></input><br>
+					<br>
+					<button type="button" id="buttonP" name="button">조회</button>
+					&nbsp;
+					<button type="reset">리셋</button>
+				</div>
+
+				<div class="form-group row"></div>
+				<div id="process"></div>
+				<div class="modal-footer">
+					<button class="btn" id="choiceP" name="choiceP" type="button" data-dismiss="modal">선택</button>
+					<button class="btn" type="reset" data-dismiss="modal">취소</button>
 				</div>
 			</div>
 		</div>
-	</form:form>
 </body>
 </html>

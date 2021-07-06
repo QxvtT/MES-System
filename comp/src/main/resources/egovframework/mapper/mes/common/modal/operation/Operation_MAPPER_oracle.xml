@@ -14,9 +14,9 @@
 		from operation
 
 		<where>
-			<if test="operCode != null and operCode != ''">
+			<if test="operCode1 != null and operCode1 != ''">
 		<![CDATA[	
-			to_number(substr(oper_code,6)) >  to_number(substr(#{operCode},6))
+			oper_code >  #{operCode1}
 		]]>
 			</if>
 			<if test="operName != null and operName != ''">
@@ -52,10 +52,10 @@
 		from item
 
 		<where>
-			<if test="itmCode != null and itmCode != ''">
-							<![CDATA[	
-								to_number(substr(itm_code,6)) >  to_number(substr(#{itmCode},6))
-							]]>
+			<if test="itmCode1 != null and itmCode1 != ''">
+		<![CDATA[	
+			itm_code >  #{itmCode1}
+		]]>
 			</if>
 			<if test="itmName != null and itmName != ''">
 							<![CDATA[	
@@ -89,9 +89,9 @@
 		from process
 		<where>
 
-			<if test="prcName != null and prcName != ''">
+			<if test="prcCode1 != null and prcCode1 != ''">
 							<![CDATA[	
-								to_number(substr(prc_name,6)) >  to_number(substr(#{prcName},6))
+								to_number(m.prc_code) >  to_number(#{ prcCode1})
 							]]>
 			</if>
 			<if test="prcCode != null and prcCode != ''">
@@ -122,20 +122,21 @@
 		select m.mat_code,
 		m.mat_name, m.mat_size, o.oper_name
 		from material m, operation o
-		where m.oper_code = o.oper_code
-		
-			<if test="matCode1 != null and matCode1 != ''">
+		where
+		m.oper_code = o.oper_code
+
+		<if test="matCode1 != null and matCode1 != ''">
 							<![CDATA[	
 								to_number(m.mat_code) >  to_number(#{ matCode1})
 							]]>
-			</if>
+		</if>
 
-			<if test="matCode != null and matCode != ''">
+		<if test="matCode != null and matCode != ''">
 							<![CDATA[	
 								and m.mat_code = #{matCode}
 							]]>
-			</if>
-		
+		</if>
+
 
 
 		order by m.mat_code
