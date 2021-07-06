@@ -44,7 +44,7 @@ import mes.mat.stc.service.MaterialStockVO;
  */
 
 @Controller
-@SessionAttributes(types=MaterialHistoryVO.class)
+//@SessionAttributes(types=MaterialHistoryVO.class)
 public class MaterialHistoryController {
 
 	@Resource(name = "materialHistoryService")
@@ -61,7 +61,6 @@ public class MaterialHistoryController {
 	 * @exception Exception
 	 */
     
-    
     // 자재 입고 CUD
     @RequestMapping("/mat/in/updateMatIn")
     public void updateMatIn(@RequestBody GridDataVO gridDataVO) throws Exception{
@@ -72,7 +71,22 @@ public class MaterialHistoryController {
     @RequestMapping(value="/mat/in/MatInMng", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajaxMatInMng(MaterialHistoryVO searchVO) throws Exception {
+    	System.out.println(searchVO.toString());
+    	searchVO.setOperCodeList(null);
+    	// 업체 코드 다중 선택 처리
+    	if(searchVO.getOperCodes() != null && searchVO.getOperCodes() != "") {
+    		String[] operList = searchVO.getOperCodes().split(",");
+    		for(int i = 0; i<operList.length; i++) {
+    			operList[i] = operList[i].trim();
+    		}
+    		List<String> ol = new ArrayList<String>();
+    		ol = Arrays.asList(operList);
+    		searchVO.setOperCodeList(ol);
+    		
+    		System.out.println(searchVO.getOperCodeList().get(0));
+    	}
     	List<?> selectMatInMng = materialHistoryService.selectMatInMng(searchVO);
+    	
     	System.out.println("a");
     	System.out.println(selectMatInMng);
     	return selectMatInMng;
@@ -111,6 +125,16 @@ public class MaterialHistoryController {
     public String selectMatInList(@ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO, ModelMap model) throws Exception{
     	return "mat/in/MatInList.page";
     } // end 자재 입고 조회
+    
+    // 일 입고 자료 LIST 조회
+    @RequestMapping(value="/mat/in/MatInDayList", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> ajaxMatInDayList(@ModelAttribute("matInDayVO") MaterialHistoryVO matInDayVO) throws Exception{
+    	List<?> matInDayList = materialHistoryService.matInDayList(matInDayVO);
+    	System.out.println(matInDayList);
+    	return matInDayList;
+    }
+    // end 일 입고 자료 리스트 조회
     
     // 자재 출고 관리 조회
     @RequestMapping(value="/mat/in/MatOutMng", method=RequestMethod.GET)

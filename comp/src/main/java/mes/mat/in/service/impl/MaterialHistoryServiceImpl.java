@@ -1,5 +1,8 @@
 package mes.mat.in.service.impl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -15,6 +18,7 @@ import mes.mat.in.service.GridDataVO;
 import mes.mat.in.service.MaterialHistoryDefaultVO;
 import mes.mat.in.service.MaterialHistoryService;
 import mes.mat.in.service.MaterialHistoryVO;
+import mes.mat.stc.service.MaterialStockVO;
 /**
  * @Class Name : MaterialHistoryServiceImpl.java
  * @Description : MaterialHistory Business Implement class
@@ -44,12 +48,6 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
     //@Resource(name="{egovMaterialHistoryIdGnrService}")    
     //private EgovIdGnrService egovIdGnrService;
 
-    /**
-	 * MATERIAL_HISTORY을 조회한다.
-	 * @param vo - 조회할 정보가 담긴 MaterialHistoryVO
-	 * @return 조회한 MATERIAL_HISTORY
-	 * @exception Exception
-	 */
     public MaterialHistoryVO selectMaterialHistory(MaterialHistoryVO vo) throws Exception {
         MaterialHistoryVO resultVO = materialHistoryDAO.selectMaterialHistory(vo);
         if (resultVO == null)
@@ -57,36 +55,31 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
         return resultVO;
     }
 
-    /**
-	 * MATERIAL_HISTORY 목록을 조회한다.
-	 * @param searchVO - 조회할 정보가 담긴 VO
-	 * @return MATERIAL_HISTORY 목록
-	 * @exception Exception
-	 */
     public List<?> selectMatInList(MaterialHistoryVO searchVO) throws Exception {
         return materialHistoryDAO.selectMatInList(searchVO);
-    } // 자재 입고 조회
-
-    /**
-	 * MATERIAL_HISTORY 총 갯수를 조회한다.
-	 * @param searchVO - 조회할 정보가 담긴 VO
-	 * @return MATERIAL_HISTORY 총 갯수
-	 * @exception
-	 */
+    } 
+    // 자재 입고 조회
     
     public List<?> selectMatOutMng(MaterialHistoryVO searchVO) throws Exception{
     	return materialHistoryDAO.selectMatOutMng(searchVO);
-    } // 자재 출고 관리 조회
+    }
+	// 자재 출고 관리 조회
     
     public List<?> selectMatInMng(MaterialHistoryVO searchVO) throws Exception {
     	return materialHistoryDAO.selectMatInMng(searchVO);
-    	// 자재 입고 관리 조회
     }
+	// 자재 입고 관리 조회
+    
+    public List<?> matInDayList(MaterialHistoryVO searchVO) throws Exception {
+    	return materialHistoryDAO.matInDayList(searchVO);
+    }
+    // 일 입고 리스트 조회
     
     public int selectMaterialHistoryListTotCnt(MaterialHistoryDefaultVO searchVO) {
 		return materialHistoryDAO.selectMaterialHistoryListTotCnt(searchVO);
 	}
-
+    
+    // 자재 입고 관리 CUD
 	@Override
 	public void updateMatIn(GridDataVO gridDataVO) throws Exception {
 		if(gridDataVO.getUpdatedRows() != null) {
@@ -94,19 +87,29 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 				materialHistoryDAO.updateMatIn(gridDataVO.getUpdatedRows().get(i));
 			}
 		}
-		if(gridDataVO.getUpdatedRows() != null) {
-			for(int i = 0; i<gridDataVO.getUpdatedRows().size(); i++) {
-				MaterialHistoryVO matVO = gridDataVO.getCreatedRows().get(i);
-				matVO.setMatHisDate(gridDataVO.getMaterialStockVO().getMatHisDate());
-				matVO.setMatOutOper(gridDataVO.getMaterialStockVO().getMatOutOper());
-				materialHistoryDAO.insertMatIn(matVO);
+		if(gridDataVO.getCreatedRows() != null) {
+			if(gridDataVO.getMaterialHistoryVO().getMatHisNum() != null) {
+				for(int i = 0; i<gridDataVO.getCreatedRows().size(); i++) {
+					MaterialHistoryVO matVO = gridDataVO.getCreatedRows().get(i);
+					matVO.setMatHisDate(gridDataVO.getMaterialHistoryVO().getMatHisDate());
+					matVO.setMatCode(gridDataVO.getMaterialHistoryVO().getMatCode());
+					matVO.setMatHisDVol(gridDataVO.getMaterialHistoryVO().getMatHisDVol());
+					matVO.setMatHisPrice(gridDataVO.getMaterialHistoryVO().getMatHisPrice());
+					materialHistoryDAO.insertMatIn(matVO);
+				}
 			}
+			
 		}
-		if(gridDataVO.getUpdatedRows() != null) {
-			for(int i = 0; i<gridDataVO.getUpdatedRows().size(); i++) {
+		if(gridDataVO.getDeletedRows() != null) {
+			for(int i = 0; i<gridDataVO.getDeletedRows().size(); i++) {
 				materialHistoryDAO.deleteMatIn(gridDataVO.getDeletedRows().get(i));
 			}
 		}
+	}
+	// end 자재 입고 관리 CUD
+	
+	public int getCount(MaterialHistoryVO searchVO) {
+		return materialHistoryDAO.getCount(searchVO);
 	}
 
 }

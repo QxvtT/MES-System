@@ -11,5 +11,5 @@ public class GridDataVO {
 	List<MaterialHistoryVO> createdRows;
 	List<MaterialHistoryVO> deletedRows;
 	
-	MaterialStockVO materialStockVO;
+	MaterialHistoryVO materialHistoryVO;
 }

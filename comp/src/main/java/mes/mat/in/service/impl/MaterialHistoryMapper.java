@@ -43,10 +43,13 @@ public interface MaterialHistoryMapper {
     
     List selectMatInMng(MaterialHistoryVO searchVO) throws Exception; // 자재 입고 관리 조회
     
+    public List<?> matInDayList(MaterialHistoryVO searchVO) throws Exception; // 일 입고 자료 리스트 조회
+    
     public void insertMatIn(MaterialHistoryVO materialHisoryVO) throws Exception;
     public void updateMatIn(MaterialHistoryVO materialHisoryVO) throws Exception;
     public void deleteMatIn(MaterialHistoryVO materialHisoryVO) throws Exception;
     
     public int selectMaterialHistoryListTotCnt(MaterialHistoryDefaultVO searchVO);
+	public int getCount(MaterialHistoryVO searchVO);
     
 }

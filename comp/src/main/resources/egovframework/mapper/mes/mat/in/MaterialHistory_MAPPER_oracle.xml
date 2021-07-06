@@ -10,13 +10,11 @@
 	
 	<!-- 자재 입고 수정 -->
 	<update id="updateMatIn">
-		<![CDATA[			
 		UPDATE MATERIAL_HISTORY_D
 		SET  MAT_CODE = #{matCode}
 			,MAT_HIS_D_VOL = #{matHisDVol}
 			,MAT_HIS_PRICE = #{matHisPrice}
 		WHERE MAT_HIS_D_NUM = #{matHisDNum}
-		]]>
 	</update>
 	
 	<!-- 자재 입고 삭제 -->
@@ -69,7 +67,6 @@ SELECT * FROM (
 	            			MH.MAT_HIS_DATE >= TO_DATE(#{matHisDateS} ,'yyyy-MM-dd') and  
 	            			MH.MAT_HIS_DATE <= TO_DATE(#{matHisDateE} ,'yyyy-MM-dd')
 	            			]]>
-<!-- 			      	MH.MAT_HIS_DATE BETWEEN TO_DATE(#{matHisDateS}, 'YYYY-MM-DD') AND TO_DATE(#{matHisDateE}, 'YYYY-MM-DD') -->
 			     </if>
 			     <if test="matCodeList != null">
 			     <if test="matCodeList.size != 0">
@@ -131,7 +128,7 @@ SELECT * FROM (
 	</select> 
 	<!-- END 자재 출고 관리 조회 -->
 	
-	<select id="selectMatInMng" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="egovMap">
+	<select id="selectMatInMng" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
 				SELECT MH.MAT_HIS_DATE, 
@@ -155,20 +152,17 @@ SELECT * FROM (
 	            			MH.MAT_HIS_DATE >= TO_DATE(#{matHisDateS} ,'yyyy-MM-dd') and  
 	            			MH.MAT_HIS_DATE <= TO_DATE(#{matHisDateE} ,'yyyy-MM-dd')
 	            			]]>
-<!-- 			      	MH.MAT_HIS_DATE BETWEEN TO_DATE(#{matHisDateS}, 'YYYY-MM-DD') AND TO_DATE(#{matHisDateE}, 'YYYY-MM-DD') -->
 			     </if>
-			     <if test="matCodeList != null">
-			     <if test="matCodeList.size != 0">
-				      AND M.MAT_CODE IN 
-			     	<foreach item="item" index="index" collection="matCodeList"
+			     <if test="operCodeList != null">
+			     <if test="operCodeList.size != 0">
+				      AND O.OPER_CODE IN 
+			     	<foreach item="item" index="index" collection="operCodeList"
 					      open="(" separator="," close=")">
 					        #{item}
 					</foreach>
 			     </if>
 			     </if>
-			     <if test="operCode != null and operCode != ''">
-				      AND O.OPER_CODE IN (${operCode})
-			     </if>
+
 				<if test="searchKeyword != null and searchKeyword != ''">
 					<if test="searchCondition == 0">AND
 						M.MAT_NAME = #{searchKeyword}
@@ -196,6 +190,31 @@ SELECT * FROM (
 				<if test="searchCondition == 1">AND
 					MAT_HIS_DIV LIKE '%' || #{searchKeyword} || '%'
 				</if>
+			</if>
+	</select>
+	
+	<!-- 일 입고 자료 리스트 -->
+	<select id="matInDayList" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
+			SELECT    MH.MAT_HIS_DATE
+			        , MH.MAT_HIS_NUM
+			        , MHD.MAT_OUT_OPER
+			        , MH.MAT_HIS_VOL
+			        , O.OPER_CODE
+			FROM  MATERIAL_HISTORY MH
+			    , MATERIAL_HISTORY_D MHD
+			    , OPERATION O
+			WHERE MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
+			AND   O.OPER_NAME = MHD.MAT_OUT_OPER
+			<if test="sDate != null and sDate != '' and eDate != null and eDate != ''"> AND
+			     <![CDATA[			    			
+         			MH.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
+         			MH.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
+				]]>
+			</if>
+			<if test="operCode != null and operCode != ''"> AND
+			     <![CDATA[			    			
+         			O.OPER_CODE = #{operCode}
+				]]>
 			</if>
 	</select>
 
