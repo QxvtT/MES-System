@@ -49,10 +49,17 @@ public class ProducePlanDController {
 	//CRUD
 	@RequestMapping(value="/prd/pln/ProducePlanUpdate")
 	public void producePlanUpdate(@RequestBody GridData gridData) throws Exception {
-		System.out.println(gridData.getCreatedRows().get(0));
+		System.out.println(gridData);
 		producePlanDService.producePlanUpdate(gridData);
-	} 
-
+	}
+	
+	//master삭제 detail도 함께 삭제됌
+	@RequestMapping(value = "/prd/pln/ProducePlanDelete")
+	@ResponseBody
+	public void producePlanDelete(@ModelAttribute("prdVO") ProducePlanDVO prdVO) throws Exception {
+		producePlanDService.producePlanDelete(prdVO);
+	}
+	
 	// 생산계획 ajax
 	@RequestMapping(value = "/prd/pln/ProducePlanList")
 	@ResponseBody
@@ -76,6 +83,14 @@ public class ProducePlanDController {
 		return producePlanDService.selectItem(itmVO);
 	}
 
+
+	// 생산계획 관리 페이지
+	@RequestMapping(value = "/prd/pln/ProducePlanDList.do")
+	public String selectProducePlanDList(@ModelAttribute("searchVO") ProducePlanDDefaultVO searchVO, ModelMap model)
+			throws Exception {
+		return "prd/pln/ProducePlanDList.page";
+	}
+
 	// 생산계획 디테일 조회 ajax 처리
 	@RequestMapping(value = "/prd/pln/ProducePlanDList", method = RequestMethod.GET)
 	@ResponseBody
@@ -83,20 +98,21 @@ public class ProducePlanDController {
 		List<?> list = producePlanDService.selectProducePlanDList(searchVO);
 		return list;
 	}
-
-	// 생산계획관리 페이지
-	@RequestMapping(value = "/prd/pln/ProducePlanDList.do")
-	public String selectProducePlanDList(@ModelAttribute("searchVO") ProducePlanDDefaultVO searchVO, ModelMap model)
-			throws Exception {
-		return "prd/pln/ProducePlanDList.page";
-	}
-
-	@RequestMapping("/prd/pln/addProducePlanDView.do")
+	
+	// 생산계획 조회 페이지 
+	@RequestMapping("/ProducePlanDView.do")
 	public String addProducePlanDView(@ModelAttribute("searchVO") ProducePlanDDefaultVO searchVO, Model model)
 			throws Exception {
-		model.addAttribute("producePlanDVO", new ProducePlanDVO());
 		return "prd/pln/ProducePlanDRegister.page";
 	}
+	
+	// 생산계획조회  리스트 ajax 처리
+		@RequestMapping(value = "/ProducePlanList", method = RequestMethod.GET)
+		@ResponseBody
+		public List<?> ajaxPlanList(@ModelAttribute("searchVO") ProducePlanDVO searchVO) throws Exception {
+			List<?> list = producePlanDService.producePlanList(searchVO);
+			return list;
+		}
 
 	@RequestMapping("/prd/pln/addProducePlanD.do")
 	public String addProducePlanD(ProducePlanDVO producePlanDVO,

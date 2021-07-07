@@ -35,25 +35,27 @@
 	
 	<!-- 일련번호 유무에 따른 update 처리 -->
 	<update id="updateProducePlanD">
-		<if test="prdNum != null and prdNum != ''">
+		<if test="prdNum != null and prdNum != '' and prdDate != null and prdDate != ''">
 			UPDATE PRODUCE_PLAN
-			SET PRD_DATE = #{prdDate}
-				,PRD_NAME = #{prdName}
-				,PRD_NOTE = #{prdNote}
-			WHERE PRD_NUM = #{prdNum}
-			
+				SET PRD_DATE = TO_DATE(#{prdDate}, 'yy/MM/dd')
+					,PRD_NAME = #{prdName}
+					,PRD_NOTE = #{prdNote}
+				WHERE PRD_NUM = #{prdNum}
+		</if>
+		
+		<if test="prdNum != null and prdNum != '' and itmCode != null and itmCode != ''">
 			UPDATE PRODUCE_PLAN_D
-			SET ITM_CODE = #{itmCode},
-				,PRD_WORK_VOL = #{prdWorkVol}
-				,PRD_PLAN_DATE = #{prdPlanDate}
-				,PRD_NO = #{prdNo}
-				,PRD_D_NOTE = #{prdDNote}
-			WHERE PRD_PLAN_D_NUM = #{prdPlanDNum}
+				SET ITM_CODE = #{itmCode}
+					,PRD_WORK_VOL = #{prdWorkVol}
+					,PRD_PLAN_DATE = TO_DATE(#{prdPlanDate}, 'yy/MM/dd')
+					,PRD_NO = #{prdNo}
+					,PRD_D_NOTE = #{prdDNote}
+				WHERE PRD_PLAN_D_NUM = #{prdPlanDNum}
 		</if>
 	</update>
 	
 	<insert id="insertProducePlanD" parameterType="mes.prd.pln.service.ProducePlanDVO" statementType="CALLABLE" >
-		<if test="prdNum != null and prdNum != ''">
+		<if test="prdNum != null and prdNum != '' and itmCode != null and itmCode != ''">
 			INSERT INTO PRODUCE_PLAN_D
 			( PRD_PLAN_D_NUM
 			, PRD_NUM
@@ -67,7 +69,7 @@
 			, #{prdNum}
 			, #{itmCode}
 			, #{prdWorkVol}
-			, #{prdPlanDate}
+			, TO_DATE(#{prdPlanDate}, 'yy/MM/dd')
 			, #{prdNo}
 			, #{prdDNote})
 		</if>
@@ -78,10 +80,19 @@
 	</insert>
 	
 	<delete id="deleteProducePlanD">
-		<![CDATA[
-			DELETE FROM PRODUCE_PLAN_D 
+		<if test="prdPlanDNum != null and prdPlanDNum != ''">
+			DELETE FROM PRODUCE_PLAN_D
 						WHERE PRD_PLAN_D_NUM=#{prdPlanDNum}
-				]]>
+		</if>
+	</delete>
+	
+	<delete id="producePlanDelete">
+		<if test="prdNum != null and prdNum != ''">
+		BEGIN
+			DELETE FROM PRODUCE_PLAN WHERE PRD_NUM = #{prdNum};
+			DELETE FROM PRODUCE_PLAN_D WHERE PRD_NUM = #{prdNum};
+		END;
+		</if>
 	</delete>
 	
 	<select id="selectProducePlanD" resultMap="producePlanD">

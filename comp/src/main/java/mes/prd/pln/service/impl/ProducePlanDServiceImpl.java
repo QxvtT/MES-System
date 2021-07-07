@@ -125,16 +125,27 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 
 	// cud 통합
 	public void producePlanUpdate(GridData gridData) throws Exception {
-        if(gridData.getUpdatedRows() != null) {
+
+		if(gridData.getUpdatedRows() != null && gridData.getUpdatedRows().size() != 0  || gridData.getProducePlanDVO() != null) {
+        	ProducePlanDVO vo = new ProducePlanDVO();
+        	vo.setPrdNum(gridData.getProducePlanDVO().getPrdNum());
+        	vo.setPrdDate(gridData.getProducePlanDVO().getPrdDate());
+			vo.setPrdName(gridData.getProducePlanDVO().getPrdName());
+			vo.setPrdNote(gridData.getProducePlanDVO().getPrdNote());
+			producePlanDDAO.updateProducePlanD(vo);
+			
+			if(gridData.getUpdatedRows() != null)
         	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
-        		producePlanDDAO.updateProducePlanD(gridData.getUpdatedRows().get(i));
+        		vo = gridData.getUpdatedRows().get(i);
+        		System.out.println(vo);
+        		producePlanDDAO.updateProducePlanD(vo);
         	}
         }
-        if(gridData.getCreatedRows() != null) {
+        
+        if(gridData.getCreatedRows() != null && gridData.getCreatedRows().size() != 0) {
         	// 이미 있는 생산계획에 계획을 추가할 경우 prdNum을 뽑아냄
         	String prdNum = gridData.getProducePlanDVO().getPrdNum();
-        	System.out.println("prdNum = " + prdNum);
-        	
+        	System.out.println(prdNum);
 			if (prdNum == null) { // 생산계획이 없는 경우 마스터 insert 생산계획 생성됌
 				ProducePlanDVO vo = new ProducePlanDVO();
 				vo.setPrdDate(gridData.getProducePlanDVO().getPrdDate());
@@ -146,16 +157,28 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
         	}
 			for (int i = 0; i < gridData.getCreatedRows().size(); i++) {
         		ProducePlanDVO vo = gridData.getCreatedRows().get(i);
+        		System.out.println(vo);
         		vo.setPrdNum(prdNum);
         		producePlanDDAO.insertProducePlanD(vo);
         	}
         }
-        if(gridData.getDeletedRows() != null) {
+        
+        if(gridData.getDeletedRows() != null && gridData.getDeletedRows().size() != 0) {
         	for(int i =0; i<gridData.getDeletedRows().size(); i++) {
         		producePlanDDAO.deleteProducePlanD(gridData.getDeletedRows().get(i));
         	}
         }
     }
+	
+	//master삭제 detail도 함께 삭제
+	public void producePlanDelete(ProducePlanDVO prdVO) throws Exception {
+		producePlanDDAO.producePlanDelete(prdVO);
+	}
+
+	// 생산계획조회 페이지 뷰 리스트
+	public List<?> producePlanList(ProducePlanDVO searchVO) throws Exception {
+		return producePlanDDAO.producePlanList(searchVO);
+	}
 
 	
     

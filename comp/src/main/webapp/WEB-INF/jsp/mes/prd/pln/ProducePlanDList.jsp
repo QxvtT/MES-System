@@ -46,7 +46,8 @@ $(function(){
 	    columns: [
 	    	{
 	    		header: '디테일번호',
-	    		name: 'prdPlanDNum'
+	    		name: 'prdPlanDNum',
+	    		hidden: true
 	    	},
 			{ 
 	    		header: '제품코드', 
@@ -90,7 +91,9 @@ $(function(){
 	    	        required: true
 	    	    },
 	    	    onAfterChange(e) {
-	    	    	grid.setValue(e['rowKey'], 'prdPerDay', (e['value']/grid.getValue(e['rowKey'], 'itmDayOutput')));
+	    	    	console.log(e['rowKey'])
+	    	    	console.log()
+	    	    	grid.setValue(e['rowKey'], 'prdPerDay', (e['value']/grid.getValue(e['rowKey'])), 'itmDayOutput');
 	    	    }	    	      
 	    	},
 			{ 
@@ -106,10 +109,10 @@ $(function(){
 			{ 
 	    		header: '작업일자', 
 	    		name:'prdPlanDate',
-	    		format: 'yyyy/MM/dd',
 	    		align: 'center',
 	    		editor: {
-	    			type: 'datePicker'
+	    			type: 'datePicker',
+	    			format: 'yyyy/MM/dd'
 	    		}
 	    	},
 			{ 
@@ -126,7 +129,6 @@ $(function(){
 	    	}
 	    ]
 	});
-	grid.hideColumn('prdPlanDNum');
 	
 	// 생산계획 마스터 테이블(조회시 사용)
 	const grid2 = new tui.Grid({
@@ -135,6 +137,10 @@ $(function(){
 	    scrollY: true,
 	    bodyHeight: 200,
 	    data: [],
+	    rowHeaders: [{
+            type: 'checkbox',
+            header: ' '
+    	}],
 	    columns: [
 	    	{ 
 	    		header: '계획일자', 
@@ -191,6 +197,7 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
+			cache: false,
 			url : "ProducePlanList",
 			type : "get",
 			data : {
@@ -215,6 +222,7 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
+			cache: false,
 			url : "ProducePlanDList",
 			type : "get",
 			data : {
@@ -238,6 +246,7 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
+			cache: false,
 			url : "ItemList",
 			type : "get",
 			data : {
@@ -259,6 +268,7 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
+			cache: false,
 			url : "SelectItem",
 			type : "get",
 			data : {
@@ -367,13 +377,32 @@ $(function(){
 		}
 	});
 	
+	grid2.on('check', (e) => {
+		let rows = grid2.getCheckedRowKeys();
+		if(rows.length > 1) {
+			for(let i in rows){
+				if(e.rowKey != rows[i]){
+					grid2.uncheck(rows[i]);
+				}
+			}
+			rows = grid2.getCheckedRowKeys();
+		}
+		// 조회된 리스트에서 체크된 생산계획을 디테일테이블에 뿌려줌
+		$('#loadBtn').click(function() {
+			prdNum = grid2.getValue(rows, 'prdNum');
+			console.log(prdNum);
+			grid.resetData(getList());
+		})
+	});
+	
+	
 	// 새자료 버튼 클릭 이벤트, 마스터 Form과 디테일 그리드 데이터 remove, 날짜 정보 초기화를 위한 setDatePicker();
 	$('#resetBtn').click(function(){
-		$('#master').each(function() {
-			this.reset();
-			grid.clear();
-			setDatePicker();
-		});
+		master.reset();
+		grid.resetData([]);
+		prdNum = null;
+		grid2.clear();
+		setDatePicker();
 	});
 	
 	// 추가 버튼 클릭 이벤트, 그리드 row 생성 미완성
@@ -404,12 +433,20 @@ $(function(){
 					grid3.uncheck(rows[i]);
 				}
 			}
+			rows = grid3.getCheckedRowKeys();
 		}
+		// 제품코드 모달창 제품코드 체크 로우 값 확인 클릭시 디테일 테이블 로우 데이터 값 수정
+		$('#itmCheckSearchBtn').click(function() {
+			$('#itmModal').modal("hide");
+			itmCode = grid3.getValue(rows, 'itmCode');
+			selectItem(itmCode);
+		})
 	});
-	
+
 	// 제품코드 모달창 제품코드 더블클릭 시 디테일 테이블 로우 데이터 값 수정
 	grid3.on('dblclick', (e) => {
 		var selectItm = grid.getFocusedCell();
+		console.log(selectItm);
 		if(getKeyByValue(selectItm, "itmCode") != null){
 			$('#itmModal').modal("hide");
 			let selectItm = grid3.getFocusedCell();
@@ -417,10 +454,6 @@ $(function(){
 			selectItem(itmCode);
 		}
 	});
-
-	$('#deleteRowBtn').click(function(){
-		grid.clear();
-	})
 	
 	$('#saveBtn').click(function(){
 		console.log(grid.getRowCount());
@@ -472,6 +505,7 @@ $(function(){
 		}
 		$.ajax({
 			async: false,
+			cache: false,
 			url : "ProducePlanUpdate",
 			type : "post",
 			data : JSON.stringify(gridData),
@@ -481,12 +515,53 @@ $(function(){
 		});
 	})// end of saveBtn
 	
+	
+	$('#removeBtn').click(function(){
+		if(prdNum != null){
+			var result = confirm("해당 생산 계획을 삭제하시겠습니까?");
+			if(result){ // 그리드 초기화 -> reset, clear, 마스터 초기화  
+				grid.resetData([]);
+				grid2.resetData([]);
+				master.reset();
+				prdNum = null;
+				setDatePicker();
+				$.ajax({
+					async: false,
+					url: 'ProducePlanDelete',
+					type: 'get',
+					data: {
+						prdNum : prdNum
+					},
+					datatype: 'json',
+				})
+			    alert("삭제되었습니다.")
+			}
+		}
+	})
+	
+	$('#deleteRowBtn').click(function() {
+		if(prdNum != null){
+			var result = confirm("체크된 행을 삭제하시겠습니까?");
+			if(result){ // 그리드 초기화 -> reset, clear, 마스터 초기화  
+				grid.removeCheckedRows();
+				let gridData = grid.getModifiedRows()
+				$.ajax({
+					async: false,
+					url : "ProducePlanUpdate",
+					type : "post",
+					data : JSON.stringify(gridData),
+					dataType: "json",
+					contentType:"application/json",
+				});
+				alert("삭제되었습니다.");
+			}
+		}
+	})
 }); 
 
 
 </script>
 <style>
-	
 	.modal-content {
 		padding: 5px;
 	}
@@ -639,8 +714,7 @@ $(function(){
 					<div id="grid2"></div>
 				</div>
 				<div class="modal-footer">
-					<a class="btn" id="modalY" href="#">예</a>
-					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+					<button class="btn" id="loadBtn" type="button" data-dismiss="modal">불러오기</button>
 				</div>
 			</div>
 		</div>
@@ -661,7 +735,7 @@ $(function(){
 					<div id="grid3"></div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary">확인</button>
+					<button type="button" class="btn btn-primary" id="itmCheckSearchBtn">확인</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
 				</div>
 			</div>

@@ -70,5 +70,10 @@ public interface ProducePlanDMapper {
 
 	public ProducePlanDVO selectItem(ProducePlanDVO itmVO) throws Exception;
 
+	public void producePlanDelete(ProducePlanDVO prdVO) throws Exception;
+
+	// 생산계획조회 뷰 리스트 
+	public List<?> producePlanList(ProducePlanDVO searchVO) throws Exception;
+
 
 }

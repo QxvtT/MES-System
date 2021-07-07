@@ -71,5 +71,9 @@ public interface ProducePlanDService {
 	ProducePlanDVO selectItem(ProducePlanDVO itmVO) throws Exception;
 
 	void producePlanUpdate(GridData gridData) throws Exception;
+
+	void producePlanDelete(ProducePlanDVO prdVO) throws Exception;
+
+	List<?> producePlanList(ProducePlanDVO searchVO) throws Exception;
     
 }
