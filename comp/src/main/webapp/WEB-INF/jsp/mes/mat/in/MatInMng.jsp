@@ -30,6 +30,9 @@
 	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
+let matHisNum1 = null;
+let matHisDNum1 = null;
+let matHisDNum = null;
 let matHisNum = null;
 let matHisDateS = null;
 let matHisDateE = null;
@@ -98,6 +101,11 @@ $(function(){
 	    rowHeaders: ['rowNum', 'checkbox'],
 	    columns: [
 	    	{ 
+	    		header: '일련번호', 
+	    		name:'matHisDNum', 
+	    		hidden: true
+	    	},
+	    	{ 
 	    		header: '자재코드', 
 	    		name:'matCode', 
 	    		editor: "text"
@@ -156,19 +164,13 @@ $(function(){
 			url : "MatInMng",
 			type : "get",
 			data : {
-				matCode: matCode,
-				operCodes: operCodes,
-				matHisDateS: matHisDateS,
-				matHisDateE: matHisDateE
-				},
+				matHisNum: matHisNum,
+				matHisDNum1: matHisDNum1				
+			},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					matCode = result[result.length -1].matCode;
-				}
-				console.log(result);
-				if(result.length != 0){
-					matCode = result[result.length -1].matCode;
+					matHisDNum1 = result[result.length -1].matHisDNum;
 				}
 				console.log(result);
 				data = result;
@@ -187,7 +189,9 @@ $(function(){
 	    scrollY: true,
 	    bodyHeight: 200,
 	    data: getMatInDayList(),
-	    rowHeaders: ['rowNum', 'checkbox'],
+	    rowHeaders: [
+	    	{type:'rowNum'}, {type:'checkbox', header: ' '}
+	    ],
 	    columns: [
 	    	{ 
 	    		header: '입고일자', 
@@ -199,7 +203,7 @@ $(function(){
 	    	},
 			{ 
 	    		header: '입고업체명', 
-	    		name:'matOutOper'
+	    		name:'matOrdOper'
 	    	},
 			{ 
 	    		header: '건수', 
@@ -220,14 +224,14 @@ $(function(){
 			url : "MatInDayList",
 			type : "get",
 			data : {
-				matHisNum: matHisNum,
+				matHisNum1: matHisNum1,
 				sDate: sDate,
 				eDate: eDate
 				},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					matHisNum = result[result.length -1].matHisNum;
+					matHisNum1 = result[result.length -1].matHisNum;
 				}
 				console.log(result);
 				data = result;
@@ -241,7 +245,7 @@ $(function(){
 	   });
 	   
 	$('#matInDayBtn').click(function(){
-		grid2.clear();
+		matHisNum1 = null;
 		grid2.resetData(getMatInDayList());
 		$("#myModal").modal("toggle");
 		$("#myModal").on('shown.bs.modal', function () {
@@ -274,8 +278,10 @@ $(function(){
 		let gridData = grid.getModifiedRows({});
 		
 		gridData["materialHistoryVO"]={
-// 				matHisDate : $("#matHisDate").val()
-				matOutOper : $("#matOutOper").val()
+ 				matHisDate : $("#matHisDate").val()
+				,matCode : $("#matCode").val()
+				,matHisVol :$("#matHisVol").val()
+				,matHisPrice :$('#matHisPrice').val()
 				}
 		
 		$.ajax({
@@ -289,7 +295,7 @@ $(function(){
 				alret("insert success")
 			}
 		});
-		grid.resetData(getList());
+		grid2.resetData(getMatInDayList());
 	});
 	
 	resetBtn.onclick=function(){
@@ -305,24 +311,40 @@ $(function(){
 // 		grid.resetData(getList());
 // 		gird2.resetData(getMatInDayList());
 // 	})
+
+	// 일입고리스트 모달창 단일 체크 구현
+	grid2.on('check', (e) => {
+		let rows = grid2.getCheckedRowKeys();
+		if(rows.length > 1) {
+			for(let i in rows){
+				if(e.rowKey != rows[i]){
+					grid2.uncheck(rows[i]);
+				}
+			}
+		}
+	});
 	
 	modalY.onclick=function() {
 		matHisDate = null;
 		operCode = null;
 		matOutOper = null;
-		str = '';
-		for(let i =0; i<grid2.getCheckedRows().length; i++) {
-			if(i == grid2.getCheckedRows().length-1){
-				operCode = str + grid2.getCheckedRows()[i]['operCode'];
-				matOutOper = str + grid2.getCheckedRows()[i]['matOutOper'];
-				matHisDate = str + grid2.getCheckedRows()[i]['matHisDate'];
-			}
+		if(grid2.getCheckedRows() != null){
+			matHisDNum1 = null;
+			console.log("테ㅓㄴ라ㅣ너ㅣ");
+			console.log(grid2.getCheckedRows()[0]);
+			operCode = grid2.getCheckedRows()[0].operCode;
+			matOutOper = grid2.getCheckedRows()[0].matOutOper;
+			matHisDate = grid2.getCheckedRows()[0].matHisDate;
+			matHisNum = grid2.getCheckedRows()[0].matHisNum;
+			grid.resetData(getList());
+			
 		}
 		console.log(operCode);
 		console.log(matOutOper);
 		console.log(matHisDate);
+		console.log(matHisNum);
 		console.log('======================');
-	grid.resetData(getList());
+	
 	grid2.resetData(getMatInDayList());
 	document.getElementById("MatInpicker-input").value=matHisDate;
 	document.getElementById("operCode").value=operCode;
@@ -330,7 +352,7 @@ $(function(){
 	}
 	
 	grid2.on('scrollEnd', () => {
-		  grid.appendRows(getMatInDayList());
+		  grid2.appendRows(getMatInDayList());
 		})
 	
 	searchBtn.onclick = function(){
@@ -345,7 +367,7 @@ $(function(){
 	}
 	
 	matInDeleteBtn.onclick = function(){
-		grid.remoceCheckedRows()
+		grid.removeCheckedRows()
 		console.log(grid.removeCheckedRows());
 	}
 	
@@ -443,7 +465,7 @@ $(function(){
 		</div>
 	</form:form>
 
-
+	<!-- 일 입고 자료 리스트 -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">

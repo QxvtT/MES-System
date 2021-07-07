@@ -36,6 +36,8 @@ public interface MaterialHistoryService {
     
     List matInDayList(MaterialHistoryVO searchVO) throws Exception; // 일 입고자료 리스트
     
+    List matOutDayList(MaterialHistoryVO searchVO) throws Exception; // 일 입고자료 리스트
+    
     void updateMatIn(GridDataVO gridDataVO) throws Exception; // ajax CRUD
     
     int getCount(MaterialHistoryVO searchVO);

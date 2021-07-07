@@ -62,9 +62,9 @@ public class MaterialHistoryController {
 	 */
     
     // 자재 입고 CUD
-    @RequestMapping("/mat/in/updateMatIn")
-    public void updateMatIn(@RequestBody GridDataVO gridDataVO) throws Exception{
-    	materialHistoryService.updateMatIn(gridDataVO);
+    @RequestMapping("/updateMatIn")
+    public void updateMatIn(@RequestBody GridDataVO gridData) throws Exception{
+    	materialHistoryService.updateMatIn(gridData);
     }
     
     // 자재 입고 관리 조회
@@ -136,6 +136,16 @@ public class MaterialHistoryController {
     }
     // end 일 입고 자료 리스트 조회
     
+ // 일 출고 자료 LIST 조회
+    @RequestMapping(value="/mat/in/MatOutDayList", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> MatOutDayList(@ModelAttribute("matOutDayVO") MaterialHistoryVO matOutDayVO) throws Exception{
+    	List<?> matOutDayList = materialHistoryService.matInDayList(matOutDayVO);
+    	System.out.println(matOutDayList);
+    	return matOutDayList;
+    }
+    // end 일 출고 자료 리스트 조회
+    
     // 자재 출고 관리 조회
     @RequestMapping(value="/mat/in/MatOutMng", method=RequestMethod.GET)
     @ResponseBody
@@ -161,18 +171,6 @@ public class MaterialHistoryController {
         return "/materialHistory/MaterialHistoryRegister";
     }
     
-    @RequestMapping("/materialHistory/updateMaterialHistoryView.do")
-    public String updateMaterialHistoryView(
-            @RequestParam("matHisNum") java.math.BigDecimal matHisNum ,
-            @ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO, Model model)
-            throws Exception {
-        MaterialHistoryVO materialHistoryVO = new MaterialHistoryVO();
-        materialHistoryVO.setMatHisNum(matHisNum);
-        // 변수명은 CoC 에 따라 materialHistoryVO
-        model.addAttribute(selectMaterialHistory(materialHistoryVO, searchVO));
-        return "/materialHistory/MaterialHistoryRegister";
-    }
-
     @RequestMapping("/materialHistory/selectMaterialHistory.do")
     public @ModelAttribute("materialHistoryVO")
     MaterialHistoryVO selectMaterialHistory(

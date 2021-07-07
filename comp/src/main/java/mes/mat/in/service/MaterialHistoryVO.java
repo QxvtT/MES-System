@@ -21,6 +21,12 @@ import mes.mat.stc.service.MaterialDefaultVO;
 public class MaterialHistoryVO extends MaterialDefaultVO{
     private static final long serialVersionUID = 1L;
     
+    /** matInDayList 스크롤용 **/
+    private java.lang.String matHisNum1;
+    
+    /** main grid 스크롤용 */
+    private java.math.BigDecimal matHisDNum1;
+    
     /** 작업일자 검색 **/
     private java.lang.String matHisDateS;
     private java.lang.String matHisDateE;
@@ -115,7 +121,7 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     private java.lang.String matComNum;
     
     /** LOT_NO */
-    private java.math.BigDecimal lotNo;
+    private java.lang.String lotNo;
     
     /** MAT_HIS_D_VOL */
     private java.math.BigDecimal matHisDVol;
@@ -123,13 +129,10 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     /** MAT_HIS_PRICE */
     private java.math.BigDecimal matHisPrice;
     
-    /** MAT_OUT_OPER */
-    private java.lang.String matOutOper;
-    
     
     
     /** MAT_HIS_NUM */
-    private java.math.BigDecimal matHisNum;
+    private java.lang.String matHisNum;
     
     /** MAT_HIS_DIV */
     private java.lang.String matHisDiv;

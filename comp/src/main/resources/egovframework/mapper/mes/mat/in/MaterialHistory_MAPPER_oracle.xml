@@ -45,12 +45,13 @@
 	
 	<select id="selectMatInList" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
 SELECT * FROM (
-	SELECT A.*, ROWNUM RNUM FROM (
+	SELECT A.*, ROWNUM RNUM FROM ( 
 				SELECT MH.MAT_HIS_DATE, 
 				       M.MAT_CODE, 
 				       M.MAT_NAME,
 				       M.MAT_SIZE, 
-				       MHD.MAT_OUT_OPER,
+				       MH.MAT_ORD_OPER,
+				       MHD.MAT_HIS_D_NUM,
 				       MHD.MAT_COM_NUM,
 				       MHD.MAT_HIS_D_VOL, 
 				       MHD.MAT_HIS_PRICE, 
@@ -62,6 +63,14 @@ SELECT * FROM (
 				      AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
 				      AND M.OPER_CODE = O.OPER_CODE
 				      AND MH.MAT_HIS_DIV='입고'
+				      <if test= "matHisNum != null and matHisNum != ''">
+				      		and mhd.mat_his_num = #{matHisNum}
+				      </if> 
+				      <if test="matHisDNum1 != null and matHisDNum1 != ''">
+				      <![CDATA[	
+				      		and MHD.MAT_HIS_D_NUM < #{matHisDNum1}
+				      ]]>
+				      </if>
 			     <if test="matHisDateS != null and matHisDateS != '' and matHisDateE != null and matHisDateE != ''"> AND
 			     <![CDATA[			    			
 	            			MH.MAT_HIS_DATE >= TO_DATE(#{matHisDateS} ,'yyyy-MM-dd') and  
@@ -80,15 +89,7 @@ SELECT * FROM (
 			     <if test="operCode != null and operCode != ''">
 				      AND O.OPER_CODE IN (${operCode})
 			     </if>
-				<if test="searchKeyword != null and searchKeyword != ''">
-					<if test="searchCondition == 0">AND
-						M.MAT_NAME = #{searchKeyword}
-					</if>
-					<if test="searchCondition == 1">AND
-						M.MAT_NAME '%' || #{searchKeyword} || '%'
-					</if>
-				</if>
-					
+			     order by MHD.MAT_HIS_D_NUM desc
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )
@@ -135,18 +136,23 @@ SELECT * FROM (
 				       M.MAT_CODE, 
 				       M.MAT_NAME,
 				       M.MAT_SIZE, 
-				       MHD.MAT_OUT_OPER,
 				       MHD.MAT_COM_NUM,
 				       MHD.MAT_HIS_D_VOL, 
 				       MHD.MAT_HIS_PRICE, 
 				       (MHD.MAT_HIS_D_VOL * MHD.MAT_HIS_PRICE) AS AMOUNT, 
 				       MHD.LOT_NO,
-				       MHD.MAT_HIS_NUM
+				       MHD.MAT_HIS_NUM,
+				       MHD.MAT_HIS_D_NUM
 				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_HISTORY MH, OPERATION O
 				WHERE M.MAT_CODE = MHD.MAT_CODE 
 				      AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
-				      AND M.OPER_CODE = O.OPER_CODE
 				      AND MH.MAT_HIS_DIV='입고'
+				      <if test="matHisNum != null and matHisNum != ''">
+				      	and mh.mat_His_Num = #{matHisNum}
+				      </if>
+				 <if test= "matHisDNum1 != null and matHisDNum1 != ''">
+			      		and mhd.mat_his_d_num > #{matHisDNum1}
+			     </if>
 			     <if test="matHisDateS != null and matHisDateS != '' and matHisDateE != null and matHisDateE != ''"> AND
 			     <![CDATA[			    			
 	            			MH.MAT_HIS_DATE >= TO_DATE(#{matHisDateS} ,'yyyy-MM-dd') and  
@@ -179,32 +185,47 @@ SELECT * FROM (
 	</select>
 	<!-- END 자재 입고 관리 조회 -->
 	
-	<select id="selectMaterialHistoryListTotCnt" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="int">
-			SELECT COUNT(*) totcnt
-			FROM MATERIAL_HISTORY
-			WHERE 1=1
-			<if test="searchKeyword != null and searchKeyword != ''">
-				<if test="searchCondition == 0">AND
-					MAT_HIS_NUM = #{searchKeyword}
-				</if>
-				<if test="searchCondition == 1">AND
-					MAT_HIS_DIV LIKE '%' || #{searchKeyword} || '%'
-				</if>
-			</if>
-	</select>
-	
 	<!-- 일 입고 자료 리스트 -->
 	<select id="matInDayList" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
+	SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+			SELECT    MAT_HIS_DATE
+			        , MAT_HIS_NUM
+			        , MAT_HIS_VOL
+                    , mat_ord_oper
+			FROM  MATERIAL_HISTORY
+			where mat_his_div = '입고'
+			<if test="matHisNum1 != null and matHisNum1 != ''">AND
+				mat_his_num > #{matHisNum1}
+			</if>
+			<if test="sDate != null and sDate != '' and eDate != null and eDate != ''"> AND
+			     <![CDATA[			    			
+         			MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
+         			MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
+				]]>
+			</if>
+			order by mat_his_num			
+			<![CDATA[		
+		) A WHERE ROWNUM <= 10
+	)
+	]]>
+	</select>
+	
+	<!-- 일 반품 자료 리스트 -->
+	<select id="matOutDayList" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
+	SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
 			SELECT    MH.MAT_HIS_DATE
 			        , MH.MAT_HIS_NUM
-			        , MHD.MAT_OUT_OPER
+			        , MH.MAT_ORD_OPER
 			        , MH.MAT_HIS_VOL
 			        , O.OPER_CODE
 			FROM  MATERIAL_HISTORY MH
-			    , MATERIAL_HISTORY_D MHD
 			    , OPERATION O
-			WHERE MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
-			AND   O.OPER_NAME = MHD.MAT_OUT_OPER
+			WHERE O.OPER_NAME = MH.MAT_ORD_OPER
+			<if test="matHisNum1 != null and matHisNum1 != ''">
+				and mh.mat_his_num > #{matHisNum1}
+			</if>
 			<if test="sDate != null and sDate != '' and eDate != null and eDate != ''"> AND
 			     <![CDATA[			    			
          			MH.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
@@ -216,6 +237,15 @@ SELECT * FROM (
          			O.OPER_CODE = #{operCode}
 				]]>
 			</if>
+			<![CDATA[	
+			order by mat_his_num
+			) A WHERE ROWNUM <= 10
+		)
+	]]>
 	</select>
-
+	
+	<!-- 자재 출고 삭제 -->
+	<delete id="deleteMatOut">
+		
+	</delete>
 </mapper>
