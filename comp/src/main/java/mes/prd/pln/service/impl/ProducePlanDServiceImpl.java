@@ -131,11 +131,22 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
         	}
         }
         if(gridData.getCreatedRows() != null) {
-        	for(int i =0; i<gridData.getCreatedRows().size(); i++) {
-        		ProducePlanDVO vo= gridData.getCreatedRows().get(i);
-        		vo.setPrdDate(gridData.getProducePlanDVO().getPrdDate());
-        		vo.setPrdName(gridData.getProducePlanDVO().getPrdName());
-        		vo.setPrdNote(gridData.getProducePlanDVO().getPrdNote());      		
+        	// 이미 있는 생산계획에 계획을 추가할 경우 prdNum을 뽑아냄
+        	String prdNum = gridData.getProducePlanDVO().getPrdNum();
+        	System.out.println("prdNum = " + prdNum);
+        	
+			if (prdNum == null) { // 생산계획이 없는 경우 마스터 insert 생산계획 생성됌
+				ProducePlanDVO vo = new ProducePlanDVO();
+				vo.setPrdDate(gridData.getProducePlanDVO().getPrdDate());
+				vo.setPrdName(gridData.getProducePlanDVO().getPrdName());
+				vo.setPrdNote(gridData.getProducePlanDVO().getPrdNote());
+				producePlanDDAO.insertProducePlanD(vo);
+				prdNum = vo.getPrdNum();
+				
+        	}
+			for (int i = 0; i < gridData.getCreatedRows().size(); i++) {
+        		ProducePlanDVO vo = gridData.getCreatedRows().get(i);
+        		vo.setPrdNum(prdNum);
         		producePlanDDAO.insertProducePlanD(vo);
         	}
         }

@@ -19,7 +19,7 @@
 	<!-- 생산계획 MODAL 테이블 조회 -->
 	<select id="selectProducePlanList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.pln.service.ProducePlanDVO">
 		SELECT PRD_NUM,
-			   PRD_DATE,
+			   TO_CHAR(PRD_DATE, 'yyyy-MM-dd') as PRD_DATE,
 			   PRD_NAME,
 			   PRD_NOTE
 		FROM PRODUCE_PLAN
@@ -33,41 +33,49 @@
 		</where>
 	</select>
 	
-	<insert id="insertProducePlanD">
-		<![CDATA[
-			INSERT INTO PRODUCE_PLAN_D 
-				( PRD_PLAN_D_NUM
-				  , PRD_NUM
-				  , ITM_CODE
-				  , PRD_WORK_VOL
-				  , PRD_PLAN_DATE
-				  , PRD_NO
-				  , PRD_NOTE
-				  , COM_CHK
-				  , ORD_NUM )
-			VALUES ( #{prdPlanDNum}
-				  , #{prdNum}
-				  , #{itmCode}
-				  , #{prdWorkVol}
-				  , #{prdPlanDate}
-				  , #{prdNo}
-				  , #{prdNote}
-				  , #{comChk}
-				  , #{ordNum} )
-		]]>
-	</insert>
-	
+	<!-- 일련번호 유무에 따른 update 처리 -->
 	<update id="updateProducePlanD">
-		<![CDATA[
+		<if test="prdNum != null and prdNum != ''">
+			UPDATE PRODUCE_PLAN
+			SET PRD_DATE = #{prdDate}
+				,PRD_NAME = #{prdName}
+				,PRD_NOTE = #{prdNote}
+			WHERE PRD_NUM = #{prdNum}
+			
 			UPDATE PRODUCE_PLAN_D
-			SET   ITM_CODE=#{itmCode}
-				, PRD_WORK_VOL=#{prdWorkVol}
-				, PRD_PLAN_DATE=#{prdPlanDate}
-				, PRD_NO=#{prdNo}
-				, PRD_D_NOTE=#{prdDNote}
-						WHERE PRD_NUM=#{prdNum}
-				]]>
+			SET ITM_CODE = #{itmCode},
+				,PRD_WORK_VOL = #{prdWorkVol}
+				,PRD_PLAN_DATE = #{prdPlanDate}
+				,PRD_NO = #{prdNo}
+				,PRD_D_NOTE = #{prdDNote}
+			WHERE PRD_PLAN_D_NUM = #{prdPlanDNum}
+		</if>
 	</update>
+	
+	<insert id="insertProducePlanD" parameterType="mes.prd.pln.service.ProducePlanDVO" statementType="CALLABLE" >
+		<if test="prdNum != null and prdNum != ''">
+			INSERT INTO PRODUCE_PLAN_D
+			( PRD_PLAN_D_NUM
+			, PRD_NUM
+			, ITM_CODE
+			, PRD_WORK_VOL
+			, PRD_PLAN_DATE
+			, PRD_NO
+			, PRD_D_NOTE)
+			VALUES 
+			( PRODUCE_PLAN_D_SEQ.nextVal
+			, #{prdNum}
+			, #{itmCode}
+			, #{prdWorkVol}
+			, #{prdPlanDate}
+			, #{prdNo}
+			, #{prdDNote})
+		</if>
+		
+		<if test="prdNum == null or prdNum == ''">
+			{ call create_prdNum(#{prdName}, #{prdDate}, #{prdNote}, #{prdNum, mode=OUT, jdbcType=VARCHAR}) }
+		</if>
+	</insert>
 	
 	<delete id="deleteProducePlanD">
 		<![CDATA[

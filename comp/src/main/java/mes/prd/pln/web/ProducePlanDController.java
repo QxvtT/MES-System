@@ -49,6 +49,7 @@ public class ProducePlanDController {
 	//CRUD
 	@RequestMapping(value="/prd/pln/ProducePlanUpdate")
 	public void producePlanUpdate(@RequestBody GridData gridData) throws Exception {
+		System.out.println(gridData.getCreatedRows().get(0));
 		producePlanDService.producePlanUpdate(gridData);
 	} 
 

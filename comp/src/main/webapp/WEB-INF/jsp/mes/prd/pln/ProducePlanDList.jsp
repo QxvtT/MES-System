@@ -44,6 +44,10 @@ $(function(){
 	    data: [],
 	    rowHeaders: ['checkbox'],
 	    columns: [
+	    	{
+	    		header: '디테일번호',
+	    		name: 'prdPlanDNum'
+	    	},
 			{ 
 	    		header: '제품코드', 
 	    		name:'itmCode',
@@ -121,7 +125,8 @@ $(function(){
 	    		editor: 'text'
 	    	}
 	    ]
-	}); 
+	});
+	grid.hideColumn('prdPlanDNum');
 	
 	// 생산계획 마스터 테이블(조회시 사용)
 	const grid2 = new tui.Grid({
@@ -191,7 +196,6 @@ $(function(){
 			data : {
 				startDate : startDate,
 				endDate : endDate,
-				prdNum: prdNum
 				},
 			dataType: "json",
 			success : function(result){
