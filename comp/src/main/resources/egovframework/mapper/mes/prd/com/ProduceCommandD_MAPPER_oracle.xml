@@ -105,6 +105,25 @@
 		]]>
 	</select>
 	
+	<!-- 작업지시 master insert -->
+	<insert id="insertProduceCommand">
+		insert into Produce_Command values( 
+			#{prdComNum},
+			to_date(#{prdComDate},'yyyy-MM-dd'),
+			#{prdComName},
+			#{prdComNote}
+		)
+	</insert>
+	
+	<!-- 작업지시 master update -->
+	<update id="updateProduceCommand">
+		update Produce_Command set 
+			prd_com_date = to_date(#{prdComDate},'yyyy-MM-dd'),
+			prd_com_name = #{prdComName},
+			prd_com_note = #{prdComNote}
+		where prd_com_num = #{prdComNum}
+	</update>
+	
 	<!-- 작업지시 grid 행 insert -->
 	<insert id="insertProduceCommandD">
 		declare
@@ -117,7 +136,7 @@
 			insert into Produce_Command_D
 				(prd_com_d_num, prd_com_num, itm_code, mat_code, prd_com_vol, prd_com_d_date, prc_com_no, prc_com_div, prd_com_d_note) 
 				values(
-					Produce_Command_D_seq.nextval,
+					produce_command_d_seq.nextval,
 					#{prdComNum},
 					#{itmCode},
 					v_matCode,
@@ -129,15 +148,6 @@
 				);
 			end;
 	</insert>
-	
-	<!-- 작업지시 master update -->
-	<update id="updateProduceCommand">
-		update Produce_Command set 
-			prd_com_date = to_date(#{prdComDate},'yyyy-MM-dd'),
-			prd_com_name = #{prdComName},
-			prd_com_note = #{prdComNote}
-		where prd_com_num = #{prdComNum}
-	</update>
 	
 	<!-- 작업지시 grid 행 update -->
 	<update id="updateProduceCommandD">
@@ -156,5 +166,12 @@
 		delete from Produce_Command_D 
 		where prd_com_d_num = #{prdComDNum}
 	</delete>
+	
+	<!-- 작업지시 마스터번호 구하기 -->
+	<select id="getPrdComCount" resultType="int">
+		select nvl(to_number(max(substr(prd_com_num,11))),0) + 1
+		from produce_command
+		where to_char(prd_com_date,'yyyy-MM-dd') = #{prdComDate}
+	</select>
 
 </mapper>

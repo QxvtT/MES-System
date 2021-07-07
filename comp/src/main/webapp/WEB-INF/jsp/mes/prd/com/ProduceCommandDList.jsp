@@ -32,6 +32,12 @@ let prdComMatNum = null;
 let prdComDNum = null;
 let itmCode = null;
 let prcFNo = null;
+let lotNum = null;
+let lotNum1 = null;
+
+//주문일련 계획일련 있는 row들 담을 변수
+let rows = null;
+
 $(function(){
 	var datepicker = new tui.DatePicker('#date', {
         date: new Date(),
@@ -190,6 +196,17 @@ $(function(){
 		
 	})
 	
+	// 주문일련이나 계획일련이 있으면 제품번호 수정 못하게 막는 function
+	function dblclickCanceal(e) {
+		console.log(e);
+		if(e.columnName == "itmCode") {
+			for(let i=0; i<rows.length; i++) {
+				if(e.rowKey == rows[i].rowKey) e.stop();
+			}
+		}
+	};
+	// 주문일련이나 계획일련이 있으면 제품번호 수정 못하게 막는  function //
+	
 	//작업지시 조회모달에서 더블클릭시 조회할 지시 선택하는 기능
 	function selectCom(e) {
 		prdComDNum1 = null;
@@ -202,6 +219,17 @@ $(function(){
 		$('#operName').val(grid2.getValue(e.rowKey,'operName'));
 		
 		grid.resetData(getList());
+		
+		// 주문일련이나 계획일련이 있는 row 구하기
+		rows = grid.findRows((row) => {
+		    return (row.prdPlanDNum != null || row.ordDNum != null);
+		});
+		console.log("row값");
+		console.log(rows);
+		
+		// 주문일련이나 계획일련이 있으면 제품번호 수정 못하게 막는 코드
+		grid.on('dblclick', dblclickCanceal);
+		
 		$('#myModal').modal('hide');
 		//토스트메시지 테스트
 		myToast = $.toast({ 
@@ -229,6 +257,57 @@ $(function(){
 		}
 	});
 	//작업지시 조회용 모달//
+	
+	//자재로트번호 선택용 모달
+	const gridMatStock = new tui.Grid({
+	    el: document.getElementById('gridMatStock'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    rowWidth: 100,
+	    data: getMatStokList,
+	    rowHeaders: ['checkbox'],
+	    columns: [
+	    	{ header: '자재LOTNO', name:'lotNum'},
+			{ header: '수량', name:'matVol'},
+	    ]
+	}); // end const grid2
+	
+	gridMatStock.on('scrollEnd', () => {
+		gridMatStock.appendRows(getMatStokList());
+	  })
+	  
+	function getMatStokList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "MatStockList",
+			type : "get",
+			data : {lotNum1: lotNum1},
+			dataType: "json",
+			success : function(result){
+				console.log(prdComNum1);
+				if(result.length > 0) {
+					lotNum1 = result[result.length -1].lotNum;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	
+	$('#searchMatLotBtn').click(function(){
+		$("#mLotModal").modal("toggle");
+		$("#mLotModal").on('shown.bs.modal', function () {
+			console.log("aaaaaaaaaaa");
+			lotNum1 = null;
+			gridMatStock.refreshLayout();
+			gridMatStock.resetData(getMatStokList());
+		});
+		
+	})
+	//자재로트번호 선택용 모달 //
 	
 	//행에서 쓸 자재로트
 	const gridMat = new tui.Grid({
@@ -357,7 +436,10 @@ $(function(){
 				data : JSON.stringify(gridData),
 				dataType: "json",
 				contentType:"application/json",
-				success : console.log("updatesuccess")
+				success : function(data) {
+					console.log(data);
+					prdComNum = data;
+				}
 				});
 		
 		prdComDNum1 = null;
@@ -412,6 +494,37 @@ $(function(){
 				<div id="grid2"></div>
 				<div class="modal-footer">
 					<a class="btn" id="modalComY">예</a>
+					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 자재lotno 검색 모달 -->
+	<div class="modal fade" id="mLotModal" tabindex="-1" role="dialog"
+				aria-labelledby="matModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="matModalLabel">
+						자재LOT NO 검색
+					</h3>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="">
+					    LOT NO
+					    <input type="text" class="form-control ml-3 w-50" id="lotNum" name="lotNum"></input>
+					    <button type="button" id="searchLotNumBtn"
+							class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
+					</div>
+				</div>	
+				<div id="gridMatStock"></div>
+				<div class="modal-footer">
+					<a class="btn" id="modalLotY">예</a>
 					<button class="btn" type="button" data-dismiss="modal">아니요</button>
 				</div>
 			</div>
@@ -522,7 +635,7 @@ $(function(){
 				<input type="text" class="form-control ml-3 d-inline" id="matName" name="matName" style="width:100px" readonly></input>
 			</div>
 			<div class="col-sm-1 text-right" style="padding-left: 0px">
-				<button type="button" id="searchMatLotBtn"
+				<button type="button" id="searchMatLotBtn" data-toggle="modal" data-target="#mLotModal"
 								class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
 			</div>
 		</div>

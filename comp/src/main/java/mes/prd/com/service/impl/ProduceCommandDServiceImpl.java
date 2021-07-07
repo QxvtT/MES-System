@@ -1,5 +1,8 @@
 package mes.prd.com.service.impl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -14,6 +17,7 @@ import mes.prd.com.service.GridDataVO;
 import mes.prd.com.service.ProduceCommandDDefaultVO;
 import mes.prd.com.service.ProduceCommandDService;
 import mes.prd.com.service.ProduceCommandDVO;
+import mes.sal.out.service.ItemHistoryVO;
 /**
  * @Class Name : ProduceCommandDServiceImpl.java
  * @Description : ProduceCommandD Business Implement class
@@ -122,11 +126,23 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
     	return produceCommandDDAO.selectProduceCommandFlowList(searchVO);
     }
     
-    /** 작업지시 update */
-    public void produceCommandUpdate(GridDataVO gridData) throws Exception {
+    /** 작업지시 update 및 insert*/
+    public String produceCommandUpdate(GridDataVO gridData) throws Exception {
+    	String newPrdComNum = null;
     	if(gridData.getProduceCommandDVO().getPrdComNum() != null && gridData.getProduceCommandDVO().getPrdComNum() != "") {
     		produceCommandDDAO.updateProduceCommand(gridData.getProduceCommandDVO());
+    	} else {
+    		String date = gridData.getProduceCommandDVO().getPrdComDate().replace("-", "");      
+    		int a = produceCommandDDAO.getPrdComCount(gridData.getProduceCommandDVO());
+    		System.out.println(a);
+    		String num = String.format("%03d", a);
+    		newPrdComNum = "PC"+date+num;
+    		ProduceCommandDVO vo = gridData.getProduceCommandDVO();
+    		vo.setPrdComNum(newPrdComNum);
+    		produceCommandDDAO.insertProduceCommand(vo);
+    		gridData.setProduceCommandDVO(vo);
     	}
+    	
         if(gridData.getUpdatedRows() != null) {
         	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
         		produceCommandDDAO.updateProduceCommandD(gridData.getUpdatedRows().get(i));
@@ -150,6 +166,8 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
         		produceCommandDDAO.deleteProduceCommandD(gridData.getDeletedRows().get(i));
         	}
         }
+        
+        return newPrdComNum;
     }
     
     /**

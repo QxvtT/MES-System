@@ -67,7 +67,7 @@ public interface ProduceCommandDService {
     List selectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception;
     
     /** 작업지시 update */
-    void produceCommandUpdate(GridDataVO gridData) throws Exception;
+    String produceCommandUpdate(GridDataVO gridData) throws Exception;
 
     /**
 	 * PRODUCE_COMMAND_D 총 갯수를 조회한다.

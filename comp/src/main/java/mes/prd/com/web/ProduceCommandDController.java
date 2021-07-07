@@ -61,7 +61,6 @@ public class ProduceCommandDController {
 		
     	System.out.println("이름 : ");
     	List<?> list = produceCommandDService.selectProduceCommandList(searchVO);
-    	System.out.println(list);
     	return list;
     }
 	
@@ -71,7 +70,6 @@ public class ProduceCommandDController {
 	public List<?> ajaxSelectProduceCommandDList(ProduceCommandDVO searchVO) throws Exception {
 		System.out.println("이름 : ");
 		List<?> list = produceCommandDService.selectProduceCommandDList(searchVO);
-		System.out.println(list);
 		return list;
 	}
 	
@@ -81,7 +79,6 @@ public class ProduceCommandDController {
 	public List<?> ajaxSelectProduceCommandMatList(ProduceCommandDVO searchVO) throws Exception {
 		System.out.println("이름 : ");
 		List<?> list = produceCommandDService.selectProduceCommandMatList(searchVO);
-		System.out.println(list);
 		return list;
 	}
 	
@@ -91,7 +88,6 @@ public class ProduceCommandDController {
 	public List<?> ajaxSelectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception {
 		System.out.println("이름 : ");
 		List<?> list = produceCommandDService.selectProduceCommandFlowList(searchVO);
-		System.out.println(list);
 		return list;
 	}
 	
@@ -104,9 +100,9 @@ public class ProduceCommandDController {
 	
 	@RequestMapping(value="/ProduceCommandUpdate")
 	@ResponseBody
-	public void ProduceCommandUpdate(@RequestBody GridDataVO gridData) throws Exception {
+	public String ProduceCommandUpdate(@RequestBody GridDataVO gridData) throws Exception {
 	    	
-		produceCommandDService.produceCommandUpdate(gridData);
+		return produceCommandDService.produceCommandUpdate(gridData);
 	}
 	
     /*

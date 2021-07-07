@@ -28,6 +28,7 @@ public interface ProduceCommandDMapper {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
+    public void insertProduceCommand(ProduceCommandDVO vo) throws Exception;
     public void insertProduceCommandD(ProduceCommandDVO vo) throws Exception;
 
     /**
@@ -72,6 +73,9 @@ public interface ProduceCommandDMapper {
 	
 	/** 작업지시공정흐름 조회 */
 	public List<?> selectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception;
+	
+	/** 지시번호 count */
+	public int getPrdComCount(ProduceCommandDVO searchVO) throws Exception;
 	
     /**
 	 * PRODUCE_COMMAND_D 총 갯수를 조회한다.
