@@ -121,6 +121,11 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
     	return produceCommandDDAO.selectProduceCommandMatList(searchVO);
     }
     
+    /** 모달 lotno자재 조회 */
+    public List<?> seletMatStockList(ProduceCommandDVO searchVO) throws Exception {
+    	return produceCommandDDAO.seletMatStockList(searchVO);
+    }
+    
     /** 작업지시공정흐름 조회 */
     public List<?> selectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception {
     	return produceCommandDDAO.selectProduceCommandFlowList(searchVO);

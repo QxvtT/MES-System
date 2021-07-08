@@ -71,6 +71,9 @@ public interface ProduceCommandDMapper {
 	/** 작업지시자재 조회 */
 	public List<?> selectProduceCommandMatList(ProduceCommandDVO searchVO) throws Exception;
 	
+	/** 모달 lotno자재 조회 */
+	public List<?> seletMatStockList(ProduceCommandDVO searchVO) throws Exception;
+	
 	/** 작업지시공정흐름 조회 */
 	public List<?> selectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception;
 	

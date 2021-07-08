@@ -48,6 +48,14 @@ public class ProduceCommandDController {
     @Resource(name = "propertiesService")
     protected EgovPropertyService propertiesService;
 	
+    /** 화면 조회 */
+    @RequestMapping(value="/ProduceCommandDList.do")
+    public String produceCommandDList(ProduceCommandDVO searchVO, 
+    		ModelMap model)
+    				throws Exception {
+    	return "prd/com/ProduceCommandDList.page";
+    }
+    
     /**
 	 * PRODUCE_COMMAND_D 목록을 조회한다. (pageing)
 	 * @param searchVO - 조회할 정보가 담긴 ProduceCommandDDefaultVO
@@ -82,6 +90,15 @@ public class ProduceCommandDController {
 		return list;
 	}
 	
+	/** 모달 lotno자재 조회 */
+	@RequestMapping(value ="/MatStockList", method=RequestMethod.GET)
+	@ResponseBody
+	public List<?> ajaxMatStockList(ProduceCommandDVO searchVO) throws Exception {
+		System.out.println("이름 : ");
+		List<?> list = produceCommandDService.seletMatStockList(searchVO);
+		return list;
+	}
+	
 	/** 작업지시공정흐름 조회 */
 	@RequestMapping(value ="/ProduceCommandFlowList", method=RequestMethod.GET)
 	@ResponseBody
@@ -91,12 +108,6 @@ public class ProduceCommandDController {
 		return list;
 	}
 	
-	@RequestMapping(value="/ProduceCommandDList.do")
-    public String produceCommandDList(ProduceCommandDVO searchVO, 
-    		ModelMap model)
-            throws Exception {
-		return "prd/com/ProduceCommandDList.page";
-	}
 	
 	@RequestMapping(value="/ProduceCommandUpdate")
 	@ResponseBody

@@ -83,6 +83,25 @@
 		]]>
 	</select>
 	
+	<!-- 모달 lotno자재 조회 -->
+	<select id="seletMatStockList" parameterType="mes.prd.com.service.ProduceCommandDVO"
+		resultType="mes.prd.com.service.ProduceCommandDVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+		select * from material_stock
+		where mat_code = #{matCode}
+		<if test="lotNum1 != null and lotNum1 != ''">
+				<![CDATA[	
+					and lot_Num > #{lotNum1}
+				]]>
+		</if>
+		ORDER BY lot_Num
+		<![CDATA[					
+		) A WHERE ROWNUM <= 10)
+		]]>
+	
+	</select>
+	
 	<!-- 작업지시공정흐름 조회 -->
 	<select id="selectProduceCommandFlowList"
 		parameterType="mes.prd.com.service.ProduceCommandDVO"

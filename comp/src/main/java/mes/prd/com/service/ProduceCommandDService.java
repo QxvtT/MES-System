@@ -62,6 +62,9 @@ public interface ProduceCommandDService {
     
     /** 작업지시자재 조회 */
     List selectProduceCommandMatList(ProduceCommandDVO searchVO) throws Exception;
+    
+    /** 모달 lotno자재 조회 */
+    List seletMatStockList(ProduceCommandDVO searchVO) throws Exception;
 	
     /** 작업지시공정흐름 조회 */
     List selectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception;

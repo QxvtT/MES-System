@@ -26,6 +26,9 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     /** 스크롤용 일련번호 */
     private java.lang.String prdComDNum1;
     
+    /** matLot모달 스크롤용 로트번호 */
+    private java.lang.String lotNum1;
+    
     /** 지시번호 */
     private java.lang.String prdComNum;
     /** 지시일자 */

@@ -34,6 +34,7 @@ let itmCode = null;
 let prcFNo = null;
 let lotNum = null;
 let lotNum1 = null;
+let matCode = null;
 
 //주문일련 계획일련 있는 row들 담을 변수
 let rows = null;
@@ -216,9 +217,18 @@ $(function(){
 		$('#prdComDate').val(grid2.getValue(e.rowKey,'prdComDate'));
 		$('#prdComName').val(grid2.getValue(e.rowKey,'prdComName'));
 		$('#prdComNote').val(grid2.getValue(e.rowKey,'prdComNote'));
-		$('#operName').val(grid2.getValue(e.rowKey,'operName'));
+		//$('#operName').val(grid2.getValue(e.rowKey,'operName'));
 		
 		grid.resetData(getList());
+		// 이전 데이터들 clear해주기
+		gridMat.clear();
+		gridFlow.clear();
+		$('#itmCode').val('');
+		$('#itmName').val('');
+		$('#prdComVol').val('');
+		$('#matCode').val('');
+		$('#matName').val('');
+		$('#operName').val('');
 		
 		// 주문일련이나 계획일련이 있는 row 구하기
 		rows = grid.findRows((row) => {
@@ -283,7 +293,9 @@ $(function(){
 			async: false,
 			url : "MatStockList",
 			type : "get",
-			data : {lotNum1: lotNum1},
+			data : {lotNum1: lotNum1,
+					matCode: matCode
+			},
 			dataType: "json",
 			success : function(result){
 				console.log(prdComNum1);
@@ -298,6 +310,9 @@ $(function(){
 	}
 	
 	$('#searchMatLotBtn').click(function(){
+		if(matCode == null) {
+			return alert("행이 선택되지 않았습니다.");
+		}
 		$("#mLotModal").modal("toggle");
 		$("#mLotModal").on('shown.bs.modal', function () {
 			console.log("aaaaaaaaaaa");
@@ -307,6 +322,26 @@ $(function(){
 		});
 		
 	})
+	
+	// lotno자재 모달에서 더블클릭시 조회할 지시 선택하는 기능
+	
+	$('#modalLotY').click(() => {
+		let oldRows = gridMat.getData();
+		let chkRows = gridMatStock.getCheckedRows();
+		console.log(oldRows);
+		console.log(chkRows);
+		for(let i in oldRows) {
+			for(let j in chkRows) {
+				if(oldRows[i].lotNum == chkRows[j].lotNum) {
+					chkRows.splice(j,1);
+				}
+			}
+		}
+		for(let r in chkRows) {
+			gridMat.appendRow(chkRows[r]);
+		}
+		$('#mLotModal').modal('hide');
+	});
 	//자재로트번호 선택용 모달 //
 	
 	//행에서 쓸 자재로트
@@ -320,7 +355,7 @@ $(function(){
 	    rowHeaders: ['checkbox'],
 	    columns: [
 			{ header: '지시자재일련번호', name:'prdComMatNum', hidden: true},
-			{ header: '순번', name:'prdComMatO'},
+			{ header: '순번', name:'prdComMatO', editor: 'text'},
 			{ header: '자재LOT NO', name:'lotNum'},
 			{ header: '수량', name:'matVol', editor: 'text'},
 			{ header: '비고', name:'prdComMatNote', editor: 'text'}
@@ -351,6 +386,11 @@ $(function(){
 		}); // end ajax 
 		return data;
 	}
+	
+	deleteMBtn.onclick = function() {
+		gridMat.removeCheckedRows(true);
+		
+	}
 	//행에서 쓸 자재로트//
 	
 	//grid 행 더블클릭시 자재조회 및 공정흐름조회
@@ -361,10 +401,11 @@ $(function(){
 		prcFNo = null;
 		gridMat.resetData(getComMatList());
 		gridFlow.resetData(getFlowList());
+		matCode = grid.getValue(e.rowKey,'matCode');
 		$('#itmCode').val(grid.getValue(e.rowKey,'itmCode'));
 		$('#itmName').val(grid.getValue(e.rowKey,'itmName'));
 		$('#prdComVol').val(grid.getValue(e.rowKey,'prdComVol'));
-		$('#matCode').val(grid.getValue(e.rowKey,'matCode'));
+		$('#matCode').val(matCode);
 		$('#matName').val(grid.getValue(e.rowKey,'matName'));
 		$('#operName').val(grid.getValue(e.rowKey,'operName'));
 	});
@@ -617,17 +658,22 @@ $(function(){
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xl-6 col-lg-12">
-			<label class="ml-3 d-inline">제품코드</label>
-			<input type="text" class="form-control ml-3 d-inline" id="itmCode" name="itmCode" style="width:100px" readonly></input>
-			<label class="ml-3 d-inline">제품명</label>
-			<input type="text" class="form-control ml-3 d-inline" id="itmName" name="itmName" style="width:100px" readonly></input>
+		<div class="col-xl-7 col-lg-12">
+			<div class="col-sm-11" style="padding-right: 0px">
+				<label class="ml-3 d-inline">제품코드</label>
+				<input type="text" class="form-control ml-3 d-inline" id="itmCode" name="itmCode" style="width:100px" readonly></input>
+				<label class="ml-3 d-inline">제품명</label>
+				<input type="text" class="form-control ml-3 d-inline" id="itmName" name="itmName" style="width:100px" readonly></input>
+			</div>
+			<div class="col-sm-1 text-right" style="padding-left: 0px">
+				<button type="button" id="searchMatLotBtn" class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
+			</div>
 		</div>
-		<div class="col-xl-6 col-lg-12">
+		<div class="col-xl-5 col-lg-12">
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xl-6 col-lg-12 row">
+		<div class="col-xl-7 col-lg-12 row">
 			<div class="col-sm-11" style="padding-right: 0px">
 				<label class="ml-3 d-inline">자재코드</label>
 				<input type="text" class="form-control ml-3 d-inline" id="matCode" name="matCode" style="width:100px" readonly></input>
@@ -635,11 +681,10 @@ $(function(){
 				<input type="text" class="form-control ml-3 d-inline" id="matName" name="matName" style="width:100px" readonly></input>
 			</div>
 			<div class="col-sm-1 text-right" style="padding-left: 0px">
-				<button type="button" id="searchMatLotBtn" data-toggle="modal" data-target="#mLotModal"
-								class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
+				<button type="button" id="deleteMBtn" class="btn btn-sm btn-primary waves-effect waves-light">삭제</button>
 			</div>
 		</div>
-		<div class="col-xl-6 col-lg-12">
+		<div class="col-xl-5 col-lg-12">
 			<label class="ml-3  d-inline">고객사명</label>
 			<input type="text" class="form-control ml-3  d-inline" id="operName" name="operName" style="width:100px" readonly></input>
 			<label class="ml-3  d-inline">지시량</label>
@@ -647,10 +692,10 @@ $(function(){
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xl-6 col-lg-12">
+		<div class="col-xl-7 col-lg-12">
 			<div id="gridMat"></div>
 		</div>
-		<div class="col-xl-6 col-lg-12">
+		<div class="col-xl-5 col-lg-12">
 			<div id="gridFlow"></div>
 		</div>
 	</div>
