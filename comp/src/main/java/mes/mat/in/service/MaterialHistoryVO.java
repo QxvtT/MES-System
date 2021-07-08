@@ -138,7 +138,7 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     private java.lang.String matHisDiv;
     
     /** MAT_HIS_DATE */
-    private java.sql.Date matHisDate;
+    private java.lang.String matHisDate;
     
     /** MAT_OUT */
     private java.lang.String matOut;

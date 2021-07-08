@@ -3,7 +3,6 @@ package mes.mat.in.service.impl;
 import java.util.List;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
-import mes.mat.in.service.GridDataVO;
 import mes.mat.in.service.MaterialHistoryDefaultVO;
 import mes.mat.in.service.MaterialHistoryVO;
 
@@ -47,11 +46,17 @@ public interface MaterialHistoryMapper {
     
     public List<?> matOutDayList(MaterialHistoryVO searchVO) throws Exception; // 일 입고 자료 리스트 조회
     
-    public void insertMatIn(MaterialHistoryVO materialHisoryVO) throws Exception;
-    public void updateMatIn(MaterialHistoryVO materialHisoryVO) throws Exception;
-    public void deleteMatIn(MaterialHistoryVO materialHisoryVO) throws Exception;
+    public void insertMatInMng(MaterialHistoryVO vo) throws Exception;
+    public void insertMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 등록
+    
+    public void updateMatInMng(MaterialHistoryVO vo) throws Exception;
+    public void updateMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 그리드 행 수정
+    
+    public void deleteMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 행 삭제
+    
+    public int getMatInMngCount(MaterialHistoryVO searchVO) throws Exception; // 입고 번호 count
     
     public int selectMaterialHistoryListTotCnt(MaterialHistoryDefaultVO searchVO);
-	public int getCount(MaterialHistoryVO searchVO);
+	
     
 }

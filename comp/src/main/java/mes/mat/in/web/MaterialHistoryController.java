@@ -53,19 +53,6 @@ public class MaterialHistoryController {
     /** EgovPropertyService */
     @Resource(name = "propertiesService")
     protected EgovPropertyService propertiesService;
-	
-    /**
-	 * MATERIAL_HISTORY 목록을 조회한다. (pageing)
-	 * @param searchVO - 조회할 정보가 담긴 MaterialHistoryDefaultVO
-	 * @return "/materialHistory/MaterialHistoryList"
-	 * @exception Exception
-	 */
-    
-    // 자재 입고 CUD
-    @RequestMapping("/updateMatIn")
-    public void updateMatIn(@RequestBody GridDataVO gridData) throws Exception{
-    	materialHistoryService.updateMatIn(gridData);
-    }
     
     // 자재 입고 관리 조회
     @RequestMapping(value="/mat/in/MatInMng", method=RequestMethod.GET)
@@ -97,6 +84,25 @@ public class MaterialHistoryController {
     	return "mat/in/MatInMng.page";
     } // end 자재 입고 관리 조회
     
+    // 일 입고 자료 LIST 조회
+    @RequestMapping(value="/mat/in/MatInDayList", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> ajaxMatInDayList(@ModelAttribute("matInDayVO") MaterialHistoryVO matInDayVO) throws Exception{
+    	List<?> matInDayList = materialHistoryService.matInDayList(matInDayVO);
+    	System.out.println(matInDayList);
+    	return matInDayList;
+    }
+    // end 일 입고 자료 리스트 조회
+
+    // 자재 입고 관리 CRUD
+    @RequestMapping(value="/mat/in/matHisMngUpdate")
+    @ResponseBody
+    public String matHisMngUpdate(@RequestBody GridDataVO gridData) throws Exception{
+    	System.out.println("aaaaaaaaaaaaa");
+    	System.out.println(gridData);
+    	return materialHistoryService.matHisMngUpdate(gridData);
+    }
+    // end 자재 입고 관리 CRUD
     
     //자재 입고 조회
     @RequestMapping(value="/mat/in/MatInList", method=RequestMethod.GET)
@@ -124,27 +130,8 @@ public class MaterialHistoryController {
     @RequestMapping("/mat/in/MatInList.do")
     public String selectMatInList(@ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO, ModelMap model) throws Exception{
     	return "mat/in/MatInList.page";
-    } // end 자재 입고 조회
-    
-    // 일 입고 자료 LIST 조회
-    @RequestMapping(value="/mat/in/MatInDayList", method = RequestMethod.GET)
-    @ResponseBody
-    public List<?> ajaxMatInDayList(@ModelAttribute("matInDayVO") MaterialHistoryVO matInDayVO) throws Exception{
-    	List<?> matInDayList = materialHistoryService.matInDayList(matInDayVO);
-    	System.out.println(matInDayList);
-    	return matInDayList;
-    }
-    // end 일 입고 자료 리스트 조회
-    
- // 일 출고 자료 LIST 조회
-    @RequestMapping(value="/mat/in/MatOutDayList", method = RequestMethod.GET)
-    @ResponseBody
-    public List<?> MatOutDayList(@ModelAttribute("matOutDayVO") MaterialHistoryVO matOutDayVO) throws Exception{
-    	List<?> matOutDayList = materialHistoryService.matInDayList(matOutDayVO);
-    	System.out.println(matOutDayList);
-    	return matOutDayList;
-    }
-    // end 일 출고 자료 리스트 조회
+    } 
+    // end 자재 입고 조회
     
     // 자재 출고 관리 조회
     @RequestMapping(value="/mat/in/MatOutMng", method=RequestMethod.GET)
@@ -161,22 +148,17 @@ public class MaterialHistoryController {
     @RequestMapping("/mat/in/MatOutMng.do")
     public String selectMatOutMng(@ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO, ModelMap model) throws Exception{
     	return "mat/in/MatOutMng.page";
-    } // end 자재 출고 관리 조회
+    } 
+    // end 자재 출고 관리 조회
     
-    @RequestMapping("/materialHistory/addMaterialHistoryView.do")
-    public String addMaterialHistoryView(
-            @ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO, Model model)
-            throws Exception {
-        model.addAttribute("materialHistoryVO", new MaterialHistoryVO());
-        return "/materialHistory/MaterialHistoryRegister";
+    // 일 출고 자료 LIST 조회
+    @RequestMapping(value="/mat/in/MatOutDayList", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> MatOutDayList(@ModelAttribute("matOutDayVO") MaterialHistoryVO matOutDayVO) throws Exception{
+    	List<?> matOutDayList = materialHistoryService.matInDayList(matOutDayVO);
+    	System.out.println(matOutDayList);
+    	return matOutDayList;
     }
-    
-    @RequestMapping("/materialHistory/selectMaterialHistory.do")
-    public @ModelAttribute("materialHistoryVO")
-    MaterialHistoryVO selectMaterialHistory(
-            MaterialHistoryVO materialHistoryVO,
-            @ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO) throws Exception {
-        return materialHistoryService.selectMaterialHistory(materialHistoryVO);
-    }
+    // end 일 출고 자료 리스트 조회
 
 }

@@ -38,6 +38,7 @@ let matHisDateS = null;
 let matHisDateE = null;
 let matCode = null;
 let operCode = null;
+let matOrdOper = null;
 let operCodes = null;
 let matHisDate = null;
 let sDate = null;
@@ -62,25 +63,6 @@ $(function(){
         format: 'yyyy-MM-dd'
   
     });
-    
-/**    
-    let TestDate = new Date();
-    let picker2 = tui.DatePicker.createRangePicker({
-        startpicker: {
-            date: TestDate,
-            input: '#TestStartpicker-input',
-            container: '#TestStartpicker-container'
-        },
-        endpicker: {
-            date: TestDate,
-            input: '#TestEndpicker-input',
-            container: '#TestEndpicker-container'
-        },
-        language: 'ko',
-        type: 'date',
-        format: 'yyyy-MM-dd'
-    });
-**/
     
     let MatInDate = new Date();
     var datepicker = new tui.DatePicker('#MatInpicker-container', {
@@ -151,8 +133,18 @@ $(function(){
 	    	},
 	    	{ 
 	    		header: '관리번호', 
-	    		name:'matHisNum'
-// 	    		hidden: true
+	    		name:'matHisNum',
+	    		hidden: true
+	    	},
+	    	{ 
+	    		header: '업체코드', 
+	    		name:'operCode',
+	    		hidden: true
+	    	},
+	    	{ 
+	    		header: '입고업체명', 
+	    		name:'matOrdOper',
+	    		hidden: true
 	    	}
 	    ]
 	}); // end const grid
@@ -165,7 +157,7 @@ $(function(){
 			type : "get",
 			data : {
 				matHisNum: matHisNum,
-				matHisDNum1: matHisDNum1				
+				matHisDNum1: matHisDNum1		
 			},
 			dataType: "json",
 			success : function(result){
@@ -254,12 +246,6 @@ $(function(){
 		
 	})
 	
-	// 추가 버튼 클릭 이벤트, 그리드 row 생성 미완성
-	var rowData = [];
-	$('#addRowBtn').click(function() {
-		grid.appendRow(rowData)
-	})
-	
 	$(document).on('click','#matInDeleteBtn',function(){
 	//선택한 그리드가 있으면 삭제
 	var datas = grid.getCheckedRows();    
@@ -273,30 +259,34 @@ $(function(){
 		}
 	});
 	
-	$("#matInSaveBtn").click(function(){
-		console.log(grid.getModifiedRows({}));
+	// 자재 입고 관리 수정 및 생성
+	matInSaveBtn.onclick = function(){
 		let gridData = grid.getModifiedRows({});
 		
 		gridData["materialHistoryVO"]={
- 				matHisDate : $("#matHisDate").val()
-				,matCode : $("#matCode").val()
-				,matHisVol :$("#matHisVol").val()
-				,matHisPrice :$('#matHisPrice').val()
+ 				matHisDate : $("#MatInpicker-input").val()
+				,operCode : $("#operCode").val()
+				,matHisNum :  matHisNum
 				}
+		console.log(gridData);
 		
 		$.ajax({
 			async: false,
-			url: "updateMatIn",
+			url: "matHisMngUpdate",
 			type : "post",
 			data : JSON.stringify(gridData),
 			dataType: "json",
 			contentType: "application/json",
-			success : function(){
-				alret("insert success")
+			success : function(data){
+				console.log(data);
+				matHisNum = data;
 			}
 		});
-		grid2.resetData(getMatInDayList());
-	});
+		
+		matHisDNum1 = null;
+		grid.resetData(getList());
+		
+	}
 	
 	resetBtn.onclick=function(){
 		grid.clear();
@@ -326,29 +316,27 @@ $(function(){
 	
 	modalY.onclick=function() {
 		matHisDate = null;
-		operCode = null;
-		matOutOper = null;
 		if(grid2.getCheckedRows() != null){
 			matHisDNum1 = null;
 			console.log("테ㅓㄴ라ㅣ너ㅣ");
 			console.log(grid2.getCheckedRows()[0]);
 			operCode = grid2.getCheckedRows()[0].operCode;
-			matOutOper = grid2.getCheckedRows()[0].matOutOper;
+			operName = grid2.getCheckedRows()[0].matOrdOper;
 			matHisDate = grid2.getCheckedRows()[0].matHisDate;
 			matHisNum = grid2.getCheckedRows()[0].matHisNum;
 			grid.resetData(getList());
 			
 		}
 		console.log(operCode);
-		console.log(matOutOper);
 		console.log(matHisDate);
+		console.log(operName);
 		console.log(matHisNum);
 		console.log('======================');
 	
 	grid2.resetData(getMatInDayList());
 	document.getElementById("MatInpicker-input").value=matHisDate;
 	document.getElementById("operCode").value=operCode;
-	document.getElementById("matOutOper").value=matOutOper;
+	document.getElementById("operName").value=operName;
 	}
 	
 	grid2.on('scrollEnd', () => {
@@ -356,7 +344,8 @@ $(function(){
 		})
 	
 	searchBtn.onclick = function(){
-		console.log('test')
+		matHisNum1 = null;
+		console.log(matHisNum1)
 		
 		sDate = $(".modal-body").find('input[name="sDate"]').val();
 		console.log(sDate)
@@ -366,9 +355,14 @@ $(function(){
 		grid2.resetData(getMatInDayList());
 	}
 	
-	matInDeleteBtn.onclick = function(){
-		grid.removeCheckedRows()
-		console.log(grid.removeCheckedRows());
+	// 그리드 행 추가
+	addRowBtn.onclick = function(){
+		grid.appendRow();
+	}
+	
+	// 그리드 행 삭제
+	deleteRowBtn.onclick = function(){
+		grid.removeCheckedRows(true);
 	}
 	
 })
@@ -396,7 +390,7 @@ $(function(){
 								<div
 									class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 									<input type="text" id="MatInpicker-input"
-										class=" form-control w-25" aria-label="Date-Time"
+										class=" form-control w-25" aria-label="Date-Time" id="matHisDate"
 										name="matHisDate" /> <span class="tui-ico-date"></span>
 									<div id="MatInpicker-container" style="margin-left: -1px;"></div>
 								</div>
@@ -427,7 +421,7 @@ $(function(){
 							
 							<div>
 								입고업체 * <input type="text" id="operCode" name="operCode"></input>
-								<input type="text" disabled id="matOutOper" name="matOutOper"></input>
+								<input type="text" disabled id="operName" name="operName"></input>
 								<%@ include
 									file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
 							</div>

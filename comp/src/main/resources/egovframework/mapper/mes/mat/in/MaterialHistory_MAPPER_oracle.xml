@@ -4,31 +4,31 @@
 <mapper namespace="mes.mat.in.service.impl.MaterialHistoryMapper">
 	
 	<!-- 자재 입고 등록 -->
-	<insert id="insertMatIn">
+<!-- 	<insert id="insertMatIn"> -->
 		
-	</insert>
+<!-- 	</insert> -->
 	
 	<!-- 자재 입고 수정 -->
-	<update id="updateMatIn">
-		UPDATE MATERIAL_HISTORY_D
-		SET  MAT_CODE = #{matCode}
-			,MAT_HIS_D_VOL = #{matHisDVol}
-			,MAT_HIS_PRICE = #{matHisPrice}
-		WHERE MAT_HIS_D_NUM = #{matHisDNum}
-	</update>
+<!-- 	<update id="updateMatIn"> -->
+<!-- 		UPDATE MATERIAL_HISTORY_D -->
+<!-- 		SET  MAT_CODE = #{matCode} -->
+<!-- 			,MAT_HIS_D_VOL = #{matHisDVol} -->
+<!-- 			,MAT_HIS_PRICE = #{matHisPrice} -->
+<!-- 		WHERE MAT_HIS_D_NUM = #{matHisDNum} -->
+<!-- 	</update> -->
 	
 	<!-- 자재 입고 삭제 -->
-	<delete id="deleteMatIn">
-		<![CDATA[
-			DELETE FROM MATERIAL_HISTORY_D MHD 
-			WHERE EXISTS
-			    (SELECT 1 FROM MATERIAL_HISTORY MH 
-			     WHERE MHD.MAT_HIS_NUM = MH.MAT_HIS_NUM
-			     AND MHD.MAT_HIS_NUM = #{matHisNum}
-			     AND MH.MAT_HIS_NUM = #{matHisNum}
-			     AND MH.MAT_HIS_DIV = '입고')
-				]]>
-	</delete>
+<!-- 	<delete id="deleteMatIn"> -->
+<!-- 		<![CDATA[ -->
+<!-- 			DELETE FROM MATERIAL_HISTORY_D MHD  -->
+<!-- 			WHERE EXISTS -->
+<!-- 			    (SELECT 1 FROM MATERIAL_HISTORY MH  -->
+<!-- 			     WHERE MHD.MAT_HIS_NUM = MH.MAT_HIS_NUM -->
+<!-- 			     AND MHD.MAT_HIS_NUM = #{matHisNum} -->
+<!-- 			     AND MH.MAT_HIS_NUM = #{matHisNum} -->
+<!-- 			     AND MH.MAT_HIS_DIV = '입고') -->
+<!-- 				]]> -->
+<!-- 	</delete> -->
 	
 	<select id="selectMaterialHistory" resultType="mes.mat.in.service.MaterialHistoryVO">
 		<![CDATA[
@@ -132,10 +132,11 @@ SELECT * FROM (
 	<select id="selectMatInMng" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
-				SELECT MH.MAT_HIS_DATE, 
+				SELECT TO_CHAR(MH.MAT_HIS_DATE, 'yyyy-MM-DD') as MAT_HIS_DATE, 
 				       M.MAT_CODE, 
 				       M.MAT_NAME,
-				       M.MAT_SIZE, 
+				       M.MAT_SIZE,
+				       M.MAT_UNIT,  
 				       MHD.MAT_COM_NUM,
 				       MHD.MAT_HIS_D_VOL, 
 				       MHD.MAT_HIS_PRICE, 
@@ -143,7 +144,7 @@ SELECT * FROM (
 				       MHD.LOT_NO,
 				       MHD.MAT_HIS_NUM,
 				       MHD.MAT_HIS_D_NUM
-				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_HISTORY MH, OPERATION O
+				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_HISTORY MH
 				WHERE M.MAT_CODE = MHD.MAT_CODE 
 				      AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
 				      AND MH.MAT_HIS_DIV='입고'
@@ -153,10 +154,10 @@ SELECT * FROM (
 				 <if test= "matHisDNum1 != null and matHisDNum1 != ''">
 			      		and mhd.mat_his_d_num > #{matHisDNum1}
 			     </if>
-			     <if test="matHisDateS != null and matHisDateS != '' and matHisDateE != null and matHisDateE != ''"> AND
+			     <if test="sDate != null and sDate != '' and eDate != null and eDate != ''"> AND
 			     <![CDATA[			    			
-	            			MH.MAT_HIS_DATE >= TO_DATE(#{matHisDateS} ,'yyyy-MM-dd') and  
-	            			MH.MAT_HIS_DATE <= TO_DATE(#{matHisDateE} ,'yyyy-MM-dd')
+	            			MH.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
+	            			MH.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
 	            			]]>
 			     </if>
 			     <if test="operCodeList != null">
@@ -189,12 +190,16 @@ SELECT * FROM (
 	<select id="matInDayList" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
 	SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-			SELECT    MAT_HIS_DATE
-			        , MAT_HIS_NUM
-			        , MAT_HIS_VOL
-                    , mat_ord_oper
-			FROM  MATERIAL_HISTORY
+			SELECT    TO_CHAR(mh.MAT_HIS_DATE, 'yyyy-MM-DD') as MAT_HIS_DATE
+			        , mh.MAT_HIS_NUM
+			        , mh.MAT_HIS_VOL
+                    , mh.mat_ord_oper
+                    , o.oper_code
+			FROM  MATERIAL_HISTORY mh, operation o
 			where mat_his_div = '입고'
+			<if test="matHisNum != null and matHisNum != ''">AND
+				mat_his_num = #{matHisNum}
+			</if>
 			<if test="matHisNum1 != null and matHisNum1 != ''">AND
 				mat_his_num > #{matHisNum1}
 			</if>
@@ -244,8 +249,69 @@ SELECT * FROM (
 	]]>
 	</select>
 	
-	<!-- 자재 출고 삭제 -->
-	<delete id="deleteMatOut">
-		
+	<!-- 자재 입고  master insert -->
+	<insert id="insertMatInMng">
+		INSERT INTO MATERIAL_HISTORY( MAT_HIS_NUM
+		                            , MAT_HIS_DATE
+		                            , MAT_ORD_OPER
+		                            , MAT_HIS_DIV
+		                            , MAT_HIS_VOL) 
+		VALUES( #{matHisNum}
+				, TO_DATE(#{matHisDate}v, 'yyyy-MM-dd')
+				, #{matOrdOper}
+			 	, #{matHisDiv}
+			 	, #{matHisVol})
+	</insert>
+	
+	<!-- 자재입고 master update -->
+	<update id="updateMatInMng">
+		<selectKey resultType="string" keyProperty="matOrdOper" order="BEFORE">
+	        SELECT oper_name FROM operation   
+	        where oper_code = #{operCode}   
+	    </selectKey>
+		UPDATE MATERIAL_HISTORY
+		SET MAT_HIS_DATE = TO_DATE(#{matHisDate}, 'yyyy-MM-dd'),
+			mat_ord_oper = #{matOrdOper}
+		WHERE MAT_HIS_NUM = #{matHisNum}
+	</update>
+	
+	<!-- 자재 입고 관리 grid 행 insert -->
+	<insert id="insertMatInMngD">
+		insert into material_history_d
+			(mat_his_d_num
+			, mat_his_num
+			, mat_code
+			, mat_his_d_vol
+			, mat_his_price)
+			values(
+				material_history_seq.nextval,
+				#{matHisNum},
+				#{matCode},
+				#{matHisDVol},
+				#{matHisPrice}
+			)
+	</insert>
+	
+	<!-- 자재 입고 관리 grid 행 update -->
+	<update id="updateMatInMngD">
+		UPDATE MATERIAL_HISTORY_D SET 
+			MAT_CODE = #{matCode},
+			MAT_HIS_D_VOL = #{matHisDVol},
+			MAT_HIS_PRICE = #{matHisPrice}
+		WHERE MAT_HIS_D_NUM = #{matHisDNum}
+	</update>
+	
+	<!-- 작업지시 grid 행 delete -->
+	<delete id="deleteMatInMngD">
+		delete from MATERIAL_HISTORY_D 
+		where MAT_HIS_D_NUM = #{matHisDNum}
 	</delete>
+	
+	<!-- 자재 입고 관리 마스터번호 구하기 -->
+	<select id="getMatInMngCount" resultType="int">
+		select nvl(to_number(max(substr(mat_com_num,11))),0) + 1
+		from material_history
+		where to_char(mat_his_date,'yyyy-MM-dd') = #{matHisDate}
+	</select>
+	
 </mapper>
