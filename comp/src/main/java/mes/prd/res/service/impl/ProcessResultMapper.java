@@ -63,7 +63,7 @@ public interface ProcessResultMapper {
 	 */
     public List<?> selectProcessResultList(ProcessResultDefaultVO searchVO) throws Exception;
     public List<?> processResultSelect(ProcessResultDefaultVO searchVO) throws Exception;
-    public List<?> produceSelect(ProcessResultDefaultVO searchVO) throws Exception;
+    public List<?> produceSelect(ProcessResultVO searchVO) throws Exception;
 
     
     

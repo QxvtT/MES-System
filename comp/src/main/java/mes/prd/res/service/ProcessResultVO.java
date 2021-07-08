@@ -109,5 +109,11 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     /** 작업지시디테일 순서 */
     private java.math.BigDecimal prdComMatO;
     
+    /** 지시구분*/
+    private java.lang.String prcComDiv;
+    
+    /** 마지막공정상태구분*/
+    private java.lang.String prcFState;
+    
     
 }

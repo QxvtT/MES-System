@@ -101,8 +101,8 @@ $(function(){
 				prcName = prcName + process.getCheckedRows()[i]['prcName']
 			}
 			else{
-				prcCode2 = prcCode2 + process.getCheckedRows()[i]['prcCode']+" , ";
-				prcName = prcName + process.getCheckedRows()[i]['prcName']+" , ";
+				prcCode2 = prcCode2 + process.getCheckedRows()[i]['prcCode']+",";
+				prcName = prcName + process.getCheckedRows()[i]['prcName']+",";
 			}	
 		}
 		

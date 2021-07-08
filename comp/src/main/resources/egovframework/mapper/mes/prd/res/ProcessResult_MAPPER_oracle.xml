@@ -81,6 +81,7 @@ SELECT * FROM (
                        ,(prd.prc_com_d_vol-prd.prc_res_vol) as prc_n_vol
                        ,pcd.prc_com_div
                        ,prd.prc_res_d_num
+                       ,prd.prc_code 
 				from produce_command_d pcd
                      , process_result pr
                      , process_result_d prd
@@ -89,16 +90,20 @@ SELECT * FROM (
 				where pr.prd_com_num = pcd.prd_com_num and
 				      item.itm_code=pcd.itm_code and
                       pr.mov_num =prd.mov_num and
-                      p.prc_code = prd.prc_code
+                      p.prc_code = prd.prc_code and
+                      <![CDATA[
+                      pcd.prc_com_y <> 'Y'
+                      ]]>
                       <if test="prcCode != null and prcCode !=''" >
-							and prd.prc_code = #{prcCode}
+                      and prd.prc_code in (${prcCode})
 						</if>
 				      <if test="prcResDNum != null">
 						<![CDATA[	
-							and prc_res_d_num < #{prcResDNum}
+							and prd.prc_res_d_num < #{prcResDNum}
 						]]>
 						</if>
-						
+						ORDER BY
+		prd.prc_res_d_num DESC
 		<![CDATA[					
 	) A WHERE ROWNUM <=10
 )
@@ -140,22 +145,32 @@ SELECT * FROM (
 	<select id="produceSelect" parameterType="mes.prd.res.service.ProcessResultVO" resultType="mes.prd.res.service.ProcessResultVO">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
-				select pcm.prd_com_mat_o
+				select                 
+                       pcm.prd_com_mat_o
 				       ,pcm.lot_num
 				       ,prd.prc_com_d_vol
 				       ,prc_res_vol
 				       ,(prd.prc_com_d_vol-prc_res_vol) as prc_n_vol
 				       ,prd.prc_err_vol
-				       
+                       ,pcm.mat_vol
+                       ,prd.prc_state
+				       ,a.prc_state as prc_f_state
+                       
 				from 	produce_command_mat pcm,
 				     	produce_command_d pcd,
 				     	process_result pr,
-				     	process_result_d prd
-				     	
+				     	process_result_d prd,
+				     	(select a.*, prd.prc_state from process_result pr, 
+                          process_result_d prd,
+                          (select max(prc_code) as prc_code,mov_num from process_result_d group by mov_num)a
+                          where pr.mov_num = prd.mov_num and
+                          pr.mov_num = a.mov_num  and
+                          a.prc_code = prd.prc_code)a
 				where 	pcd.prd_com_d_num = pcm.prd_com_d_num and
 				      	pr.prd_com_num = pcd.prd_com_num and
 				      	pr. lot_num = pcm.lot_num and
-				      	prd.mov_num = pr.mov_num and
+				      	prd.mov_num = pr.mov_num  and
+                        a.mov_num = prd.mov_num and
 				      	prd.prc_code = #{prcCode} and
 				      	pcd.prd_com_d_num = #{prdComDNum}
 		<![CDATA[					

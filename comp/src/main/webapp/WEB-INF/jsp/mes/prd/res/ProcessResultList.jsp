@@ -54,27 +54,6 @@ $(function(){
 			{ header: '지시구분', name:'prcComDiv'},
 	    ]
 	}); // end const grid
-	const grid3 = new tui.Grid({
-	    el: document.getElementById('grid3'),
-	    scrollX: false,
-	    scrollY: true,
-	    bodyHeight: 200,
-	    data: null,
-	    rowHeaders: ['rowNum'],
-	    columns: [
-	    	{ header: '순서', name:'prdComMatO'},
-	    	{ header: '소재LOT_NO', name:'lotNum'},
-	    	{ header: '입고량', name:'prcComDVol'},
-	    	{ header: '기실적량', name:'prcResVol'},
-			{ header: '미실적량', name:'prcNVol'},
-			{ header: '불량량', name:'prcErrVol'},
-			{ header: '상태', name:'prcResVol'}
-	    ]
-	});
-	
-	grid.on('scrollEnd', () => {
-	    grid.appendRows(getProcessResulList());
-	  })
 	function getProcessResulList() { 
 		$.ajax({
 			async: false, 
@@ -95,6 +74,29 @@ $(function(){
 		}); // end ajax 
 		return data;
 	}
+	const grid3 = new tui.Grid({
+	    el: document.getElementById('grid3'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: null,
+	    rowHeaders: ['rowNum'],
+	    columns: [
+	    	{ header: '순서', name:'prdComMatO'},
+	    	{ header: '소재LOT_NO', name:'lotNum'},
+	    	{ header: '입고량', name:'prcComDVol'},
+	    	{ header: '기실적량', name:'prcResVol'},
+			{ header: '미실적량', name:'prcNVol'},
+			{ header: '불량량', name:'prcErrVol'},
+			{ header: '상태', name:'prcFState'},
+			
+	    ]
+	});
+	
+	grid.on('scrollEnd', () => {
+	    grid.appendRows(getProcessResulList());
+	  })
+	
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
 	   });
@@ -106,8 +108,8 @@ $(function(){
 		let keyt = grid.getFocusedCell()['rowKey'];
 		let prdComDNum = grid.getColumnValues('prdComDNum')[keyt];
 		console.log(prdComDNum);
-		prcCode = $('input#prcCode').val();
-		
+		prcCode = grid.getColumnValues('prcCode')[keyt];;
+		console.log(prcCode );
 		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
 		
 	});
@@ -123,7 +125,6 @@ function getProcessResultSelect(key) {
 			dataType: "json",
 			success : function(result){
 				console.log(result);
-				console.log('result');
 				$( 'td#prdComNum' ).text(result[0]['prdComNum']);
 				$( 'td#itmCode' ).text(result[0]['itmCode']);
 				$( 'td#itmName' ).text(result[0]['itmName']);
@@ -138,35 +139,61 @@ function getProcessResultSelect(key) {
 		return data;
 	}
 	
-function getProduceSelect(prdComDNum,prcCode) { 
-	$.ajax({
-		async: false, 
-		url : "ProduceSelect",
-		type : "get",
-		data : {
-			prdComDNum : prdComDNum,
-			prcCode : prcCode
-			},
-		dataType: "json",
-		success : function(result){
-			console.log(result);
-			data = result;
-		} // end success
-	}); // end ajax 
-	return data;
-}
+	function getProduceSelect(prdComDNum,prcCode) { 
+		$.ajax({
+			async: false, 
+			url : "ProduceSelect",
+			type : "get",
+			data : {
+				prdComDNum : prdComDNum,
+				prcCode : prcCode
+				},
+			dataType: "json",
+			success : function(result){
+				for(let i = 0; i<result.length; i++){
+					console.log(result[i]['prcFState']);
+					if(result[i]['prcState'] =='진행'){
+						result[i]['prcFState'] = '노랑'
+					}
+					else if(result[i]['prcState'] =='완료'){
+						if(result[i]['prcFState']=='진행'){
+							result[i]['prcFState'] = '초록'
+						}else{
+							result[i]['prcFState'] = '파랑'
+						}
+					}else{
+						result[i]['prcFState'] = '빨강'
+					}
+					console.log('test123123');
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
 
-search.onclick = function() {
-	prcResDNum = null;
-	grid.resetData(getProcessResulList());
-}
-
-
+	search.onclick = function() {
+		prcResDNum = null;
+		prcCode = $("input#prcCode").val();
+		console.log(prcCode);
+		grid.resetData(getProcessResulList());
+		$( 'td#prdComNum' ).text();
+		$( 'td#itmCode' ).text();
+		$( 'td#itmName' ).text();
+		$( 'td#operName' ).text();
+		$( 'td#prcComDVol' ).text();
+		$( 'td#prcResVol' ).text();
+		$( 'td#prcNVol' ).text();
+	}
+	
+	
 	
 
-	
+	 
 	
 })
+	
 </script>
 </head>
 <body>
@@ -182,9 +209,9 @@ search.onclick = function() {
 								<div id="title" class="card-header">
 									<ul>
 										작업공정<input type="text" id="prcCode" name ="prcCode"/>
-										이동번호<input type="text" id="" name =""/>
-										<button type ="button" id ="search" name = "search">검색</button>
+										<%@ include file="/WEB-INF/jsp/mes/common/modal/ProcessList.jsp" %>
 									</ul>
+										<button type ="button" id ="search" name = "search">검색</button>
 								</div>
 
 								<!-- // 타이틀 -->
@@ -273,5 +300,6 @@ search.onclick = function() {
 
 </body>
 </html>
+
 
 

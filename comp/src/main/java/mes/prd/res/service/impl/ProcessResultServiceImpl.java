@@ -1,5 +1,6 @@
 package mes.prd.res.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import mes.prd.res.service.ProcessResultDefaultVO;
 import mes.prd.res.service.ProcessResultService;
 import mes.prd.res.service.ProcessResultVO;
