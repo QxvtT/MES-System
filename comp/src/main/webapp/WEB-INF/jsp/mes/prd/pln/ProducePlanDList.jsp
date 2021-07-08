@@ -33,6 +33,8 @@ let prdNum = null;
 let prdName = null;
 let prdNote = null;
 let itmCode = null;
+let autoItemInfo = null;
+let rowKey = null;
 $(function(){
 	
 	// 생산계획 디테일 그리드
@@ -47,6 +49,11 @@ $(function(){
 	    	{
 	    		header: '디테일번호',
 	    		name: 'prdPlanDNum',
+	    		hidden: true
+	    	},
+	    	{
+	    		header: '주문디테일 일련번호',
+	    		name: 'ordDNum',
 	    		hidden: true
 	    	},
 			{ 
@@ -68,7 +75,7 @@ $(function(){
 	    		align: 'center'
 	    	},
 			{ 
-	    		header: '주문서관리번호', 
+	    		header: '주문번호', 
 	    		name:'ordNum',
 	    		align: 'center'
 	    	},
@@ -85,16 +92,15 @@ $(function(){
 			{
 	    		header: '작업량', 
 	    		name:'prdWorkVol',
+	    	    onAfterChange(e) {
+	    	    	let a = e.value / grid.getValue(e.rowKey, 'itmDayOutput');
+	    	    	grid.setValue(e.rowKey, 'prdPerDay', a);
+	    	    },	    	      
 	    		align: 'center',
 	    		editor: 'text',
 	    		validation: {
 	    	        required: true
-	    	    },
-	    	    onAfterChange(e) {
-	    	    	console.log(e['rowKey'])
-	    	    	console.log()
-	    	    	grid.setValue(e['rowKey'], 'prdPerDay', (e['value']/grid.getValue(e['rowKey'])), 'itmDayOutput');
-	    	    }	    	      
+	    	    }
 	    	},
 			{ 
 	    		header: '일생산량', 
@@ -112,7 +118,8 @@ $(function(){
 	    		align: 'center',
 	    		editor: {
 	    			type: 'datePicker',
-	    			format: 'yyyy/MM/dd'
+	    			format: 'yyyy/MM/dd',
+	    			language: 'ko'
 	    		}
 	    	},
 			{ 
@@ -198,7 +205,7 @@ $(function(){
 		$.ajax({
 			async: false,
 			cache: false,
-			url : "ProducePlanList",
+			url : "SelectProducePlanD",
 			type : "get",
 			data : {
 				startDate : startDate,
@@ -208,12 +215,33 @@ $(function(){
 			success : function(result){
 				if(result.length > 0) {
 					prdNum = result[result.length -1].prdNum;
+					prdName = result[0].prdName;
+					prdNote = result[0].prdNote;
 				}
-				prdName = result[0].prdName;
-				prdNote = result[0].prdNote;
 				data = result;
 			} // end success
 		}); // end ajax 
+		return data;
+	}
+	
+	//미생산 계획 검색 Select 데이터
+	function getUnPrdList() {
+		grid.clear();
+		let data;
+		$.ajax({
+			async: false,
+			url: 'UnProducePlanList',
+			type: 'get',
+			data: {
+				unpStartDate : unpStartDate,
+				unpEndDate : unpEndDate
+			},
+			dataType: 'json',
+			success : function(result) {
+				autoItemInfo = result;
+				data = result;
+			}
+		});
 		return data;
 	}
 	
@@ -369,7 +397,6 @@ $(function(){
 		var selectPrd = grid2.getFocusedCell();
 		if(getKeyByValue(selectPrd, "prdNum") != null){
 			prdNum = Object.values(selectPrd)[2];
-			console.log(prdNum);
 			$('#searchModal').modal("hide");
 			$('#prdName').val(prdName);
 			$('#prdNote').val(prdNote);
@@ -385,12 +412,11 @@ $(function(){
 					grid2.uncheck(rows[i]);
 				}
 			}
-			rows = grid2.getCheckedRowKeys();
+			rows = grid2.getCheckeds();
 		}
 		// 조회된 리스트에서 체크된 생산계획을 디테일테이블에 뿌려줌
 		$('#loadBtn').click(function() {
 			prdNum = grid2.getValue(rows, 'prdNum');
-			console.log(prdNum);
 			grid.resetData(getList());
 		})
 	});
@@ -405,6 +431,17 @@ $(function(){
 		setDatePicker();
 	});
 	
+	// 미생산 계획 조회 버튼 클릭 이벤트, 클릭시 제품코드에 해당하는 제품명, 규격도 세팅
+	$('#unPrdSearchBtn').click(function() {
+		unpStartDate = $('#unpStartDate').val();
+		unpEndDate = $('#unpEndDate').val();
+		grid.resetData(getUnPrdList());
+		for(var i in autoItemInfo){
+			rowKey = autoItemInfo[i]['rowKey']
+			selectItem(autoItemInfo[i].itmCode);
+		}
+	})
+	
 	// 추가 버튼 클릭 이벤트, 그리드 row 생성 미완성
 	var rowData = [];
 	$('#addRowBtn').click(function() {
@@ -412,7 +449,6 @@ $(function(){
 	})
 	
 	// 제품코드 입력란 더블클릭 시 제품코드별 제품명을 볼 수 있는 모달창 생성
-	let rowKey = null;
 	grid.on('dblclick', (e) => {
 		var selectItm = grid.getFocusedCell();
 		if(getKeyByValue(selectItm, "itmCode") != null){
@@ -446,7 +482,6 @@ $(function(){
 	// 제품코드 모달창 제품코드 더블클릭 시 디테일 테이블 로우 데이터 값 수정
 	grid3.on('dblclick', (e) => {
 		var selectItm = grid.getFocusedCell();
-		console.log(selectItm);
 		if(getKeyByValue(selectItm, "itmCode") != null){
 			$('#itmModal').modal("hide");
 			let selectItm = grid3.getFocusedCell();
@@ -456,7 +491,6 @@ $(function(){
 	});
 	
 	$('#saveBtn').click(function(){
-		console.log(grid.getRowCount());
 		prdName = $('#prdName').val();
 		if(prdName == null || prdName == ""){
 			$('#prdName').focus();
@@ -477,7 +511,6 @@ $(function(){
 		}
 		
 		for(let i = 0; i < grid.getRowCount(); i++){
-			console.log(grid.getValue(i, 'prdPlanDate'));
 			if(grid.getValue(i, 'prdPlanDate') == null || grid.getValue(i, 'prdPlanDate') == ""){
 				let myToast = null;
 				//토스트메시지 테스트
@@ -501,7 +534,8 @@ $(function(){
 			prdDate : $('#prdDate').val(),
 			prdName : $('#prdName').val(),
 			prdNote : $('#prdNote').val(),
-			prdNum : prdNum
+			prdNum : prdNum,
+			unpStartDate : unpStartDate
 		}
 		$.ajax({
 			async: false,
@@ -512,6 +546,7 @@ $(function(){
 			dataType: "json",
 			contentType:"application/json",
 			success: console.log(JSON.stringify(gridData))
+			
 		});
 	})// end of saveBtn
 	
@@ -633,7 +668,7 @@ $(function(){
 						<div class="col border"
 							style="background-color: white; padding: 10px;">
 							<h5>미생산 계획 검색</h5>
-							<div>납기일자</div>
+							<div>주문 접수 일자</div>
 							<div class="row">
 								<div
 									class="tui-datepicker-input tui-datetime-input tui-has-focus">
@@ -649,7 +684,7 @@ $(function(){
 									<div id="unpEndDate-container" style="margin-left: -1px;"></div>
 								</div>
 								<div class="col">
-									<button type="submit" class="btn btn-primary btn-sm">미생산 계획
+									<button type="button" id="unPrdSearchBtn" class="btn btn-primary btn-sm">미생산 계획
 										조회</button>
 								</div>
 							</div>

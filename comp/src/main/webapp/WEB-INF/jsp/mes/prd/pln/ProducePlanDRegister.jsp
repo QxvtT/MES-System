@@ -23,54 +23,59 @@
 <head>
 
 <script type="text/javaScript" language="javascript" defer="defer">
+
+let prdDate = null;
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
 	    scrollX: false,
 	    scrollY: true,
-	    bodyHeight: 200,
+	    bodyHeight: 500,
 	    rowWidth: 100,
 	    data: null,
 	    columns: [
-	    	{ header: '계획일자', name:'prdComDNum'},
-	    	{ header: '고객사명', name:'prdPlanDNum'},
-	    	{ header: '제품코드', name:'ordDNum'},
-			{ header: '제품명', name:'matCode'},
-			{ header: '주문번호', name:'matName'},
-			{ header: '납기일자', name:'operName'},
-			{ header: '주문량', name:'itmCode', editor: 'text'},
-			{ header: '계획량', name:'itmName'},
-			{ header: '작업일자', name:'prcComDiv'},
-			{ header: '순서', name:'ordNum'},
-			{ header: '비고', name:'ordDeliveryDate'}
+	    	{ header: '계획일자', name:'prdDate'},
+	    	{ header: '고객사명', name:'operName'},
+	    	{ header: '제품코드', name:'itmCode'},
+			{ header: '제품명', name:'itmName'},
+			{ header: '주문번호', name:'ordNum'},
+			{ header: '납기일자', name:'ordDeliveryDate'},
+			{ header: '주문량', name:'ordVol'},
+			{ header: '계획량', name:'prdWorkVol'},
+			{ header: '작업일자', name:'prdPlanDate'},
+			{ header: '순서', name:'prdNo'}
 	    ]
 	}); // end const grid
 	
+	// 고객사 검색 모달
+	const grid2 = new tui.Grid({
+	    el: document.getElementById('grid2'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: getOperList(),
+	    rowHeaders: [{
+            type: 'checkbox',
+            header: ' '
+    	}],
+	    columns: [
+	    	{ 
+	    		header: '업체코드', 
+	    		name:'operCode',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '업체명', 
+	    		name:'operName',
+	    		align: 'center'
+	    		}
+	    ]
+	});
+	
 	grid.on('scrollEnd', () => {
-	    grid.appendRows(getList());
+	    grid.appendRows(getPrdComList());
 	  })
 	  
-	function getList() {
-		let data;
-		$.ajax({
-			async: false,
-			url : "ProduceCommandDList",
-			type : "get",
-			data : {prdComDNum1: prdComDNum1,
-					prdComNum: prdComNum
-					},
-			dataType: "json",
-			success : function(result){
-				console.log(prdComNum1);
-				if(result.length > 0) {
-					prdComDNum1 = result[result.length -1].prdComDNum;
-				}
-				console.log(result);
-				data = result;
-			} // end success
-		}); // end ajax 
-		return data;
-	}
 	// toast datePicker 관련 Script
 	var today = new Date();
 	var preDay = new Date();
@@ -92,21 +97,31 @@ $(function(){
         format: 'yyyy-MM-dd'
     });
     
-
-	  
+	// 생산계획조회 일단은 전체 조회
 	function getPrdComList() {
 		let data;
 		$.ajax({
 			async: false,
-			url : "ProduceCommandList",
+			url : "ProducePlanList",
 			type : "get",
-			data : {prdComNum1: prdComNum1},
+			data : {prdDate: prdDate},
 			dataType: "json",
 			success : function(result){
-				console.log(prdComNum1);
-				if(result.length > 0) {
-					prdComNum1 = result[result.length -1].prdComNum;
-				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	
+	// 고객사 모달 고객사 정보 Select List
+	function getOperList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "OperationList",
+			type : "get",
+			success : function(result){
 				console.log(result);
 				data = result;
 			} // end success
@@ -122,8 +137,15 @@ $(function(){
 	
 	// 생산계획조회 그리드 생성
 	$('#searchBtn').click(function() {
-		grid.resetData(getPrdList());
+		grid.resetData(getPrdComList());
 	})
+	
+	$('#searchOperBtn').click(function(){
+		$('#operModal').modal('toggle');
+		$('#operModal').on('shown.bs.modal', function(){
+			grid2.refreshLayout();
+		});
+	});
 	
 	
 })
@@ -210,7 +232,7 @@ $(function(){
 														<input type="text"
 															class="form-control" id="endOperName" name="endOperName"
 															readonly="readonly" />
-														<button type="button">검색</button>
+														<button type="button" id="searchOperBtn">검색</button>
 													</div>
 													<span style="margin: 10px;"> ~ </span>
 													<div>
@@ -257,6 +279,28 @@ $(function(){
 			</div>
 		</div>
 	</div>
+	
+	<!-- 고객사 선택 모달 -->
+	<div class="modal fade" id="operModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="myModalLabel">고객사</h3>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="grid2"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="operCheckSearchBtn">확인</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

@@ -75,5 +75,7 @@ public interface ProducePlanDService {
 	void producePlanDelete(ProducePlanDVO prdVO) throws Exception;
 
 	List<?> producePlanList(ProducePlanDVO searchVO) throws Exception;
+
+	List<?> selectUnProducePlanList(ProducePlanDVO prdVO) throws Exception;
     
 }

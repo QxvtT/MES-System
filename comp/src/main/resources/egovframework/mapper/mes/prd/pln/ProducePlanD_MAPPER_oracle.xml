@@ -33,6 +33,23 @@
 		</where>
 	</select>
 	
+	<!-- 미생산계획 조회 -->
+	<select id="selectUnProducePlanList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.pln.service.ProducePlanDVO">
+		SELECT TO_CHAR(A.ORD_REQUEST_DATE, 'yyyy-MM-dd') ORD_REQUEST_DATE
+			 , TO_CHAR(A.ORD_DELIVERY_DATE, 'yyyy-MM-dd') ORD_DELIVERY_DATE
+			 , B.ORD_D_NUM
+		     , B.ORD_NUM
+		     , B.ITM_CODE
+		     , B.ORD_VOL 
+		FROM ORDER_M A, ORDER_D B 
+		WHERE B.PRD_CHK = 'N' 
+        AND A.ORD_NUM = B.ORD_NUM
+        <![CDATA[
+        AND ORD_REQUEST_DATE >= #{unpStartDate}
+        AND ORD_REQUEST_DATE <= #{unpEndDate}
+        ]]>
+	</select>
+	
 	<!-- 일련번호 유무에 따른 update 처리 -->
 	<update id="updateProducePlanD">
 		<if test="prdNum != null and prdNum != '' and prdDate != null and prdDate != ''">
@@ -63,7 +80,9 @@
 			, PRD_WORK_VOL
 			, PRD_PLAN_DATE
 			, PRD_NO
-			, PRD_D_NOTE)
+			, PRD_D_NOTE
+			, ORD_NUM
+			, ORD_D_NUM)
 			VALUES 
 			( PRODUCE_PLAN_D_SEQ.nextVal
 			, #{prdNum}
@@ -71,7 +90,10 @@
 			, #{prdWorkVol}
 			, TO_DATE(#{prdPlanDate}, 'yy/MM/dd')
 			, #{prdNo}
-			, #{prdDNote})
+			, #{prdDNote}
+			, #{ordNum}
+			, #{ordDNum}
+			)
 		</if>
 		
 		<if test="prdNum == null or prdNum == ''">
@@ -133,6 +155,24 @@
 	
 	<select id="selectItem" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.pln.service.ProducePlanDVO">
 		SELECT * FROM ITEM WHERE ITM_CODE = #{itmCode}
+	</select>
+	
+	<!-- 생산계획조회 리스트 -->
+	<select id="producePlanList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.pln.service.ProducePlanDVO">
+		SELECT A.PRD_DATE
+		     , (SELECT OPER_NAME FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) OPER_NAME
+		     , B.PRD_NUM
+		     , B.ITM_CODE
+		     , (SELECT ITM_NAME FROM ITEM WHERE ITM_CODE = B.ITM_CODE) ITM_NAME
+		     , B.ORD_NUM
+		     , (SELECT ORD_DELIVERY_DATE FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) ORD_DELIVERY_DATE
+		     , (SELECT ORD_VOL FROM ORDER_D WHERE ORD_NUM = B.ORD_NUM AND ORD_D_NUM = B.ORD_D_NUM) ORD_VOL
+		     , B.PRD_WORK_VOL
+		     , B.PRD_PLAN_DATE
+		     , B.PRD_NO
+		FROM PRODUCE_PLAN A
+		   , PRODUCE_PLAN_D B 
+		WHERE A.PRD_NUM = B.PRD_NUM
 	</select>
 		
 </mapper>

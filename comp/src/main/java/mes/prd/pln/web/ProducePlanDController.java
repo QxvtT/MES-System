@@ -61,11 +61,19 @@ public class ProducePlanDController {
 	}
 	
 	// 생산계획 ajax
-	@RequestMapping(value = "/prd/pln/ProducePlanList")
+	@RequestMapping(value = "/prd/pln/SelectProducePlanD")
 	@ResponseBody
 	public List<?> ajaxPrd(@ModelAttribute("prdVO") ProducePlanDVO prdVO) throws Exception {
 		List<?> prdList = producePlanDService.selectProducePlanList(prdVO);
-		return prdList;
+		return prdList;	
+	}
+	
+	// 미생산계획 ajax
+	@RequestMapping(value = "/prd/pln/UnProducePlanList")
+	@ResponseBody
+	public List<?> ajaxUnPrd(@ModelAttribute("prdVO") ProducePlanDVO prdVO) throws Exception {
+		List<?> prdList = producePlanDService.selectUnProducePlanList(prdVO);
+		return prdList;	
 	}
 
 	// 제품 List
@@ -107,12 +115,13 @@ public class ProducePlanDController {
 	}
 	
 	// 생산계획조회  리스트 ajax 처리
-		@RequestMapping(value = "/ProducePlanList", method = RequestMethod.GET)
-		@ResponseBody
-		public List<?> ajaxPlanList(@ModelAttribute("searchVO") ProducePlanDVO searchVO) throws Exception {
-			List<?> list = producePlanDService.producePlanList(searchVO);
-			return list;
-		}
+	@RequestMapping(value = "/ProducePlanList", method = RequestMethod.GET)
+	@ResponseBody
+	public List<?> ajaxPlanList(@ModelAttribute("searchVO") ProducePlanDVO searchVO) throws Exception {
+		System.out.println(searchVO);
+		List<?> list = producePlanDService.producePlanList(searchVO);
+		return list;
+	}
 
 	@RequestMapping("/prd/pln/addProducePlanD.do")
 	public String addProducePlanD(ProducePlanDVO producePlanDVO,

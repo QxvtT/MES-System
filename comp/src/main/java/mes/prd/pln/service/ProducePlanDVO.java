@@ -1,9 +1,6 @@
 package mes.prd.pln.service;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -54,6 +51,7 @@ public class ProducePlanDVO extends ProducePlanDDefaultVO{
     private java.lang.String itmName;
     private java.lang.String matCode;
     private java.lang.String ordDeliveryDate;
+    private java.lang.String ordRequestDate;
     private java.math.BigDecimal ordVol;
     private java.math.BigDecimal itmDayOutput;
 
@@ -64,6 +62,13 @@ public class ProducePlanDVO extends ProducePlanDDefaultVO{
     
     private java.lang.String startDate;
     private java.lang.String endDate;
+
+    private java.lang.String unpStartDate;
+    private java.lang.String unpEndDate;
+    
+    private java.lang.String operName;
+    
+    private java.math.BigDecimal ordDNum;
     
     
 }

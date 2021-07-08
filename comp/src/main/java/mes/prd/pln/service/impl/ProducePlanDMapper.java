@@ -75,5 +75,8 @@ public interface ProducePlanDMapper {
 	// 생산계획조회 뷰 리스트 
 	public List<?> producePlanList(ProducePlanDVO searchVO) throws Exception;
 
+	// 미생산계획 조회 
+	public List<?> selectUnProducePlanList(ProducePlanDVO prdVO) throws Exception;
+
 
 }

@@ -101,6 +101,11 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 		return producePlanDDAO.selectProducePlanList(prdVO);
 	}
     
+	// 미생산계획 조회
+	public List<?> selectUnProducePlanList(ProducePlanDVO prdVO) throws Exception {
+		return producePlanDDAO.selectUnProducePlanList(prdVO);
+	}
+	
     /**
 	 * PRODUCE_PLAN_D 총 갯수를 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO
@@ -125,21 +130,29 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 
 	// cud 통합
 	public void producePlanUpdate(GridData gridData) throws Exception {
-
+		
 		if(gridData.getUpdatedRows() != null && gridData.getUpdatedRows().size() != 0  || gridData.getProducePlanDVO() != null) {
         	ProducePlanDVO vo = new ProducePlanDVO();
         	vo.setPrdNum(gridData.getProducePlanDVO().getPrdNum());
         	vo.setPrdDate(gridData.getProducePlanDVO().getPrdDate());
 			vo.setPrdName(gridData.getProducePlanDVO().getPrdName());
 			vo.setPrdNote(gridData.getProducePlanDVO().getPrdNote());
-			producePlanDDAO.updateProducePlanD(vo);
-			
-			if(gridData.getUpdatedRows() != null)
-        	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
-        		vo = gridData.getUpdatedRows().get(i);
-        		System.out.println(vo);
-        		producePlanDDAO.updateProducePlanD(vo);
-        	}
+			String unpStartDate = (gridData.getProducePlanDVO().getUnpStartDate());
+			if(unpStartDate != null) {
+				producePlanDDAO.insertProducePlanD(vo);
+				String prdNum = vo.getPrdNum();
+				for (int i = 0; i < gridData.getUpdatedRows().size(); i++) {
+	        		vo = gridData.getUpdatedRows().get(i);
+	        		vo.setPrdNum(prdNum);
+	        		producePlanDDAO.insertProducePlanD(vo);
+	        	}
+			} else {
+				producePlanDDAO.updateProducePlanD(vo);
+				for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
+					vo = gridData.getUpdatedRows().get(i);
+					producePlanDDAO.updateProducePlanD(vo);
+				}
+			}
         }
         
         if(gridData.getCreatedRows() != null && gridData.getCreatedRows().size() != 0) {
@@ -179,6 +192,7 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 	public List<?> producePlanList(ProducePlanDVO searchVO) throws Exception {
 		return producePlanDDAO.producePlanList(searchVO);
 	}
+
 
 	
     
