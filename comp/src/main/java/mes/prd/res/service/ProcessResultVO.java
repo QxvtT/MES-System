@@ -31,18 +31,29 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     /** 제품명 item */
     private java.lang.String itmName;
     
+    
+    /** 기업명 item */
+    private java.lang.String operName;
+    
     /** 자재 LOT_NO*/
     private java.lang.String lotNum;
     
     /** 입고량 */
     private java.math.BigDecimal prcComVol;
     
+    /** 포장량*/
+    private java.math.BigDecimal prcPackVol;
+    
+    /** 미포장량 */
+    private java.math.BigDecimal prcNVol;
+    
+    
     /** 실적량*/
     private java.math.BigDecimal prcBckVol;
     
     
     /** 작업시작날짜 produce_command*/
-    private java.lang.String prdComDate;
+    private java.lang.String prdComDDate;
     
     
     
@@ -88,5 +99,15 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     
     /** 작업종료시간*/
     private java.lang.String prcEndTime;
+    
+    /** 디테일입고량 */
+    private java.math.BigDecimal prcComDVol;
+    
+    /** 작업지시디테일 일련번호PK */
+    private java.math.BigDecimal prdComDNum;
+    
+    /** 작업지시디테일 순서 */
+    private java.math.BigDecimal prdComMatO;
+    
     
 }

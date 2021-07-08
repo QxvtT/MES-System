@@ -57,6 +57,10 @@ public interface ProcessResultService {
 	 * @exception Exception
 	 */
     List selectProcessResultList(ProcessResultVO searchVO) throws Exception;
+    List processResultSelect(ProcessResultVO searchVO) throws Exception;
+    List produceSelect(ProcessResultVO searchVO) throws Exception;
+    
+    
     
     /**
 	 * PROCESS_RESULT 총 갯수를 조회한다.

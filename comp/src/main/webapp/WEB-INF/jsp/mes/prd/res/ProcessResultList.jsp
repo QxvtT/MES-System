@@ -30,43 +30,64 @@
 	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
-let rowNum = null;
+let prcResDNum = null;
+let prdComNum = null;
+let data;
+let prcCode = null;
 $(function(){
-	console.log('start');
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
-	    data: getList(),
+	    data: null,
 	    rowHeaders: ['rowNum'],
 	    columns: [
-	    	{ header: '작업시작날짜', name:'prdComDate'},
+	    	{ header: '작업시작날짜', name:'prdComDDate'},
 	    	{ header: '지시번호', name:'prdComNum'},
 	    	{ header: '제품코드', name:'itmCode'},
+	    	{ header: '공정순서', name:'prcResNo'},
 			{ header: '제품명', name:'itmName'},
-			{ header: '입고량', name:'prcComVol'},
-			{ header: '실적량', name:'prcBckVol'}
+			{ header: '입고량', name:'prcComDVol'},
+			{ header: '작업량', name:'prcResVol'},
+			{ header: '미실적량', name:'prcNVol'},
+			{ header: '지시구분', name:'prcComDiv'},
 	    ]
 	}); // end const grid
+	const grid3 = new tui.Grid({
+	    el: document.getElementById('grid3'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: null,
+	    rowHeaders: ['rowNum'],
+	    columns: [
+	    	{ header: '순서', name:'prdComMatO'},
+	    	{ header: '소재LOT_NO', name:'lotNum'},
+	    	{ header: '입고량', name:'prcComDVol'},
+	    	{ header: '기실적량', name:'prcResVol'},
+			{ header: '미실적량', name:'prcNVol'},
+			{ header: '불량량', name:'prcErrVol'},
+			{ header: '상태', name:'prcResVol'}
+	    ]
+	});
 	
 	grid.on('scrollEnd', () => {
-	    grid.appendRows(getList());
+	    grid.appendRows(getProcessResulList());
 	  })
-	function getList() { 
-		let data;
+	function getProcessResulList() { 
 		$.ajax({
 			async: false, 
 			url : "ProcessResultList",
 			type : "get",
 			data : {
-  				rowNum : rowNum
-  
+				prcResDNum : prcResDNum,
+				prcCode : prcCode
 				},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					rowNum = result[result.length -1].rowNum;
+					prcResDNum = result[result.length -1].prcResDNum;
 				}
 				console.log(result);
 				data = result;
@@ -79,16 +100,72 @@ $(function(){
 	   });
 	
 	grid.on('dblclick', () => { 
-		let selectPrd = grid2.getFocusedCell();
-		if(getKeyByValue(selectPrd, "prdNum") != null){
-			prdNum = Object.values(selectPrd)[2];
-			console.log(prdNum);
-			$('#searchModal').modal("hide");
-			$('#prdName').val(prdName);
-			$('#prdNote').val(prdNote);
-			grid.resetData(getList());
-		}
+		let key = grid.getFocusedCell()['rowKey'];
+		let result = grid.getColumnValues('prcResDNum')[key];
+		getProcessResultSelect(result);
+		let keyt = grid.getFocusedCell()['rowKey'];
+		let prdComDNum = grid.getColumnValues('prdComDNum')[keyt];
+		console.log(prdComDNum);
+		prcCode = $('input#prcCode').val();
+		
+		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
+		
 	});
+	
+function getProcessResultSelect(key) { 
+		$.ajax({
+			async: false, 
+			url : "ProcessResultSelect",
+			type : "get",
+			data : {
+				prcResDNum : key
+				},
+			dataType: "json",
+			success : function(result){
+				console.log(result);
+				console.log('result');
+				$( 'td#prdComNum' ).text(result[0]['prdComNum']);
+				$( 'td#itmCode' ).text(result[0]['itmCode']);
+				$( 'td#itmName' ).text(result[0]['itmName']);
+				$( 'td#operName' ).text(result[0]['operName']);
+				$( 'td#prcComDVol' ).text(result[0]['prcComDVol']);
+				$( 'td#prcResVol' ).text(result[0]['prcResVol']);
+				$( 'td#prcNVol' ).text(result[0]['prcNVol']);
+				
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	
+function getProduceSelect(prdComDNum,prcCode) { 
+	$.ajax({
+		async: false, 
+		url : "ProduceSelect",
+		type : "get",
+		data : {
+			prdComDNum : prdComDNum,
+			prcCode : prcCode
+			},
+		dataType: "json",
+		success : function(result){
+			console.log(result);
+			data = result;
+		} // end success
+	}); // end ajax 
+	return data;
+}
+
+search.onclick = function() {
+	prcResDNum = null;
+	grid.resetData(getProcessResulList());
+}
+
+
+	
+
+	
+	
 })
 </script>
 </head>
@@ -104,9 +181,9 @@ $(function(){
 								<!-- 타이틀 -->
 								<div id="title" class="card-header">
 									<ul>
-										
-										작업공정<input type="text"/>
-										이동번호<input type="text"/>
+										작업공정<input type="text" id="prcCode" name ="prcCode"/>
+										이동번호<input type="text" id="" name =""/>
+										<button type ="button" id ="search" name = "search">검색</button>
 									</ul>
 								</div>
 
@@ -137,7 +214,39 @@ $(function(){
 
 								<!-- // 타이틀 -->
 								<!-- List -->
-								<div id="grid2"></div>
+								<div id="table1">
+									<table class = "table">
+										<tr>
+											<th>작업 지시 번호</th>
+											<td id="prdComNum" name="prdComNum"</td>
+										</tr>
+										<tr>
+											<th>제품코드</th>
+											<td id="itmCode" name="itmCode"</td>
+										</tr>
+										<tr>
+											<th>제품명</th>
+											<td id="itmName" name="itmName"</td>
+										</tr>
+										<tr>
+											<th>고객사</th>
+											<td id="operName" name="operName"</td>
+										</tr>
+										<tr>
+											<th>입고량</th>
+											<td id="prcComDVol" name="prcComDVol"</td>
+										</tr>
+										<tr>
+											<th>포장량</th>
+											<td id="prcResVol" name="prcResVol"</td>
+										</tr>
+										<tr>
+											<th>미포장량</th>
+											<td id="prcNVol" name="prcNVol"</td>
+										</tr>
+									
+									</table>
+								</div>
 							</div>
 						</div>
 						<div class="col-xl-8">
@@ -164,3 +273,5 @@ $(function(){
 
 </body>
 </html>
+
+

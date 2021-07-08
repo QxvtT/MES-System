@@ -103,6 +103,13 @@ public class ProcessResultServiceImpl extends EgovAbstractServiceImpl implements
     public List<?> selectProcessResultList(ProcessResultVO searchVO) throws Exception {
         return processResultDAO.selectProcessResultList(searchVO);
     }
+    
+    public List<?> processResultSelect(ProcessResultVO searchVO) throws Exception {
+        return processResultDAO.processResultSelect(searchVO);
+    }
+    public List<?> produceSelect(ProcessResultVO searchVO) throws Exception {
+        return processResultDAO.produceSelect(searchVO);
+    }
 
     /**
 	 * PROCESS_RESULT 총 갯수를 조회한다.

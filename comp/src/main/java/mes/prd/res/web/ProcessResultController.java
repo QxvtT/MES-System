@@ -61,6 +61,23 @@ public class ProcessResultController {
         return processResultList;
     }
     
+    @RequestMapping(value="ProcessResultSelect", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> processResultSelect(ProcessResultVO processResultVO)
+            throws Exception {
+        List<?> processResultSelect = processResultService.processResultSelect(processResultVO);
+        return processResultSelect;
+    }
+    
+    @RequestMapping(value="ProduceSelect", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> produceSelect(ProcessResultVO processResultVO)
+            throws Exception {
+        List<?> produceSelect = processResultService.produceSelect(processResultVO);
+        return produceSelect;
+    }
+    
+    
     @RequestMapping(value="ProcessResultList.do")
     public String selectProcessResultList() throws Exception {
 

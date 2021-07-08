@@ -50,7 +50,6 @@ let bDate = null;
 let test = null;
 
 let str = '';
-let number = 0;
 
 let data;
 
@@ -113,7 +112,6 @@ $(function(){
 						$( 'input#ordNum' ).val(result[0]['ordNum']);
 						}
 						data = result;
-						number = result.length;
 						} // end success
 		}); // end ajax 
 		return data;
@@ -213,8 +211,6 @@ $(function(){
 		console.log(str);
 		console.log('======================');
 	grid.resetData(getList());
-	grid2.resetData(getItemHisNumList());
-	
 	}
 	
 	insert.onclick = function() {
@@ -250,7 +246,7 @@ $(function(){
 	
 	
 	$('#ordNum').on('dblclick', () => { 
-		$('#ordNum').val('SO2106300026');
+		$('#ordNum').val('SO202106300026');
 		
 	});
 	

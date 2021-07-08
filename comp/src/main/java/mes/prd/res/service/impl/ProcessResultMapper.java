@@ -62,7 +62,11 @@ public interface ProcessResultMapper {
 	 * @exception Exception
 	 */
     public List<?> selectProcessResultList(ProcessResultDefaultVO searchVO) throws Exception;
+    public List<?> processResultSelect(ProcessResultDefaultVO searchVO) throws Exception;
+    public List<?> produceSelect(ProcessResultDefaultVO searchVO) throws Exception;
 
+    
+    
     /**
 	 * PROCESS_RESULT 총 갯수를 조회한다.
 	 * @param searchMap - 조회할 정보가 담긴 Map
