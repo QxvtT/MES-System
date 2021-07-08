@@ -245,31 +245,31 @@ function getProcessResultSelect(key) {
 									<table class = "table">
 										<tr>
 											<th>작업 지시 번호</th>
-											<td id="prdComNum" name="prdComNum"</td>
+											<td id="prdComNum" name="prdComNum"></td>
 										</tr>
 										<tr>
 											<th>제품코드</th>
-											<td id="itmCode" name="itmCode"</td>
+											<td id="itmCode" name="itmCode"></td>
 										</tr>
 										<tr>
 											<th>제품명</th>
-											<td id="itmName" name="itmName"</td>
+											<td id="itmName" name="itmName"></td>
 										</tr>
 										<tr>
 											<th>고객사</th>
-											<td id="operName" name="operName"</td>
+											<td id="operName" name="operName"></td>
 										</tr>
 										<tr>
 											<th>입고량</th>
-											<td id="prcComDVol" name="prcComDVol"</td>
+											<td id="prcComDVol" name="prcComDVol"></td>
 										</tr>
 										<tr>
 											<th>포장량</th>
-											<td id="prcResVol" name="prcResVol"</td>
+											<td id="prcResVol" name="prcResVol"></td>
 										</tr>
 										<tr>
 											<th>미포장량</th>
-											<td id="prcNVol" name="prcNVol"</td>
+											<td id="prcNVol" name="prcNVol"></td>
 										</tr>
 									
 									</table>

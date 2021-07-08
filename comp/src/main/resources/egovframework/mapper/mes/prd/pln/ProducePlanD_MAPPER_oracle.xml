@@ -173,6 +173,10 @@
 		FROM PRODUCE_PLAN A
 		   , PRODUCE_PLAN_D B 
 		WHERE A.PRD_NUM = B.PRD_NUM
+		<![CDATA[
+		AND PRD_DATE >= #{startDate}
+        AND PRD_DATE <= #{endDate}
+        ]]>
 	</select>
 		
 </mapper>
