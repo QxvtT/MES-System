@@ -59,6 +59,8 @@ public interface ProcessResultService {
     List selectProcessResultList(ProcessResultVO searchVO) throws Exception;
     List processResultSelect(ProcessResultVO searchVO) throws Exception;
     List produceSelect(ProcessResultVO searchVO) throws Exception;
+    List setProduceSelect(ProcessResultVO searchVO) throws Exception;
+    void resultSuccess(GridDataVO gridDataVO) throws Exception;
     
     
     

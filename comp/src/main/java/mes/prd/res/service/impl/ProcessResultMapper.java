@@ -2,10 +2,10 @@ package mes.prd.res.service.impl;
 
 import java.util.List;
 
-import mes.prd.res.service.ProcessResultVO;
-import mes.prd.res.service.ProcessResultDefaultVO;
-
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import mes.prd.res.service.GridDataVO;
+import mes.prd.res.service.ProcessResultDefaultVO;
+import mes.prd.res.service.ProcessResultVO;
 
 /**
  * @Class Name : ProcessResultMapper.java
@@ -38,6 +38,8 @@ public interface ProcessResultMapper {
 	 * @exception Exception
 	 */
     public void updateProcessResult(ProcessResultVO vo) throws Exception;
+    
+    public void resultSuccess(ProcessResultVO vo) throws Exception;
 
     /**
 	 * PROCESS_RESULT을 삭제한다.
@@ -46,7 +48,8 @@ public interface ProcessResultMapper {
 	 * @exception Exception
 	 */
     public void deleteProcessResult(ProcessResultVO vo) throws Exception;
-
+    
+    
     /**
 	 * PROCESS_RESULT을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 ProcessResultVO
@@ -64,7 +67,10 @@ public interface ProcessResultMapper {
     public List<?> selectProcessResultList(ProcessResultDefaultVO searchVO) throws Exception;
     public List<?> processResultSelect(ProcessResultDefaultVO searchVO) throws Exception;
     public List<?> produceSelect(ProcessResultVO searchVO) throws Exception;
-
+    public List<?> setProduceSelect(ProcessResultVO searchVO) throws Exception;
+    
+   
+    
     
     
     /**

@@ -1,6 +1,5 @@
 package mes.prd.res.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -10,10 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
+import mes.prd.res.service.GridDataVO;
 import mes.prd.res.service.ProcessResultDefaultVO;
 import mes.prd.res.service.ProcessResultService;
 import mes.prd.res.service.ProcessResultVO;
+import mes.sal.out.service.ItemHistoryVO;
 /**
  * @Class Name : ProcessResultServiceImpl.java
  * @Description : ProcessResult Business Implement class
@@ -112,7 +112,27 @@ public class ProcessResultServiceImpl extends EgovAbstractServiceImpl implements
     public List<?> produceSelect(ProcessResultVO searchVO) throws Exception {
         return processResultDAO.produceSelect(searchVO);
     }
+    public List<?> setProduceSelect(ProcessResultVO searchVO) throws Exception {
+        return processResultDAO.setProduceSelect(searchVO);
+    }
+    public void resultSuccess(GridDataVO gridDataVO) throws Exception {
+    	 if(gridDataVO.getUpdatedRows() != null) {
+    		 ProcessResultVO vo= gridDataVO.getUpdatedRows().get(0);
+    		 System.out.println("시발f");
+    		 System.out.println(vo.getPrcState());
+    		 if(vo.getPrcState().equals("진행")) {
+    			 processResultDAO.resultSuccess(gridDataVO.getUpdatedRows().get(0));
+    		 }
+    		 else {
+    			 
+    		 }
+    		 
+    			 
+    	 }
+    	
+    }
 
+    
     /**
 	 * PROCESS_RESULT 총 갯수를 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO

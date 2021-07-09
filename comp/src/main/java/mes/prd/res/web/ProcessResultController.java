@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +21,7 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 import mes.prd.res.service.ProcessResultService;
+import mes.prd.res.service.GridDataVO;
 import mes.prd.res.service.ProcessResultDefaultVO;
 import mes.prd.res.service.ProcessResultVO;
 
@@ -76,6 +79,20 @@ public class ProcessResultController {
         List<?> produceSelect = processResultService.produceSelect(processResultVO);
         return produceSelect;
     }
+    @RequestMapping(value="SetProduceSelect", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> setProduceSelect(ProcessResultVO processResultVO)
+            throws Exception {
+        List<?> setProduceSelect = processResultService.setProduceSelect(processResultVO);
+        return setProduceSelect;
+    }
+    
+    @RequestMapping(value="resultSuccess")
+  public void ItemHistoryUpdate(@RequestBody GridDataVO gridData) throws Exception {
+    	
+    	processResultService.resultSuccess(gridData);
+  } 
+    
     
     
     @RequestMapping(value="ProcessResultList.do")

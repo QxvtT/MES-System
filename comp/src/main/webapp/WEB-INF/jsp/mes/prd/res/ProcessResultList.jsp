@@ -32,8 +32,11 @@
 <script type="text/javaScript" language="javascript" defer="defer">
 let prcResDNum = null;
 let prdComNum = null;
+let prdComDNum = null
 let data;
 let prcCode = null;
+
+let matVol = 0;
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -46,7 +49,7 @@ $(function(){
 	    	{ header: '작업시작날짜', name:'prdComDDate'},
 	    	{ header: '지시번호', name:'prdComNum'},
 	    	{ header: '제품코드', name:'itmCode'},
-	    	{ header: '공정순서', name:'prcResNo'},
+	    	{ header: '순번', name:'prcResNo'},
 			{ header: '제품명', name:'itmName'},
 			{ header: '입고량', name:'prcComDVol'},
 			{ header: '작업량', name:'prcResVol'},
@@ -95,7 +98,7 @@ $(function(){
 	
 	grid.on('scrollEnd', () => {
 	    grid.appendRows(getProcessResulList());
-	  })
+	  });
 	
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
@@ -105,11 +108,8 @@ $(function(){
 		let key = grid.getFocusedCell()['rowKey'];
 		let result = grid.getColumnValues('prcResDNum')[key];
 		getProcessResultSelect(result);
-		let keyt = grid.getFocusedCell()['rowKey'];
-		let prdComDNum = grid.getColumnValues('prdComDNum')[keyt];
-		console.log(prdComDNum);
-		prcCode = grid.getColumnValues('prcCode')[keyt];;
-		console.log(prcCode );
+		prdComDNum = grid.getColumnValues('prdComDNum')[key];
+		prcCode = grid.getColumnValues('prcCode')[key];;
 		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
 		
 	});
@@ -164,8 +164,8 @@ function getProcessResultSelect(key) {
 					}else{
 						result[i]['prcFState'] = '빨강'
 					}
-					console.log('test123123');
 				}
+				matVol = result[0]['matVol'];
 				console.log(result);
 				data = result;
 			} // end success
@@ -178,20 +178,93 @@ function getProcessResultSelect(key) {
 		prcCode = $("input#prcCode").val();
 		console.log(prcCode);
 		grid.resetData(getProcessResulList());
-		$( 'td#prdComNum' ).text();
-		$( 'td#itmCode' ).text();
-		$( 'td#itmName' ).text();
-		$( 'td#operName' ).text();
-		$( 'td#prcComDVol' ).text();
-		$( 'td#prcResVol' ).text();
-		$( 'td#prcNVol' ).text();
+		$( 'td#prdComNum' ).text(' ');
+		$( 'td#itmCode' ).text(' ');
+		$( 'td#itmName' ).text(' ');
+		$( 'td#operName' ).text(' ');
+		$( 'td#prcComDVol' ).text(' ');
+		$( 'td#prcResVol' ).text(' ');
+		$( 'td#prcNVol' ).text(' ');
+		let testt=[];
+		grid3.resetData(testt);
 	}
 	
-	
-	
 
-	 
+	const grid4 = new tui.Grid({
+	    el: document.getElementById('grid4'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 100,
+	    data: null,
+	    rowHeaders: ['rowNum'],
+	    columns: [
+			{ header: '입고량', name:'prcComDVol'},
+			{ header: '작업량', name:'prcResVol',editor:"text"},
+			{ header: '불량량', name:'prcErrVol',editor:"text"},
+			{ header: '비고', name:'prcResltDNote'}
+	    ]
+	});
+	grid3.on('dblclick', () => { 
+		let key = grid3.getFocusedCell()['rowKey'];
+		prcResDNum = grid3.getColumnValues('prcResDNum')[key];
+		setProduceSelect(prcResDNum);
+		grid4.resetData(setProduceSelect(prcResDNum));
+		console.log(prcResDNum);
+		$('#myModal').modal('toggle');
+		$('#myModal').on('shown.bs.modal', function(){
+			 grid4.refreshLayout();
+		});
+	});
 	
+	function setProduceSelect(key) { 
+		$.ajax({
+			async: false, 
+			url : "SetProduceSelect",
+			type : "get",
+			data : {
+				prcResDNum : key
+				},
+			dataType: "json",
+			success : function(result){
+				console.log(result);
+				data = result;
+				$( 'td#movNum' ).text(result[0]['movNum']);
+				$( 'td#prcResNo' ).text(result[0]['prcResNo']);
+				$( 'td#prcName' ).text(result[0]['prcName']);
+				$( 'td#prcWorkNum' ).text(result[0]['prcWorkNum']);
+				$( 'td#empId' ).text(result[0]['empId']);
+				$( 'td#prcStrTime' ).text(result[0]['prcStrTime']);
+				$( 'td#prcEndTime' ).text(result[0]['prcEndTime']);
+				
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	sibalY.onclick= function() {
+		let gridData = grid4.getModifiedRows({});
+		console.log('start');
+		console.log(gridData);
+		console.log(prcResDNum);
+		console.log(grid4.getData()[0]['prcState']);
+		gridData["ProcessResultVO"] ={
+				prcResDNum :prcResDNum,
+				prcState : grid4.getData()[0]['prcState'],
+				matVol : matVol}
+			$.ajax({
+			async: false, 
+			url : "resultSuccess",
+			type : "post",
+			data : JSON.stringify(gridData),
+			dataType: "json",
+			contentType:"application/json",
+			success : function(){
+				console.log("updatesuccess");
+						grid3.resetData(getProduceSelect(prdComDNum,prcCode))
+						grid.resetData(getProcessResulList());
+			}
+			});
+			
+	}
 })
 	
 </script>
@@ -208,9 +281,13 @@ function getProcessResultSelect(key) {
 								<!-- 타이틀 -->
 								<div id="title" class="card-header">
 									<ul>
-										작업공정<input type="text" id="prcCode" name ="prcCode"/>
+										공정코드<input type="text" id="prcCode" name ="prcCode" readonly="readonly"/>
 										<%@ include file="/WEB-INF/jsp/mes/common/modal/ProcessList.jsp" %>
 									</ul>
+									<ul>
+										공정이름<input type="text" id="prcName" name ="prcName" readonly="readonly"/>
+									</ul>
+									
 										<button type ="button" id ="search" name = "search">검색</button>
 								</div>
 
@@ -296,10 +373,60 @@ function getProcessResultSelect(key) {
 				</div>
 			</div>
 		</div>
-
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="exampleModalLabel">공정실적관리</h4>
+				</div>
+				<div class="modal-body" >
+						<div class="form-group row">
+							<table class="table">
+								<tr>
+									<th>이동번호</th>
+									<th>순번</th>
+									<th>공정이름</th>
+								</tr>
+								<tr>
+									<td id= "movNum" name ="movNum">  </td>
+									<td id= "prcResNo" name ="prcResNo">  </td>
+									<td id= "prcName" name ="prcName">  </td>
+								</tr>
+							</table>
+							<table class="table">
+								<tr>
+									<th>작업번호</th>
+									<th>작업자</th>
+								</tr>
+								<tr>
+									<td id= "prcWorkNum" name ="prcWorkNum">  </td>
+									<td id= "empId" name ="empId">  </td>
+								</tr>
+							</table>
+							<table class="table">
+								<tr>
+									<th>작업시작시간</th>
+									<th>작업종료시간</th>
+								</tr>
+								<tr>
+									<td id= "prcStrTime" name ="prcStrTime">  </td>
+									<td id= "prcEndTime" name ="prcEndTime">  </td>
+								</tr>
+							</table>
+						</div>
+						<div class="col-lg-8">
+						</div>
+					<br />
+					<div id="grid4"></div>
+				</div>
+				<div class="modal-footer">
+					<a class="btn" id="sibalY" >예</a>
+					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </body>
 </html>
-
-
-

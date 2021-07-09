@@ -72,6 +72,8 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     
     /** 공정코드*/
     private java.lang.String prcCode;
+    /** 공정이름*/
+    private java.lang.String prcName;
     
     /** 공정상태*/
     private java.lang.String prcState;
@@ -114,6 +116,9 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     
     /** 마지막공정상태구분*/
     private java.lang.String prcFState;
+    
+    /** 작업지시물량 */
+    private java.math.BigDecimal matVol;
     
     
 }

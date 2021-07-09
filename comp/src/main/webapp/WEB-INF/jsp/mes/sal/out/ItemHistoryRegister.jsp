@@ -300,6 +300,7 @@ $(function(){
 								<th>ITM_HIS_NUM *</th>
 								<td><input type ="text" name ="itmHisNum" id = "itmHisNum"/></td>
 							</tr>
+							
 						</c:if>
 						<tr>
 							<th>출고일자</th>
