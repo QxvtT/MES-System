@@ -30,6 +30,7 @@ public interface ProduceCommandDMapper {
 	 */
     public void insertProduceCommand(ProduceCommandDVO vo) throws Exception;
     public void insertProduceCommandD(ProduceCommandDVO vo) throws Exception;
+    public void insertProduceCommandMat(ProduceCommandDVO vo) throws Exception;
 
     /**
 	 * PRODUCE_COMMAND_D을 수정한다.
@@ -39,6 +40,7 @@ public interface ProduceCommandDMapper {
 	 */
     public void updateProduceCommand(ProduceCommandDVO vo) throws Exception;
     public void updateProduceCommandD(ProduceCommandDVO vo) throws Exception;
+    public void updateProduceCommandMat(ProduceCommandDVO vo) throws Exception;
 
     /**
 	 * PRODUCE_COMMAND_D을 삭제한다.
@@ -47,6 +49,7 @@ public interface ProduceCommandDMapper {
 	 * @exception Exception
 	 */
     public void deleteProduceCommandD(ProduceCommandDVO vo) throws Exception;
+    public void deleteProduceCommandMat(ProduceCommandDVO vo) throws Exception;
 
     /**
 	 * PRODUCE_COMMAND_D을 조회한다.

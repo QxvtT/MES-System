@@ -71,6 +71,9 @@ public interface ProduceCommandDService {
     
     /** 작업지시 update */
     String produceCommandUpdate(GridDataVO gridData) throws Exception;
+    
+    /** 작업지시 mat update */
+    void produceCommandMatUpdate(GridDataVO gridData) throws Exception;
 
     /**
 	 * PRODUCE_COMMAND_D 총 갯수를 조회한다.

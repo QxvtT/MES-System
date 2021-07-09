@@ -220,7 +220,7 @@ $(function(){
 		//$('#operName').val(grid2.getValue(e.rowKey,'operName'));
 		
 		grid.resetData(getList());
-		// 이전 데이터들 clear해주기
+		// 이전 데이터들 초기화
 		gridMat.clear();
 		gridFlow.clear();
 		$('#itmCode').val('');
@@ -397,11 +397,11 @@ $(function(){
 	grid.on('dblclick', (e) => {
 		prdComDNum = grid.getValue(e.rowKey,'prdComDNum');
 		itmCode = grid.getValue(e.rowKey,'itmCode');
+		matCode = grid.getValue(e.rowKey,'matCode');
 		prdComMatNum = null;
 		prcFNo = null;
 		gridMat.resetData(getComMatList());
 		gridFlow.resetData(getFlowList());
-		matCode = grid.getValue(e.rowKey,'matCode');
 		$('#itmCode').val(grid.getValue(e.rowKey,'itmCode'));
 		$('#itmName').val(grid.getValue(e.rowKey,'itmName'));
 		$('#prdComVol').val(grid.getValue(e.rowKey,'prdComVol'));
@@ -464,7 +464,7 @@ $(function(){
 		let gridData = grid.getModifiedRows({});
 		console.log(gridData);
 
-		gridData["produceCommandDVO"] ={
+		gridData["produceCommandDVO"] = {
 									prdComNum : $('#prdComNum').val(),
 									prdComDate : $('#prdComDate').val(),
 									prdComName : $('#prdComName').val(),
@@ -482,6 +482,25 @@ $(function(){
 					prdComNum = data;
 				}
 				});
+		
+		//lot자재 수정
+		let gridDataM = gridMat.getModifiedRows({});
+		gridDataM["produceCommandDVO"] = {
+				prdComDNum : prdComDNum,
+				matCode : matCode,
+				}
+		$.ajax({
+			async: false, 
+			url : "ProduceCommandMatUpdate",
+			type : "post",
+			data : JSON.stringify(gridDataM),
+			dataType: "json",
+			contentType:"application/json",
+			success : function(data) {
+				console.log(data);
+				prdComNum = data;
+			}
+			});
 		
 		prdComDNum1 = null;
 		grid.resetData(getList());
@@ -659,28 +678,25 @@ $(function(){
 	</div>
 	<div class="row">
 		<div class="col-xl-7 col-lg-12">
-			<div class="col-sm-11" style="padding-right: 0px">
-				<label class="ml-3 d-inline">제품코드</label>
-				<input type="text" class="form-control ml-3 d-inline" id="itmCode" name="itmCode" style="width:100px" readonly></input>
-				<label class="ml-3 d-inline">제품명</label>
-				<input type="text" class="form-control ml-3 d-inline" id="itmName" name="itmName" style="width:100px" readonly></input>
-			</div>
-			<div class="col-sm-1 text-right" style="padding-left: 0px">
-				<button type="button" id="searchMatLotBtn" class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
-			</div>
+			<label class="ml-3 d-inline">자재코드</label>
+			<input type="text" class="form-control ml-3 d-inline" id="matCode" name="matCode" style="width:100px" readonly></input>
+			<label class="ml-3 d-inline">자재명</label>
+			<input type="text" class="form-control ml-3 d-inline" id="matName" name="matName" style="width:100px" readonly></input>
 		</div>
 		<div class="col-xl-5 col-lg-12">
+			<label class="ml-3 d-inline">제품코드</label>
+			<input type="text" class="form-control ml-3 d-inline" id="itmCode" name="itmCode" style="width:100px" readonly></input>
+			<label class="ml-3 d-inline">제품명</label>
+			<input type="text" class="form-control ml-3 d-inline" id="itmName" name="itmName" style="width:100px" readonly></input>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xl-7 col-lg-12 row">
-			<div class="col-sm-11" style="padding-right: 0px">
-				<label class="ml-3 d-inline">자재코드</label>
-				<input type="text" class="form-control ml-3 d-inline" id="matCode" name="matCode" style="width:100px" readonly></input>
-				<label class="ml-3 d-inline">자재명</label>
-				<input type="text" class="form-control ml-3 d-inline" id="matName" name="matName" style="width:100px" readonly></input>
+		<div class="col-xl-7 col-lg-12 row text-right">
+			<div class="col-sm-8">
 			</div>
-			<div class="col-sm-1 text-right" style="padding-left: 0px">
+			<div class="col-sm-4 text-right" style="padding-left: 0px">
+				<button type="button" id="outMatLotBtn" class="btn btn-sm btn-primary waves-effect waves-light">출고</button>
+				<button type="button" id="searchMatLotBtn" class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
 				<button type="button" id="deleteMBtn" class="btn btn-sm btn-primary waves-effect waves-light">삭제</button>
 			</div>
 		</div>

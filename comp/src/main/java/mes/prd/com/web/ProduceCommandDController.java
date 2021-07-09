@@ -116,6 +116,13 @@ public class ProduceCommandDController {
 		return produceCommandDService.produceCommandUpdate(gridData);
 	}
 	
+	@RequestMapping(value="/ProduceCommandMatUpdate")
+	@ResponseBody
+	public String ProduceCommandMatUpdate(@RequestBody GridDataVO gridData) throws Exception {
+		produceCommandDService.produceCommandMatUpdate(gridData);
+		return null;
+	}
+	
     /*
     @RequestMapping(value="/prd/com/ProduceCommandDList.do")
     public String selectProduceCommandDList(@ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, 

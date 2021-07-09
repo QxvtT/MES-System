@@ -1,5 +1,6 @@
 package mes.prd.com.service.impl;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -148,6 +149,11 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
     		gridData.setProduceCommandDVO(vo);
     	}
     	
+    	if(gridData.getDeletedRows() != null) {
+        	for(int i =0; i<gridData.getDeletedRows().size(); i++) {
+        		produceCommandDDAO.deleteProduceCommandD(gridData.getDeletedRows().get(i));
+        	}
+        }
         if(gridData.getUpdatedRows() != null) {
         	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
         		produceCommandDDAO.updateProduceCommandD(gridData.getUpdatedRows().get(i));
@@ -166,13 +172,38 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
         	}
         	
         }
-        if(gridData.getDeletedRows() != null) {
+        
+        
+        return newPrdComNum;
+    }
+    
+    /** 작업지시 Mat update 및 insert*/
+    public void produceCommandMatUpdate(GridDataVO gridData) throws Exception {
+    	
+    	ProduceCommandDVO vo;
+    	if(gridData.getDeletedRows() != null) {
         	for(int i =0; i<gridData.getDeletedRows().size(); i++) {
-        		produceCommandDDAO.deleteProduceCommandD(gridData.getDeletedRows().get(i));
+        		produceCommandDDAO.deleteProduceCommandMat(gridData.getDeletedRows().get(i));
+        	}
+        }
+        if(gridData.getUpdatedRows() != null) {
+        	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
+        		vo = gridData.getUpdatedRows().get(i);
+        		produceCommandDDAO.updateProduceCommandMat(vo);
+        	}
+        }
+        if(gridData.getCreatedRows() != null) {
+    		for(int i =0; i<gridData.getCreatedRows().size(); i++) {
+    			vo = gridData.getCreatedRows().get(i);
+    			BigDecimal prdComDNum = gridData.getProduceCommandDVO().getPrdComDNum();
+    	    	String matCode = gridData.getProduceCommandDVO().getMatCode();
+        		vo.setPrdComDNum(prdComDNum);
+        		vo.setMatCode(matCode);
+        		produceCommandDDAO.insertProduceCommandMat(vo);
         	}
         }
         
-        return newPrdComNum;
+        
     }
     
     /**

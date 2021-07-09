@@ -33,8 +33,8 @@
 		
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-		select A.* ,(B.yes_Com_Vol - a.prd_com_vol) as yes_Com_Vol,
-		        a.ord_vol - (B.yes_Com_Vol - a.prd_com_vol) - a.ord_out_vol as no_Com_Vol,
+		select A.* , B.yes_Com_Vol,
+		        a.ord_vol - B.yes_Com_Vol - a.ord_out_vol as no_Com_Vol,
 		        a.itm_day_output/8 as UPH, a.prd_com_vol/a.itm_day_output as day_Num
 		from(select C.*, TO_CHAR(C.prd_com_d_date, 'yyyy-MM-dd') as prd_com_d_date1, I.itm_name, M.mat_name, OD.ord_num, OM.ord_delivery_date, OM.oper_name,
 		      OD.ord_vol, OD.ord_out_vol, I.itm_day_output
@@ -87,9 +87,16 @@
 	<select id="seletMatStockList" parameterType="mes.prd.com.service.ProduceCommandDVO"
 		resultType="mes.prd.com.service.ProduceCommandDVO">
 		SELECT * FROM (
-		SELECT A.*, ROWNUM RNUM FROM (
-		select * from material_stock
-		where mat_code = #{matCode}
+		SELECT A.*, ROWNUM RNUM FROM ( 
+			select a.lot_num, a.mat_code, (a.mat_vol - nvl(b.mat_vol,0)) as mat_vol
+			from material_stock a,
+			(select lot_num, mat_vol
+			from produce_command_mat
+			where prd_com_d_num in 
+			    (select prd_com_d_num from produce_command_d 
+			    where mat_out_chk = 'N')) b
+			where a.lot_num = b.lot_num (+)
+			and mat_code = #{matCode}
 		<if test="lotNum1 != null and lotNum1 != ''">
 				<![CDATA[	
 					and lot_Num > #{lotNum1}
@@ -147,6 +154,9 @@
 	<insert id="insertProduceCommandD">
 		declare
 		v_matCode item.mat_code%type;
+		v_prdWorkVol produce_plan_d.prd_work_vol%type;
+		v_prdComVol produce_command_d.prd_com_vol%type;
+		v_ordIndVol order_d.ord_ind_vol%type;
 		begin
 			select mat_code into v_matCode
 			from item
@@ -165,25 +175,115 @@
 					#{prcComDiv},
 					#{prdComDNote}
 				);
+			
+			<if test="#{prdPlanDNum} != null">
+				select prd_work_vol into v_prdWorkVol
+				from produce_plan_d
+				where prd_plan_d_num = #{prdPlanDNum};
+				
+				select sum(prd_com_vol) into v_prdComVol
+				from produce_command_d
+				where prd_plan_d_num = #{prdPlanDNum} and prc_com_div = '정상';
+				<![CDATA[					
+				if v_prdWorkVol <= v_prdComVol then
+					update produce_plan_d 
+					set com_chk = 'Y'
+					where prd_plan_d_num = #{prdPlanDNum};
+				end if;
+				]]>
+			</if>
+			<if test="#{ordDNum} != null">
+				select nvl(sum(prd_com_vol),0) into v_ordIndVol
+				from produce_command_d
+				where ord_d_num = #{ordDNum} and prc_com_div = '정상';
+				
+				update order_d
+				set ord_ind_vol = v_ordIndVol
+				where ord_d_num = #{ordDNum};
+			</if>
 			end;
 	</insert>
 	
 	<!-- 작업지시 grid 행 update -->
 	<update id="updateProduceCommandD">
-		update Produce_Command_D set 
-			itm_code = #{itmCode},
-			prd_com_vol = #{prdComVol},
-			prd_com_d_date = to_date(#{prdComDDate1},'YYYY-MM-DD'),
-			prc_com_no = #{prcComNo},
-			prc_com_div = #{prcComDiv},
-			prd_com_d_note = #{prdComDNote}
-		where prd_com_d_num = #{prdComDNum}
+	declare
+		v_prdWorkVol produce_plan_d.prd_work_vol%type;
+		v_prdComVol produce_command_d.prd_com_vol%type;
+		v_ordIndVol order_d.ord_ind_vol%type;
+		begin
+			update Produce_Command_D set 
+				itm_code = #{itmCode},
+				prd_com_vol = #{prdComVol},
+				prd_com_d_date = to_date(#{prdComDDate1},'YYYY-MM-DD'),
+				prc_com_no = #{prcComNo},
+				prc_com_div = #{prcComDiv},
+				prd_com_d_note = #{prdComDNote}
+			where prd_com_d_num = #{prdComDNum};
+			
+			<if test="#{prdPlanDNum} != null">
+				select prd_work_vol into v_prdWorkVol
+				from produce_plan_d
+				where prd_plan_d_num = #{prdPlanDNum};
+				
+				select sum(prd_com_vol) into v_prdComVol
+				from produce_command_d
+				where prd_plan_d_num = #{prdPlanDNum} and prc_com_div = '정상';
+				<![CDATA[					
+				if v_prdWorkVol > v_prdComVol then
+					update produce_plan_d 
+					set com_chk = 'N'
+					where prd_plan_d_num = #{prdPlanDNum};
+				end if;
+				]]>
+			</if>
+			<if test="#{ordDNum} != null">
+				select nvl(sum(prd_com_vol),0) into v_ordIndVol
+				from produce_command_d
+				where ord_d_num = #{ordDNum} and prc_com_div = '정상';
+				
+				update order_d
+				set ord_ind_vol = v_ordIndVol
+				where ord_d_num = #{ordDNum};
+			</if>
+		end;
 	</update>
 	
 	<!-- 작업지시 grid 행 delete -->
 	<delete id="deleteProduceCommandD">
-		delete from Produce_Command_D 
-		where prd_com_d_num = #{prdComDNum}
+		declare
+			v_prdWorkVol produce_plan_d.prd_work_vol%type;
+			v_prdComVol produce_command_d.prd_com_vol%type;
+			v_ordIndVol order_d.ord_ind_vol%type;
+		begin
+			delete from Produce_Command_D 
+			where prd_com_d_num = #{prdComDNum}
+			
+			<if test="#{prdPlanDNum} != null">
+				select prd_work_vol into v_prdWorkVol
+				from produce_plan_d
+				where prd_plan_d_num = #{prdPlanDNum};
+				
+				select sum(prd_com_vol) into v_prdComVol
+				from produce_command_d
+				where prd_plan_d_num = #{prdPlanDNum} and prc_com_div = '정상';
+				<![CDATA[					
+				if v_prdWorkVol > v_prdComVol then
+					update produce_plan_d 
+					set com_chk = 'N'
+					where prd_plan_d_num = #{prdPlanDNum};
+				end if;
+				]]>
+			</if>
+			<if test="#{ordDNum} != null">
+				select nvl(sum(prd_com_vol),0) into v_ordIndVol
+				from produce_command_d
+				where ord_d_num = #{ordDNum} and prc_com_div = '정상';
+				
+				update order_d
+				set ord_ind_vol = v_ordIndVol
+				where ord_d_num = #{ordDNum};
+			</if>
+		end;
 	</delete>
 	
 	<!-- 작업지시 마스터번호 구하기 -->
@@ -192,5 +292,30 @@
 		from produce_command
 		where to_char(prd_com_date,'yyyy-MM-dd') = #{prdComDate}
 	</select>
+	
+	<!-- 작업지시 Mat 행 insert -->
+	<insert id="insertProduceCommandMat">
+		<selectKey resultType="BigDecimal" keyProperty="prdComMatNum" order="BEFORE">
+	        SELECT nvl(MAX(prd_com_mat_num),0)+1 FROM produce_command_mat        
+	    </selectKey>  
+		insert into produce_command_mat(prd_com_mat_num, prd_com_d_num, mat_code, lot_num, mat_vol, prd_com_mat_O, prd_com_mat_note)
+		values(#{prdComMatNum}, #{prdComDNum}, #{matCode}, #{lotNum}, #{matVol}, #{prdComMatO}, #{prdComMatNote})
+	</insert>
+	
+	<!-- 작업지시 Mat 행 update -->
+	<update id="updateProduceCommandMat">
+		update produce_command_mat set 
+		lot_num = #{lotNum},
+		mat_vol = #{matVol},
+		prd_com_mat_O = #{prdComMatO},
+		prd_com_mat_note = #{prdComMatNote}
+		where prd_com_mat_num = #{prdComMatNum}
+	</update>
+	
+	<!-- 작업지시 Mat 행 delete -->
+	<delete id="deleteProduceCommandMat">
+		delete from produce_command_mat
+		where prd_com_mat_num = #{prdComMatNum}
+	</delete>
 
 </mapper>
