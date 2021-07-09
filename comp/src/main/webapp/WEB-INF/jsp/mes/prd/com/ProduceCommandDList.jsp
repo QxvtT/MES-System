@@ -500,12 +500,37 @@ $(function(){
 				console.log(data);
 				prdComNum = data;
 			}
-			});
+		});
 		
 		prdComDNum1 = null;
 		grid.resetData(getList());
 
 	}
+	
+	//자재 출고 관리
+	outMatLotBtn.onclick = function() {
+		//저장안된 수정사항이 없는지 체크하고 이미 출고된 녀셕은 못하게 하고 수행하기
+		let gridDataMO = gridMat.getData({});
+		gridDataM["produceCommandDVO"] = {
+				prdComDNum : prdComDNum,
+				matCode : matCode,
+				}
+		$.ajax({
+			async: false, 
+			url : "MatOutUpdate",
+			type : "post",
+			data : JSON.stringify(gridDataMO),
+			dataType: "json",
+			contentType:"application/json",
+			success : function(data) {
+				console.log(data);
+				prdComNum = data;
+			}
+		});
+		prdComDNum1 = null;
+		grid.resetData(getList());
+	}
+	
 	
 })
 
