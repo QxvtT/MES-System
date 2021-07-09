@@ -108,6 +108,14 @@ public class ProduceCommandDController {
 		return list;
 	}
 	
+	/** 공정이동표 페이지 */
+    @RequestMapping(value="/ProcessMove.do")
+    public String processMove(ProduceCommandDVO searchVO, 
+    		ModelMap model)
+    				throws Exception {
+    	return "prd/com/ProcessMove.page";
+    }
+	
 	
 	@RequestMapping(value="/ProduceCommandUpdate")
 	@ResponseBody
