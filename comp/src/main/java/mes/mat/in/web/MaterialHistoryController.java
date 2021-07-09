@@ -82,7 +82,8 @@ public class MaterialHistoryController {
     @RequestMapping("/mat/in/MatInMng.do")
     public String selectMatInMng(@ModelAttribute("searchVO") MaterialHistoryDefaultVO searchVO, ModelMap model) throws Exception{
     	return "mat/in/MatInMng.page";
-    } // end 자재 입고 관리 조회
+    } 
+    // end 자재 입고 관리 조회
     
     // 일 입고 자료 LIST 조회
     @RequestMapping(value="/mat/in/MatInDayList", method = RequestMethod.GET)
@@ -155,10 +156,10 @@ public class MaterialHistoryController {
     @RequestMapping(value="/mat/in/MatOutDayList", method = RequestMethod.GET)
     @ResponseBody
     public List<?> MatOutDayList(@ModelAttribute("matOutDayVO") MaterialHistoryVO matOutDayVO) throws Exception{
-    	List<?> matOutDayList = materialHistoryService.matInDayList(matOutDayVO);
+    	List<?> matOutDayList = materialHistoryService.matOutDayList(matOutDayVO);
     	System.out.println(matOutDayList);
     	return matOutDayList;
     }
     // end 일 출고 자료 리스트 조회
-
+    
 }

@@ -125,7 +125,7 @@ $(function(){
 	    	},
 			{ 
 	    		header: 'Lot No', 
-	    		name:'lotNo'
+	    		name:'lotNum'
 	    	},
 			{ 
 	    		header: '자재재고', 
@@ -146,7 +146,19 @@ $(function(){
 	    		name:'matOrdOper',
 	    		hidden: true
 	    	}
-	    ]
+	    ],
+	    summary: {
+	        position: 'bottom',
+	        height: 30,  // by pixel
+	        columnContent: {
+	          matCode: '합계',
+	          matHisDVol: {
+	            template(valueMap) {
+	              return valueMap.sum;
+	            }
+	          }
+	        }
+	    }
 	}); // end const grid
 	
 	function getList() {
@@ -291,16 +303,6 @@ $(function(){
 	resetBtn.onclick=function(){
 		grid.clear();
 	}
-	
-// 	$('#testBtn').click(function(){
-// 		console.log("searchBtn");
-// 		console.log(grid.getCheckedRows());
-// 		matHisDateS = $('#startpicker-input').val();
-// 		matHisDateE = $('#endpicker-input').val();
-// 		console.log(operCodes);
-// 		grid.resetData(getList());
-// 		gird2.resetData(getMatInDayList());
-// 	})
 
 	// 일입고리스트 모달창 단일 체크 구현
 	grid2.on('check', (e) => {
@@ -314,11 +316,12 @@ $(function(){
 		}
 	});
 	
+	/* 일 입고 자료 리스트 검색 모달 */
 	modalY.onclick=function() {
 		matHisDate = null;
 		if(grid2.getCheckedRows() != null){
 			matHisDNum1 = null;
-			console.log("테ㅓㄴ라ㅣ너ㅣ");
+			console.log("일 입고 자료 리스트 검색 모달 '예' 버튼");
 			console.log(grid2.getCheckedRows()[0]);
 			operCode = grid2.getCheckedRows()[0].operCode;
 			operName = grid2.getCheckedRows()[0].matOrdOper;
@@ -390,14 +393,14 @@ $(function(){
 								<div
 									class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 									<input type="text" id="MatInpicker-input"
-										class=" form-control w-25" aria-label="Date-Time" id="matHisDate"
+										class=" form-control w-25" aria-label="Date-Time"
 										name="matHisDate" /> <span class="tui-ico-date"></span>
 									<div id="MatInpicker-container" style="margin-left: -1px;"></div>
 								</div>
 								<div id="date1" style="margin-top: -1px;"></div>
-							<br />
-							
-							<!--  <div>검사 자료</div>
+								<br />
+
+								<!--  <div>검사 자료</div>
 							<div>
 								<div class="d-inline-block align-middle">검사 일자 *</div>
 								<div
@@ -418,36 +421,38 @@ $(function(){
 								<div id="date4" style="margin-top: -1px;"></div>
 							</div>
 							<input type="button" id="testBtn" name="testBtn" value="검사 자료 조회" /> -->
-							
-							<div>
-								입고업체 * <input type="text" id="operCode" name="operCode"></input>
-								<input type="text" disabled id="operName" name="operName"></input>
-								<%@ include
-									file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
-							</div>
-							<br />
-							<div>
-								<button id="matInDayBtn" type="button" class="btn btn-info btn-sm">조회</button>
-								<input id="resetBtn" class="btn btn-info btn-sm" type="reset"
-									value="리셋"></input>
-								<button type="button" id="matInSaveBtn" name="matInSaveBtn"
-									class="btn btn-info btn-sm">저장</button>
-								<button type="button" id="matInDeleteBtn" name="matInDeleteBtn"
-									class="btn btn-info btn-sm">삭제</button>
-							</div>
-							<br />
-							<div class="page-wrapper">
-								<div class="text-right">
-									<button type="button" class="btn btn-primary btn-sm"
-										id="addRowBtn">추가</button>
-									<button type="button" class="btn btn-primary btn-sm"
-										id="deleteRowBtn">삭제</button>
+
+								<div>
+									입고업체 * <input type="text" id="operCode" name="operCode"></input>
+									<input type="text" disabled id="operName" name="operName"></input>
+									<%@ include
+										file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
 								</div>
 								<br />
-								<div class="row">
-									<div class="col-xl-12">
-										<div class="card">
-											<div id="grid" />
+								<div>
+									<button id="matInDayBtn" type="button"
+										class="btn btn-info btn-sm">조회</button>
+									<input id="resetBtn" class="btn btn-info btn-sm" type="reset"
+										value="리셋"></input>
+									<button type="button" id="matInSaveBtn" name="matInSaveBtn"
+										class="btn btn-info btn-sm">저장</button>
+									<button type="button" id="matInDeleteBtn" name="matInDeleteBtn"
+										class="btn btn-info btn-sm">삭제</button>
+								</div>
+								<br />
+								<div class="page-wrapper">
+									<div class="text-right">
+										<button type="button" class="btn btn-primary btn-sm"
+											id="addRowBtn">추가</button>
+										<button type="button" class="btn btn-primary btn-sm"
+											id="deleteRowBtn">삭제</button>
+									</div>
+									<br />
+									<div class="row">
+										<div class="col-xl-12">
+											<div class="card">
+												<div id="grid" />
+											</div>
 										</div>
 									</div>
 								</div>
@@ -456,7 +461,6 @@ $(function(){
 					</div>
 				</div>
 			</div>
-		</div>
 	</form:form>
 
 	<!-- 일 입고 자료 리스트 -->
@@ -467,35 +471,36 @@ $(function(){
 				<div class="modal-header">
 					<h4 class="modal-title" id="exampleModalLabel">일 입고 자료 LIST</h4>
 					<button class="close" type="button" data-dismiss="modal"
-						aria-label="Close">
-						&times;
-					</button>
+						aria-label="Close">&times;</button>
 				</div>
 				<div class="modal-body">
-				<div>
-					<div class="d-inline-block align-middle">입고 일자 *</div>
-					<div
-						class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-						<input type="text" id="InStartpicker-input"
-							class=" form-control w-25" aria-label="Date-Time"
-							name="sDate" /> <span class="tui-ico-date"></span>
-						<div id="InStartpicker-container" style="margin-left: -1px;"></div>
+					<div>
+						<div class="d-inline-block align-middle">입고 일자 *</div>
+						<div
+							class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+							<input type="text" id="InStartpicker-input"
+								class=" form-control w-25" aria-label="Date-Time" name="sDate" />
+							<span class="tui-ico-date"></span>
+							<div id="InStartpicker-container" style="margin-left: -1px;"></div>
+						</div>
+						<div id="date5" style="margin-top: -1px;"></div>
+						<div
+							class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+							<input type="text" id="InEndpicker-input"
+								class=" form-control w-25" aria-label="Date-Time" name="eDate" />
+							<span class="tui-ico-date"></span>
+							<div id="InEndpicker-container" style="margin-left: -1px;"></div>
+						</div>
+						<div id="date2" style="margin-top: -1px;"></div>
+						<div>
+							<input type="button" id="searchBtn" name="searchBtn" value="검색"></input>
+						</div>
 					</div>
-					<div id="date5" style="margin-top: -1px;"></div>
-					<div
-						class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-						<input type="text" id="InEndpicker-input" class=" form-control w-25"
-							aria-label="Date-Time" name="eDate" /> <span
-							class="tui-ico-date"></span>
-						<div id="InEndpicker-container" style="margin-left: -1px;"></div>
-					</div>
-					<div id="date2" style="margin-top: -1px;"></div>
-					<div><input type="button" id="searchBtn" name="searchBtn" value="검색"></input></div>
-				</div>
 					<div id='grid2' />
 				</div>
 				<div class="modal-footer">
-					<button class="btn" id="modalY" name="modalY" type="button" data-dismiss="modal">예</button>
+					<button class="btn" id="modalY" name="modalY" type="button"
+						data-dismiss="modal">예</button>
 					<button class="btn" type="button" data-dismiss="modal">아니요</button>
 				</div>
 			</div>

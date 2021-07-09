@@ -30,14 +30,16 @@
 	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
-let matHisNum1 = null;
-let matCode = null;
 let matHisNum = null;
+let matHisNum1 = null;
+let matHisDNum = null;
+let matHisDNum1 = null;
+let matCode = null;
+let prcCode = null;
+let matOut = null;
 let matHisDate = null;
 let sDate = null;
 let eDate = null;
-let operCode = null;
-let matOutOper = null;
 
 $(function(){
 	
@@ -77,14 +79,67 @@ $(function(){
 	    data: getList(),
 	    rowHeaders: ['rowNum'],
 	    columns: [
-	    	{ header: '자재코드', name:'matCode'},
-			{ header: '자재명', name:'matName'},
-			{ header: '규격', name:'matSize'},
-			{ header: '단위', name:'matUnit'},
-			{ header: '출고량', name:'matHisDVol'},
-			{ header: 'Lot No', name:'lotNo'},
-			{ header: '자재재고', name:'matVol'}
-	    ]
+	    	{ 
+	    		header: '일련번호', 
+	    		name:'matHisDNum', 
+	    		hidden: true
+	    	},
+	    	{ 
+	    		header: '관리번호', 
+	    		name:'matHisNum',
+	    		hidden: true
+	    	},
+	    	{ 
+	    		header: '공정코드', 
+	    		name:'prcCode',
+	    		hidden: true
+	    	},
+	    	{ 
+	    		header: '공정명', 
+	    		name:'matOut',
+	    		hidden: true
+	    	},
+	    	{ 
+	    		header: '자재코드',
+	    		name:'matCode'
+    		},
+			{
+	    		header: '자재명',
+	    		name:'matName'
+    		},
+			{ 
+    			header: '규격', 
+    			name:'matSize'
+   			},
+			{ 
+   				header: '단위',
+   				name:'matUnit'
+			},
+			{ 
+				header: '출고량',
+				name:'matHisDVol'
+			},
+			{ 
+				header: 'Lot No',
+				name:'lotNum'
+			},
+			{ 
+				header: '자재재고',
+				name:'matVol'
+			}
+	    ],
+	    summary: {
+	        position: 'bottom',
+	        height: 30,  // by pixel
+	        columnContent: {
+	          matCode: '합계',
+	          matHisDVol: {
+	            template(valueMap) {
+	              return valueMap.sum;
+	            }
+	          }
+	        }
+	    }
 	}); // end const grid
 	
 	grid.on('scrollEnd', () => {
@@ -97,11 +152,14 @@ $(function(){
 			async: false,
 			url : "MatOutMng",
 			type : "get",
-			data : {matCode: matCode},
+			data : {
+				matHisNum: matHisNum,
+				matHisDNum1: matHisDNum1
+				},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					matCode = result[result.length -1].matCode;
+					matHisDNum1 = result[result.length -1].matHisDNum;
 				}
 				console.log(result);
 				data = result;
@@ -126,33 +184,31 @@ $(function(){
 	    scrollY: true,
 	    bodyHeight: 200,
 	    data: getMatOutDayList(),
-	    rowHeaders: ['rowNum', 'checkbox'],
+	    rowHeaders: [
+	    	{ type:'rowNum' },
+	    	{ type:'checkbox', header: ' ' }
+	    	],
 	    columns: [
 	    	{ 
-	    		header: '반품일자', 
+	    		header: '출고일자', 
 	    		name:'matHisDate'
 	    	},
 			{ 
-	    		header: '반품번호', 
+	    		header: '출고번호', 
 	    		name:'matHisNum'
 	    	},
-	    	{ 
-	    		header: '자재코드', 
-	    		name:'matCode',
-	    		hidden: true
-	    	},
 			{ 
-	    		header: '반품자재', 
-	    		name:'matName'
+	    		header: '출고경로', 
+	    		name:'matOut'
 	    	},
 			{ 
 	    		header: '건수', 
 	    		name:'matHisVol'
 	    	},
 	    	{ 
-	    		header: '업체코드', 
-	    		name:'operCode',
-	    		hidden: true
+	    		header: '공정코드', 
+	    		name:'prcCode',
+	    		hidden: false
 	    	}
 	    ]
 	}); // end const grid2
@@ -164,7 +220,6 @@ $(function(){
 			url : "MatOutDayList",
 			type : "get",
 			data : {
-				matHisNum: matHisNum,
 				matHisNum1: matHisNum1,
 				sDate: sDate,
 				eDate: eDate
@@ -186,29 +241,100 @@ $(function(){
 		})
 	
 	searchBtn.onclick = function(){
-		console.log('test')
+		matHisNum1 = null;
+		console.log('일 반품 자료 리스트 검색 버튼 test')
 		
 		sDate = $(".modal-body").find('input[name="sDate"]').val();
 		console.log(sDate)
 		eDate = $(".modal-body").find('input[name="eDate"]').val();
 		console.log(eDate)
 		
-		grid2.resetData(getMatInDayList());
+		grid2.resetData(getMatOutDayList());
 	}
 	
-	// 추가 버튼 클릭 이벤트, 그리드 row 생성 미완성
-	var rowData = [];
-	$('#addRowBtn').click(function() {
-		grid.appendRow(rowData)
-	})
+	// 일 출고 자료 리스트 모달창 단일 체크 구현
+	grid2.on('check', (e) => {
+		let rows = grid2.getCheckedRowKeys();
+		if(rows.length > 1) {
+			for(let i in rows){
+				if(e.rowKey != rows[i]){
+					grid2.uncheck(rows[i]);
+				}
+			}
+		}
+	});
+	
+	// 일 출고 자료 리스트 검색 모달
+	modalY.onclick=function() {
+		matHisDate = null;
+		if(grid2.getCheckedRows() != null){
+			matHisDNum1 = null;
+			console.log("일 반품 자료 리스트 검색 모달 '예' 버튼");
+			console.log(grid2.getCheckedRows()[0]);
+			prcCode = grid2.getCheckedRows()[0].prcCode;
+			prcName = grid2.getCheckedRows()[0].matOut;
+			matHisDate = grid2.getCheckedRows()[0].matHisDate;
+			matHisNum = grid2.getCheckedRows()[0].matHisNum;
+			grid.resetData(getList());
+			
+		}
+		console.log(prcCode);
+		console.log(matHisDate);
+		console.log(prcName);
+		console.log(matHisNum);
+		console.log('======================');
+	
+	grid2.resetData(getMatOutDayList());
+	document.getElementById("MatOutpicker-input").value=matHisDate;
+	document.getElementById("prcCode").value=prcCode;
+	document.getElementById("prcName").value=prcName;
+	}
 	
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
 	   });
 	
-	matOutDeleteBtn.onclick = function(){
-		grid.removeCheckedRows()
-		console.log(grid.removeCheckedRows());
+	resetBtn.onclick=function(){
+		grid.clear();
+	}
+	
+	// 자재 입고 관리 수정 및 생성
+	matOutSaveBtn.onclick = function(){
+		let gridData = grid.getModifiedRows({});
+		
+		gridData["materialHistoryVO"]={
+ 				matHisDate : $("#MatInpicker-input").val()
+				,prcCode : $("#prcCode").val()
+				,matHisNum :  matHisNum
+				}
+		console.log(gridData);
+		
+		$.ajax({
+			async: false,
+			url: "matHisOutMngUpdate",
+			type : "post",
+			data : JSON.stringify(gridData),
+			dataType: "json",
+			contentType: "application/json",
+			success : function(data){
+				console.log(data);
+				matHisNum = data;
+			}
+		});
+		
+		matHisDNum1 = null;
+		grid.resetData(getList());
+		
+	}
+	
+	// 그리드 행 추가
+	addRowBtn.onclick = function(){
+		grid.appendRow();
+	}
+	
+	// 그리드 행 삭제
+	deleteRowBtn.onclick = function(){
+		grid.removeCheckedRows(true);
 	}
 	
 })
@@ -226,12 +352,12 @@ $(function(){
 							<div id="datePicker"></div>
 							<!-- 타이틀 -->
 							<div id="title" class="card-header">
-								<h3>자재 출고 관리</h3>
+								<h3>자재 출고 조회</h3>
 								<br />
 							</div>
 							<!-- // 타이틀 -->
 							<div>
-								<div class="d-inline-block align-middle">출고 일자 *</div>
+								<div class="d-inline-block align-middle">출고 일자</div>
 								<div
 									class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 									<input type="text" id="MatOutpicker-input"
@@ -240,31 +366,31 @@ $(function(){
 									<div id="MatOutpicker-container" style="margin-left: -1px;"></div>
 								</div>
 								<div id="date1" style="margin-top: -1px;"></div>
-							</div>
+							</div><br />
 							<div>
-								출고업체 <input type="text" id="operCode" name="operCode" /> 출고업체명
-								<input type="text" disabled id="matOutOper" name="matOutOper" />
-								<%@ include
-									file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
-							</div>
+								출고 공정 <input type="text" id="prcCode" name="prcCode" /> 출고 공정명
+								<input type="text" disabled id="prcName" name="prcName" />
+<%-- 								<%@ include
+									file="/WEB-INF/jsp/mes/common/modal/ProcessList.jsp"%> --%>
+							</div><br />
 							<div>
 								<button id="matOutDayBtn" type="button"
 									class="btn btn-info btn-sm">조회</button>
 								<input id="resetBtn" class="btn btn-info btn-sm" type="reset"
 									value="리셋"></input>
-								<button type="button" id="matInSaveBtn" name="matInSaveBtn"
+								<!-- <button type="button" id="matOutSaveBtn" name="matOutSaveBtn"
 									class="btn btn-info btn-sm">저장</button>
 								<button type="button" id="matOutDeleteBtn" name="matInDeleteBtn"
-									class="btn btn-info btn-sm">삭제</button>
+									class="btn btn-info btn-sm">삭제</button> -->
 							</div>
 							<br />
 							<div class="page-wrapper">
-								<div class="text-right">
+								<!-- <div class="text-right">
 									<button type="button" class="btn btn-primary btn-sm"
 										id="addRowBtn">추가</button>
 									<button type="button" class="btn btn-primary btn-sm"
 										id="deleteRowBtn">삭제</button>
-								</div>
+								</div> -->
 								<br />
 								<div class="row">
 									<div class="col-xl-12">
@@ -287,7 +413,7 @@ $(function(){
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title" id="exampleModalLabel">일 반품 자료 LIST</h4>
+					<h4 class="modal-title" id="exampleModalLabel">일 출고 자료 LIST</h4>
 					<button class="close" type="button" data-dismiss="modal"
 						aria-label="Close">
 						&times;
@@ -295,7 +421,7 @@ $(function(){
 				</div>
 				<div class="modal-body">
 					<div>
-						<div class="d-inline-block align-middle">반품 일자 *</div>
+						<div class="d-inline-block align-middle">출고 일자 *</div>
 						<div
 							class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 							<input type="text" id="OutStartpicker-input"

@@ -1,5 +1,7 @@
 package mes.mat.stc.web;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -117,11 +119,23 @@ public class MaterialStockController {
 		return "mat/stc/MatStcList.page";
 	}
 	// end 자재 재고 조회
-
+	
+	// 자재 LOT 재고 조회
 	@RequestMapping(value = "/mat/stc/MatLotStcList", method = RequestMethod.GET)
 	@ResponseBody
 	public List<?> ajaxMatLotStcList(MaterialStockVO searchVO) throws Exception {
-
+		System.out.println(searchVO.toString());
+		searchVO.setMatCodeList(null);
+		// 자재 코드 다중 선택 처리
+		if(searchVO.getMatCodes() != null && searchVO.getMatCodes() != "") {
+			String[] rowList = searchVO.getMatCodes().split(",");
+			for(int i = 0; i < rowList.length; i++) {
+				rowList[i] = rowList[i].trim();
+			}
+			List<String> mc = new ArrayList<String>();
+			mc = Arrays.asList(rowList);
+			searchVO.setMatCodeList(mc);
+		}
 		List<?> list = materialStockService.selectMatLotStcList(searchVO);
 
 		System.out.println("a");
@@ -130,8 +144,7 @@ public class MaterialStockController {
 	}
 
 	@RequestMapping("/mat/stc/MatLotStcList.do")
-	public String selectMatLotStcList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, ModelMap model)
-			throws Exception {
+	public String selectMatLotStcList(@ModelAttribute("searchVO") MaterialStockDefaultVO searchVO, ModelMap model) throws Exception {
 		return "mat/stc/MatLotStcList.page";
 	}
 	// end 자재 LOT 재고 조회

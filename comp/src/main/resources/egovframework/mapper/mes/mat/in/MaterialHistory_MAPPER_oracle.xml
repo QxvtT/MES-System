@@ -3,33 +3,6 @@
 
 <mapper namespace="mes.mat.in.service.impl.MaterialHistoryMapper">
 	
-	<!-- 자재 입고 등록 -->
-<!-- 	<insert id="insertMatIn"> -->
-		
-<!-- 	</insert> -->
-	
-	<!-- 자재 입고 수정 -->
-<!-- 	<update id="updateMatIn"> -->
-<!-- 		UPDATE MATERIAL_HISTORY_D -->
-<!-- 		SET  MAT_CODE = #{matCode} -->
-<!-- 			,MAT_HIS_D_VOL = #{matHisDVol} -->
-<!-- 			,MAT_HIS_PRICE = #{matHisPrice} -->
-<!-- 		WHERE MAT_HIS_D_NUM = #{matHisDNum} -->
-<!-- 	</update> -->
-	
-	<!-- 자재 입고 삭제 -->
-<!-- 	<delete id="deleteMatIn"> -->
-<!-- 		<![CDATA[ -->
-<!-- 			DELETE FROM MATERIAL_HISTORY_D MHD  -->
-<!-- 			WHERE EXISTS -->
-<!-- 			    (SELECT 1 FROM MATERIAL_HISTORY MH  -->
-<!-- 			     WHERE MHD.MAT_HIS_NUM = MH.MAT_HIS_NUM -->
-<!-- 			     AND MHD.MAT_HIS_NUM = #{matHisNum} -->
-<!-- 			     AND MH.MAT_HIS_NUM = #{matHisNum} -->
-<!-- 			     AND MH.MAT_HIS_DIV = '입고') -->
-<!-- 				]]> -->
-<!-- 	</delete> -->
-	
 	<select id="selectMaterialHistory" resultType="mes.mat.in.service.MaterialHistoryVO">
 		<![CDATA[
 			SELECT
@@ -43,6 +16,7 @@
 				]]>
 	</select>
 	
+	<!-- 자재 입고 조회 -->
 	<select id="selectMatInList" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM ( 
@@ -56,7 +30,7 @@ SELECT * FROM (
 				       MHD.MAT_HIS_D_VOL, 
 				       MHD.MAT_HIS_PRICE, 
 				       (MHD.MAT_HIS_D_VOL * MHD.MAT_HIS_PRICE) AS AMOUNT, 
-				       MHD.LOT_NO,
+				       MHD.LOT_Num,
 				       MHD.MAT_HIS_NUM
 				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_HISTORY MH, OPERATION O
 				WHERE M.MAT_CODE = MHD.MAT_CODE 
@@ -75,7 +49,7 @@ SELECT * FROM (
 			     <![CDATA[			    			
 	            			MH.MAT_HIS_DATE >= TO_DATE(#{matHisDateS} ,'yyyy-MM-dd') and  
 	            			MH.MAT_HIS_DATE <= TO_DATE(#{matHisDateE} ,'yyyy-MM-dd')
-	            			]]>
+      			]]>
 			     </if>
 			     <if test="matCodeList != null">
 			     <if test="matCodeList.size != 0">
@@ -97,38 +71,7 @@ SELECT * FROM (
 	</select>	
 	<!-- END 자재 입고 조회 -->
 	
-		<select id="selectMatOutMng" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="egovMap">
-SELECT * FROM (
-	SELECT A.*, ROWNUM RNUM FROM (
-				SELECT M.MAT_CODE,
-				       M.MAT_NAME,
-				       M.MAT_SIZE,
-				       M.MAT_UNIT,
-				       MHD.MAT_HIS_D_VOL,
-				       MHD.LOT_NO,
-				       MS.MAT_VOL
-				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_STOCK MS, MATERIAL_HISTORY MH
-				WHERE M.MAT_CODE = MHD.MAT_CODE
-				  AND M.MAT_CODE = MS.MAT_CODE
-				  AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM  
-				  AND MH.MAT_HIS_DIV='출고'
-				  AND MH.MAT_HIS_DATE BETWEEN TO_DATE('2021-06-09', 'YYYY-MM-DD') AND TO_DATE('2021-06-25', 'YYYY-MM-DD')
-				<if test="searchKeyword != null and searchKeyword != ''">
-					<if test="searchCondition == 0">AND
-						M.MAT_NAME = #{searchKeyword}
-					</if>
-					<if test="searchCondition == 1">AND
-						M.MAT_NAME '%' || #{searchKeyword} || '%'
-					</if>
-				</if>
-					
-		<![CDATA[					
-	) A WHERE ROWNUM <= 10
-)
-]]>
-	</select> 
-	<!-- END 자재 출고 관리 조회 -->
-	
+	<!-- 자재 입고 관리 조회 -->
 	<select id="selectMatInMng" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
@@ -141,12 +84,15 @@ SELECT * FROM (
 				       MHD.MAT_HIS_D_VOL, 
 				       MHD.MAT_HIS_PRICE, 
 				       (MHD.MAT_HIS_D_VOL * MHD.MAT_HIS_PRICE) AS AMOUNT, 
-				       MHD.LOT_NO,
+				       MHD.LOT_Num,
+				       MS.MAT_VOL,
 				       MHD.MAT_HIS_NUM,
 				       MHD.MAT_HIS_D_NUM
-				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_HISTORY MH
+				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_HISTORY MH, MATERIAL_STOCK MS
 				WHERE M.MAT_CODE = MHD.MAT_CODE 
 				      AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
+				      AND M.MAT_CODE = MS.MAT_CODE
+<!-- 				      AND MHD.LOT_NUM = MS.LOT_NUM -->
 				      AND MH.MAT_HIS_DIV='입고'
 				      <if test="matHisNum != null and matHisNum != ''">
 				      	and mh.mat_His_Num = #{matHisNum}
@@ -155,10 +101,10 @@ SELECT * FROM (
 			      		and mhd.mat_his_d_num > #{matHisDNum1}
 			     </if>
 			     <if test="sDate != null and sDate != '' and eDate != null and eDate != ''"> AND
-			     <![CDATA[			    			
-	            			MH.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
-	            			MH.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
-	            			]]>
+				     <![CDATA[			    			
+            			MH.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
+            			MH.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
+	       			]]>
 			     </if>
 			     <if test="operCodeList != null">
 			     <if test="operCodeList.size != 0">
@@ -169,16 +115,6 @@ SELECT * FROM (
 					</foreach>
 			     </if>
 			     </if>
-
-				<if test="searchKeyword != null and searchKeyword != ''">
-					<if test="searchCondition == 0">AND
-						M.MAT_NAME = #{searchKeyword}
-					</if>
-					<if test="searchCondition == 1">AND
-						M.MAT_NAME '%' || #{searchKeyword} || '%'
-					</if>
-				</if>
-					
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )
@@ -186,17 +122,61 @@ SELECT * FROM (
 	</select>
 	<!-- END 자재 입고 관리 조회 -->
 	
+		<!-- 자재 출고 관리 조회 -->
+	<select id="selectMatOutMng" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="egovMap">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM (
+				SELECT TO_CHAR(MH.MAT_HIS_DATE, 'yyyy-MM-DD') as MAT_HIS_DATE,
+				       M.MAT_CODE,
+				       M.MAT_NAME,
+				       M.MAT_SIZE,
+				       MH.MAT_OUT,
+				       P.PRC_CODE,
+				       M.MAT_UNIT,
+				       MHD.MAT_HIS_D_VOL,
+				       MHD.LOT_Num,
+				       MS.MAT_VOL,
+				       MHD.MAT_HIS_NUM,
+				       MHD.MAT_HIS_D_NUM
+				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_STOCK MS, MATERIAL_HISTORY MH, PROCESS P
+				WHERE M.MAT_CODE = MHD.MAT_CODE
+				  AND M.MAT_CODE = MS.MAT_CODE
+				  AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM  
+				  AND P.PRC_NAME = MH.MAT_OUT
+				  AND MH.MAT_HIS_DIV='출고'
+				 <if test="matHisNum != null and matHisNum != ''">
+				      	and mh.mat_His_Num = #{matHisNum}
+				      </if>
+				 <if test= "matHisDNum1 != null and matHisDNum1 != ''">
+			      		and mhd.mat_his_d_num > #{matHisDNum1}
+			     </if>
+			     <if test="sDate != null and sDate != '' and eDate != null and eDate != ''"> AND
+				     <![CDATA[			    			
+	           			MH.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
+	           			MH.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
+      				]]>
+			     </if>
+					
+		<![CDATA[					
+	) A WHERE ROWNUM <= 10
+)
+]]>
+	</select> 
+	<!-- END 자재 출고 관리 조회 -->
+	
 	<!-- 일 입고 자료 리스트 -->
 	<select id="matInDayList" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
 	SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 			SELECT    TO_CHAR(mh.MAT_HIS_DATE, 'yyyy-MM-DD') as MAT_HIS_DATE
-			        , mh.MAT_HIS_NUM
-			        , mh.MAT_HIS_VOL
-                    , mh.mat_ord_oper
-                    , o.oper_code
-			FROM  MATERIAL_HISTORY mh, operation o
-			where mat_his_div = '입고'
+			        , MH.MAT_HIS_NUM
+			        , MH.MAT_HIS_VOL
+                    , MH.MAT_ORD_OPER
+                    , O.OPER_CODE
+			FROM  MATERIAL_HISTORY MH
+				  , OPERATION O
+			WHERE MH.MAT_ORD_OPER = O.OPER_NAME 
+				  AND MH.MAT_HIS_DIV = '입고'
 			<if test="matHisNum != null and matHisNum != ''">AND
 				mat_his_num = #{matHisNum}
 			</if>
@@ -215,19 +195,24 @@ SELECT * FROM (
 	)
 	]]>
 	</select>
+	<!-- END 일 입고 자료 리스트 -->
 	
-	<!-- 일 반품 자료 리스트 -->
+	<!-- 일 출고 자료 리스트 -->
 	<select id="matOutDayList" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
 	SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-			SELECT    MH.MAT_HIS_DATE
+			SELECT    TO_CHAR(mh.MAT_HIS_DATE, 'yyyy-MM-DD') as MAT_HIS_DATE
 			        , MH.MAT_HIS_NUM
-			        , MH.MAT_ORD_OPER
+			        , MH.MAT_OUT
 			        , MH.MAT_HIS_VOL
-			        , O.OPER_CODE
+			        , P.PRC_CODE
 			FROM  MATERIAL_HISTORY MH
-			    , OPERATION O
-			WHERE O.OPER_NAME = MH.MAT_ORD_OPER
+				, PROCESS P
+			WHERE MH.MAT_HIS_DIV = '출고'
+			AND   MH.MAT_OUT = P.PRC_NAME
+			<if test="matHisNum != null and matHisNum != ''">AND
+				mat_his_num = #{matHisNum}
+			</if>
 			<if test="matHisNum1 != null and matHisNum1 != ''">
 				and mh.mat_his_num > #{matHisNum1}
 			</if>
@@ -237,19 +222,15 @@ SELECT * FROM (
          			MH.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
 				]]>
 			</if>
-			<if test="operCode != null and operCode != ''"> AND
-			     <![CDATA[			    			
-         			O.OPER_CODE = #{operCode}
-				]]>
-			</if>
-			<![CDATA[	
 			order by mat_his_num
+			<![CDATA[	
 			) A WHERE ROWNUM <= 10
 		)
 	]]>
 	</select>
+	<!-- END 일 출고 자료 리스트 -->
 	
-	<!-- 자재 입고  master insert -->
+	<!-- 자재 입고 관리  master insert -->
 	<insert id="insertMatInMng">
 		INSERT INTO MATERIAL_HISTORY( MAT_HIS_NUM
 		                            , MAT_HIS_DATE
@@ -257,13 +238,29 @@ SELECT * FROM (
 		                            , MAT_HIS_DIV
 		                            , MAT_HIS_VOL) 
 		VALUES( #{matHisNum}
-				, TO_DATE(#{matHisDate}v, 'yyyy-MM-dd')
+				, TO_DATE(#{matHisDate}, 'yyyy-MM-dd')
 				, #{matOrdOper}
 			 	, #{matHisDiv}
 			 	, #{matHisVol})
 	</insert>
+	<!-- END 자재 입고 관리  master insert -->
 	
-	<!-- 자재입고 master update -->
+	<!-- 자재 출고 관리  master insert -->
+	<insert id="insertMatOutMng">
+		INSERT INTO MATERIAL_HISTORY(MAT_HIS_NUM
+		                            , MAT_HIS_DATE
+		                            , MAT_OUT
+		                            , MAT_HIS_DIV
+		                            , MAT_HIS_VOL) 
+		VALUES( #{matHisNum}
+		, TO_DATE(#{matHisDate}, 'yyyy-MM-dd')
+		, #{matOut}
+		, #{matHisDiv}
+		, #{matHisVol})
+	</insert>
+	<!-- END 자재 출고 관리  master insert -->
+	
+	<!-- 자재 입고 관리 master update -->
 	<update id="updateMatInMng">
 		<selectKey resultType="string" keyProperty="matOrdOper" order="BEFORE">
 	        SELECT oper_name FROM operation   
@@ -274,6 +271,20 @@ SELECT * FROM (
 			mat_ord_oper = #{matOrdOper}
 		WHERE MAT_HIS_NUM = #{matHisNum}
 	</update>
+	<!-- END 자재 입고 관리 master update -->
+	
+	<!-- 자재 출고 관리 master update -->
+	<update id="updateMatOutMng">
+		<selectKey resultType="string" keyProperty="matOut" order="BEFORE">
+	        SELECT prc_name FROM process   
+	        where prc_code = #{prcCode}   
+	    </selectKey>
+		UPDATE MATERIAL_HISTORY
+		SET MAT_HIS_DATE = TO_DATE(#{matHisDate}, 'yyyy-MM-dd'),
+			MAT_OUT = #{matOut}
+		WHERE MAT_HIS_NUM = #{matHisNum}
+	</update>
+	<!-- END 자재 출고 관리 master update -->
 	
 	<!-- 자재 입고 관리 grid 행 insert -->
 	<insert id="insertMatInMngD">
@@ -291,6 +302,23 @@ SELECT * FROM (
 				#{matHisPrice}
 			)
 	</insert>
+	<!-- END 자재 입고 관리 grid 행 insert -->
+	
+	<!-- 자재 출고 관리 grid 행 insert -->
+	<insert id="insertMatOutMngD">
+		insert into material_history_d
+			(mat_his_d_num
+			, mat_his_num
+			, mat_code
+			, mat_his_d_vol)
+			values(
+				material_history_seq.nextval,
+				#{matHisNum},
+				#{matCode},
+				#{matHisDVol}
+			)
+	</insert>
+	<!-- END 자재 출고 관리 grid 행 insert -->
 	
 	<!-- 자재 입고 관리 grid 행 update -->
 	<update id="updateMatInMngD">
@@ -300,12 +328,23 @@ SELECT * FROM (
 			MAT_HIS_PRICE = #{matHisPrice}
 		WHERE MAT_HIS_D_NUM = #{matHisDNum}
 	</update>
+	<!-- END 자재 입고 관리 grid 행 update -->
+	
+	<!-- 자재 출고 관리 grid 행 update -->
+	<update id="updateMatOutMngD">
+		UPDATE MATERIAL_HISTORY_D SET 
+			MAT_CODE = #{matCode},
+			MAT_HIS_D_VOL = #{matHisDVol}
+		WHERE MAT_HIS_D_NUM = #{matHisDNum}
+	</update>
+	<!-- END 자재 입고 관리 grid 행 update -->
 	
 	<!-- 작업지시 grid 행 delete -->
 	<delete id="deleteMatInMngD">
 		delete from MATERIAL_HISTORY_D 
 		where MAT_HIS_D_NUM = #{matHisDNum}
 	</delete>
+	<!-- END 작업지시 grid 행 delete -->
 	
 	<!-- 자재 입고 관리 마스터번호 구하기 -->
 	<select id="getMatInMngCount" resultType="int">
@@ -313,5 +352,13 @@ SELECT * FROM (
 		from material_history
 		where to_char(mat_his_date,'yyyy-MM-dd') = #{matHisDate}
 	</select>
+	<!-- END 자재 입고 관리 마스터번호 구하기 -->
 	
+	<!-- 자재 출고 관리 마스터번호 구하기 -->
+	<select id="getMatOutMngCount" resultType="int">
+		select nvl(to_number(max(substr(mat_com_num,11))),0) + 1
+		from material_history
+		where to_char(mat_his_date,'yyyy-MM-dd') = #{matHisDate}
+	</select>
+	<!-- END 자재 출고 관리 마스터번호 구하기 -->
 </mapper>

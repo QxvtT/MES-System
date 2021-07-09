@@ -21,7 +21,7 @@ import mes.mat.stc.service.MaterialDefaultVO;
 public class MaterialHistoryVO extends MaterialDefaultVO{
     private static final long serialVersionUID = 1L;
     
-    /** matInDayList 스크롤용 **/
+    /** matInDayList, matOutDayList 스크롤용 **/
     private java.lang.String matHisNum1;
     
     /** main grid 스크롤용 */
@@ -178,5 +178,8 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     
     /** MAT_ORD_NOTE */
     private java.lang.String matOrdNote;
+    
+    /** MAT_ORD_NOTE */
+    private java.lang.String prcCode;
     
 }

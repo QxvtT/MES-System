@@ -38,13 +38,13 @@ public interface MaterialHistoryMapper {
 	 */
     public List<?> selectMatInList(MaterialHistoryVO searchVO) throws Exception; // 자재 입고 조회
 
-    public List<?> selectMatOutMng(MaterialHistoryVO searchVO) throws Exception; // 자재 출고 관리 조회
-    
     List selectMatInMng(MaterialHistoryVO searchVO) throws Exception; // 자재 입고 관리 조회
+    
+    public List<?> selectMatOutMng(MaterialHistoryVO searchVO) throws Exception; // 자재 출고 관리 조회
     
     public List<?> matInDayList(MaterialHistoryVO searchVO) throws Exception; // 일 입고 자료 리스트 조회
     
-    public List<?> matOutDayList(MaterialHistoryVO searchVO) throws Exception; // 일 입고 자료 리스트 조회
+    public List<?> matOutDayList(MaterialHistoryVO searchVO) throws Exception; // 일 출고 자료 리스트 조회
     
     public void insertMatInMng(MaterialHistoryVO vo) throws Exception;
     public void insertMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 등록

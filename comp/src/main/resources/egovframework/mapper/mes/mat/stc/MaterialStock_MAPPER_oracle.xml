@@ -16,51 +16,54 @@
 		<result property="matHisDate" column="MAT_HIS_DATE"/>
 	</resultMap> -->
 	
-	<insert id="insertMaterialStock">
-		<![CDATA[
-			INSERT INTO MATERIAL_STOCK 
-				( LOT_NUM
-				  , MAT_CODE
-				  , MAT_VOL )
-			VALUES ( #{lotNum}
-				  , #{matCode}
-				  , #{matVol} )
-		]]>
-	</insert>
-	
-	<update id="updateMaterialStock">
-		<![CDATA[
-			UPDATE MATERIAL_STOCK
-			SET LOT_NUM=#{lotNum}
-				, MAT_CODE=#{matCode}
-				, MAT_VOL=#{matVol}
-						WHERE LOT_NUM=#{lotNum}
-								AND MAT_CODE=#{matCode}
-				]]>
-	</update>
-	
-	<delete id="deleteMaterialStock">
-		<![CDATA[
-			DELETE FROM MATERIAL_STOCK 
-						WHERE LOT_NUM=#{lotNum}
-								AND MAT_CODE=#{matCode}
-				]]>
-	</delete>
-	
-	<select id="selectMaterialStock" resultType="mes.mat.stc.service.MaterialStockVO">
-		<![CDATA[
-			SELECT
-				LOT_NUM
-				, MAT_CODE
-				, MAT_VOL
-			FROM MATERIAL_STOCK
-						WHERE LOT_NUM=#{lotNum}
-								AND MAT_CODE=#{matCode}
-				]]>
+	<!-- 자재 LOT 재고 조회 -->
+	<select id="selectMatLotStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="mes.mat.stc.service.MaterialStockVO">
+		SELECT * FROM (
+			SELECT A.*, ROWNUM RNUM FROM ( 
+				select b.* , nvl(c.MAT_HIS_D_VOL, 0) as out
+				from (SELECT M.MAT_CODE, 
+				        M.MAT_NAME, 
+				        M.MAT_SIZE, 
+				        M.MAT_UNIT, 
+				        MHD.LOT_NUM, 
+				        MHD.MAT_HIS_D_VOL,
+				        MS.MAT_VOL,
+				        MHD.MAT_HIS_D_NUM
+				      FROM MATERIAL M, MATERIAL_STOCK MS, MATERIAL_HISTORY_D MHD
+				      WHERE M.MAT_CODE=MHD.MAT_CODE AND MHD.LOT_NUM=MS.LOT_NUM) b left outer join
+				(select mat_code, MAT_HIS_D_VOL from material_history_d mhd, material_history mh
+				where mh.mat_his_num=mhd.mat_his_num 
+				and mh.mat_his_div='출고' 
+			<if test="matHisDNum1 != null and matHisDNum1 != ''">
+			      <![CDATA[	
+			      		and MHD.MAT_HIS_D_NUM < #{matHisDNum1}
+			      ]]>
+	       	</if>
+			<if test="sDate != null and sDate != '' and eDate != null and eDate != ''"> AND
+			     <![CDATA[			    			
+           			MH.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
+           			MH.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
+       			]]>
+		     </if>
+		     <if test="matCodeList != null">
+			     <if test="matCodeList.size != 0">
+				      AND M.MAT_CODE IN 
+			     	<foreach item="item" index="index" collection="matCodeList"
+					      open="(" separator="," close=")">
+					        #{item}
+					</foreach>
+	     		 </if>	
+		     </if>
+			) c
+			on c.mat_code = b.mat_code
+		<![CDATA[					
+	) A WHERE ROWNUM <= 10
+)
+]]>
 	</select>
 	
-	<select id="selectMatStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="mes.mat.stc.service.MaterialStockVO">
-SELECT * FROM (
+	<select id="selectMatLotStcList1" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="mes.mat.stc.service.MaterialStockVO">
+	SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
 				select b.* , nvl(c.MAT_HIS_D_VOL, 0) as out
 				from (select m.mat_code, 
@@ -100,7 +103,7 @@ SELECT * FROM (
 	</select>	
 	<!-- 자재 재고 조회 -->
 	
-	<select id="selectMatLotStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
+	<select id="selectMatStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 			SELECT M.MAT_CODE, 
@@ -144,12 +147,6 @@ SELECT * FROM (
 				</if>
 			</if>
 	</select>
-	
-	<!-- 자재 코드 검색 -->
-<!-- 	<select id="selectMatCodeList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap"> -->
-<!-- 		select mat_code, mat_name, mat_size, mat_unit  -->
-<!-- 		from material -->
-<!-- 	</select> -->
 	
 	<!-- 자재 코드 모달 검색 -->
 	<select id="selectMatCodeList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">

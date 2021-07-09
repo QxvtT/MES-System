@@ -1,8 +1,5 @@
 package mes.mat.in.service.impl;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -13,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import mes.mat.in.service.GridDataVO;
 import mes.mat.in.service.MaterialHistoryDefaultVO;
 import mes.mat.in.service.MaterialHistoryService;
@@ -40,50 +36,32 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 	@Resource(name = "materialHistoryMapper")
 	private MaterialHistoryMapper materialHistoryDAO;
 
-	// @Resource(name="materialHistoryDAO")
-	// private MaterialHistoryDAO materialHistoryDAO;
-
-	/** ID Generation */
-	// @Resource(name="{egovMaterialHistoryIdGnrService}")
-	// private EgovIdGnrService egovIdGnrService;
-
-	public MaterialHistoryVO selectMaterialHistory(MaterialHistoryVO vo) throws Exception {
-		MaterialHistoryVO resultVO = materialHistoryDAO.selectMaterialHistory(vo);
-		if (resultVO == null)
-			throw processException("info.nodata.msg");
-		return resultVO;
-	}
-
+	// 자재 입고 조회
 	public List<?> selectMatInList(MaterialHistoryVO searchVO) throws Exception {
 		return materialHistoryDAO.selectMatInList(searchVO);
 	}
-	// 자재 입고 조회
-
-	public List<?> selectMatOutMng(MaterialHistoryVO searchVO) throws Exception {
-		return materialHistoryDAO.selectMatOutMng(searchVO);
-	}
-	// 자재 출고 관리 조회
-
+	
+	// 자재 입고 관리 조회
 	public List<?> selectMatInMng(MaterialHistoryVO searchVO) throws Exception {
 		return materialHistoryDAO.selectMatInMng(searchVO);
 	}
-	// 자재 입고 관리 조회
-
+	
+	// 자재 출고 관리 조회
+	public List<?> selectMatOutMng(MaterialHistoryVO searchVO) throws Exception {
+		return materialHistoryDAO.selectMatOutMng(searchVO);
+	}
+	
+	// 일 입고 리스트 조회
 	public List<?> matInDayList(MaterialHistoryVO searchVO) throws Exception {
 		return materialHistoryDAO.matInDayList(searchVO);
 	}
-	// 일 입고 리스트 조회
-
-	public List<?> matOutDayList(MaterialHistoryVO searchVO) throws Exception {
-		return materialHistoryDAO.matInDayList(searchVO);
-	}
+	
 	// 일 출고 리스트 조회
-
-	public int selectMaterialHistoryListTotCnt(MaterialHistoryDefaultVO searchVO) {
-		return materialHistoryDAO.selectMaterialHistoryListTotCnt(searchVO);
+	public List<?> matOutDayList(MaterialHistoryVO searchVO) throws Exception {
+		return materialHistoryDAO.matOutDayList(searchVO);
 	}
 
-	// 자재 입고 관리 insert 및 update
+	// 자재 입고 관리 CRUD
 	@Override
 	public String matHisMngUpdate(GridDataVO gridDataVO) throws Exception {
 		String newMatHisNum = null;
@@ -124,27 +102,36 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 				materialHistoryDAO.deleteMatInMngD(gridDataVO.getDeletedRows().get(i));
 			}
 		}
-
 		return newMatHisNum;
 	}
-	// end 자재 입고 관리 CUD
+	// end 자재 입고 관리 CRUD
 
+	// 자재 입고 관리 DETAIL 등록
 	@Override
 	public String insertMatInMngD(MaterialHistoryVO vo) throws Exception {
 		materialHistoryDAO.insertMatInMngD(vo);
 		return null;
-
 	}
-
+	
+	// 자재 입고 관리 DETAIL 수정
 	@Override
 	public void updateMatInMngD(MaterialHistoryVO vo) throws Exception {
 		materialHistoryDAO.updateMatInMngD(vo);
-
 	}
 
+	// 자재 입고 관리 DETAIL 삭제
 	@Override
 	public void deleteMatInMngD(MaterialHistoryVO vo) throws Exception {
 		materialHistoryDAO.deleteMatInMngD(vo);
 	}
-
+	
+	public MaterialHistoryVO selectMaterialHistory(MaterialHistoryVO vo) throws Exception {
+		MaterialHistoryVO resultVO = materialHistoryDAO.selectMaterialHistory(vo);
+		if (resultVO == null)
+			throw processException("info.nodata.msg");
+		return resultVO;
+	}
+	public int selectMaterialHistoryListTotCnt(MaterialHistoryDefaultVO searchVO) {
+		return materialHistoryDAO.selectMaterialHistoryListTotCnt(searchVO);
+	}
 }
