@@ -51,7 +51,6 @@ $(function(){
 	}); // end const grid
 	
 	grid.on('scrollEnd', () => {
-	    grid.appendRows(getPrdComList());
 	  })
 	  
 	// toast datePicker 관련 Script
@@ -163,7 +162,6 @@ $(function(){
 </script>
 </head>
 <body>
-	<div class="print">
 		<!-- 생산계획조회 Title -->
 		<div class="page-header">
 			<div class="page-block">

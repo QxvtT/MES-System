@@ -28,7 +28,6 @@
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
 let prdPlanDNum = null;
-let prdDate = null;
 let prdNum = null;
 let prdName = null;
 let prdNote = null;
@@ -250,11 +249,9 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
-			cache: false,
 			url : "ProducePlanDList",
-			type : "get",
+			type : "GET",
 			data : {
-				prdPlanDNum: prdPlanDNum,
 				prdNum : prdNum
 				},
 			dataType: "json",
@@ -262,6 +259,8 @@ $(function(){
 				if(result.length > 0) {
 					prdPlanDNum = result[result.length -1].prdPlanDNum;
 				}
+				console.log(result);
+				prdNum = null;
 				data = result;
 			} // end success
 		}); // end ajax 
@@ -412,7 +411,7 @@ $(function(){
 					grid2.uncheck(rows[i]);
 				}
 			}
-			rows = grid2.getCheckeds();
+			rows = grid2.getCheckedRowKeys();
 		}
 		// 조회된 리스트에서 체크된 생산계획을 디테일테이블에 뿌려줌
 		$('#loadBtn').click(function() {
@@ -575,22 +574,7 @@ $(function(){
 	})
 	
 	$('#deleteRowBtn').click(function() {
-		if(prdNum != null){
-			var result = confirm("체크된 행을 삭제하시겠습니까?");
-			if(result){ // 그리드 초기화 -> reset, clear, 마스터 초기화  
-				grid.removeCheckedRows();
-				let gridData = grid.getModifiedRows()
-				$.ajax({
-					async: false,
-					url : "ProducePlanUpdate",
-					type : "post",
-					data : JSON.stringify(gridData),
-					dataType: "json",
-					contentType:"application/json",
-				});
-				alert("삭제되었습니다.");
-			}
-		}
+		grid.removeCheckedRows(true);
 	})
 }); 
 

@@ -124,7 +124,7 @@
 				, PRD_NUM
 				, ITM_CODE
 				, PRD_WORK_VOL
-				, PRD_PLAN_DATE
+				, TO_CHAR(PRD_PLAN_DATE,'yyyy-MM-dd')
 				, PRD_NO
 				, PRD_NOTE
 				, COM_CHK

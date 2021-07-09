@@ -138,7 +138,11 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     /** 공정비고 */
     private java.lang.String prcFExplain;
     
+    /** 검색 시작 날짜 */
+    private java.lang.String startDate;
     
+    /** 검색 마지막 날짜 */
+    private java.lang.String endDate;
 
 	
 	public static long getSerialversionuid() {

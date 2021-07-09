@@ -17,6 +17,12 @@
 					Prd_Com_Num < #{prdComNum1}
 				]]>
 		</if>
+		<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+		<![CDATA[
+			AND PRD_COM_DATE >= #{startDate}
+			AND PRD_COM_DATE <= #{endDate}
+			]]>
+		</if>
 		</where>
 		ORDER BY
 		PRD_COM_NUM DESC
