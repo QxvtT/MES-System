@@ -76,9 +76,9 @@ $(function(){
 	});
 	
 	
-	$('.btn').click(function(){
-		$("#myModal").modal("toggle");
-		$("#myModal").on('shown.bs.modal', function () {
+	$('#searchItemBtn').click(function(){
+		$("#itemModal").modal("toggle");
+		$("#itemModal").on('shown.bs.modal', function () {
 			item.refreshLayout();
 		});
 		
@@ -115,10 +115,9 @@ $(function(){
 </head>
 <body>
 
-	<button type="button" class="btn btn-info btn-sm" id="searchComBtn"
-		data-toggle="modal" data-target="#myModal">검색</button>
+	<button type="button" class="btn btn-info btn-sm" id="searchItemBtn">검색</button>
 
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+	<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">

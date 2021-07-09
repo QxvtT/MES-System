@@ -1,5 +1,7 @@
 package mes.prd.pln.service;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class ProducePlanDVO extends ProducePlanDDefaultVO{
+public class ProducePlanDVO {
     private static final long serialVersionUID = 1L;
     
     /** PRD_PLAN_D_NUM */
@@ -46,6 +48,14 @@ public class ProducePlanDVO extends ProducePlanDDefaultVO{
     
     /** ORD_NUM */
     private java.lang.String ordNum;
+    
+    /** 업체코드 검색 **/
+    private java.lang.String operCodes;
+    private List<String> operCodeList;
+    
+    /** 제품코드 검색 **/
+    private java.lang.String itemCodes;
+    private List<String> itemCodeList;
     
     // 생산계획 detail 테이블
     private java.lang.String itmName;

@@ -159,24 +159,52 @@
 	
 	<!-- 생산계획조회 리스트 -->
 	<select id="producePlanList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.pln.service.ProducePlanDVO">
-		SELECT A.PRD_DATE
-		     , (SELECT OPER_NAME FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) OPER_NAME
-		     , B.PRD_NUM
-		     , B.ITM_CODE
-		     , (SELECT ITM_NAME FROM ITEM WHERE ITM_CODE = B.ITM_CODE) ITM_NAME
-		     , B.ORD_NUM
-		     , (SELECT ORD_DELIVERY_DATE FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) ORD_DELIVERY_DATE
-		     , (SELECT ORD_VOL FROM ORDER_D WHERE ORD_NUM = B.ORD_NUM AND ORD_D_NUM = B.ORD_D_NUM) ORD_VOL
-		     , B.PRD_WORK_VOL
-		     , B.PRD_PLAN_DATE
-		     , B.PRD_NO
-		FROM PRODUCE_PLAN A
-		   , PRODUCE_PLAN_D B 
-		WHERE A.PRD_NUM = B.PRD_NUM
+		SELECT * FROM (
+			SELECT A.*, ROWNUM RNUM FROM ( 
+		        SELECT A.PRD_DATE
+				     , (SELECT OPER_NAME FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) as OPER_NAME
+				     , B.PRD_NUM
+				     , B.ITM_CODE
+				     , (SELECT ITM_NAME FROM ITEM WHERE ITM_CODE = B.ITM_CODE) as ITM_NAME
+				     , B.ORD_NUM
+				     , (SELECT ORD_DELIVERY_DATE FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) as ORD_DELIVERY_DATE
+				     , (SELECT ORD_VOL FROM ORDER_D WHERE ORD_NUM = B.ORD_NUM AND ORD_D_NUM = B.ORD_D_NUM) ORD_VOL
+				     , B.PRD_WORK_VOL
+				     , B.PRD_PLAN_DATE
+				     , B.PRD_NO
+				FROM PRODUCE_PLAN A
+				   , PRODUCE_PLAN_D B 
+				WHERE A.PRD_NUM = B.PRD_NUM
+				<![CDATA[
+				AND PRD_DATE >= #{startDate}
+		        AND PRD_DATE <= #{endDate}
+		        ]]>
+        <if test="itemCodeList != null">
+		<if test="itemCodeList.size != 0">
 		<![CDATA[
-		AND PRD_DATE >= #{startDate}
-        AND PRD_DATE <= #{endDate}
-        ]]>
+            AND (SELECT ITM_CODE FROM ITEM WHERE ITM_CODE = B.ITM_CODE) IN
+           ]]> 
+           <foreach item="item" index="index" collection="itemCodeList"
+           open="(" separator="," close=")">
+                  #{item}
+           </foreach>
+        </if>
+        </if>
+		<if test="operCodeList != null">
+		<if test="operCodeList.size != 0">
+        <![CDATA[
+            AND (SELECT OPER_CODE FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) IN
+            ]]>
+            <foreach item="operCode" index="index" collection="operCodeList"
+            open="(" separator="," close=")">
+            #{operCode}
+            </foreach>
+        </if>
+        </if>
+        <![CDATA[
+    	) A WHERE ROWNUM <= 10
+	)
+	]]>
 	</select>
 		
 </mapper>

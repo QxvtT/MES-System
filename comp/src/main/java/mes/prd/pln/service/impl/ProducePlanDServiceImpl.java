@@ -92,7 +92,7 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return PRODUCE_PLAN_D 목록
 	 * @exception Exception
 	 */
-    public List<?> selectProducePlanDList(ProducePlanDDefaultVO searchVO) throws Exception {
+    public List<?> selectProducePlanDList(ProducePlanDVO searchVO) throws Exception {
         return producePlanDDAO.selectProducePlanDList(searchVO);
     }
 
@@ -112,9 +112,6 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return PRODUCE_PLAN_D 총 갯수
 	 * @exception
 	 */
-    public int selectProducePlanDListTotCnt(ProducePlanDDefaultVO searchVO) {
-		return producePlanDDAO.selectProducePlanDListTotCnt(searchVO);
-	}
     
     // 제품테이블 조회
 	public List<?> selectItemList(ProducePlanDVO itmVO) throws Exception {
@@ -194,6 +191,5 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 
-	
-    
+
 }

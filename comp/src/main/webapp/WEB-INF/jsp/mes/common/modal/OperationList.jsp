@@ -120,8 +120,7 @@ $(function(){
 </script>
 </head>
 <body>
-	<button type="button" class="btn btn-info btn-sm" id="searchOperBtn"
-		data-toggle="modal" data-target="#operModal">검색</button>
+	<button type="button" class="btn btn-info btn-sm" id="searchOperBtn">검색</button>
 
 	<div class="modal fade" id="operModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">

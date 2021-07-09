@@ -1,5 +1,7 @@
 package mes.prd.pln.web;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -94,7 +96,7 @@ public class ProducePlanDController {
 
 	// 생산계획 관리 페이지
 	@RequestMapping(value = "/prd/pln/ProducePlanDList.do")
-	public String selectProducePlanDList(@ModelAttribute("searchVO") ProducePlanDDefaultVO searchVO, ModelMap model)
+	public String selectProducePlanDList(@ModelAttribute("searchVO") ProducePlanDVO searchVO, ModelMap model)
 			throws Exception {
 		return "prd/pln/ProducePlanDList.page";
 	}
@@ -119,6 +121,31 @@ public class ProducePlanDController {
 	@ResponseBody
 	public List<?> ajaxPlanList(@ModelAttribute("searchVO") ProducePlanDVO searchVO) throws Exception {
 		System.out.println(searchVO);
+		// 업체 코드 다중 선택 처리
+    	if(searchVO.getOperCodes() != null && searchVO.getOperCodes() != "") {
+    		String[] operList = searchVO.getOperCodes().split(",");
+    		for(int i = 0; i<operList.length; i++) {
+    			operList[i] = operList[i].trim();
+    		}
+    		List<String> ol = new ArrayList<String>();
+    		ol = Arrays.asList(operList);
+    		searchVO.setOperCodeList(ol);
+    		
+    		System.out.println(searchVO.getOperCodeList());
+    	}
+    	
+    	// 제품 코드 다중 선택 처리
+    	if(searchVO.getItemCodes() != null && searchVO.getItemCodes() != "") {
+    		String[] itemList = searchVO.getItemCodes().split(",");
+    		for(int i = 0; i<itemList.length; i++) {
+    			itemList[i] = itemList[i].trim();
+    		}
+    		List<String> ol = new ArrayList<String>();
+    		ol = Arrays.asList(itemList);
+    		searchVO.setItemCodeList(ol);
+    		
+    		System.out.println(searchVO.getItemCodeList());
+    	}
 		List<?> list = producePlanDService.producePlanList(searchVO);
 		return list;
 	}

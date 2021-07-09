@@ -53,7 +53,7 @@ public interface ProducePlanDMapper {
 	 * @return PRODUCE_PLAN_D 목록
 	 * @exception Exception
 	 */
-    public List<?> selectProducePlanDList(ProducePlanDDefaultVO searchVO) throws Exception;
+    public List<?> selectProducePlanDList(ProducePlanDVO searchVO) throws Exception;
 
     //생산계획 조회
     public List<?> selectProducePlanList(ProducePlanDVO prdVO) throws Exception;

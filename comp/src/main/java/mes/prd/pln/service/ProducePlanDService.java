@@ -54,7 +54,7 @@ public interface ProducePlanDService {
 	 * @return PRODUCE_PLAN_D 목록
 	 * @exception Exception
 	 */
-    List selectProducePlanDList(ProducePlanDDefaultVO searchVO) throws Exception;
+    List selectProducePlanDList(ProducePlanDVO searchVO) throws Exception;
     
     /**
 	 * PRODUCE_PLAN_D 총 갯수를 조회한다.
@@ -62,7 +62,6 @@ public interface ProducePlanDService {
 	 * @return PRODUCE_PLAN_D 총 갯수
 	 * @exception
 	 */
-    int selectProducePlanDListTotCnt(ProducePlanDDefaultVO searchVO);
 
 	List<?> selectProducePlanList(ProducePlanDVO prdVO) throws Exception;
 	

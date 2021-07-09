@@ -21,13 +21,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.min.js"
-	integrity="sha512-d5Jr3NflEZmFDdFHZtxeJtBzk0eB+kkRXWFQqEc1EKmolXjHm2IKCA7kTvXBNjIYzjXfD5XzIjaaErpkZHCkBg=="
-	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!--필수, FileSaver savaAs 이용 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
-
 let prdDate = null;
+let itemCodes = null;
+let operCodes = null;
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -49,56 +49,6 @@ $(function(){
 			{ header: '순서', name:'prdNo'}
 	    ]
 	}); // end const grid
-	
-	// 고객사 검색 모달
-	const grid2 = new tui.Grid({
-	    el: document.getElementById('grid2'),
-	    scrollX: false,
-	    scrollY: true,
-	    bodyHeight: 200,
-	    data: getOperList(),
-	    rowHeaders: [{
-            type: 'checkbox',
-            header: ' '
-    	}],
-	    columns: [
-	    	{ 
-	    		header: '업체코드', 
-	    		name:'operCode',
-	    		align: 'center'
-	    		},
-			{ 
-	    		header: '업체명', 
-	    		name:'operName',
-	    		align: 'center'
-	    		}
-	    ]
-	});
-	
-	// 제품코드를 입력할 때 제품명 확인을 위한 모달에 사용되는 그리드
-	const grid3 = new tui.Grid({
-	    el: document.getElementById('grid3'),
-	    scrollX: false,
-	    scrollY: true,
-	    bodyHeight: 200,
-	    data: getItemList(),
-	    rowHeaders: [{
-	            type: 'checkbox',
-	            header: ' '
-	    }],
-	    columns: [
-	    	{ 
-	    		header: '제품코드', 
-	    		name:'itmCode',
-	    		align: 'center'
-	    		},
-			{ 
-	    		header: '제품명', 
-	    		name:'itmName',
-	    		align: 'center'
-	    		}
-	    ]
-	}); 
 	
 	grid.on('scrollEnd', () => {
 	    grid.appendRows(getPrdComList());
@@ -134,7 +84,9 @@ $(function(){
 			type : "get",
 			data : {
 				startDate : startDate,
-				endDate : endDate
+				endDate : endDate,
+				itemCodes : itemCodes,
+				operCodes : operCodes
 				},
 			dataType: "json",
 			success : function(result){
@@ -144,85 +96,7 @@ $(function(){
 		}); // end ajax 
 		return data;
 	}
-	
-	// 제품코드 입력 모달창 제품 테이블 Select 데이터
-	function getItemList() {
-		let data;
-		$.ajax({
-			async: false,
-			url: 'ItemList',
-			type: 'get',
-			success: function(result){
-				data = result;
-			} // end success
-		}); // end ajax 
-		return data;
-	}
-	
-	// 고객사 모달 고객사 정보 Select List
-	function getOperList() {
-		let data;
-		$.ajax({
-			async: false,
-			url : "OperationList",
-			type : "get",
-			success : function(result){
-				console.log(result);
-				data = result;
-			} // end success
-		}); // end ajax 
-		return data;
-	}
 
-	// 고객사 모달창 단일 체크
-	grid2.on('check', (e) => {
-		let rows = grid2.getCheckedRowKeys();
-		if(rows.length > 1) {
-			for(let i in rows){
-				if(e.rowKey != rows[i]){
-					grid2.uncheck(rows[i]);
-				}
-			}
-			rows = grid2.getCheckedRowKeys();
-		}
-		// 고객사 모달창 체크된 로우 업체명 칼럼 값 가져오기
-		$('#operCheckSearchBtn').click(function() {
-			$('#operModal').modal("hide");
-			let operName = grid2.getValue(rows, 'operName');
-			$('#preOperName').val(operName);
-			$('#preOperName1').val(operName);
-		})
-	});
-
-	grid2.on('dblclick', (e) => {
-		var selectItm = grid.getFocusedCell();
-		if(getKeyByValue(selectItm, "itmCode") != null){
-			$('#itmModal').modal("hide");
-			let selectItm = grid2.getFocusedCell();
-			itmCode = selectItm.value;
-			selectItem(itmCode);
-		}
-	});
-	
-	// 제품코드 모달창 단일 체크 구현
-	grid3.on('check', (e) => {
-		let rows = grid3.getCheckedRowKeys();
-		if(rows.length > 1) {
-			for(let i in rows){
-				if(e.rowKey != rows[i]){
-					grid3.uncheck(rows[i]);
-				}
-			}
-			rows = grid3.getCheckedRowKeys();
-		}
-		// 제품코드 모달창 제품코드 체크 로우 값 확인 클릭시 디테일 테이블 로우 데이터 값 수정
-		$('#itmCheckSearchBtn').click(function() {
-			$('#itmModal').modal("hide");
-			let itmCode = grid3.getValue(rows, 'itmCode');
-			$('#itmCode').val(itmCode);
-			$('#itmCode1').val(itmCode);
-		})
-	});
 	
 	$('#mobile-collapse').click(function() {
 		grid.refreshLayout();
@@ -233,21 +107,51 @@ $(function(){
 	$('#searchBtn').click(function() {
 		startDate = $('#startDate').val();
 		endDate = $('#endDate').val();
+		itemCodes = $('#itmCode').val();
+		operCodes = $('#operCode').val();
 		grid.resetData(getPrdComList());
 	})
 	
-	$('#searchOperBtn').click(function(){
-		$('#operModal').modal('toggle');
-		$('#operModal').on('shown.bs.modal', function(){
-			grid2.refreshLayout();
-		});
-	});
+	function s2ab(s) { 
+	    var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+	    var view = new Uint8Array(buf);  //create uint8array as viewer
+	    for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+	    return buf;    
+	}
+	function exportExcel(){ 
+	    // step 1. workbook 생성
+	    var wb = XLSX.utils.book_new();
+
+	    // step 2. 시트 만들기 
+	    var newWorksheet = excelHandler.getWorksheet();
+	    
+	    // step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.  
+	    XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
+
+	    // step 4. 엑셀 파일 만들기 
+	    var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+
+	    // step 5. 엑셀 파일 내보내기 
+	    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), excelHandler.getExcelFileName());
+	}
 	
-	$('#itemSearchBtn').click(function() {
-		$('#itmModal').modal('toggle');
-		$('#itmModal').on('shown.bs.modal', function(){
-			grid3.refreshLayout();
-		});
+	var excelHandler = {
+	        getExcelFileName : function(){
+	            return 'json-test.xlsx';
+	        },
+	        getSheetName : function(){
+	            return 'Json Test Sheet';
+	        },
+	        getExcelData : function() {
+	        	return getPrdComList();
+	        },
+	        getWorksheet : function(){
+	            return XLSX.utils.json_to_sheet(this.getExcelData());
+	        }
+	};
+	
+	$('#excelBtn').click(function() {
+		exportExcel()
 	})
 	
 	$('#printBtn').click(function() {
@@ -332,38 +236,20 @@ $(function(){
 												</td>
 												<td>
 													<div class="row">
-														<div>
-															<input type="text" class="form-control" id="preOperName"
-																name="preOperName" /> <input type="text"
-																class="form-control" id="preOperName1"
-																name="preOperName1" readonly="readonly" />
-															<button type="button" id="searchOperBtn">검색</button>
-														</div>
-														<span style="margin: 10px;"> ~ </span>
-														<div>
-															<input type="text" class="form-control" id="endOperName"
-																name="endOperName" /> <input type="text"
-																class="form-control" id="endOperNam" name="endOperNam"
-																readonly="readonly" />
-															<button type="button">검색</button>
-														</div>
-
+														<input type="text" class="form-control w-25 ml-3" id="operCode" name="operCode" value="${result.operCode }"></input>
+														<input type="text" class="form-control w-25 ml-3" id="operName" name="operName" value="${result.operName }" readonly></input>
+														<%@include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>										
 													</div>
 												</td>
-
 											</tr>
 											<tr>
 												<td><label class="col-form-label text-center">제품코드</label>
 												</td>
 												<td>
 													<div class="row">
-														<div>
-															<input type="text" class="form-control" id="itmCode"
-																name="itmCode" /> <input type="text"
-																class="form-control" id="itmCode1" name="itmCode2"
-																readonly="readonly" />
-															<button type="button" id="itemSearchBtn">검색</button>
-														</div>
+														<input type="text" class="form-control w-25 ml-3" id="itmCode" name="itmCode" value="${result.itmCode }"></input>
+														<input type="text" class="form-control w-25 ml-3" id="itmName" name="itmName" value="${result.itmName }" readonly></input>
+														<%@include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>
 													</div>
 												</td>
 											</tr>
@@ -372,9 +258,8 @@ $(function(){
 								</div>
 							</div>
 
-
 							<div class="row">
-								<div class="col-sm-12" style="z-index: 100">
+								<div class="col-sm-12">
 									<div id="grid"></div>
 								</div>
 							</div>
@@ -383,52 +268,6 @@ $(function(){
 				</div>
 			</div>
 		</div>
-
-		<!-- 고객사 선택 모달 -->
-		<div class="modal fade" id="operModal" tabindex="-1" role="dialog"
-			aria-labelledby="myModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h3 class="modal-title" id="myModalLabel">고객사</h3>
-						<button class="close" type="button" data-dismiss="modal"
-							aria-label="Close">&times;</button>
-					</div>
-					<div class="modal-body">
-						<div id="grid2"></div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary"
-							id="operCheckSearchBtn">확인</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- 제품코드 선택 모달 -->
-	<div class="modal fade" id="itmModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title" id="myModalLabel">제품 조회</h3>
-					<button class="close" type="button" data-dismiss="modal"
-						aria-label="Close">
-						&times;
-					</button>
-				</div>
-				<div class="modal-body">
-					<div id="grid3"></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary"
-						id="itmCheckSearchBtn">확인</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-				</div>
-			</div>
-		</div>
-	</div>
 </body>
 </html>
 
