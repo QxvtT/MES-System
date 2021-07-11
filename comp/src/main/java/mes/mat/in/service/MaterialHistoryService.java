@@ -26,6 +26,8 @@ public interface MaterialHistoryService {
     List matInDayList(MaterialHistoryVO searchVO) throws Exception; // 일 입고 자료 리스트
     List matOutDayList(MaterialHistoryVO searchVO) throws Exception; // 일 출고 자료 리스트
     
+    List nordList(MaterialHistoryVO searchVO) throws Exception; // 미입고 자료 리스트 조회
+    
     String matHisMngUpdate(GridDataVO gridData) throws Exception;	// 자재 입고 관리 crud
     String insertMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 등록
     public void updateMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 그리드 행 수정

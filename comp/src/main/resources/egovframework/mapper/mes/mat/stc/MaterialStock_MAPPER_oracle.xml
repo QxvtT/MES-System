@@ -3,19 +3,6 @@
 
 <mapper namespace="mes.mat.stc.service.impl.MaterialStockMapper">
 	
-
-	<!-- <resultMap id="materialStock" type="mes.mat.stc.service.MaterialStockVO">
-		<result property="lotNum" column="LOT_NUM" />
-		<result property="matCode" column="MAT_CODE" />
-		<result property="matVol" column="MAT_VOL" />
-		<result property="matName" column="MAT_NAME" />
-		<result property="matDiv" column="MAT_DIV" />
-		<result property="matSafeStock" column="MAT_SAFE_STOCK" />
-		<result property="matHisDVol" column="MAT_HIS_D_VOL" />
-		<result property="matHisNum" column="MAT_HIS_NUM"/>
-		<result property="matHisDate" column="MAT_HIS_DATE"/>
-	</resultMap> -->
-	
 	<!-- 자재 LOT 재고 조회 -->
 	<select id="selectMatLotStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="mes.mat.stc.service.MaterialStockVO">
 		SELECT * FROM (
@@ -68,6 +55,7 @@
 )
 ]]>
 	</select>
+	<!-- 자재 LOT 재고 조회 -->
 	
 	<select id="selectMatLotStcList1" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="mes.mat.stc.service.MaterialStockVO">
 	SELECT * FROM (
@@ -108,8 +96,8 @@
 )
 ]]>
 	</select>	
-	<!-- 자재 재고 조회 -->
 	
+	<!-- 자재 재고 조회 -->
 	<select id="selectMatStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
@@ -139,48 +127,6 @@
 )
 ]]>
 	</select>
-	<!-- 자재 LOT 재고 조회 -->
-	
-	<select id="selectMaterialStockListTotCnt" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="int">
-			SELECT COUNT(*) totcnt
-			FROM MATERIAL_STOCK
-			WHERE 1=1
-			<if test="searchKeyword != null and searchKeyword != ''">
-				<if test="searchCondition == 0">AND
-					LOT_NUM = #{searchKeyword}
-				</if>
-				<if test="searchCondition == 1">AND
-					MAT_CODE LIKE '%' || #{searchKeyword} || '%'
-				</if>
-			</if>
-	</select>
-	
-	<!-- 자재 코드 모달 검색 -->
-	<select id="selectMatCodeList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
-		SELECT * FROM (
-		SELECT A.*, ROWNUM RNUM FROM (
-			SELECT MAT_CODE, 
-			       MAT_NAME, 
-			       MAT_SIZE, 
-			       MAT_UNIT
-			FROM MATERIAL
-		<where>
-			<if test="matCode != null and matCode != ''">
-				<![CDATA[		
-					MAT_CODE = #{matCode} 
-				]]>
-			</if>
-			<if test="matName != null and matName != ''"> 
-				<![CDATA[		
-					AND MAT_NAME LIKE '%' || #{matName} || '%'
-				]]>
-			</if>
-		</where>
-			      
-		<![CDATA[					
-	) A WHERE ROWNUM <= 10
-)
-]]>
-	</select>
+	<!-- 자재 재고 조회 -->
 	
 </mapper>

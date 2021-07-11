@@ -94,6 +94,16 @@ public class MaterialHistoryController {
     	return matInDayList;
     }
     // end 일 입고 자료 리스트 조회
+    
+    // 미입고 자료 LIST 조회
+    @RequestMapping(value="/mat/in/NordList", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> ajaxNordList(@ModelAttribute("NordVO") MaterialHistoryVO NordVO) throws Exception{
+    	List<?> nordList = materialHistoryService.nordList(NordVO);
+    	System.out.println(nordList);
+    	return nordList;
+    }
+    // end 일 입고 자료 리스트 조회
 
     // 자재 입고 관리 CRUD
     @RequestMapping(value="/mat/in/matHisMngUpdate")

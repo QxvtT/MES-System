@@ -31,6 +31,10 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     private java.lang.String matHisDateS;
     private java.lang.String matHisDateE;
     
+    /* 발주 일자 검색 */
+    private java.lang.String matComDateS;
+    private java.lang.String matComDateE;
+    
     /** 입고일자 검색 **/
     private java.lang.String sDate;
     private java.lang.String eDate;

@@ -44,6 +44,8 @@ public interface MaterialHistoryMapper {
     
     public List<?> matInDayList(MaterialHistoryVO searchVO) throws Exception; // 일 입고 자료 리스트 조회
     
+    public List<?> nordList(MaterialHistoryVO searchVO) throws Exception; // 미입고 자료 리스트 조회
+    
     public List<?> matOutDayList(MaterialHistoryVO searchVO) throws Exception; // 일 출고 자료 리스트 조회
     
     public void insertMatInMng(MaterialHistoryVO vo) throws Exception;

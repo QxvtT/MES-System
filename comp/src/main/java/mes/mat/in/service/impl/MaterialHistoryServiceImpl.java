@@ -56,6 +56,11 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 		return materialHistoryDAO.matInDayList(searchVO);
 	}
 	
+	// 미입고 리스트 조회
+		public List<?> nordList(MaterialHistoryVO searchVO) throws Exception {
+			return materialHistoryDAO.nordList(searchVO);
+		}
+	
 	// 일 출고 리스트 조회
 	public List<?> matOutDayList(MaterialHistoryVO searchVO) throws Exception {
 		return materialHistoryDAO.matOutDayList(searchVO);

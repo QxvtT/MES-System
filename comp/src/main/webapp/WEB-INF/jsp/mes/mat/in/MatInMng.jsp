@@ -31,8 +31,8 @@
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
 let matHisNum1 = null;
-let matHisDNum1 = null;
 let matHisDNum = null;
+let matHisDNum1 = null;
 let matHisNum = null;
 let matHisDateS = null;
 let matHisDateE = null;
@@ -57,6 +57,24 @@ $(function(){
             date: Indate,
             input: '#InEndpicker-input',
             container: '#InEndpicker-container'
+        },
+        language: 'ko',
+        type: 'date',
+        format: 'yyyy-MM-dd'
+  
+    });
+    
+    let nDate = new Date();
+    let npicker = tui.DatePicker.createRangePicker({
+        startpicker: {
+            date: nDate,
+            input: '#nStartpicker-input',
+            container: '#nStartpicker-container'
+        },
+        endpicker: {
+            date: nDate,
+            input: '#nEndpicker-input',
+            container: '#nEndpicker-container'
         },
         language: 'ko',
         type: 'date',
@@ -181,7 +199,34 @@ $(function(){
 			} // end success
 		}); // end ajax 
 		return data;
-	} 
+	}
+	
+	
+	// 자재 미입고 자료 조회
+	function getNordList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "NordList",
+			type : "get",
+			data : {
+				matHisNum: matHisNum,
+				matHisDNum1: matHisDNum1,
+				matComDateS: matComDateS,
+				matComDateE: matComDateE
+			},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					matHisDNum1 = result[result.length -1].matHisDNum;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	// END 자재 미입고 자료 조회
 	
 	grid.on('scrollEnd', () => {
 	    grid.appendRows(getList());
@@ -368,6 +413,18 @@ $(function(){
 		grid.removeCheckedRows(true);
 	}
 	
+	nOrdBtn.onclick = function(){
+		matHisDNum1 = null;
+		console.log(matHisNum1)
+		
+		matComDateS = $('input[name="matComDateS"]').val();
+		console.log(matComDateS)
+		matComDateE = $('input[name="matComDateE"]').val();
+		console.log(matComDateE)
+		
+		grid.resetData(getNordList());
+	}
+	
 })
 
 
@@ -400,34 +457,37 @@ $(function(){
 								<div id="date1" style="margin-top: -1px;"></div>
 								<br />
 
-								<div>미입고 자료</div>
-							<div>
-								<div class="d-inline-block align-middle">검사 일자 *</div>
-								<div
-									class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-									<input type="text" id="TestStartpicker-input"
-										class=" form-control w-25" aria-label="Date-Time"
-										name="matHisDate" /> <span class="tui-ico-date"></span>
-									<div id="TestStartpicker-container" style="margin-left: -1px;"></div>
-								</div>
-								<div id="date3" style="margin-top: -1px;"></div>
-								<div
-									class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-									<input type="text" id="TestEndpicker-input"
-										class=" form-control w-25" aria-label="Date-Time"
-										name="matHisDate" /> <span class="tui-ico-date"></span>
-									<div id="TestEndpicker-container" style="margin-left: -1px;"></div>
-								</div>
-								<div id="date4" style="margin-top: -1px;"></div>
-							</div>
-							<input type="button" id="testBtn" name="testBtn" value="검사 자료 조회" />
-
 								<div>
 									입고업체 * <input type="text" id="operCode" name="operCode"></input>
 									<input type="text" disabled id="operName" name="operName"></input>
 									<%@ include
 										file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
 								</div>
+								<br />
+								
+								<div>미입고 자료</div>
+								<div>
+									<div class="d-inline-block align-middle"> 일자 *</div>
+									<div
+										class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+										<input type="text" id="nStartpicker-input"
+											class=" form-control w-25" aria-label="Date-Time"
+											name="matComDateS" /> <span class="tui-ico-date"></span>
+										<div id="nStartpicker-container" style="margin-left: -1px;"></div>
+									</div>
+									<div id="date4" style="margin-top: -1px;"></div>
+									<div
+										class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+										<input type="text" id="nEndpicker-input"
+											class=" form-control w-25" aria-label="Date-Time"
+											name="matComDateE" /> <span class="tui-ico-date"></span>
+										<div id="nEndpicker-container" style="margin-left: -1px;"></div>
+									</div>
+									<div id="date5" style="margin-top: -1px;"></div>
+								</div>
+								<input type="button" id="nOrdBtn" name="nOrdBtn"
+									value="미입고 자료 조회" />
+								
 								<br />
 								<div>
 									<button id="matInDayBtn" type="button"
@@ -483,7 +543,7 @@ $(function(){
 							<span class="tui-ico-date"></span>
 							<div id="InStartpicker-container" style="margin-left: -1px;"></div>
 						</div>
-						<div id="date5" style="margin-top: -1px;"></div>
+						<div id="date2" style="margin-top: -1px;"></div>
 						<div
 							class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 							<input type="text" id="InEndpicker-input"
@@ -491,7 +551,7 @@ $(function(){
 							<span class="tui-ico-date"></span>
 							<div id="InEndpicker-container" style="margin-left: -1px;"></div>
 						</div>
-						<div id="date2" style="margin-top: -1px;"></div>
+						<div id="date3" style="margin-top: -1px;"></div>
 						<div>
 							<input type="button" id="searchBtn" name="searchBtn" value="검색"></input>
 						</div>
