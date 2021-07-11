@@ -31,8 +31,26 @@
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
 let matCode = null;
-let matName = null;
 $(function(){
+	
+	let StcDate = new Date();
+    let picker = tui.DatePicker.createRangePicker({
+        startpicker: {
+            date: StcDate,
+            input: '#StcStartpicker-input',
+            container: '#StcStartpicker-container'
+        },
+        endpicker: {
+            date: StcDate,
+            input: '#StcEndpicker-input',
+            container: '#StcEndpicker-container'
+        },
+        language: 'ko',
+        type: 'date',
+        format: 'yyyy-MM-dd'
+  
+    });
+	
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
 	    scrollX: false,
@@ -46,8 +64,8 @@ $(function(){
 			{ header: '자재구분', name:'matDiv'},
 			{ header: '안전재고', name:'matSafeStock'},
 // 			{ header: '이월량', name:'matSafeStock'},
-			{ header: '입고량', name:'matHisDVol'},
- 			{ header: '출고량', name:'out'},
+			{ header: '입고량', name:'invol'},
+ 			{ header: '출고량', name:'outvol'},
 			{ header: '현재고', name:'matVol'},
 			{ header: '미달량', name:'mShort'},
 // 			{ header: '특기사항', name:''},
@@ -76,55 +94,21 @@ $(function(){
 	grid.on('scrollEnd', () => {
 	    grid.appendRows(getList());
 	  })
-	  
-	const grid2 = new tui.Grid({
-		el: document.getElementById('grid2'),
-	    scrollX: false,
-	    scrollY: true,
-	    bodyHeight: 200,
-	    data: getMatCodeList(),
-	    rowHeaders: ['rowNum', 'checkbox'],
-	    columns: [
-	    	{ header: '자재코드', name:'matCode'},
-			{ header: '자재명', name:'matName'},
-			{ header: '관리단위', name:'matUnit'}
-	    ]
-	}); // end const grid2
-	
-	function getMatCodeList() {
-		let data;
-		$.ajax({
-			async: false,
-			url : "MatCodeList",
-			type : "get",
-			data : {matCode: matCode, matName: matName},
-			dataType: "json",
-			success : function(result){
-				if(result.length > 0) {
-					matName = result[result.length -1].matName;
-					matCode = result[result.length -1].matCode;
-				}
-				console.log(result);
-				data = result;
-			} // end success
-		}); // end ajax 
-		return data;
-	} 
 	
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
 	   });
 	   
-	$('#searchMatBtn').click(function(){
+/* 	$('#searchMatBtn').click(function(){
 		grid2.clear();
 		grid2.resetData(getMatCodeList());
 		$("#myModal").modal("toggle");
 		$("#myModal").on('shown.bs.modal', function () {
 			grid2.refreshLayout();
 		});
-	})
+	}) */
 	
-	searchMatCodeBtn.onclick = function(){
+/* 	searchMatCodeBtn.onclick = function(){
 		matCode = null;
 		matName = null;
 		
@@ -137,9 +121,9 @@ $(function(){
 		console.log(matName)
 		
 		grid2.resetData(getMatCodeList());
-	}
+	} */
 	
-	modalY.onclick=function() {
+/* 	modalY.onclick=function() {
 		matCode = null;
 		matName = null;
 		test = null;
@@ -158,11 +142,11 @@ $(function(){
 	grid2.resetData(getMatCodeList());
 	document.getElementById("matCode").value=matCode;
 	document.getElementById("matName").value=matName;
-	}
+	}*/
 	
 	resetBtn.onclick=function(){
 		grid.clear();
-	}
+	} 
 	
 })
 
@@ -177,92 +161,78 @@ $(function(){
 				<div class="page-wrapper">
 					<div class="row">
 						<div class="col-xl-12">
-							<div id="datePicker"></div>
 
 							<!-- 타이틀 -->
-							<div id="title" class="card-header">
+							<div id="title" class="mb-4">
 								<h3>자재 재고 조회</h3>
 								<br />
 							</div>
 							<!-- // 타이틀 -->
-							<div>
-								작업일자 <input type="date" id="matHisDate" name="matHisDate"
-									value=${result.matHisDate } /> ~ <input type="date"
-									id="matHisDate" name="matHisDate" value=${result.matHisDate } />
+							<div class="row">
+								<div class="col-sm-6"></div>
+								<div class="col-sm-6 text-right">
+									<div class="btn-group">
+										<button type="button" id="testBtn"
+											class="btn waves-effect waves-light btn-primary btn-outline-primary">
+											조회</button>
+										<input type="button" id="resetBtn" value="리셋 "
+											class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
+									</div>
+								</div>
+							</div><br />
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="table">
+										<table class="table">
+											<tr>
+												<td>
+													<div class="d-inline-block align-middle">해당 일자</div>
+												</td>
+												<td>
+													<div class="row align-items-center text-center col-lg-8">
+														<div
+															class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+															<input type="text" id="StcStartpicker-input"
+																class=" form-control w-25" aria-label="Date-Time"
+																name="sDate" /> <span class="tui-ico-date"></span>
+															<div id="StcStartpicker-container"
+																style="margin-left: -1px;"></div>
+														</div>
+														<div id="date1" style="margin-top: -1px;"></div>
+														<label class="col-form-label text-center"> ~ </label>
+														<div
+															class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+															<input type="text" id="StcEndpicker-input"
+																class=" form-control w-25" aria-label="Date-Time"
+																name="eDate" /> <span class="tui-ico-date"></span>
+															<div id="StcEndpicker-container"
+																style="margin-left: -1px;"></div>
+														</div>
+														<div id="date2" style="margin-top: -1px;"></div>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label class="col-form-label text-center">자재코드</label>
+												</td>
+												<td>
+													<div class="row align-items-center text-center col-lg-8">
+														<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode" value="${result.matCode }"></input> 
+														<input type="text" class="form-control w-25 ml-3" id="matName" name="matName" value="${result.matName }" readonly></input>
+														<%@ include
+															file="/WEB-INF/jsp/mes/common/modal/MaterialList.jsp"%>
+													</div>
+													<div class="col-lg-4"></div>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div id="grid"></div>
+								</div>
 							</div>
-							<br />
-							<div id="matDiv">
-								자재코드 <input type="text" id="matCode" name="matCode"
-								></input> &nbsp; &nbsp;
-								<button type="button" class="btn btn-info btn-sm"
-									id="searchMatBtn" name="searchMatBtn" data-toggle="modal"
-									data-target="#myModal">검색</button>
-								&nbsp; &nbsp; ~ &nbsp; &nbsp; <input type="text" id="matName"
-									name="matName" ></input> &nbsp; &nbsp;
-								<button type="button" class="btn btn-info btn-sm"
-									id="searchMatBtn" data-toggle="modal" data-target="#myModal">검색</button>
-								&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 자재구분 &nbsp; &nbsp;
-							</div>
-							<br />
-							<div>
-								<button class="btn btn-info btn-sm" onclick="location.href=''">조회</button>
-								<input id="resetBtn" class="btn btn-info btn-sm" type="reset" value="리셋"></input>
-									<form action="/examples/test/excelDown.do" method="post">
-									   <input type="submit" value='엑셀 다운로드'>
-									</form>
-							</div>
-							<br />
-							<div id="grid"></div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		
-		<!-- 검색조건 유지 -->
-		<input type="hidden" name="searchCondition"
-			value="<c:out value='${searchVO.searchCondition}'/>" />
-		<input type="hidden" name="searchKeyword"
-			value="<c:out value='${searchVO.searchKeyword}'/>" />
-		<input type="hidden" name="pageIndex"
-			value="<c:out value='${searchVO.pageIndex}'/>" />
 	</form:form>
-
-	<!-- 자재 검색 모달 -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" id="exampleModalLabel">자재 검색</h4>
-					<button class="close" type="button" data-dismiss="modal"
-						aria-label="Close">
-						&times;
-					</button>
-				</div>
-				<div class="modal-body">
-					<form id="matCodeSearch" name="matCodeSearch" method="post"
-						action="matCodeList.do" onsubmit="return false">
-						<div class="form-group row">
-							<div class="col">
-								<input type="text" id="matCode" name="matCode" /> 자재코드 <input
-									type="text" id="matName" name="matName" /> 자재명
-							</div>
-						</div>
-						<div class="col-md-3">
-							<button type="button" class="btn btn-info btn-sm"
-								id="searchMatCodeBtn">검색</button>
-						</div>
-					</form>
-					<br />
-					<div id="grid2"></div>
-				</div>
-				<div class="modal-footer">
-					<a class="btn" id="modalY" data-dismiss="modal">예</a>
-					<button class="btn" type="button" data-dismiss="modal">아니요</button>
-				</div>
-			</div>
-		</div>
-	</div>
 </body>
 </html>

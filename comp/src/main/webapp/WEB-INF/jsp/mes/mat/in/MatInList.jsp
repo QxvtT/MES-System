@@ -29,6 +29,8 @@ let matHisDateE = null;
 let matCode = null;
 let matCodes = null;
 let operCode = null;
+let matHisNum = null;
+let matHisDNum = null;
 
 $(function(){
 	let today = new Date();
@@ -67,6 +69,8 @@ $(function(){
 			{ header: '단가', name:'matHisPrice'},
 			{ header: '금액', name:'amount'},
 			{ header: 'Lot No', name:'lotNo'},
+			{ header: '관리번호', name:'matHisNum', hidden: true},
+			{ header: '일련번호', name:'matHisDNum', hidden: true}
 	    ]
 	}); // end const grid
 	

@@ -400,7 +400,7 @@ $(function(){
 								<div id="date1" style="margin-top: -1px;"></div>
 								<br />
 
-								<!--  <div>검사 자료</div>
+								<div>미입고 자료</div>
 							<div>
 								<div class="d-inline-block align-middle">검사 일자 *</div>
 								<div
@@ -420,7 +420,7 @@ $(function(){
 								</div>
 								<div id="date4" style="margin-top: -1px;"></div>
 							</div>
-							<input type="button" id="testBtn" name="testBtn" value="검사 자료 조회" /> -->
+							<input type="button" id="testBtn" name="testBtn" value="검사 자료 조회" />
 
 								<div>
 									입고업체 * <input type="text" id="operCode" name="operCode"></input>

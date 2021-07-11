@@ -21,7 +21,8 @@ public class MaterialStockVO extends MaterialDefaultVO{
     private static final long serialVersionUID = 1L;
     
     /* 메인 그리드 스크롤용 */    
-    private java.lang.String matHisDNum1;
+    private java.lang.String matCode1;
+    private java.lang.String matCode3;
     
     /* 자재 코드 다중 선택 */
     private java.lang.String matCodes;
@@ -31,12 +32,11 @@ public class MaterialStockVO extends MaterialDefaultVO{
     private java.lang.String sDate;
     private java.lang.String eDate;
     
-    private java.lang.String out;
+    private java.lang.String invol;
+    private java.lang.String outvol;
     
     private java.lang.String mShort;
 
-	private java.lang.String str;
-    
     /** mat_code */
     private java.lang.String matCode;
     
@@ -109,9 +109,6 @@ public class MaterialStockVO extends MaterialDefaultVO{
     /** MAT_COM_NUM */
     private java.lang.String matComNum;
     
-    /** LOT_NO */
-    private java.math.BigDecimal lotNo;
-    
     /** MAT_HIS_D_VOL */
     private java.math.BigDecimal matHisDVol;
     
@@ -137,7 +134,7 @@ public class MaterialStockVO extends MaterialDefaultVO{
     private java.math.BigDecimal matHisVol;
     
     /** LOT_NUM */
-    private java.math.BigDecimal lotNum;
+    private java.lang.String lotNum;
     
     /** MAT_VOL */
     private java.math.BigDecimal matVol;

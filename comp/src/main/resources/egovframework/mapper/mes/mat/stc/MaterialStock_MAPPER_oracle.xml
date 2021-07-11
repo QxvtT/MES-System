@@ -19,33 +19,41 @@
 	<!-- 자재 LOT 재고 조회 -->
 	<select id="selectMatLotStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="mes.mat.stc.service.MaterialStockVO">
 		SELECT * FROM (
-			SELECT A.*, ROWNUM RNUM FROM ( 
-				select b.* , nvl(c.MAT_HIS_D_VOL, 0) as out
-				from (SELECT M.MAT_CODE, 
-				        M.MAT_NAME, 
-				        M.MAT_SIZE, 
-				        M.MAT_UNIT, 
-				        MHD.LOT_NUM, 
-				        MHD.MAT_HIS_D_VOL,
-				        MS.MAT_VOL,
-				        MHD.MAT_HIS_D_NUM
-				      FROM MATERIAL M, MATERIAL_STOCK MS, MATERIAL_HISTORY_D MHD
-				      WHERE M.MAT_CODE=MHD.MAT_CODE AND MHD.LOT_NUM=MS.LOT_NUM) b left outer join
-				(select mat_code, MAT_HIS_D_VOL from material_history_d mhd, material_history mh
-				where mh.mat_his_num=mhd.mat_his_num 
-				and mh.mat_his_div='출고' 
-			<if test="matHisDNum1 != null and matHisDNum1 != ''">
+			SELECT d.*, ROWNUM RNUM FROM ( 
+				SELECT M.MAT_NAME, m.mat_size, m.mat_div, A.*, NVL(ms.mat_vol,0) AS MAT_VOL
+			FROM
+			(select a.mat_code, a.lot_num, (a.allvol - nvl(b.outvol,0)) as inVOL, nvl(b.outvol,0) AS OUTVOL
+			from(select mat_code,nvl(lot_num,'null') as lot_num, nvl(sum(mat_his_d_vol),0) as allvol
+			from material_history_d mhd, material_history mh
+			where mhd.mat_his_num = mh.mat_his_num
+			<if test="sDate != null and sDate !='' and eDate != null and eDate !=''">
+				<![CDATA[
+					AND mh.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
+						mh.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
+				]]>
+			</if>
+			group by mat_code, lot_num) a ,(select mat_code, nvl(lot_num,'null') as lot_num, nvl(sum(mat_his_d_vol),0) as outvol 
+			from material_history_d mhd, material_history mh
+			where mhd.mat_his_num = mh.mat_his_num
+			and mh.mat_his_num in (select mat_his_num from material_history where mat_his_div = '출고')
+			<if test="sDate != null and sDate !='' and eDate != null and eDate !=''">
+				<![CDATA[
+					AND mh.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
+						mh.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
+				]]>
+			</if>	
+			group by mat_code, lot_num)b
+			where a.mat_code = b.mat_code (+)
+			and a.lot_num = b.lot_num (+)) A, MATERIAL_STOCK MS, MATERIAL M
+			WHERE A.MAT_CODE = MS.MAT_CODE (+)
+			AND A.LOT_NUM = MS.LOT_NUM (+)
+			AND A.MAT_CODE = M.MAT_CODE
+			<if test=" matCode3 != null and matCode3 != ''">
 			      <![CDATA[	
-			      		and MHD.MAT_HIS_D_NUM < #{matHisDNum1}
+			      		AND M.MAT_CODE > #{matCode3}
 			      ]]>
 	       	</if>
-			<if test="sDate != null and sDate != '' and eDate != null and eDate != ''"> AND
-			     <![CDATA[			    			
-           			MH.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
-           			MH.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
-       			]]>
-		     </if>
-		     <if test="matCodeList != null">
+	       	<if test="matCodeList != null">
 			     <if test="matCodeList.size != 0">
 				      AND M.MAT_CODE IN 
 			     	<foreach item="item" index="index" collection="matCodeList"
@@ -54,10 +62,9 @@
 					</foreach>
 	     		 </if>	
 		     </if>
-			) c
-			on c.mat_code = b.mat_code
+			ORDER BY A.MAT_CODE, A.LOT_NUM
 		<![CDATA[					
-	) A WHERE ROWNUM <= 10
+	) d WHERE ROWNUM <= 10
 )
 ]]>
 	</select>
@@ -110,7 +117,7 @@
 			       M.MAT_NAME, 
 			       M.MAT_SIZE, 
 			       M.MAT_UNIT, 
-			       MHD.LOT_NO, 
+			       MHD.LOT_NUM, 
 			       MHD.MAT_HIS_D_VOL,
 			       ST.MAT_VOL
 		FROM MATERIAL M, MATERIAL_STOCK ST, MATERIAL_HISTORY_D MHD

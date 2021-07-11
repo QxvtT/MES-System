@@ -25,8 +25,12 @@
 <style type="">
 </style>
 <script type="text/javaScript" language="javascript" defer="defer">
-let matHisDNum1 = null;
-let matHisDnum = null;
+let matCode = null;
+let matCode3 = null;
+let matCodes = null;
+let sDate = null;
+let eDate = null;
+
 $(function(){
 	var today = new Date();
     var picker = tui.DatePicker.createRangePicker({
@@ -74,20 +78,15 @@ $(function(){
 	    	},
 			{ 
 	    		header: '입고량', 
-	    		name:'matHisDVol'
+	    		name:'invol'
 	    	},
  			{ 
 	    		header: '출고량', 
-	    		name:'out'
+	    		name:'outvol'
 	    	},
 			{ 
 	    		header: '현재고', 
 	    		name:'matVol'
-	    	},
-	    	{ 
-	    		header: '일련번호', 
-	    		name:'matHisDNum',
-	    		hidden: true
 	    	}
 	    ],
 	    summary: {
@@ -95,21 +94,21 @@ $(function(){
 	        height: 30,  // by pixel
 	        columnContent: {
 	          matCode: '합계',
-	          matHisDVol: {
-	            template(valueMap) {
-	              return valueMap.sum;
-	            }
-	          }/* ,
-	          out: {
+	          invol: {
 	            template(valueMap) {
 	              return valueMap.sum;
 	            }
 	          },
-	          matHisDVol: {
-	        	  matVol(valueMap) {
+	          outvol: {
+	        	template(valueMap) {
 	              return valueMap.sum;
 	            }
-	          } */
+	          },
+	          matVol: {
+	        	template(valueMap) {
+	              return valueMap.sum;
+	            }
+	          }
 	        }
 	    }
 	}); // end const grid
@@ -124,11 +123,16 @@ $(function(){
 			async: false,
 			url : "MatLotStcList",
 			type : "get",
-			data : {matHisDNum1: matHisDNum1},
+			data : {
+					matCode3: matCode3,
+					matCodes: matCodes,
+					sDate: sDate,
+					eDate: eDate
+					},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					matHisDNum1 = result[result.length -1].matHisDNum;
+					matCode3 = result[result.length -1].matCode;
 				}
 				console.log(result);
 				data = result;
@@ -138,13 +142,15 @@ $(function(){
 	}
 	
 	searchBtn.onclick = function(){
-		matHisNum1 = null;
-		console.log(matHisNum1)
+		matCode3 = null;
+		console.log(matCode3)
 		
 		sDate = $('input[name="sDate"]').val();
-		console.log(sDate)
+		console.log(sDate);
 		eDate = $('input[name="eDate"]').val();
-		console.log(eDate)
+		console.log(eDate);
+		matCodes = $('#matCode').val();
+		console.log(matCodes);
 		
 		grid.resetData(getList());
 	}
@@ -205,7 +211,16 @@ $(function(){
 														</div>
 														<div id="date2" style="margin-top: -1px;"></div>
 													</div>
-													<div class="col-lg-4"></div>
+													<div class="col-lg-4">
+													</div>
+												</td>
+												<td>
+													<div class="d-inline-block align-middle">자재구분</div>
+												</td>
+												<td>
+													<select>
+													
+													</select>
 												</td>
 											</tr>
 											<tr>
@@ -214,12 +229,11 @@ $(function(){
 												<td>
 													<div class="row align-items-center text-center col-lg-8">
 														<input type="text" class="form-control w-25 ml-3"
-															id="matCode" name="matCode" value="${result.matCode }"></input>
+															id="matCode" name="matCode"></input>
 														<input type="text" class="form-control w-25 ml-3"
-															id="matName" name="matCode" value="${result.matName }"
+															id="matName" name="matCode"
 															readonly></input>
-														<button type="button"
-															class="btn btn-sm btn-primary waves-effect waves-light ml-3">검색</button>
+														<%@ include file="/WEB-INF/jsp/mes/common/modal/MaterialList.jsp" %>
 													</div>
 													<div class="col-lg-4"></div>
 												</td>
