@@ -440,82 +440,105 @@ $(function(){
 					<div class="row">
 						<div class="col-xl-12">
 							<!-- 타이틀 -->
-							<div id="title" class="card-header">
+							<div id="title">
 								<h3>자재 입고 관리</h3>
 								<br />
 							</div>
 							<!-- // 타이틀 -->
-							<div>
-								<div class="d-inline-block align-middle">입고 일자 *</div>
-								<div
-									class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-									<input type="text" id="MatInpicker-input"
-										class=" form-control w-25" aria-label="Date-Time"
-										name="matHisDate" /> <span class="tui-ico-date"></span>
-									<div id="MatInpicker-container" style="margin-left: -1px;"></div>
-								</div>
-								<div id="date1" style="margin-top: -1px;"></div>
-								<br />
-
-								<div>
-									입고업체 * <input type="text" id="operCode" name="operCode"></input>
-									<input type="text" disabled id="operName" name="operName"></input>
-									<%@ include
-										file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
-								</div>
-								<br />
-								
-								<div>미입고 자료</div>
-								<div>
-									<div class="d-inline-block align-middle"> 일자 *</div>
-									<div
-										class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-										<input type="text" id="nStartpicker-input"
-											class=" form-control w-25" aria-label="Date-Time"
-											name="matComDateS" /> <span class="tui-ico-date"></span>
-										<div id="nStartpicker-container" style="margin-left: -1px;"></div>
+							<div class="text-right">
+								<button id="matInDayBtn" type="button"
+									class="btn btn-info btn-sm">조회</button>
+								<input id="resetBtn" class="btn btn-info btn-sm" type="reset"
+									value="리셋"></input>
+								<button type="button" id="matInSaveBtn" name="matInSaveBtn"
+									class="btn btn-info btn-sm">저장</button>
+								<button type="button" id="matInDeleteBtn" name="matInDeleteBtn"
+									class="btn btn-info btn-sm">삭제</button>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="table">
+										<table class="table">
+											<tr>
+												<td>
+													<div class="d-inline-block align-middle">입고 일자 *</div>
+												</td>
+												<td>
+													<div class="row align-items-center text-center col-lg-12">
+														<div
+														class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+														<input type="text" id="MatInpicker-input"
+															class=" form-control w-25" aria-label="Date-Time"
+															name="matHisDate" /> <span class="tui-ico-date"></span>
+														<div id="MatInpicker-container" style="margin-left: -1px;"></div>
+													</div>
+													<div id="date1" style="margin-top: -1px;"></div>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label class="col-form-label text-center">입고업체 *</label>
+												</td>
+												<td>
+													<div class="row align-items-center text-center col-lg-12">
+														<input type="text" class="form-control w-25 ml-3"
+															id="operCode" name="operCode"></input>
+														<input type="text" class="form-control w-25 ml-3"
+															id="operName" name="operName" readonly></input>
+														<%@ include
+															file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
+													</div>
+												</td>
+											</tr>
+										</table>
 									</div>
-									<div id="date4" style="margin-top: -1px;"></div>
-									<div
-										class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-										<input type="text" id="nEndpicker-input"
-											class=" form-control w-25" aria-label="Date-Time"
-											name="matComDateE" /> <span class="tui-ico-date"></span>
-										<div id="nEndpicker-container" style="margin-left: -1px;"></div>
-									</div>
-									<div id="date5" style="margin-top: -1px;"></div>
 								</div>
-								<input type="button" id="nOrdBtn" name="nOrdBtn"
-									value="미입고 자료 조회" />
+								<div class="col-md-6">
+									<div class="card">
+										<div class="card-body">
+											<h5 class="d-inline">미입고 자료</h5>
+											<div class="row  mt-3">
+												<div class="d-inline-block align-middle ml-3"> 일자 *</div>
+												<div
+													class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+													<input type="text" id="nStartpicker-input"
+														class=" form-control w-25" aria-label="Date-Time"
+														name="matComDateS" /> <span class="tui-ico-date"></span>
+													<div id="nStartpicker-container" style="margin-left: -1px;"></div>
+												</div>
+												<div id="date4" style="margin-top: -1px;"></div>
+												<div
+													class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+													<input type="text" id="nEndpicker-input"
+														class=" form-control w-25" aria-label="Date-Time"
+														name="matComDateE" /> <span class="tui-ico-date"></span>
+													<div id="nEndpicker-container" style="margin-left: -1px;"></div>
+												</div>
+												<div id="date5" style="margin-top: -1px;"></div>
+												<input type="button" id="nOrdBtn" name="nOrdBtn"
+												value="미입고 자료 조회" />
 								
-								<br />
-								<div>
-									<button id="matInDayBtn" type="button"
-										class="btn btn-info btn-sm">조회</button>
-									<input id="resetBtn" class="btn btn-info btn-sm" type="reset"
-										value="리셋"></input>
-									<button type="button" id="matInSaveBtn" name="matInSaveBtn"
-										class="btn btn-info btn-sm">저장</button>
-									<button type="button" id="matInDeleteBtn" name="matInDeleteBtn"
-										class="btn btn-info btn-sm">삭제</button>
+											</div>
+										</div>
+									</div>
 								</div>
-								<br />
-								<div class="page-wrapper">
-									<div class="text-right">
+							</div>
+								
+								<div class="row">
+									<div class="col-sm-12 text-right">
 										<button type="button" class="btn btn-primary btn-sm"
 											id="addRowBtn">추가</button>
 										<button type="button" class="btn btn-primary btn-sm"
 											id="deleteRowBtn">삭제</button>
 									</div>
-									<br />
-									<div class="row">
-										<div class="col-xl-12">
-											<div class="card">
-												<div id="grid" />
-											</div>
-										</div>
+								</div>
+								<div class="row">
+									<div class="col-xl-12">
+										<div id="grid" />
 									</div>
 								</div>
+								
+								
 							</div>
 						</div>
 					</div>
