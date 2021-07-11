@@ -64,6 +64,7 @@ public interface OrderMMapper {
     public List<?> selectOrderMList(OrderMDefaultVO searchVO) throws Exception;
     public List<?> OrderNumList(OrderMDefaultVO searchVO) throws Exception;
     
+    
     /**
 	 * ORDER_M 총 갯수를 조회한다.
 	 * @param searchMap - 조회할 정보가 담긴 Map

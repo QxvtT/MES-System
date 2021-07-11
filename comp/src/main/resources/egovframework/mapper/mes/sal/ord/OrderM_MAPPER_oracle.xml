@@ -109,22 +109,30 @@ SELECT * FROM (
 	            		<if test = "aDate !=null and aDate != '' and bDate != null and bDate !=''"> and
 	            			<if test = "date == 'request'"> 
 		        				<![CDATA[			    			
-		            			to_date(m.ORD_DELIVERY_DATE,'yyyy-MM-dd') >= to_date(#{bDate} ,'yyyy-MM-dd') and
-		            			to_date(m.ORD_DELIVERY_DATE,'yyyy-MM-dd') <= to_date(#{aDate} ,'yyyy-MM-dd')
+		            			m.ord_request_date >= to_date(#{bDate} ,'yyyy-MM-dd') and
+		            			m.ord_request_date <= to_date(#{aDate} ,'yyyy-MM-dd')
 		            			]]>
 	            			</if>
 	            			<if test = "date == 'delivery'"> 
 		        				<![CDATA[			    			
-		            			to_date(m.ORD_DELIVERY_DATE,'yyyy-MM-dd') >= to_date(#{bDate} ,'yyyy-MM-dd') and
-		            			to_date(m.ORD_DELIVERY_DATE,'yyyy-MM-dd') <= to_date(#{aDate} ,'yyyy-MM-dd')
+		            			m.ORD_DELIVERY_DATE >= to_date(#{bDate} ,'yyyy-MM-dd') and
+		            			m.ORD_DELIVERY_DATE <= to_date(#{aDate} ,'yyyy-MM-dd')
 		            			]]>
 	            			</if>
             			</if>
             			<if test = "operCode !=null and operCode !=''"> and
-            				m.oper_code like '%' || #{operCode} || '%'
+            				m.oper_code in
+            					<foreach item="item" index="index" collection="operCodes"
+								      open="(" separator="," close=")">
+								        #{item}
+								</foreach>
+								
             			</if>
             			<if test = "itmCode !=null and itmCode !=''"> and
-            				i.ITM_CODE like '%' || #{itmCode} || '%' 
+            				i.ITM_CODE in(${itmCode}) 
+            			</if>
+            			<if test = "ordStatus !=null and ordStatus !=''"> and
+            				d.ord_status= #{ordStatus}  
             			</if>
 					    ORDER BY 
 						d.ORD_D_NUM DESC

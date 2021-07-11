@@ -30,8 +30,10 @@
 let ordDNum = null;
 let aDate = null;
 let bDate = null;
+let date = null;
 let itmCode = null;
 let operCode = null;
+let ordStatus = null;
 
 $(function(){
 	const grid = new tui.Grid({
@@ -72,8 +74,10 @@ $(function(){
 			data : {
   				aDate : aDate,
   				bDate : bDate,
+  				date : date,
  				itmCode : itmCode,
  				operCode: operCode,
+ 				ordStatus: ordStatus,
 				ordDNum : ordDNum
 				},
 			dataType: "json",
@@ -93,6 +97,9 @@ $(function(){
 		aDate = $( 'input#aDate' ).val();
 		bDate = $( 'input#bDate' ).val();
 		operCode = $( 'input#operCode' ).val();
+		date = $("input[name='date']:checked").val();
+		ordStatus = $("input[name='ordStatus']:checked").val();
+		console.log(ordStatus);
 		grid.resetData(getList());
 		console.log(ordDNum);
 		
@@ -132,10 +139,23 @@ $(function(){
 	<!-- Page-header end -->
 	
 	<form id="frm" name = "frm">
-		제품코드<input type ="text" id="itmCode" name = "itmCode" ></input><br>
-		날짜<input type ="date" id="bDate" name = "bDate" ></input>~<input type ="date" id="aDate" name = "aDate" ></input><br>
-		업체<input type ="text" id="operCode" name = "operCode" ></input><br>
-		
+		<div>
+		진행<input type = "radio" id="ordStatus" name="ordStatus" value="진행" checked="checked"/>
+		완료<input type = "radio" id="ordStatus" name="ordStatus" value="완료"/>
+		전체<input type = "radio" id="ordStatus" name="ordStatus" value=""/>
+		</div>
+		<div>
+		주문일자<input type = "radio" id="date" name="date" value="request" checked="checked"/>
+		납기일자<input type = "radio" id="date" name="date" value="delivery"/>
+		</div>
+		날짜<input type ="date" id="bDate" name = "bDate" />~<input type ="date" id="aDate" name = "aDate" />
+		<br>업체코드<input type ="text" id="operCode" name = "operCode" />
+		<%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %><br/>
+		업체이름<input type ="text" id="operName" name = "operName" readonly="readonly"/><br/>
+		제품코드<input type ="text" id="itmCode" name = "itmCode" ></input>
+		<%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %><br/>
+		제품명<input type ="text" id="itmCode" name = "itmCode" ></input><br/>
+		<br/>
 		<button type="button" id ="button" name="button">조회</button>
 	<button type="reset" >리셋</button>
 	</form>
@@ -169,3 +189,4 @@ $(function(){
 	</form:form>
 </body>
 </html>
+

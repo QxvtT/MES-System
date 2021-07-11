@@ -2,10 +2,9 @@ package mes.sal.out.service.impl;
 
 import java.util.List;
 
-import mes.sal.out.service.ItemHistoryVO;
-import mes.sal.out.service.ItemHistoryDefaultVO;
-
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import mes.sal.out.service.ItemHistoryDefaultVO;
+import mes.sal.out.service.ItemHistoryVO;
 
 /**
  * @Class Name : ItemHistoryMapper.java
@@ -69,6 +68,9 @@ public interface ItemHistoryMapper {
     public List<?> selectItemHistoryList(ItemHistoryDefaultVO searchVO) throws Exception;
     public List<?> ItemHisNumList(ItemHistoryDefaultVO searchVO) throws Exception;
     public List<?> ItemHistoryRegist(ItemHistoryDefaultVO searchVO) throws Exception;
+    public List<?> setLotNum(ItemHistoryVO searchVO) throws Exception;
+    public List<?> setOrdNum(ItemHistoryVO searchVO) throws Exception;
+    public List<?> setItemCode(ItemHistoryVO searchVO) throws Exception;
     
     /**
 	 * ITEM_HISTORY 총 갯수를 조회한다.
@@ -77,6 +79,6 @@ public interface ItemHistoryMapper {
 	 * @exception
 	 */
     public int selectItemHistoryListTotCnt(ItemHistoryDefaultVO searchVO);
-    public int getCount(ItemHistoryDefaultVO searchVO);
+    public String getCount(ItemHistoryDefaultVO searchVO);
 
 }

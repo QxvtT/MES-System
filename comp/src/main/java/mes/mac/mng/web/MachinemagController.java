@@ -65,7 +65,7 @@ public class MachinemagController {
 	@RequestMapping("/machine/addMachineView.do")
 	public String addMachineView(@ModelAttribute("searchVO") MachinemagDefaultVO searchVO, Model model) throws Exception {
 		model.addAttribute("machineVO", new MachinemagVO());
-		return "/machine/MachineRegister";
+		return "/machine/MachineRegister.page";
 	}
 
 	@RequestMapping("/machine/addMachine.do")

@@ -102,6 +102,15 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
     public List<?> itemHistoryRegist(ItemHistoryVO searchVO) throws Exception {
         return itemHistoryDAO.ItemHistoryRegist(searchVO);
     }
+    public List<?> setItemCode(ItemHistoryVO searchVO) throws Exception {
+        return itemHistoryDAO.setItemCode(searchVO);
+    }
+    public List<?> setLotNum(ItemHistoryVO searchVO) throws Exception {
+        return itemHistoryDAO.setLotNum(searchVO);
+    }
+    public List<?> setOrdNum(ItemHistoryVO searchVO) throws Exception {
+        return itemHistoryDAO.setOrdNum(searchVO);
+    }
     
     
     public void itemHistoryUpdate(GridDataVO gridData) throws Exception {
@@ -128,8 +137,8 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
         		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         		Date date = gridData.getItemHistoryVO().getItmHisRdy();      
         		String dateToStr = dateFormat.format(date);
-        		int a =getCount(gridData.getItemHistoryVO())+1;
-        		String num = String.format("%04d", a);
+        		int a =Integer.parseInt(getCount(gridData.getItemHistoryVO()))+1;
+        		String num = String.format("%03d", a);
         		String result = "ITH"+dateToStr+num;
         		for(int i =0; i<gridData.getCreatedRows().size(); i++) {
 	        		ItemHistoryVO vo= gridData.getCreatedRows().get(i);
@@ -172,8 +181,13 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	@Override
-	public int getCount(ItemHistoryVO searchVO) {
-		return  itemHistoryDAO.getCount(searchVO);
+	public String getCount(ItemHistoryVO searchVO) {
+		String a = "001";
+		if(itemHistoryDAO.getCount(searchVO) != null) {
+			a=itemHistoryDAO.getCount(searchVO);
+		}
+		
+		return a ;
 	}
     
 

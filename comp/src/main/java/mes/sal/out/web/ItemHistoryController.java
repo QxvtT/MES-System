@@ -1,5 +1,7 @@
 package mes.sal.out.web;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import lombok.Data;
+import mes.sal.ord.service.OrderMVO;
 import mes.sal.out.service.GridDataVO;
 import mes.sal.out.service.ItemHistoryDefaultVO;
 import mes.sal.out.service.ItemHistoryService;
@@ -63,7 +66,15 @@ public class ItemHistoryController {
     @RequestMapping(value="/ItemHistoryList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajax(ItemHistoryVO searchVO ) throws Exception {
-    	
+    	if(searchVO.getOperCode() != null && searchVO.getOperCode() != "") {
+    		String[] operCodeList = searchVO.getOperCode().split(",");
+    		for(int i =0; i<operCodeList.length; i++) {
+    			operCodeList[i] = operCodeList[i].trim();
+    		}
+    		List<String> operCodes = new ArrayList<String>();
+    		operCodes = Arrays.asList(operCodeList);
+    		searchVO.setOperCodes(operCodes);
+    	}
         List<?> ItemHistoryList = itemHistoryService.selectItemHistoryList(searchVO);
         return ItemHistoryList;
     }
@@ -95,6 +106,33 @@ public class ItemHistoryController {
     	
      itemHistoryService.itemHistoryUpdate(gridData);
   } 
+    
+    //제품코드검색
+    @RequestMapping(value="/setItemCode", method=RequestMethod.GET)
+    @ResponseBody
+    public List<?> setItemCode(ItemHistoryVO searchVO ) throws Exception {
+        List<?> orderMList = itemHistoryService.setItemCode(searchVO);
+        return orderMList;
+       
+    }
+    
+    @RequestMapping(value="/setLotNum", method=RequestMethod.GET)
+    @ResponseBody
+    public List<?> setLotNum(ItemHistoryVO searchVO ) throws Exception {
+        List<?> orderMList = itemHistoryService.setLotNum(searchVO);
+        return orderMList;
+       
+    }
+    
+    @RequestMapping(value="/setOrdNum", method=RequestMethod.GET)
+    @ResponseBody
+    public List<?> setOrdNum(ItemHistoryVO searchVO ) throws Exception {
+        List<?> orderMList = itemHistoryService.setOrdNum(searchVO);
+        return orderMList;
+       
+    }
+    
+    
     
     
 //    @RequestMapping(value="/ItemHistoryUpdate")

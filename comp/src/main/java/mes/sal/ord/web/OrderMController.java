@@ -1,5 +1,7 @@
 package mes.sal.ord.web;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -54,7 +56,15 @@ public class OrderMController {
     @RequestMapping(value="/OrderMList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajax(OrderMVO searchVO ) throws Exception {
-    	
+    	if(searchVO.getOperCode() != null && searchVO.getOperCode() != "") {
+    		String[] operCodeList = searchVO.getOperCode().split(",");
+    		for(int i =0; i<operCodeList.length; i++) {
+    			operCodeList[i] = operCodeList[i].trim();
+    		}
+    		List<String> operCodes = new ArrayList<String>();
+    		operCodes = Arrays.asList(operCodeList);
+    		searchVO.setOperCodes(operCodes);
+    	}
         List<?> orderMList = orderMService.selectOrderMList(searchVO);
         return orderMList;
     }
@@ -81,7 +91,7 @@ public class OrderMController {
             throws Exception {
 		return "sal/ord/OrderMList.page";
 	}
-    
+
     
   
     

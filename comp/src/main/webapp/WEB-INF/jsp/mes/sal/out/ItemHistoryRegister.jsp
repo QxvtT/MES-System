@@ -23,12 +23,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<c:set var="registerFlag"
-	value="${empty itemHistoryVO.itmHisNum ? '등록' : '수정'}" />
 
 <title><c:out value="${registerFlag}" /></title>
-<link type="text/css" rel="stylesheet"
-	href="<c:url value='/css/egovframework/sample.css'/>" />
 <link rel="stylesheet"
 	href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 <script
@@ -48,6 +44,7 @@ let operCode = null;
 let aDate = null;
 let bDate = null;
 let test = null;
+let ordDNum = null;
 
 let str = '';
 
@@ -56,6 +53,11 @@ let data;
 let oldVal;
 let newVal;
 
+let key =0;
+let sibal = 0;
+let itmCode1 = null;
+let ordNum1 =null;
+let ordNum =null;
 
 $(function(){
 	const grid = new tui.Grid({
@@ -96,6 +98,7 @@ $(function(){
   				,itmHisRdy : itmHisRdy
   				,operCode : operCode
   				,str : str
+  				,ordNum : ordNum
 				},
 			dataType: "json",
 			success : function(result){
@@ -126,6 +129,7 @@ $(function(){
 		grid.resetData(getList());
 		grid2.resetData(getItemHisNumList());
 		
+		
 
 	}
 	$('#mobile-collapse').click(function() {
@@ -140,7 +144,7 @@ $(function(){
 	    scrollY: true,
 	    bodyHeight: 200,
 	    data: getItemHisNumList(),
-	    rowHeaders: ['rowNum', 'checkbox'],
+	    rowHeaders: ['rowNum', {type : 'checkbox',header: ' '}],
 	    columns: [
 			 { header: '출고일자', name:'itmHisRdy'}
 			,{ header: '전표번호', name:'itmHisNum'}
@@ -208,8 +212,7 @@ $(function(){
 				str = str + grid2.getCheckedRows()[i]['itmHisNum']+"' , '";
 			}
 		}
-		console.log(str);
-		console.log('======================');
+		
 	grid.resetData(getList());
 	}
 	
@@ -245,22 +248,229 @@ $(function(){
 	}
 	
 	
-	$('#ordNum').on('dblclick', () => { 
-		$('#ordNum').val('SO202106300026');
-		
-	});
+
 	
 	deleteItm.onclick = function() {
 		grid.removeCheckedRows()
 		console.log(grid.removeCheckedRows());
 		
 	}
+	
+	grid.on('dblclick', () => { 
+		key = grid.getFocusedCell()['rowKey'];
+		if(grid.getFocusedCell()['columnName'] == "itmCode"){
+			grid3.resetData(setItemCode());
+			$('#selectItemCode').modal('toggle');
+			$('#selectItemCode').on('shown.bs.modal', function(){
+				 grid3.refreshLayout();
+					itmCodeY.onclick=function() {
+						grid.focusAt(0,1,false);
+						grid.setValue(key,'itmCode',grid3.getCheckedRows()[0]['itmCode']);
+						grid.setValue(key,'itmName',grid3.getCheckedRows()[0]['itmName']);
+						grid.setValue(key,'itmSize',grid3.getCheckedRows()[0]['itmSize']);
+						grid.setValue(key,'itmUnit',grid3.getCheckedRows()[0]['itmUnit']);
+						grid.setValue(key,'ordVol',grid3.getCheckedRows()[0]['ordVol']);
+						grid.setValue(key,'ordOutVol',grid3.getCheckedRows()[0]['ordOutVol']);
+						grid.setValue(key,'itmNoutVol',grid3.getCheckedRows()[0]['itmNoutVol']);
+						grid.focusAt(key,7,false);
+					}
+			});
+		}
+		if(grid.getFocusedCell()['columnName'] == "lotNum" && grid.getData()[key]['itmCode'] != null && grid.getData()[key]['itmCode'] != "" && grid.getData()[key]['ordNum'] == null){
+		grid4.resetData(setLotNum(grid.getData()[key]['itmCode']));
+			$('#selectLotNum').modal('toggle');
+			$('#selectLotNum').on('shown.bs.modal', function(){
+				 grid4.refreshLayout();
+				 lotNoY.onclick=function() {
+						grid.focusAt(0,0,false);
+						grid.setValue(key,'lotNum',grid4.getCheckedRows()[0]['lotNum']);
+						grid.setValue(key,'itmStock',grid4.getCheckedRows()[0]['itmVol']);
+						grid.focusAt(key,7,false);
+					}
+				 
+				 
+			});
+		}
+		
+	});
+	
+
+
+	
+
+	const grid3 = new tui.Grid({
+	    el: document.getElementById('grid3'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: setItemCode(),
+	    rowHeaders: ['rowNum',{type : 'checkbox',header: ' '}],
+	    columns: [
+			{ header: '제품코드', name:'itmCode'},
+			{ header: '제품명', name:'itmName'},
+			{ header: '규격', name:'itmSize'},
+			{ header: '단위', name:'itmUnit'},
+			{ header: '주문량', name:'ordVol'}
+	    ]
+	});
+	function setItemCode() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "setItemCode",
+			type : "get",
+			data : {
+				ordNum : $('input#ordNum' ).val(),
+				itmCode1 : itmCode1
+				},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					itmCode1 = result[result.length -1].itmCode1;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	const grid4 = new tui.Grid({
+	    el: document.getElementById('grid4'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: null,
+	    rowHeaders: ['rowNum',{type : 'checkbox',header: ' '}],
+	    columns: [
+			{ header: '제품코드', name:'itmCode'},
+			{ header: 'lot_no', name:'lotNum'},
+			{ header: '재고', name:'itmVol'}
+	    ]
+	});
+	function setLotNum(test) {
+		let data;
+		$.ajax({
+			async: false,
+			url : "setLotNum",
+			type : "get",
+			data : {
+				itmCode : test
+				},
+			dataType: "json",
+			success : function(result){
+				console.log('lotNum');
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+
+	$('#ordNum').on('dblclick', () => { 
+		grid5.resetData(setOrdNum());
+		$('#selectOrdNum').modal('toggle');
+		$('#selectOrdNum').on('shown.bs.modal', function(){
+			grid5.refreshLayout();
+			ordNumY.onclick = function() {
+				$('input#ordNum' ).val(grid5.getCheckedRows()[0]['ordNum']);
+				$('input#operCode' ).val(grid5.getCheckedRows()[0]['operCode']);
+				$('input#operName' ).val(grid5.getCheckedRows()[0]['operName']);
+				itmHisDNum = null;
+				ordNum = grid5.getCheckedRows()[0]['ordNum'];
+				grid.resetData(getList());
+				itmHisDNum = null;
+			}
+			
+		})
+	});
+		const grid5 = new tui.Grid({
+		    el: document.getElementById('grid5'),
+		    scrollX: false,
+		    scrollY: true,
+		    bodyHeight: 200,
+		    data: setOrdNum(),
+		    rowHeaders: ['rowNum',{type : 'checkbox',header: ' '}],
+		    columns: [
+				{ header: '주문번호', name:'ordNum'},
+				{ header: '주문일자', name:'ordRequestDate'},
+				{ header: '납기일자', name:'ordDeliveryDate'},
+				{ header: '업체명', name:'operName'}
+		    ]
+		});
+		function setOrdNum() {
+			let data;
+			$.ajax({
+				async: false,
+				url : "setOrdNum",
+				type : "get",
+				data : {
+					ordNum1 : ordNum1
+					},
+				dataType: "json",
+				success : function(result){
+					if(result.length > 0) {
+						ordNum1 = result[result.length -1].ordNum1;
+					}
+					console.log(result);
+					data = result;
+				} // end success
+			}); // end ajax 
+			return data;
+		}
+		grid5.on('scrollEnd', () => {
+		    grid5.appendRows(setLotNum());
+		  })
+	grid2.on('check', (e) => {
+		let rows = grid2.getCheckedRowKeys(); 
+		if(rows.length > 1) { 
+			for(let i in rows){ 
+				if(e.rowKey != rows[i]){ 
+					grid2.uncheck(rows[i]); 
+					} 
+				}
+		}
+	})
+	grid3.on('check', (e) => {
+		let rows = grid3.getCheckedRowKeys(); 
+		if(rows.length > 1) { 
+			for(let i in rows){ 
+				if(e.rowKey != rows[i]){ 
+					grid3.uncheck(rows[i]); 
+					} 
+				}
+		}
+	})
+	grid4.on('check', (e) => {
+		let rows = grid4.getCheckedRowKeys(); 
+		if(rows.length > 1) { 
+			for(let i in rows){ 
+				if(e.rowKey != rows[i]){ 
+					grid4.uncheck(rows[i]); 
+					} 
+				}
+		}
+	})
+	grid5.on('check', (e) => {
+		let rows = grid5.getCheckedRowKeys(); 
+		if(rows.length > 1) { 
+			for(let i in rows){ 
+				if(e.rowKey != rows[i]){ 
+					grid5.uncheck(rows[i]); 
+					} 
+				}
+		}
+	})
+	grid5.on('scrollEnd', () => {
+	    grid5.appendRows(getList());
+	  })
+		
 })
 
 
 </script>
 </head>
 <body>
+<input type="hidden" id="test" name="test" value="test"/>
 	<!-- Page-header start -->
 	<div class="page-header">
 		<div class="page-block">
@@ -350,8 +560,6 @@ $(function(){
 											</ul>
 										</div>
 
-										<!-- // 타이틀 -->
-										<!-- List -->
 										<div id="grid"></div>
 									</div>
 								</div>
@@ -359,7 +567,6 @@ $(function(){
 							</div>
 						</div>
 					</div>
-			
 		</div>
 
 
@@ -369,7 +576,7 @@ $(function(){
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title" id="exampleModalLabel">출고리스트검색</h4>
+					<h4 class="modal-title" id="exampleModalLabel">출고번호검색</h4>
 					<button class="close" type="button" data-dismiss="modal"aria-label="Close">
 						&times;
 					</button>
@@ -394,12 +601,96 @@ $(function(){
 		</div>
 	</div>
 	<!-- 주쿤코드 검색 모달 종료-->
+	
+	<!-- 제품코드 검색 해당 주문에 해당하는 제품코드 -->
+	<div class="modal fade" id="selectItemCode" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="exampleModalLabel">제품코드검색</h4>
+					<button class="close" type="button" data-dismiss="modal"aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body" >
+						<div class="form-group row">
+						</div>
+						<div class="col-md-3">
+						</div>
+					<br />
+					<div id="grid3"></div>
+				</div>
+				<div class="modal-footer">
+					<a class="btn" id="itmCodeY" data-dismiss="modal">예</a>
+					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 제품코드 검색 종료-->
+		<!-- 제품lotNO 검색 해당  제품에 해당하는 lotno -->
+	<div class="modal fade" id="selectLotNum" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="exampleModalLabel">lotNo 검색</h4>
+					<button class="close" type="button" data-dismiss="modal"aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body" >
+						<div class="form-group row">
+						</div>
+						<div class="col-md-3">
+						</div>
+					<br />
+					<div id="grid4"></div>
+				</div>
+				<div class="modal-footer">
+					<a class="btn" id="lotNoY" data-dismiss="modal">예</a>
+					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- lotno 검색 종료-->
+	
+		<!-- 주문번호 검색 -->
+	<div class="modal fade" id="selectOrdNum" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="exampleModalLabel">주문번호검색</h4>
+					<button class="close" type="button" data-dismiss="modal"aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body" >
+						<div class="form-group row">
+						</div>
+						<div class="col-md-3">
+							<button type="button" class="btn btn-info btn-sm" id="ordNumSearch">검색</button>
+						</div>
+					<br />
+					<div id="grid5"></div>
+				</div>
+				<div class="modal-footer">
+					<a class="btn" id="ordNumY" data-dismiss="modal">예</a>
+					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 주문번호 검색 종료-->
+	
+	
 
 
 </body>
 </html>
-
-
 
 
 

@@ -128,8 +128,8 @@ $(function(){
 				</div>
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>제품명</h4>
-					<input type="text" id="itmNameM" name="itmName"></input><br> <br>
-					<button type="button" id="buttonI" name="button">조회</button>
+					<input type="text" id="itmNameM" name="itmNameM"></input><br> <br>
+					<button type="button" id="buttonI" name="buttonI">조회</button>
 					&nbsp;
 					<button type="reset">리셋</button>
 				</div>
@@ -142,5 +142,6 @@ $(function(){
 				</div>
 			</div>
 		</div>
+	</div>
 </body>
 </html>

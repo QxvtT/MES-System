@@ -1,6 +1,7 @@
 package mes.sal.ord.service;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,8 @@ public class OrderMVO extends OrderMDefaultVO{
     /** OPER_CODE */
     private java.lang.String operCode;
     
+    private List operCodes;
+    
     /** OPER_NAME */
     private java.lang.String operName;
     
@@ -67,6 +70,9 @@ public class OrderMVO extends OrderMDefaultVO{
     
     private java.lang.String aDate;
     private java.lang.String bDate;
+    private java.lang.String date;
+    
+    
     
     
     

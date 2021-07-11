@@ -33,8 +33,7 @@
 let itmHisDNum = null;
 let aDate = null;
 let bDate = null;
-let operName = null;
-let itmCode = null;
+let operCode = null;
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -69,7 +68,7 @@ $(function(){
 			data : {
   				aDate : aDate,
   				bDate : bDate,
-  				operName : operName,
+  				operCode : operCode,
   				itmCode : itmCode,
   				itmHisDNum : itmHisDNum
 				},
@@ -84,11 +83,11 @@ $(function(){
 		}); // end ajax 
 		return data;
 	}
- 	button.onclick = function(){
+	getItemHistory.onclick = function(){
  		itmHisDNum = null;
  		aDate = $( 'input#aDate' ).val();
  		bDate = $( 'input#bDate' ).val();
- 		operName = $( 'input#operName' ).val();
+ 		operCode = $( 'input#operCode' ).val();
  		itmCode = $( 'input#itmCode' ).val();
  		grid.resetData(getList());
  		console.log(bDate);
@@ -126,14 +125,20 @@ $(function(){
 	
 	<form id="frm" name ="frm">
 		날짜<input type="date" id="bDate" name = "bDate"/> ~ <input type="date" id="aDate" name = "aDate"/> <br>
-		업체명 <input type="text" id="operName" name = "operName"/><br>
-		제품코드 <input type="text" id="itmCode" name = "itmCode"/><br>
-		
-		<button type="button" class="btn btn-info btn-sm" id="button">검색</button>
+		업체코드 <input type="text" id="operCode" name = "operCode"/>
+		<%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>
+		<br/>
+		업체명<input type ="text" id="operName" name = "operName" readonly="readonly"/>
+		<br/>
+		제품코드 <input type="text" id="itmCode" name = "itmCode"/>
+		<%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>
+		<br/>
+		제품명<input type="text" id="itmName" name = "itmName"/>
+		<br/>
+		<button type="button" class="btn btn-info btn-sm" id="getItemHistory">검색</button>
+		<button type="reset" class="btn btn-info btn-sm" id="button">리셋</button>
 	</form>
-	<form:form commandName="searchVO" name="listForm" id="listForm"
-		method="post">
-		<input type="hidden" name="itmHisDNum" />
+	
 		<div class="pcoded-inner-content">
 			<div class="main-body">
 				<div class="page-wrapper">
@@ -146,9 +151,6 @@ $(function(){
 										<li>List</li>
 									</ul>
 								</div>
-
-								<!-- // 타이틀 -->
-								<!-- List -->
 								<div id="grid"></div>
 							</div>
 						</div>
@@ -157,7 +159,6 @@ $(function(){
 				</div>
 			</div>
 		</div>
-	</form:form>
 
 
 
