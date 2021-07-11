@@ -137,4 +137,17 @@ public interface OperationService {
     
     List selectMachineList(MachineVO searchVO) throws Exception;
     
+    
+    //
+    
+    EmployeesVO selectEmployees(EmployeesVO vo) throws Exception;
+    
+    /**
+	 * OPERATION 목록을 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return OPERATION 목록
+	 * @exception Exception
+	 */
+    
+    List selectEmployeesList(EmployeesVO searchVO) throws Exception;
 }

@@ -181,5 +181,36 @@
 		) A WHERE ROWNUM <= 10 )
 	]]>
 	</select>
+	
+		<select id="selectMachineList"
+		parameterType="mes.common.modal.service.MachineVO"
+		resultType="mes.common.modal.service.MachineVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+
+		select mac_code,
+		mac_name, mac_div, mac_size
+		from machine
+		<where>
+
+			<if test="macCode1 != null and macCode1 != ''">
+							<![CDATA[	
+								mac_code >  #{macCode1}
+							]]>
+			</if>
+			<if test="macCode != null and macCode != ''">
+							<![CDATA[	
+								and mac_code = #{macCode}
+							]]>
+			</if>
+			
+
+		</where>
+		order by mac_code
+			<![CDATA[					
+		) A WHERE ROWNUM <= 10 )
+	]]>
+	</select>
+	
 	<!-- -->
 </mapper>
