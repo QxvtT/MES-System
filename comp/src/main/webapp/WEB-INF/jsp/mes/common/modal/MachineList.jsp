@@ -107,7 +107,15 @@ $(function(){
 		}
 		$('input[id="macCode"]').val(macCode2);
 		$('input[id="macName"]').val(macName);
+		
+		$("#macModal").modal("toggle");
 	});
+	
+	
+	$('#btnM').click(function(){
+		$("#macModal").modal("toggle");
+	}
+	
 	
 })
 
@@ -134,7 +142,7 @@ $(function(){
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>설비</h4>
 					<input type="text" id="macCodeM" name="macCode"></input><br> <br>
-					
+
 					<button type="button" id="buttonM" class="btn" name="button">조회</button>
 					&nbsp;
 					<button class="btn" type="reset">리셋</button>
@@ -142,9 +150,8 @@ $(function(){
 				<div class="form-group row"></div>
 				<div id="machine"></div>
 				<div class="modal-footer">
-					<button class="btn" id="choiceM" name="choiceM" type="button"
-						data-dismiss="modal">선택</button>
-					<button class="btn" type="reset" data-dismiss="modal">취소</button>
+					<button class="btn" id="choiceM" name="choiceM" type="button">선택</button>
+					<button class="btn" type="reset" id="btnM">취소</button>
 				</div>
 			</div>
 		</div>
