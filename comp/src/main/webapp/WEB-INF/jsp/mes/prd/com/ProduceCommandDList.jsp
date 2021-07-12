@@ -86,7 +86,8 @@ $(function(){
       			}	
 			},
 			{ header: '작업순서', name:'prcComNo', editor: 'text'},
-			{ header: '비고', name:'prdComDNote', editor: 'text'}
+			{ header: '비고', name:'prdComDNote', editor: 'text'},
+			{ header: '출고여부', name:'mat_out_chk'}
 	    ]
 	}); // end const grid
 	
@@ -174,10 +175,14 @@ $(function(){
 			type: "get",
 			data: {
 				startDate : startDate,
-				endDate : endDate
+				endDate : endDate,
+				prdComNum1: prdComNum1
 			},
 			dataType: "json",
 			success: function(result){
+				if(result.length > 0) {
+					prdComNum1 = result[result.length -1].prdComNum;
+				}
 				data = result;
 			} // end success
 		}); // end ajax 
@@ -388,6 +393,9 @@ $(function(){
 	
 	//grid 행 더블클릭시 자재조회 및 공정흐름조회
 	grid.on('dblclick', (e) => {
+		if(grid.getValue(e.rowKey,'mat_out_chk') != 'Y') {
+			outMatLotBtn.classList.remove('btn-disabled', 'disabled');
+		}
 		prdComDNum = grid.getValue(e.rowKey,'prdComDNum');
 		itmCode = grid.getValue(e.rowKey,'itmCode');
 		matCode = grid.getValue(e.rowKey,'matCode');
@@ -501,6 +509,22 @@ $(function(){
 	
 	//자재 출고 관리
 	outMatLotBtn.onclick = function() {
+		if(gridMat.isModified()) {
+			//수정사항이 있는경우
+			//토스트메시지 
+			$.toast({ 
+				  text : "변경사항이 저장되지 않았습니다.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return false;
+		}
 		//저장안된 수정사항이 없는지 체크하고 이미 출고된 녀셕은 못하게 하고 수행하기
 		//1. 지시디테일 출고여부 Y로 업데이트, 2. 자재입출반관리 출고 추가, 3.자재현재고 -업데이트, 4.공정실적관리 생성
 		let gridDataMO = {};
@@ -530,6 +554,9 @@ $(function(){
 		});
 		prdComDNum1 = null;
 		grid.resetData(getList());
+		outMatLotBtn.classList.add('btn-disabled');
+		outMatLotBtn.classList.add('disabled');
+		 
 	}
 	
 	// 작업지시 조회 모달창 팝업 버튼
@@ -685,7 +712,7 @@ $(function(){
 								<div class="col-sm-8"></div>
 								<div class="col-sm-4 text-right" style="padding-left: 0px">
 									<button type="button" id="outMatLotBtn"
-										class="btn btn-sm btn-primary waves-effect waves-light">출고</button>
+										class="btn btn-sm btn-primary btn-disabled disabled waves-effect waves-light">출고</button>
 									<button type="button" id="searchMatLotBtn"
 										class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
 									<button type="button" id="deleteMBtn"
