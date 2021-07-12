@@ -137,6 +137,7 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 			newPrdNum = vo.getPrdNum();
 		}
 		System.out.println(newPrdNum);
+		
 		if(gridData.getUpdatedRows() != null && gridData.getUpdatedRows().size() != 0) {
         	ProducePlanDVO vo = new ProducePlanDVO();
         	vo.setPrdNum(gridData.getProducePlanDVO().getPrdNum());

@@ -93,6 +93,7 @@ $(function(){
 	    		header: '작업량', 
 	    		name:'prdWorkVol',
 	    	    onAfterChange(e) {
+	    			console.log(e.rowKey)
 	    	    	grid.setValue(e.rowKey, 'prdPerDay', e.value / grid.getValue(e.rowKey, 'itmDayOutput'));
 	    	    },	    	      
 	    		align: 'center',
@@ -399,18 +400,11 @@ $(function(){
 			$('#searchModal').modal("hide");
 			prdNum = Object.values(selectPrd)[2];
 			selectRow = grid2.getRow(e.rowKey);
-			console.log(e.rowKey)
-			console.log(selectRow)
 			$('#prdDate').val(selectRow.prdDate);
 			$('#prdName').val(selectRow.prdName);
 			$('#prdNote').val(selectRow.prdNote);
 			grid.resetData(getList());
-			console.log(grid.getRowCount());
-			console.log(grid.getRow(0));
-			for(let i = 0; i < grid.getRowCount(); i++){
-				console.log(getRow(i));
-				grid.setValue(grid.getRow(i), 'prdPerDay', i.prdWordVol / grid.getValue(grid.getRow(i), 'itmDayOutput'));
-			}
+			console.log(prdNum);
 		}
 	});
 	
@@ -571,8 +565,8 @@ $(function(){
 				grid.resetData([]);
 				grid2.resetData([]);
 				master.reset();
-				prdNum = null;
 				setDatePicker();
+				console.log(prdNum)
 				$.ajax({
 					async: false,
 					url: 'ProducePlanDelete',
@@ -581,9 +575,14 @@ $(function(){
 						prdNum : prdNum
 					},
 					datatype: 'json',
+					success: function(){
+						prdNum = null;
+					}
 				})
 			    alert("삭제되었습니다.")
 			}
+		} else {
+			alert("삭제할 데이터가 없습니다.")
 		}
 	})
 	

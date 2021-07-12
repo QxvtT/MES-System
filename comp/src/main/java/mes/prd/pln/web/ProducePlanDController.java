@@ -59,6 +59,7 @@ public class ProducePlanDController {
 	@RequestMapping(value = "/prd/pln/ProducePlanDelete")
 	@ResponseBody
 	public void producePlanDelete(@ModelAttribute("prdVO") ProducePlanDVO prdVO) throws Exception {
+		System.out.println(prdVO);
 		producePlanDService.producePlanDelete(prdVO);
 	}
 	
