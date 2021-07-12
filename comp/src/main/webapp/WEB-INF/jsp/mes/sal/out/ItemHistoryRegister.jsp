@@ -265,11 +265,19 @@ $(function(){
 		
 	}
 	
+	// 주문일련이나 계획일련이 있으면 제품번호 수정 못하게 막는 function
 	grid.on('dblclick', (e) => { 
+		let check = false;
 		if(e.columnName == "itmCode") {
-			dblclickCanceal(e);
-		}else {
 			
+			for(let i=0; i<rows.length; i++) {
+				if(e.rowKey == rows[i].rowKey) {
+					check = true;
+					e.stop();
+				}
+			}
+		}
+		if(!check) {
 			key = grid.getFocusedCell()['rowKey'];
 			if(grid.getFocusedCell()['columnName'] == "itmCode"){
 				grid3.resetData(setItemCode());
@@ -478,17 +486,6 @@ $(function(){
 	    grid5.appendRows(getList());
 	  })
 	 
-	// 주문일련이나 계획일련이 있으면 제품번호 수정 못하게 막는 function
-		function dblclickCanceal(e) {
-			console.log(e);
-			if(e.columnName == "itmCode") {
-				for(let i=0; i<rows.length; i++) {
-					if(e.rowKey == rows[i].rowKey) e.stop();
-				}
-			}
-		};
-		
-		
 })
 
 
