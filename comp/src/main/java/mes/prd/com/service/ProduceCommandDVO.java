@@ -124,6 +124,33 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     private java.lang.String prdComMatNote;
     
     
+//자재출고관련
+    /** 자재입출반관리 번호 */
+    private java.lang.String matHisNum;
+    
+    /** 자재입출반관리 일자 */
+    private java.lang.String matHisDate;
+    
+    /** 자재입출고관리용 건수 */
+    private java.math.BigDecimal matHisVol;
+    
+    
+    /** 공정흐름 이동번호 */
+    private java.lang.String movNum;
+    
+    /** 공정흐름 입고량 */
+    private java.math.BigDecimal prc_com_vol;
+    
+    
+    /** 공정흐름D 일련번호 */
+    private java.math.BigDecimal prc_res_d_num;
+    
+
+    
+    
+    
+    
+    
     /** 제품 한줄별로 공정흐름  */
     
     /** 순서 */

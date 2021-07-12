@@ -9,6 +9,10 @@ public class GridDataVO {
 	List<ProduceCommandDVO> deletedRows;
 	List<ProduceCommandDVO> updatedRows;
 	
+	
+	List<ProduceCommandDVO> matRows;
+	List<ProduceCommandDVO> flowRows;
+	
 	ProduceCommandDVO produceCommandDVO; 
 }
  

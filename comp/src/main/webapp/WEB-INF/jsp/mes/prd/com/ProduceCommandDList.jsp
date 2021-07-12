@@ -473,6 +473,9 @@ $(function(){
 				success : function(data) {
 					console.log(data);
 					prdComNum = data;
+					$('#prdComNum').val(prdComNum);
+					prdComDNum1 = null;
+					grid.resetData(getList());
 				}
 				});
 		
@@ -491,23 +494,28 @@ $(function(){
 			contentType:"application/json",
 			success : function(data) {
 				console.log(data);
-				prdComNum = data;
 			}
 		});
 		
-		prdComDNum1 = null;
-		grid.resetData(getList());
-
 	}
 	
 	//자재 출고 관리
 	outMatLotBtn.onclick = function() {
 		//저장안된 수정사항이 없는지 체크하고 이미 출고된 녀셕은 못하게 하고 수행하기
-		let gridDataMO = gridMat.getData({});
-		gridDataM["produceCommandDVO"] = {
+		//1. 지시디테일 출고여부 Y로 업데이트, 2. 자재입출반관리 출고 추가, 3.자재현재고 -업데이트, 4.공정실적관리 생성
+		let gridDataMO = {};
+		gridDataMO["matRows"] = gridMat.getData({});
+		gridDataMO["flowRows"] = gridFlow.getData({});
+		console.log(gridDataMO);
+		let prcName = gridFlow.getValue(0,"prcName");
+		gridDataMO["produceCommandDVO"] = {
 				prdComDNum : prdComDNum,
-				matCode : matCode,
+				matHisVol : gridMat.getRowCount(),
+				prcName : prcName,
+				itmCode : itmCode
 				}
+		console.log(gridDataMO);
+		
 		$.ajax({
 			async: false, 
 			url : "MatOutUpdate",
@@ -585,6 +593,7 @@ $(function(){
 						<div class="row">
 							<div class="col-md-6" style="z-index: 200">
 								<div class="table">
+								<input type="hidden" id="prdComNum" />
 									<table class="table">
 										<tr>
 											<td>

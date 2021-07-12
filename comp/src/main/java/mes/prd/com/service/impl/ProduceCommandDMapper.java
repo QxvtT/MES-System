@@ -31,6 +31,12 @@ public interface ProduceCommandDMapper {
     public void insertProduceCommand(ProduceCommandDVO vo) throws Exception;
     public void insertProduceCommandD(ProduceCommandDVO vo) throws Exception;
     public void insertProduceCommandMat(ProduceCommandDVO vo) throws Exception;
+    
+    public void insertMatHis(ProduceCommandDVO vo) throws Exception;
+    public void insertMatHisD(ProduceCommandDVO vo) throws Exception;
+    public void insertPrcRes(ProduceCommandDVO vo) throws Exception;
+    public void insertPrcResDF(ProduceCommandDVO vo) throws Exception;
+    public void insertPrcResD(ProduceCommandDVO vo) throws Exception;
 
     /**
 	 * PRODUCE_COMMAND_D을 수정한다.
@@ -41,6 +47,8 @@ public interface ProduceCommandDMapper {
     public void updateProduceCommand(ProduceCommandDVO vo) throws Exception;
     public void updateProduceCommandD(ProduceCommandDVO vo) throws Exception;
     public void updateProduceCommandMat(ProduceCommandDVO vo) throws Exception;
+    
+    public void updatetMatStc(ProduceCommandDVO vo) throws Exception;
 
     /**
 	 * PRODUCE_COMMAND_D을 삭제한다.
@@ -82,6 +90,12 @@ public interface ProduceCommandDMapper {
 	
 	/** 지시번호 count */
 	public int getPrdComCount(ProduceCommandDVO searchVO) throws Exception;
+	
+	/** 입출반관리 번호 생성 */
+	public String getNewMatHisNum(String date) throws Exception;
+	
+	/** 공정실적 이동번호 count */
+	public int getPrcResCount() throws Exception;
 	
     /**
 	 * PRODUCE_COMMAND_D 총 갯수를 조회한다.

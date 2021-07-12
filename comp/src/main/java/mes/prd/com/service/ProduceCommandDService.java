@@ -75,6 +75,8 @@ public interface ProduceCommandDService {
     /** 작업지시 mat update */
     void produceCommandMatUpdate(GridDataVO gridData) throws Exception;
 
+    /** 작업지시자재 출고 작업*/
+    void matOutUpdate(GridDataVO gridData) throws Exception;
     /**
 	 * PRODUCE_COMMAND_D 총 갯수를 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO

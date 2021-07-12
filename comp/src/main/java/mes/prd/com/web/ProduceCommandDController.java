@@ -116,11 +116,10 @@ public class ProduceCommandDController {
     	return "prd/com/ProcessMove.page";
     }
 	
-	
+	/*업데이트*/
 	@RequestMapping(value="/ProduceCommandUpdate")
 	@ResponseBody
 	public String ProduceCommandUpdate(@RequestBody GridDataVO gridData) throws Exception {
-	    	
 		return produceCommandDService.produceCommandUpdate(gridData);
 	}
 	
@@ -128,6 +127,13 @@ public class ProduceCommandDController {
 	@ResponseBody
 	public String ProduceCommandMatUpdate(@RequestBody GridDataVO gridData) throws Exception {
 		produceCommandDService.produceCommandMatUpdate(gridData);
+		return null;
+	}
+	
+	@RequestMapping(value="/MatOutUpdate")
+	@ResponseBody
+	public String MatOutUpdate(@RequestBody GridDataVO gridData) throws Exception {
+		produceCommandDService.matOutUpdate(gridData);
 		return null;
 	}
 	

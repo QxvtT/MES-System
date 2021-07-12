@@ -202,10 +202,57 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
         		produceCommandDDAO.insertProduceCommandMat(vo);
         	}
         }
-        
-        
     }
     
+    /** 작업지시자재 출고 작업*/
+    public void matOutUpdate(GridDataVO gridData) throws Exception {
+    	
+    	if(gridData.getMatRows() != null && gridData.getMatRows().size() != 0) {
+	    	//입출반관리 마스터 생성
+	    	String pattern = "yyyyMMdd";
+	    	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+	    	String date = simpleDateFormat.format(new Date());
+			String newMatHisNum = produceCommandDDAO.getNewMatHisNum(date);
+			System.out.println(newMatHisNum);
+			ProduceCommandDVO vo = gridData.getProduceCommandDVO();
+			vo.setMatHisNum(newMatHisNum);
+			vo.setMatHisDate(date);
+			produceCommandDDAO.insertMatHis(vo);
+			gridData.setProduceCommandDVO(vo);
+			
+			//공정흐름관리 마스터 생성(이동번호 생성방식 내일 바꿔야함)
+    		int b = produceCommandDDAO.getPrcResCount();
+    		System.out.println(b);
+    		String num = String.format("%03d", b);
+    		String newMovNum = "M"+num;
+    		vo.setMovNum(newMovNum);
+    		
+			
+			//입출반관리 디테일 생성 및 현재고 수정 및 공정실적 마스터 생성
+			for(int i =0; i<gridData.getMatRows().size(); i++) {
+				vo = gridData.getMatRows().get(i);
+				vo.setMatHisNum(newMatHisNum);
+				vo.setItmCode(gridData.getProduceCommandDVO().getItmCode());
+				produceCommandDDAO.insertMatHisD(vo);
+				produceCommandDDAO.updatetMatStc(vo);
+				produceCommandDDAO.insertPrcRes(vo);
+				for(int j =0; i<gridData.getFlowRows().size(); j++) {
+					vo = gridData.getFlowRows().get(j);
+					vo.setMovNum(newMovNum);
+					if(j == 0) {
+						produceCommandDDAO.insertPrcResDF(vo);
+					} else {
+						produceCommandDDAO.insertPrcResD(vo);
+					}
+				}
+				
+			}
+			
+			
+			
+    	}
+    	
+    }
     /**
 	 * PRODUCE_COMMAND_D 총 갯수를 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO

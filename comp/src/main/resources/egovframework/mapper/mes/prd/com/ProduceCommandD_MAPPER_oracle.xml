@@ -42,7 +42,7 @@
 		select A.* , B.yes_Com_Vol,
 		        a.ord_vol - B.yes_Com_Vol - a.ord_out_vol as no_Com_Vol,
 		        a.itm_day_output/8 as UPH, a.prd_com_vol/a.itm_day_output as day_Num
-		from(select C.*, TO_CHAR(C.prd_com_d_date, 'yyyy-MM-dd') as prd_com_d_date1, I.itm_name, M.mat_name, OD.ord_num, OM.ord_delivery_date, OM.oper_name,
+		from(select C.*, TO_CHAR(C.prd_com_d_date, 'yyyy-MM-dd') as prd_com_d_date1, I.itm_name, M.mat_name, OD.ord_num, to_char(OM.ord_delivery_date,'yyyy-MM-dd') ord_delivery_date, OM.oper_name,
 		      OD.ord_vol, OD.ord_out_vol, I.itm_day_output
 		      from PRODUCE_COMMAND_d C, item I, order_d OD, order_m  OM, material M
 		      where c.prd_com_num = #{prdComNum}
@@ -323,5 +323,62 @@
 		delete from produce_command_mat
 		where prd_com_mat_num = #{prdComMatNum}
 	</delete>
+	
+	<!-- 입출반관리 마스터번호 구하기 -->
+	<select id="getNewMatHisNum" resultType="String">
+		select 'MOT'|| #{date} || lpad(to_char(nvl(to_number(max(substr(mat_his_num,12))),0) + 1),3,'0')
+		from material_history
+		where to_char(mat_his_date,'yyyyMMdd') = #{date}
+	</select>
+	
+	<!-- 입출반관리 마스터 생성 -->
+	<insert id="insertMatHis">
+		insert into material_history(mat_his_num,mat_his_div,mat_his_date,mat_out,mat_his_vol)
+		values(#{matHisNum}, '출고', #{matHisDate}, #{prcName}, #{matHisVol})
+	</insert>
+	
+	<!-- 입출반관리 detail 추가 -->
+	<insert id="insertMatHisD"> 
+		insert into material_history_d(mat_his_num,mat_his_div,mat_his_date,mat_out,mat_his_vol)
+		values(#{matHisNum}, '출고', #{matHisDate}, #{prcName}, #{matHisVol})
+	</insert>
+	
+	<!-- 출고자재 자재재고 행 update -->
+	<update id="updatetMatStc"> 
+		declare
+			v_matVol material_stock.mat_vol%type;
+		begin
+	        SELECT mat_vol into v_matVol FROM material_stock  
+	        where mat_code = #{matVol} and lot_num = #{lotNum};
+	        
+			update material_stock set 
+			mat_vol = v_matVol - #{matVol}
+			where lot_num = #{lotNum} and mat_code = #{matVol};
+		end;
+	</update>
+	
+	<!-- 공정실적 마스터번호 구하기(수정필) -->
+	<select id="getPrcResCount" resultType="int">
+		select nvl(to_number(max(substr(mov_num,2))),0) + 1
+		from process_result
+	</select>
+	
+	<!-- 공정실적 마스터 생성 -->
+	<insert id="insertPrcRes">
+		insert into process_result(mov_num,prd_com_d_num,itm_code,lot_num,prc_com_vol)
+		values(#{movNum}, #{prdComDNum}, #{itmCode}, #{lotNum}, #{matVol})
+	</insert>
+	
+	<!-- 공정실적 detail 추가(첫) -->
+	<insert id="insertPrcResDF">
+		insert into process_result_d(prc_res_d_num, mov_num, prc_res_no, prc_code, prc_state, prc_com_d_vol)
+		values(PROCESS_RESULT_D_SEQ.nextval, #{movNum}, #{prcFNo}, #{prcCode}, '준비Blue',#{matVol})
+	</insert>
+	
+	<!-- 공정실적 detail 추가(이후) -->
+	<insert id="insertPrcResD">
+		insert into process_result_d(prc_res_d_num, mov_num, prc_res_no, prc_code, prc_state, prc_com_d_vol)
+		values(PROCESS_RESULT_D_SEQ.nextval, #{movNum}, #{prcFNo}, #{prcCode}, '준비Blue', 0)
+	</insert>
 
 </mapper>
