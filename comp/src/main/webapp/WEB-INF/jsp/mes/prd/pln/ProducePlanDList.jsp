@@ -71,7 +71,7 @@ $(function(){
 	    	},
 			{ 
 	    		header: '규격', 
-	    		name:'matCode',
+	    		name:'itmSize',
 	    		align: 'center'
 	    	},
 			{ 
@@ -263,6 +263,7 @@ $(function(){
 					prdPlanDNum = result[result.length -1].prdPlanDNum;
 				}
 				data = result;
+				console.log(result)
 			} // end success
 		}); // end ajax 
 		return data;
@@ -306,7 +307,7 @@ $(function(){
 			success : function(result){
 				grid.setValue(rowKey, 'itmCode', result.itmCode);
 				grid.setValue(rowKey, 'itmName', result.itmName);
-				grid.setValue(rowKey, 'itmSize', result.matCode);
+				grid.setValue(rowKey, 'itmSize', result.itmSize);
 				grid.setValue(rowKey, 'itmDayOutput', result.itmDayOutput);
 				data = result;
 			} // end success

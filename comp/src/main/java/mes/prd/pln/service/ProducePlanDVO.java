@@ -59,7 +59,7 @@ public class ProducePlanDVO {
     
     // 생산계획 detail 테이블
     private java.lang.String itmName;
-    private java.lang.String matCode;
+    private java.lang.String itmSize;
     private java.lang.String ordDeliveryDate;
     private java.lang.String ordRequestDate;
     private java.math.BigDecimal ordVol;
