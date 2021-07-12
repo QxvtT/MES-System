@@ -33,7 +33,9 @@
 let matHisNum1 = null;
 let matHisDNum = null;
 let matHisDNum1 = null;
+let matHisDNum2 = null;
 let matHisNum = null;
+let matOrdNum = null;
 let matHisDateS = null;
 let matHisDateE = null;
 let matCode = null;
@@ -163,6 +165,11 @@ $(function(){
 	    		header: '입고업체명', 
 	    		name:'matOrdOper',
 	    		hidden: true
+	    	},
+	    	{ 
+	    		header: '발주일련', 
+	    		name:'matOrdNum',
+// 	    		hidden: true
 	    	}
 	    ],
 	    summary: {
@@ -187,7 +194,7 @@ $(function(){
 			type : "get",
 			data : {
 				matHisNum: matHisNum,
-				matHisDNum1: matHisDNum1		
+				matHisDNum1: matHisDNum1
 			},
 			dataType: "json",
 			success : function(result){
@@ -211,14 +218,15 @@ $(function(){
 			type : "get",
 			data : {
 				matHisNum: matHisNum,
-				matHisDNum1: matHisDNum1,
+				matOrdNum: matOrdNum,
+				matHisDNum2: matHisDNum2,
 				matComDateS: matComDateS,
 				matComDateE: matComDateE
 			},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					matHisDNum1 = result[result.length -1].matHisDNum;
+					matHisDNum2 = result[result.length -1].matHisDNum;
 				}
 				console.log(result);
 				data = result;
@@ -415,14 +423,17 @@ $(function(){
 	
 	nOrdBtn.onclick = function(){
 		matHisDNum1 = null;
-		console.log(matHisNum1)
-		
+		console.log(matHisDNum1)
+
 		matComDateS = $('input[name="matComDateS"]').val();
 		console.log(matComDateS)
 		matComDateE = $('input[name="matComDateE"]').val();
 		console.log(matComDateE)
 		
-		grid.resetData(getNordList());
+		let nordList = getNordList();
+		for(let i in nordList){
+			grid.appendRow(nordList[i]);
+		}
 	}
 	
 })
