@@ -145,7 +145,7 @@ $(function(){
 					<h3 class="modal-title" id="exampleModalLabel" align="center">사원 검색</h3>
 					<button class="close" type="button" data-dismiss="modal"
 						aria-label="Close">&times;</button>
-				</div>
+				</div> 
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>사원명</h4>
 					<input type="text" id="empNameM" name="empNameM"></input><br>
