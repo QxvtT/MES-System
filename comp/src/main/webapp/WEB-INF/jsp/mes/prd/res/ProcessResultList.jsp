@@ -228,13 +228,12 @@ function getProcessResultSelect(key) {
 			success : function(result){
 				console.log(result);
 				data = result;
-				$( 'td#movNum' ).text(result[0]['movNum']);
-				$( 'td#prcResNo' ).text(result[0]['prcResNo']);
-				$( 'td#prcName' ).text(result[0]['prcName']);
-				$( 'td#prcWorkNum' ).text(result[0]['prcWorkNum']);
-				$( 'td#empId' ).text(result[0]['empId']);
-				$( 'td#prcStrTime' ).text(result[0]['prcStrTime']);
-				$( 'td#prcEndTime' ).text(result[0]['prcEndTime']);
+				$( 'input#prdComDDate' ).val(result[0]['prdComDDate']);
+				$( 'input#prdComNum' ).val(result[0]['prdComNum']);
+				$( 'input#prcName' ).val(result[0]['prcName']);
+				$( 'input#prcWorkNum' ).val(result[0]['prcWorkNum']);
+				$( 'input#empName' ).val(result[0]['empName']);
+				$( 'input#macName' ).val(result[0]['macName']);
 				
 			} // end success
 		}); // end ajax 
@@ -245,11 +244,14 @@ function getProcessResultSelect(key) {
 		console.log('start');
 		console.log(gridData);
 		console.log(prcResDNum);
-		console.log(grid4.getData()[0]['prcState']);
+		console.log($('input#macCode').val());
+		console.log($('input#empId').val());
 		gridData["ProcessResultVO"] ={
-				prcResDNum :prcResDNum,
-				prcState : grid4.getData()[0]['prcState'],
-				matVol : matVol}
+										prcResDNum :prcResDNum,
+										prcState : grid4.getData()[0]['prcState'],
+										macCode : $('input#macCode').val(),
+										empId : $('input#empId').val()
+										}
 			$.ajax({
 			async: false, 
 			url : "resultSuccess",
@@ -373,9 +375,10 @@ function getProcessResultSelect(key) {
 				</div>
 			</div>
 		</div>
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
+
+
+<div class="modal fade bd-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+		<div class="modal-dialog modal-lg" role="document" >
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title" id="exampleModalLabel">공정실적관리</h4>
@@ -384,41 +387,74 @@ function getProcessResultSelect(key) {
 						<div class="form-group row">
 							<table class="table">
 								<tr>
-									<th>이동번호</th>
-									<th>순번</th>
-									<th>공정이름</th>
+									<td>
+										<table class ="table">
+											<tr>
+												<th>작업일자</th>
+												<td><input id = "prdComDDate" namd = "prdComDDate"/></td>
+											</tr>
+											<tr>
+												<th>지시번호</th>
+												<td><input id = "prdComNum" namd = "prdComNum" readonly="readonly"/></td>
+											</tr>
+										</table>
+									
+									</td>
+									<td>
+										<table class ="table">
+											<tr>
+												<th>공정명</th>
+												<td><input id = "prcName" namd = "prcName" readonly="readonly"/></td>
+											</tr>
+											<tr>
+												<th>작업번호</th>
+												<td><input id = "prcWorkNum" namd = "prcWorkNum" readonly="readonly"/></td>
+											</tr>
+										</table>
+									
+									</td>
+									<td>
+										<table class ="table">
+											<tr>
+												<th>작업자</th>
+												<td><input id = "empName" namd = "empName" /><%@ include file="/WEB-INF/jsp/mes/common/modal/EmployeesList.jsp" %></td>
+												<input type="hidden" id="empId" name = "empId"/>
+											</tr>
+											<tr>
+												<th>설비</th>
+												<td><input id = "macName" namd = "macName" /><%@ include file="/WEB-INF/jsp/mes/common/modal/MachineList.jsp" %></td>
+												<input type="hidden" id="macCode" name = "macCode"/>
+											</tr>
+										</table>
+									
+									</td>
 								</tr>
-								<tr>
-									<td id= "movNum" name ="movNum">  </td>
-									<td id= "prcResNo" name ="prcResNo">  </td>
-									<td id= "prcName" name ="prcName">  </td>
-								</tr>
+								
+								
 							</table>
-							<table class="table">
-								<tr>
-									<th>작업번호</th>
-									<th>작업자</th>
-								</tr>
-								<tr>
-									<td id= "prcWorkNum" name ="prcWorkNum">  </td>
-									<td id= "empId" name ="empId">  </td>
-								</tr>
-							</table>
-							<table class="table">
-								<tr>
-									<th>작업시작시간</th>
-									<th>작업종료시간</th>
-								</tr>
-								<tr>
-									<td id= "prcStrTime" name ="prcStrTime">  </td>
-									<td id= "prcEndTime" name ="prcEndTime">  </td>
-								</tr>
-							</table>
+							
+							
 						</div>
-						<div class="col-lg-8">
+						<div class="col-lg-4">
 						</div>
 					<br />
-					<div id="grid4"></div>
+					<div class="col-xl-4">
+					
+						<table border="1">
+							<tr>
+								<td></td>
+								<td></td>
+							</tr>
+						</table>
+					</div>
+				<div class="col-xl-8">
+					<table>
+						<tr>
+							<td></td>
+							<td><div id="grid4"></div></td>
+						</tr>
+					</table>
+				</div>
 				</div>
 				<div class="modal-footer">
 					<a class="btn" id="sibalY" >예</a>

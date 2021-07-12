@@ -29,7 +29,7 @@ public class EmployeesVO extends OperationDefaultVO {
 
 	private java.lang.String empName;
 
-	private java.lang.String departmnet;
+	private java.lang.String department;
 
 	private java.lang.String hireDate;
 
@@ -58,5 +58,9 @@ public class EmployeesVO extends OperationDefaultVO {
 	private java.lang.String position;
 	
 	private java.lang.String password;
+	
+	// 스크롤용
+	
+	private java.lang.String empId1;
 
 }

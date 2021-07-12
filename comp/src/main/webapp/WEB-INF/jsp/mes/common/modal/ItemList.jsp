@@ -129,9 +129,9 @@ $(function(){
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>제품명</h4>
 					<input type="text" id="itmNameM" name="itmNameM"></input><br> <br>
-					<button type="button" id="buttonI" name="buttonI">조회</button>
+					<button type="button" id="buttonI" class="btn" name="buttonI">조회</button>
 					&nbsp;
-					<button type="reset">리셋</button>
+					<button class="btn" type="reset">리셋</button>
 				</div>
 				<div class="form-group row"></div>
 				<div id="item"></div>

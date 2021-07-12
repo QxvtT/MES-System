@@ -113,16 +113,24 @@ public class ProcessResultServiceImpl extends EgovAbstractServiceImpl implements
         return processResultDAO.produceSelect(searchVO);
     }
     public List<?> setProduceSelect(ProcessResultVO searchVO) throws Exception {
-        return processResultDAO.setProduceSelect(searchVO);
+    	List list = processResultDAO.setProduceSelect(searchVO);
+    	if(list.size() <1) {
+    		list = processResultDAO.setProduceSelect2(searchVO);
+    	}
+        return list;
     }
     public void resultSuccess(GridDataVO gridDataVO) throws Exception {
     	 if(gridDataVO.getUpdatedRows() != null) {
-    		 ProcessResultVO vo= gridDataVO.getUpdatedRows().get(0);
-    		 System.out.println("시발f");
-    		 System.out.println(vo.getPrcState());
-    		 if(vo.getPrcState().equals("진행")) {
-    			 processResultDAO.resultSuccess(gridDataVO.getUpdatedRows().get(0));
-    		 }
+    		 System.out.println("test");
+    		 System.out.println(gridDataVO.getProcessResultVO().getEmpId());
+    		 if(gridDataVO.getUpdatedRows().get(0).getPrcState().equals("진행")) {
+	    			 ProcessResultVO vo= gridDataVO.getUpdatedRows().get(0);
+	    			 vo.setEmpId(gridDataVO.getProcessResultVO().getEmpId());
+	    			 vo.setMacCode(gridDataVO.getProcessResultVO().getMacCode());
+	    			 vo.setPrcWorkNum(gridDataVO.getProcessResultVO().getPrcWorkNum());
+	    			 processResultDAO.resultSuccess(gridDataVO.getUpdatedRows().get(0));
+	    		 }
+    		 
     		 else {
     			 
     		 }

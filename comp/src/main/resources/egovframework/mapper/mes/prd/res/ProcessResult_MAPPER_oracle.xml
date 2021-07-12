@@ -13,23 +13,7 @@
 		<result property="prcBckVol" column="PRC_BCK_VOL" />
 	</resultMap>
 	
-	<insert id="insertProcessResult">
-		<![CDATA[
-			INSERT INTO PROCESS_RESULT 
-				( MOV_NUM
-				  , PRD_COM_NUM
-				  , ITM_CODE
-				  , LOT_NUM
-				  , PRC_COM_VOL
-				  , PRC_BCK_VOL )
-			VALUES ( #{movNum}
-				  , #{prdComNum}
-				  , #{itmCode}
-				  , #{lotNum}
-				  , #{prcComVol}
-				  , #{prcBckVol} )
-		]]>
-	</insert>
+	
 	
 
 	
@@ -40,27 +24,15 @@
 				]]>
 	</delete>
 	
-	<select id="selectProcessResult" resultMap="processResult">
-		<![CDATA[
-			SELECT
-				MOV_NUM
-				, PRD_COM_NUM
-				, ITM_CODE
-				, LOT_NUM
-				, PRC_COM_VOL
-				, PRC_BCK_VOL
-			FROM PROCESS_RESULT
-						WHERE MOV_NUM=#{movNum}
-				]]>
-	</select>
+
 	
 	<select id="selectProcessResultList" parameterType="mes.prd.res.service.ProcessResultVO" resultType="mes.prd.res.service.ProcessResultVO">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
-				select rownum
-				       ,to_char(pcd.prd_com_d_date ,'yyyy-MM-dd') as prd_com_d_date
+				select
+				      to_char(pcd.prd_com_d_date ,'yyyy-MM-dd') as prd_com_d_date
 				       ,pcd.prd_com_num
-				       ,prd_com_d_num
+				       ,pcd.prd_com_d_num
 				       ,pcd.itm_code
 				       ,item.itm_name
 				       ,p.prc_name
@@ -76,7 +48,7 @@ SELECT * FROM (
                      , process_result_d prd
                      , item 
                      , process p 
-				where pr.prd_com_num = pcd.prd_com_num and
+				where pr.prd_com_d_num = pcd.prd_com_d_num and
 				      item.itm_code=pcd.itm_code and
                       pr.mov_num =prd.mov_num and
                       p.prc_code = prd.prc_code and
@@ -118,7 +90,7 @@ SELECT * FROM (
                      , order_m om
 				where 
 				      item.itm_code=pcd.itm_code and
-                      pcd.prd_com_num = pr.prd_com_num and
+                      pcd.prd_com_d_num = pr.prd_com_d_num and
                       pr.mov_num = prd.mov_num and
                       od.ord_d_num = pcd.ord_d_num and
                       od.ord_num = om.ord_num and
@@ -157,7 +129,7 @@ SELECT * FROM (
                           pr.mov_num = a.mov_num  and
                           a.prc_code = prd.prc_code)a
 				where 	pcd.prd_com_d_num = pcm.prd_com_d_num and
-				      	pr.prd_com_num = pcd.prd_com_num and
+				      	pr.prd_com_d_num = pcd.prd_com_d_num and
 				      	pr. lot_num = pcm.lot_num and
 				      	prd.mov_num = pr.mov_num  and
                         a.mov_num = prd.mov_num and
@@ -170,26 +142,36 @@ SELECT * FROM (
 ]]>
 
 	</select>	
+	
 	<select id="setProduceSelect" parameterType="mes.prd.res.service.ProcessResultVO" resultType="mes.prd.res.service.ProcessResultVO">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
-				select prd.prc_res_d_num
+				select  prd.prc_res_d_num
+						,pcd.prd_com_num
 				        ,prd.mov_num
 				        ,prd.prc_res_no
+				        ,to_char(pcd.prd_com_d_date,'yyyy-MM-dd') as prd_com_d_date
 				        ,p.prc_name
 				        ,prd.PRC_STATE
 				        ,prd.MAC_CODE
 				        ,prd.PRC_WORK_NUM
-				        ,prd.EMP_ID
+				        ,e.emp_name
+				        ,m.mac_name
 				        ,prd.PRC_RES_VOL
 				        ,prd.PRC_ERR_VOL
 				        ,prd.PRC_RESULT_D_NOTE
-				        ,to_char(prd.PRC_STR_TIME,'yyyy-MM-dd:HH24:mm:ss') as prc_str_time
-				        ,to_char(prd.PRC_END_TIME,'yyyy-MM-dd:HH24:mm:ss') as prc_end_time
+				        ,to_char(prd.PRC_STR_TIME,'HH24:mm:ss') as prc_str_time
+				        ,to_char(prd.PRC_END_TIME,'HH24:mm:ss') as prc_end_time
 				        ,prd.PRC_COM_D_VOL
-				from process_result_d prd, process p
-				where prd.prc_code = p.prc_code and 
-					   prc_res_d_num = #{prcResDNum}
+				from process_result_d prd, process p, produce_command_d pcd, process_result pr
+				     ,employees e,machine m
+				where prd.prc_code = p.prc_code 
+				and pr.prd_com_d_num = pcd.prd_com_d_num 
+				and pr.mov_num = prd.mov_num
+				and e.emp_id = prd.emp_id
+				and m.mac_code = prd.mac_code 
+				and
+					   prd.prc_res_d_num = #{prcResDNum}
 				      
 		<![CDATA[					
 	) A WHERE ROWNUM <=10
@@ -197,50 +179,95 @@ SELECT * FROM (
 ]]>
 
 	</select>
+	
+	
+	 
+	<select id="setProduceSelect2" parameterType="mes.prd.res.service.ProcessResultVO" resultType="mes.prd.res.service.ProcessResultVO">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM (
+				select  prd.prc_res_d_num
+						,pcd.prd_com_num
+				        ,prd.mov_num
+				        ,prd.prc_res_no
+				        ,to_char(pcd.prd_com_d_date,'yyyy-MM-dd') as prd_com_d_date
+				        ,p.prc_name
+				        ,prd.PRC_STATE
+				        ,prd.MAC_CODE
+				        ,prd.PRC_WORK_NUM
+				        ,prd.PRC_RES_VOL
+				        ,prd.PRC_ERR_VOL
+				        ,prd.PRC_RESULT_D_NOTE
+				        ,to_char(prd.PRC_STR_TIME,'HH24:mm:ss') as prc_str_time
+				        ,to_char(prd.PRC_END_TIME,'HH24:mm:ss') as prc_end_time
+				        ,prd.PRC_COM_D_VOL
+				from process_result_d prd, process p, produce_command_d pcd, process_result pr
+				where prd.prc_code = p.prc_code 
+				and pr.prd_com_d_num = pcd.prd_com_d_num 
+				and pr.mov_num = prd.mov_num
+				and
+					   prd.prc_res_d_num = #{prcResDNum}
+				      
+		<![CDATA[					
+	) A WHERE ROWNUM <=10
+)
+]]>
+
+	</select>
+	
+	
 	<update id="resultSuccess">
-	declare
-    v_old_vol process_result_d.prc_res_vol%type;
-    v_mov_num process_result_d.mov_num%type;
-    v_prc_res_no process_result_d.prc_res_no%type;
-    v_start_vol process_result_d.prc_com_d_vol%type;
-    v_cha_res_vol number := #{prcResVol};
-    v_cha_err_vol number := #{prcErrVol};
-begin
-    select prc_res_vol, mov_num, prc_res_no
-    into v_old_vol,v_mov_num,v_prc_res_no
-    from process_result_d
-    where prc_res_d_num=#{prcResDNum};
-    if v_prc_res_no = 1 then
-        select prc_com_d_vol 
-        into v_start_vol
-        from process_result_d
-        where prc_res_d_num=#{prcResDNum};
-    else
-        select (prc_com_d_vol- prc_err_vol)
-        into v_start_vol
-        from process_result_d
-        where mov_num = v_mov_num and
-        prc_res_no = v_prc_res_no-1;
-    end if;
-    if v_cha_res_vol+v_cha_err_vol = v_start_vol then
-        update process_result_d
-        set prc_res_vol = v_cha_res_vol,
-        prc_err_vol = v_cha_err_vol,
-        PRC_STATE = '완료',
-        PRC_END_TIME = sysdate
-        where prc_res_d_num=#{prcResDNum};
-    else
-        update process_result_d
-        set prc_res_vol = v_cha_res_vol,
-        prc_err_vol = v_cha_err_vol
-        where prc_res_d_num=#{prcResDNum};
-    end if;
-    
-    update process_result_d
-    set prc_com_d_vol = prc_com_d_vol+(v_cha_res_vol-v_old_vol)
-    where mov_num = v_mov_num and
-            prc_res_no = v_prc_res_no+1;
-	end;
+		declare
+		    v_old_vol process_result_d.prc_res_vol%type;
+		    v_mov_num process_result_d.mov_num%type;
+		    v_prc_res_no process_result_d.prc_res_no%type;
+		    v_start_vol process_result_d.prc_com_d_vol%type;
+		    v_cha_res_vol number := #{prcResVol};
+		    v_cha_err_vol number := #{prcErrVol};
+		begin
+		
+			update process_result_d 
+			set emp_id = #{empId},
+				mac_code = #{macCode},
+				prc_work_num = #{prcWorkNum}
+			where prc_res_d_num = #{prcResDNum};
+			
+		    select prc_res_vol, mov_num, prc_res_no
+		    into v_old_vol,v_mov_num,v_prc_res_no
+		    from process_result_d
+		    where prc_res_d_num=#{prcResDNum};
+		    
+	    if v_prc_res_no = 1 then
+	        select prc_com_d_vol 
+	        into v_start_vol
+	        from process_result_d
+	        where prc_res_d_num=#{prcResDNum};
+	    else
+	        select (prc_com_d_vol- prc_err_vol)
+	        into v_start_vol
+	        from process_result_d
+	        where mov_num = v_mov_num and
+	        prc_res_no = v_prc_res_no-1;
+	    end if;
+	    
+	    if v_cha_res_vol+v_cha_err_vol = v_start_vol then
+	        update process_result_d
+	        set prc_res_vol = v_cha_res_vol,
+	        prc_err_vol = v_cha_err_vol,
+	        PRC_STATE = '완료',
+	        PRC_END_TIME = sysdate
+	        where prc_res_d_num=#{prcResDNum};
+	    else
+	        update process_result_d
+	        set prc_res_vol = v_cha_res_vol,
+	        prc_err_vol = v_cha_err_vol
+	        where prc_res_d_num=#{prcResDNum};
+	    end if;
+	    
+	    update process_result_d
+	    set prc_com_d_vol = prc_com_d_vol+(v_cha_res_vol-v_old_vol)
+	    where mov_num = v_mov_num and
+	            prc_res_no = v_prc_res_no+1;
+		end;
 	</update>
 	
 		
@@ -248,18 +275,6 @@ begin
 	
 	
 	
-	<select id="selectProcessResultListTotCnt" parameterType="mes.prd.res.service.ProcessResultVO" resultType="int">
-			SELECT COUNT(*) totcnt
-			FROM PROCESS_RESULT
-			WHERE 1=1
-			<if test="searchKeyword != null and searchKeyword != ''">
-				<if test="searchCondition == 0">AND
-					MOV_NUM = #{searchKeyword}
-				</if>
-				<if test="searchCondition == 1">AND
-					PRD_COM_NUM LIKE '%' || #{searchKeyword} || '%'
-				</if>
-			</if>
-	</select>
+
 
 </mapper>
