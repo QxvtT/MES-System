@@ -339,8 +339,8 @@
 	
 	<!-- 입출반관리 detail 추가 -->
 	<insert id="insertMatHisD"> 
-		insert into material_history_d(mat_his_num,mat_his_div,mat_his_date,mat_out,mat_his_vol)
-		values(#{matHisNum}, '출고', #{matHisDate}, #{prcName}, #{matHisVol})
+		insert into material_history_d(mat_his_d_num, mat_his_num, mat_code, lot_num, mat_his_d_vol)
+		values(MATERIAL_HISTORY_SEQ.nextval, #{matHisNum}, #{matCode}, #{lotNum}, #{matVol})
 	</insert>
 	
 	<!-- 출고자재 자재재고 행 update -->
@@ -348,12 +348,17 @@
 		declare
 			v_matVol material_stock.mat_vol%type;
 		begin
-	        SELECT mat_vol into v_matVol FROM material_stock  
-	        where mat_code = #{matVol} and lot_num = #{lotNum};
+			IF #{lotNum} is null THEN
+		      	SELECT mat_vol into v_matVol FROM material_stock  
+	        	where mat_code = #{matCode} and lot_num is null;
+		    ELSE
+		     	SELECT mat_vol into v_matVol FROM material_stock  
+	        	where mat_code = #{matCode} and lot_num = #{lotNum};
+		    END IF;
 	        
 			update material_stock set 
 			mat_vol = v_matVol - #{matVol}
-			where lot_num = #{lotNum} and mat_code = #{matVol};
+			where lot_num = #{lotNum} and mat_code = #{matCode};
 		end;
 	</update>
 	
@@ -372,13 +377,20 @@
 	<!-- 공정실적 detail 추가(첫) -->
 	<insert id="insertPrcResDF">
 		insert into process_result_d(prc_res_d_num, mov_num, prc_res_no, prc_code, prc_state, prc_com_d_vol)
-		values(PROCESS_RESULT_D_SEQ.nextval, #{movNum}, #{prcFNo}, #{prcCode}, '준비Blue',#{matVol})
+		values(PROCESS_RESULT_D_SEQ.nextval, #{movNum}, #{prcFNo}, #{prcCode}, '준비',#{matVol})
 	</insert>
 	
 	<!-- 공정실적 detail 추가(이후) -->
 	<insert id="insertPrcResD">
 		insert into process_result_d(prc_res_d_num, mov_num, prc_res_no, prc_code, prc_state, prc_com_d_vol)
-		values(PROCESS_RESULT_D_SEQ.nextval, #{movNum}, #{prcFNo}, #{prcCode}, '준비Blue', 0)
+		values(PROCESS_RESULT_D_SEQ.nextval, #{movNum}, #{prcFNo}, #{prcCode}, '준비', 0)
 	</insert>
 
+	<!-- 작업지시디테일 출고여부 Y update -->
+	<update id="updatePrdComDY"> 
+		update Produce_Command_D set 
+			mat_out_chk = 'Y'
+		where prd_com_d_num = #{prdComDNum}
+	</update>
+	
 </mapper>

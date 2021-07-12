@@ -115,7 +115,7 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     private java.math.BigDecimal prdComMatO;
     
     /** LOT_NUM */
-    private java.math.BigDecimal lotNum;
+    private java.lang.String lotNum;
     
     /** 자재수량 */
     private java.math.BigDecimal matVol;

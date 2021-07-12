@@ -220,25 +220,31 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
 			produceCommandDDAO.insertMatHis(vo);
 			gridData.setProduceCommandDVO(vo);
 			
-			//공정흐름관리 마스터 생성(이동번호 생성방식 내일 바꿔야함)
-    		int b = produceCommandDDAO.getPrcResCount();
-    		System.out.println(b);
-    		String num = String.format("%03d", b);
-    		String newMovNum = "M"+num;
-    		vo.setMovNum(newMovNum);
-    		
+			//생산지시디테일 출고여부 Y
+			produceCommandDDAO.updatePrdComDY(vo);
 			
 			//입출반관리 디테일 생성 및 현재고 수정 및 공정실적 마스터 생성
 			for(int i =0; i<gridData.getMatRows().size(); i++) {
 				vo = gridData.getMatRows().get(i);
 				vo.setMatHisNum(newMatHisNum);
 				vo.setItmCode(gridData.getProduceCommandDVO().getItmCode());
+				
+				//공정흐름관리 마스터 생성(이동번호 생성방식 내일 바꿔야함)
+	    		int b = produceCommandDDAO.getPrcResCount();
+	    		System.out.println(b);
+	    		String num = String.format("%03d", b);
+	    		String newMovNum = "M"+num;
+	    		vo.setMovNum(newMovNum);
+	    		
+				System.out.println("체크체크");
+				System.out.println(vo);
 				produceCommandDDAO.insertMatHisD(vo);
 				produceCommandDDAO.updatetMatStc(vo);
 				produceCommandDDAO.insertPrcRes(vo);
-				for(int j =0; i<gridData.getFlowRows().size(); j++) {
+				for(int j =0; j<gridData.getFlowRows().size(); j++) {
 					vo = gridData.getFlowRows().get(j);
 					vo.setMovNum(newMovNum);
+					vo.setMatVol(gridData.getMatRows().get(j).getMatVol());
 					if(j == 0) {
 						produceCommandDDAO.insertPrcResDF(vo);
 					} else {

@@ -49,6 +49,7 @@ public interface ProduceCommandDMapper {
     public void updateProduceCommandMat(ProduceCommandDVO vo) throws Exception;
     
     public void updatetMatStc(ProduceCommandDVO vo) throws Exception;
+    public void updatePrdComDY(ProduceCommandDVO vo) throws Exception;
 
     /**
 	 * PRODUCE_COMMAND_D을 삭제한다.
