@@ -77,8 +77,8 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 			String date = gridDataVO.getMaterialHistoryVO().getMatHisDate().replace("-", "");
 			int a = materialHistoryDAO.getMatInMngCount(gridDataVO.getMaterialHistoryVO());
 			System.out.println(a);
-			String num = String.format("%04d", a);
-			newMatHisNum = "MATIN" + date + num;
+			String num = String.format("%03d", a);
+			newMatHisNum = "MIN" + date + num;
 			MaterialHistoryVO vo = gridDataVO.getMaterialHistoryVO();
 			vo.setMatHisNum(newMatHisNum);
 			materialHistoryDAO.insertMatInMng(vo);

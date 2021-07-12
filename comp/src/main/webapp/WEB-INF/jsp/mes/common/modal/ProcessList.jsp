@@ -38,7 +38,7 @@ $(function(){
 	    bodyHeight: 200,
 	    rowWidth: 100,
 	    data: getProcessList(),
-	    rowHeaders: ['rowNum','checkbox'],
+	    rowHeaders: ['rowNum',{type:'checkbox',header:' '}],
 	    columns: [
 	    	{ header: '공정코드', name:'prcCode'},
 			{ header: '공정명', name:'prcName'},
@@ -103,19 +103,36 @@ $(function(){
 			else{
 				prcCode2 = prcCode2 + process.getCheckedRows()[i]['prcCode']+",";
 				prcName = prcName + process.getCheckedRows()[i]['prcName']+",";
+				
+				
 			}	
 		}
 		
 		$('input[id="prcCode"]').val(prcCode2);
 		$('input[id="prcName"]').val(prcName);
+		
+		$("#serchPrcModal").modal("toggle");
 	});
+	
+	$('#btnP').click(function(){
+		
+		$("#serchPrcModal").modal("toggle");
+	})
+	
+		process.on('check', (e) => {
+		let rows = process.getCheckedRowKeys(); 
+		if(rows.length > 1) { 
+			for(let i in rows){ 
+				if(e.rowKey != rows[i]){ 
+					process.uncheck(rows[i]); 
+					} 
+				}
+		}
+	})
 
 	
 	
 })
-
-
-
 
  // -->
 </script>
@@ -136,8 +153,7 @@ $(function(){
 				</div>
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>공정코드</h4>
-					<input type="text" id="prcCodeM" name="prcCode"></input><br>
-					<br>
+					<input type="text" id="prcCodeM" name="prcCode"></input><br> <br>
 					<button type="button" id="buttonP" name="button" class="btn">조회</button>
 					&nbsp;
 					<button type="reset" class="btn">리셋</button>
@@ -146,8 +162,8 @@ $(function(){
 				<div class="form-group row"></div>
 				<div id="process"></div>
 				<div class="modal-footer">
-					<button class="btn" id="choiceP" name="choiceP" type="button" data-dismiss="modal">선택</button>
-					<button class="btn" type="reset" data-dismiss="modal">취소</button>
+					<button class="btn" id="choiceP" name="choiceP" type="button">선택</button>
+					<button class="btn" type="reset" id="btnP">취소</button>
 				</div>
 			</div>
 		</div>

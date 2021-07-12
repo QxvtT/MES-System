@@ -26,6 +26,7 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     
     /** main grid 스크롤용 */
     private java.math.BigDecimal matHisDNum1;
+    private java.math.BigDecimal matHisDNum2;
     
     /** 작업일자 검색 **/
     private java.lang.String matHisDateS;

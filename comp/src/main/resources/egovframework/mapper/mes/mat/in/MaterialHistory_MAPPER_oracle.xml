@@ -141,7 +141,8 @@ SELECT * FROM (
 				       MH.MAT_ORD_OPER,
 				       O.OPER_CODE,
 				       MS.MAT_VOL,
-				       MO.MAT_NORD_VOL
+				       MO.MAT_NORD_VOL,
+				       MHD.MAT_ORD_NUM
 				FROM  MATERIAL M
 				    , MATERIAL_HISTORY_D MHD
 				    , MATERIAL_HISTORY MH
@@ -156,8 +157,8 @@ SELECT * FROM (
 				      AND MO.MAT_COM_NUM = MHD.MAT_COM_NUM
 				      AND MH.MAT_HIS_DIV='입고'
 				      AND MO.MAT_NORD_VOL > 0
-				 <if test= "matHisDNum1 != null and matHisDNum1 != ''">
-			      		and mhd.mat_his_d_num > #{matHisDNum1}
+				 <if test= "matHisDNum2 != null and matHisDNum2 != ''">
+			      		and mhd.mat_his_d_num > #{matHisDNum2}
 			     </if>
 			     <if test="matComDateS != null and matComDateS != '' and matComDateE != null and matComDateE != ''"> AND
 				     <![CDATA[			    			
@@ -378,8 +379,22 @@ SELECT * FROM (
 			MAT_HIS_D_VOL = #{matHisDVol},
 			MAT_HIS_PRICE = #{matHisPrice}
 		WHERE MAT_HIS_D_NUM = #{matHisDNum}
+	
+	<!-- 	DECLARE
+			V_MAT_ORD_VOL NUMBER := #{matHisDVol};
+			V_MAT_ORD_NUM NUMBER := #{matOrdNum};		  
+		BEGIN
+		UPDATE MATERIAL_ORDER SET
+		    MAT_ORD_VOL = (V_MAT_ORD_VOL + MAT_ORD_VOL)
+		    WHERE MAT_ORD_NUM = V_MAT_ORD_NUM; 
+		UPDATE MATERIAL_ORDER SET
+		    MAT_NORD_VOL = (MAT_VOL - MAT_ORD_VOL)
+		    WHERE MAT_ORD_NUM = V_MAT_ORD_NUM;
+		UPDATE MATERIAL_HISTORY_D SET
+		    MAT_HIS_D_VOL = (V_MAT_ORD_VOL + MAT_HIS_D_VOL)
+		    WHERE MAT_ORD_NUM = V_MAT_ORD_NUM;
+		END; -->
 	</update>
-	<!-- END 자재 입고 관리 grid 행 update -->
 	
 	<!-- 자재 출고 관리 grid 행 update -->
 	<update id="updateMatOutMngD">
@@ -399,17 +414,9 @@ SELECT * FROM (
 	
 	<!-- 자재 입고 관리 마스터번호 구하기 -->
 	<select id="getMatInMngCount" resultType="int">
-		select nvl(to_number(max(substr(mat_com_num,11))),0) + 1
+		select nvl(to_number(max(substr(mat_his_num,11))),0) + 1
 		from material_history
 		where to_char(mat_his_date,'yyyy-MM-dd') = #{matHisDate}
 	</select>
 	<!-- END 자재 입고 관리 마스터번호 구하기 -->
-	
-	<!-- 자재 출고 관리 마스터번호 구하기 -->
-	<select id="getMatOutMngCount" resultType="int">
-		select nvl(to_number(max(substr(mat_com_num,11))),0) + 1
-		from material_history
-		where to_char(mat_his_date,'yyyy-MM-dd') = #{matHisDate}
-	</select>
-	<!-- END 자재 출고 관리 마스터번호 구하기 -->
 </mapper>
