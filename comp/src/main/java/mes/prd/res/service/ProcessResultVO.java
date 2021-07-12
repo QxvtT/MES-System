@@ -80,12 +80,17 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     
     /** 설비코드*/
     private java.lang.String macCode;
+    /** 설비코드*/
+    private java.lang.String macName;
     
     /** 작업번호*/
     private java.lang.String prcWorkNum;
     
     /** 작업자 */
     private java.lang.String empId;
+    
+    /** 작업자 */
+    private java.lang.String empName;
     
     /** 작업량*/
     private java.math.BigDecimal prcResVol;
