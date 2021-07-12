@@ -45,8 +45,7 @@ let aDate = null;
 let bDate = null;
 let test = null;
 let ordDNum = null;
-
-let str = '';
+let itmHisNum = null;
 
 let data;
 
@@ -54,7 +53,6 @@ let oldVal;
 let newVal;
 
 let key =0;
-let sibal = 0;
 let itmCode1 = null;
 let ordNum1 =null;
 let ordNum =null;
@@ -100,7 +98,7 @@ $(function(){
   				 itmHisDNum : itmHisDNum
   				,itmHisRdy : itmHisRdy
   				,operCode : operCode
-  				,str : str
+  				,itmHisNum : itmHisNum
   				,ordNum : ordNum
 				},
 			dataType: "json",
@@ -128,18 +126,17 @@ $(function(){
 		itmHisDNum = null;
 		test = null;
 		ordNum = $( 'input#ordNum' ).val();
-		
 		grid.resetData(getList());
 		grid2.resetData(getItemHisNumList());
 		
 		
 
-	}
+	} 
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
 	   });
 	
-// 	모달
+// 	주문번호 검색 모달
 	const grid2 = new tui.Grid({
 		
 		el: document.getElementById('grid2'),
@@ -153,8 +150,7 @@ $(function(){
 			,{ header: '전표번호', name:'itmHisNum'}
 			,{ header: '업체명', name:'operName'}
 			,{ header: '비고', name:'itmNote' }
-			
-			
+	
 	    ]
 	});
 	function getItemHisNumList() {
@@ -203,26 +199,16 @@ $(function(){
 		bDate = $(".modal-body").find('input[name="bDate"]').val();
 		grid2.resetData(getItemHisNumList());
 	}
-	modalY.onclick=function() {
+	hisNumY.onclick=function() {
 		itmHisDNum = null;
+		itmHisNum = grid2.getCheckedRows()[0]['itmHisNum'];
 		test = null;
-		str = '';
-		for(let i =0; i<grid2.getCheckedRows().length; i++) {
-			if(i == grid2.getCheckedRows().length-1){
-				str = str + grid2.getCheckedRows()[i]['itmHisNum'];
-			}
-			else{
-				str = str + grid2.getCheckedRows()[i]['itmHisNum']+"' , '";
-			}
-		}
-		
 		grid.resetData(getList());
+		
 		// 주문일련이나 계획일련이 있는 row 구하기
 		rows = grid.findRows((row) => {
 		    return (row.ordNum != null);
 		});
-		console.log("row값");
-		console.log(rows);
 	}
 	
 	insert.onclick = function() {
@@ -397,8 +383,11 @@ $(function(){
 				$('input#ordNum' ).val(grid5.getCheckedRows()[0]['ordNum']);
 				$('input#operCode' ).val(grid5.getCheckedRows()[0]['operCode']);
 				$('input#operName' ).val(grid5.getCheckedRows()[0]['operName']);
-				itmHisDNum = null;
 				ordNum = grid5.getCheckedRows()[0]['ordNum'];
+				$( 'input#itmHisNum' ).val(' ');
+				$( 'input#itmNote').val(' ');
+				itmHisDNum = null;
+				itmHisNum = null;
 				grid.resetData(getList());
 				itmHisDNum = null;
 			}
@@ -592,7 +581,7 @@ $(function(){
 		</div>
 
 
-	<!-- 주문코드 검색 모달 -->
+	<!-- 출고번호 검색 모달 -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -616,7 +605,7 @@ $(function(){
 					<div id="grid2"></div>
 				</div>
 				<div class="modal-footer">
-					<a class="btn" id="modalY" data-dismiss="modal">예</a>
+					<a class="btn" id="hisNumY" data-dismiss="modal">예</a>
 					<button class="btn" type="button" data-dismiss="modal">아니요</button>
 				</div>
 			</div>
@@ -713,6 +702,3 @@ $(function(){
 
 </body>
 </html>
-
-
-

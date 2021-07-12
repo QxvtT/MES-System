@@ -239,13 +239,13 @@
 							, (  select sum(id.itm_vol) 
 							     from item_history_d id, item_history i
 								 where id.itm_his_num = i.itm_his_num
-								 and id.itm_his_num=#{itmHisNum}
+								 and id.itm_his_num =  #{itmHisNum}
 							     group by i.ord_num) as ord_out_vol
 							, id.itm_vol
 							, (od.ord_vol-(select sum(id.itm_vol) 
 											from item_history_d id,item_history i
 											where id.itm_his_num = i.itm_his_num
-											 and id.itm_his_num=#{itmHisNum}
+											 and id.itm_his_num = #{itmHisNum}
 											group by i.ord_num)-id.itm_vol) as itm_nout_vol
 							, its.itm_vol as itm_stock
 							, id.lot_num
@@ -253,13 +253,20 @@
 							, (id.itm_vol*id.itm_price) total_price
 							, id.itm_note_d
 							, id.itm_his_d_num
-				from item_history i, item_history_d id, order_m o, order_d od, item,
-				item_stock its
+				from item_history i, 
+				      item_history_d id, 
+				      order_m o, 
+				      order_d od, 
+				      item,
+					  item_stock its
 				where i.itm_his_num = id.itm_his_num and
 				i.ord_num = o.ord_num and
 				i.ord_num = od.ord_num and
 				item.itm_code = its.itm_code and
 				item.itm_code = od.itm_code
+				<if test="ordNum !=null and ordNum !=''">and
+				and o.ord_num = #{ordNum}
+				</if>
 				<if test="itmHisDNum != null">
 								<![CDATA[	
 									and id.ITM_HIS_D_NUM < #{itmHisDNum}
@@ -273,12 +280,11 @@
 				<if test="operCode !=null and operCode !=''">and
 					od.oper_code = #{operCode}
 				</if>
-				<if test="str !=null and str !=''"> and
-					id.itm_his_num IN ('${str}')
+				<if test="itmHisNum !=null and itmHisNum !=''"> and
+					id.itm_his_num = #{itmHisNum}
 				</if>
-				<if test="ordNum !=null and ordNum !=''"> and
-					o.ord_num = #{ordNum}
-				</if>
+				
+				
 				ORDER BY
 				id.itm_his_d_num desc
 		<![CDATA[					
@@ -293,17 +299,16 @@
 		SELECT * FROM (
 			SELECT A.*, ROWNUM RNUM FROM (
 				select 
-					to_char(i.itm_his_rdy+1,'yyyy-MM-dd') as itm_his_rdy
+					to_char(i.itm_his_rdy,'yyyy-MM-dd') as itm_his_rdy
 					,i.itm_his_num
 					,o.oper_name
 					,i.itm_note
-					,rownum as ITM_HIS_D_NUM
 				from item_history i, order_m o
 				where
 						i.ord_num = o.ord_num 
 			<if test="itmHisDNum != null">
 				<![CDATA[	
-					and rownum < #{itmHisDNum}
+					and i.itm_his_d_num < #{itmHisDNum}
 				]]>
 			</if>
 		<if

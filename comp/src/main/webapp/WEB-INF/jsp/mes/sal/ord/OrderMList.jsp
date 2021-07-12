@@ -154,7 +154,7 @@ $(function(){
 		업체이름<input type ="text" id="operName" name = "operName" readonly="readonly"/><br/>
 		제품코드<input type ="text" id="itmCode" name = "itmCode" ></input>
 		<%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %><br/>
-		제품명<input type ="text" id="itmCode" name = "itmCode" ></input><br/>
+		제품명<input type ="text" id="itmName" name = "itmName" ></input><br/>
 		<br/>
 		<button type="button" id ="button" name="button">조회</button>
 	<button type="reset" >리셋</button>
