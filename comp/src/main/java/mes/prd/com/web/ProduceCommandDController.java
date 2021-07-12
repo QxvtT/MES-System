@@ -1,5 +1,7 @@
 package mes.prd.com.web;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -23,6 +25,7 @@ import mes.prd.com.service.GridDataVO;
 import mes.prd.com.service.ProduceCommandDDefaultVO;
 import mes.prd.com.service.ProduceCommandDService;
 import mes.prd.com.service.ProduceCommandDVO;
+import mes.prd.pln.service.ProducePlanDVO;
 
 /**
  * @Class Name : ProduceCommandDController.java
@@ -165,13 +168,46 @@ public class ProduceCommandDController {
         return "prd/com/ProduceCommandDList.page";
     }*/
     
-    @RequestMapping("/prd/com/addProduceCommandDView.do")
+    @RequestMapping("/prd/com/ProduceCommandDView.do")
     public String addProduceCommandDView(
-            @ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, Model model)
+            @ModelAttribute("searchVO") ProduceCommandDVO searchVO, Model model)
             throws Exception {
-        model.addAttribute("produceCommandDVO", new ProduceCommandDVO());
         return "prd/com/ProduceCommandDRegister.page";
     }
+    
+ // 생산계획조회  리스트 ajax 처리
+ 	@RequestMapping(value = "/ProduceCommandList", method = RequestMethod.GET)
+ 	@ResponseBody
+ 	public List<?> ajaxComList(@ModelAttribute("searchVO") ProduceCommandDVO searchVO) throws Exception {
+ 		System.out.println(searchVO);
+ 		// 업체 코드 다중 선택 처리
+     	if(searchVO.getOperCodes() != null && searchVO.getOperCodes() != "") {
+     		String[] operList = searchVO.getOperCodes().split(",");
+     		for(int i = 0; i<operList.length; i++) {
+     			operList[i] = operList[i].trim();
+     		}
+     		List<String> ol = new ArrayList<String>();
+     		ol = Arrays.asList(operList);
+     		searchVO.setOperCodeList(ol);
+     		
+     		System.out.println(searchVO.getOperCodeList());
+     	}
+     	
+     	// 제품 코드 다중 선택 처리
+     	if(searchVO.getItemCodes() != null && searchVO.getItemCodes() != "") {
+     		String[] itemList = searchVO.getItemCodes().split(",");
+     		for(int i = 0; i<itemList.length; i++) {
+     			itemList[i] = itemList[i].trim();
+     		}
+     		List<String> ol = new ArrayList<String>();
+     		ol = Arrays.asList(itemList);
+     		searchVO.setItemCodeList(ol);
+     		
+     		System.out.println(searchVO.getItemCodeList());
+     	}
+ 		List<?> list = produceCommandDService.produceCommandList(searchVO);
+ 		return list;
+ 	}
     
     @RequestMapping("/prd/com/addProduceCommandD.do")
     public String addProduceCommandD(

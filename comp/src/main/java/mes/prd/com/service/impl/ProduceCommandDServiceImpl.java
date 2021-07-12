@@ -269,4 +269,9 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
 		return produceCommandDDAO.selectProduceCommandDListTotCnt(searchVO);
 	}
     
+    // 생산지시조회
+	public List<?> produceCommandList(ProduceCommandDVO searchVO) throws Exception {
+		return produceCommandDDAO.selectProduceCommandDList(searchVO);
+	}
+    
 }

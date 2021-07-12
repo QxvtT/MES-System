@@ -84,5 +84,8 @@ public interface ProduceCommandDService {
 	 * @exception
 	 */
     int selectProduceCommandDListTotCnt(ProduceCommandDDefaultVO searchVO);
+
+    /** 생산지시조회*/
+	List<?> produceCommandList(ProduceCommandDVO searchVO) throws Exception;
     
 }

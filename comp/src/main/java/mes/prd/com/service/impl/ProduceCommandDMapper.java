@@ -105,5 +105,8 @@ public interface ProduceCommandDMapper {
 	 * @exception
 	 */
     public int selectProduceCommandDListTotCnt(ProduceCommandDDefaultVO searchVO);
+    
+    /** 생산지시조회 count */
+	public List<?> produceCommandList(ProduceCommandDVO searchVO);
 
 }

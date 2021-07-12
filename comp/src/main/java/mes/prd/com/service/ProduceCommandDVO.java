@@ -1,5 +1,7 @@
 package mes.prd.com.service;
 
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -144,6 +146,15 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     
     /** 공정흐름D 일련번호 */
     private java.math.BigDecimal prc_res_d_num;
+    
+    // 생산지시조회
+    /** 업체코드 검색 **/
+    private java.lang.String operCodes;
+    private List<String> operCodeList;
+    
+    /** 제품코드 검색 **/
+    private java.lang.String itemCodes;
+    private List<String> itemCodeList;
     
 
     

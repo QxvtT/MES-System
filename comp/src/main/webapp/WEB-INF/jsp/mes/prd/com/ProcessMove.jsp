@@ -219,6 +219,11 @@ $(function(){
 })
 
 </script>
+<style>
+	.form-control {
+		width: 1px;
+	}
+</style>
 </head>
 <body>
 
