@@ -34,6 +34,7 @@ let prdNote = null;
 let itmCode = null;
 let autoItemInfo = null;
 let rowKey = null;
+let unpStartDate = null;
 $(function(){
 	
 	// 생산계획 디테일 그리드
@@ -92,8 +93,7 @@ $(function(){
 	    		header: '작업량', 
 	    		name:'prdWorkVol',
 	    	    onAfterChange(e) {
-	    	    	let a = e.value / grid.getValue(e.rowKey, 'itmDayOutput');
-	    	    	grid.setValue(e.rowKey, 'prdPerDay', a);
+	    	    	grid.setValue(e.rowKey, 'prdPerDay', e.value / grid.getValue(e.rowKey, 'itmDayOutput'));
 	    	    },	    	      
 	    		align: 'center',
 	    		editor: 'text',
@@ -116,10 +116,12 @@ $(function(){
 	    		name:'prdPlanDate',
 	    		align: 'center',
 	    		editor: {
-	    			type: 'datePicker',
-	    			format: 'yyyy/MM/dd',
-	    			language: 'ko'
-	    		}
+		            type: 'datePicker',
+		            options: {
+		              format: 'yyyy-MM-dd',
+		              language: 'ko'
+		            }
+      			}
 	    	},
 			{ 
 	    		header: '작업순서', 
@@ -165,7 +167,7 @@ $(function(){
 		    	},
 			{ 
 	    		header: '비고', 
-	    		name:'prdDNote',
+	    		name:'prdNote',
 	    		align: 'center'
 	    		}
 	    ]
@@ -246,7 +248,7 @@ $(function(){
 	
 	// 조회에서 선택한 생산계획 디테일 테이블 Select 데이터
 	function getList() {
-		let data;
+		let data = null;
 		$.ajax({
 			async: false,
 			url : "ProducePlanDList",
@@ -259,8 +261,6 @@ $(function(){
 				if(result.length > 0) {
 					prdPlanDNum = result[result.length -1].prdPlanDNum;
 				}
-				console.log(result);
-				prdNum = null;
 				data = result;
 			} // end success
 		}); // end ajax 
@@ -305,7 +305,7 @@ $(function(){
 			success : function(result){
 				grid.setValue(rowKey, 'itmCode', result.itmCode);
 				grid.setValue(rowKey, 'itmName', result.itmName);
-				grid.setValue(rowKey, 'matCode', result.matCode);
+				grid.setValue(rowKey, 'itmSize', result.matCode);
 				grid.setValue(rowKey, 'itmDayOutput', result.itmDayOutput);
 				data = result;
 			} // end success
@@ -392,14 +392,25 @@ $(function(){
 	}
 	
 	// 조회된 리스트에서 특정 생산계획의 계획번호를 더블클릭 시 cell의 계획번호 값을 가져와서 디테일테이블 select 후 생산계획 디테일 그리드에 적용
-	grid2.on('dblclick', () => { 
+	grid2.on('dblclick', (e) => { 
 		var selectPrd = grid2.getFocusedCell();
+		var selectRow = null;
 		if(getKeyByValue(selectPrd, "prdNum") != null){
-			prdNum = Object.values(selectPrd)[2];
 			$('#searchModal').modal("hide");
-			$('#prdName').val(prdName);
-			$('#prdNote').val(prdNote);
+			prdNum = Object.values(selectPrd)[2];
+			selectRow = grid2.getRow(e.rowKey);
+			console.log(e.rowKey)
+			console.log(selectRow)
+			$('#prdDate').val(selectRow.prdDate);
+			$('#prdName').val(selectRow.prdName);
+			$('#prdNote').val(selectRow.prdNote);
 			grid.resetData(getList());
+			console.log(grid.getRowCount());
+			console.log(grid.getRow(0));
+			for(let i = 0; i < grid.getRowCount(); i++){
+				console.log(getRow(i));
+				grid.setValue(grid.getRow(i), 'prdPerDay', i.prdWordVol / grid.getValue(grid.getRow(i), 'itmDayOutput'));
+			}
 		}
 	});
 	
@@ -529,6 +540,7 @@ $(function(){
 		}
 		
 		let gridData = grid.getModifiedRows()
+		console.log(gridData);
 		gridData['producePlanDVO'] = {
 			prdDate : $('#prdDate').val(),
 			prdName : $('#prdName').val(),
@@ -538,15 +550,17 @@ $(function(){
 		}
 		$.ajax({
 			async: false,
-			cache: false,
 			url : "ProducePlanUpdate",
 			type : "post",
 			data : JSON.stringify(gridData),
 			dataType: "json",
 			contentType:"application/json",
-			success: console.log(JSON.stringify(gridData))
-			
+			success: function(result){
+				prdNum = result;
+				console.log(JSON.stringify(gridData))
+				}
 		});
+		grid.resetData(getList());
 	})// end of saveBtn
 	
 	

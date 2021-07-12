@@ -126,9 +126,18 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	// cud 통합
-	public void producePlanUpdate(GridData gridData) throws Exception {
-		
-		if(gridData.getUpdatedRows() != null && gridData.getUpdatedRows().size() != 0  || gridData.getProducePlanDVO() != null) {
+	public String producePlanUpdate(GridData gridData) throws Exception {
+		System.out.println(gridData);
+		String newPrdNum = null;
+		if(gridData.getProducePlanDVO().getPrdNum() != null && gridData.getProducePlanDVO().getPrdNum() != "") {
+			producePlanDDAO.updateProducePlanD(gridData.getProducePlanDVO());
+		} else {
+			ProducePlanDVO vo = gridData.getProducePlanDVO();
+			producePlanDDAO.insertProducePlanD(vo);
+			newPrdNum = vo.getPrdNum();
+		}
+		System.out.println(newPrdNum);
+		if(gridData.getUpdatedRows() != null && gridData.getUpdatedRows().size() != 0) {
         	ProducePlanDVO vo = new ProducePlanDVO();
         	vo.setPrdNum(gridData.getProducePlanDVO().getPrdNum());
         	vo.setPrdDate(gridData.getProducePlanDVO().getPrdDate());
@@ -156,15 +165,6 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
         	// 이미 있는 생산계획에 계획을 추가할 경우 prdNum을 뽑아냄
         	String prdNum = gridData.getProducePlanDVO().getPrdNum();
         	System.out.println(prdNum);
-			if (prdNum == null) { // 생산계획이 없는 경우 마스터 insert 생산계획 생성됌
-				ProducePlanDVO vo = new ProducePlanDVO();
-				vo.setPrdDate(gridData.getProducePlanDVO().getPrdDate());
-				vo.setPrdName(gridData.getProducePlanDVO().getPrdName());
-				vo.setPrdNote(gridData.getProducePlanDVO().getPrdNote());
-				producePlanDDAO.insertProducePlanD(vo);
-				prdNum = vo.getPrdNum();
-				
-        	}
 			for (int i = 0; i < gridData.getCreatedRows().size(); i++) {
         		ProducePlanDVO vo = gridData.getCreatedRows().get(i);
         		System.out.println(vo);
@@ -178,6 +178,7 @@ public class ProducePlanDServiceImpl extends EgovAbstractServiceImpl implements
         		producePlanDDAO.deleteProducePlanD(gridData.getDeletedRows().get(i));
         	}
         }
+		return newPrdNum;
     }
 	
 	//master삭제 detail도 함께 삭제

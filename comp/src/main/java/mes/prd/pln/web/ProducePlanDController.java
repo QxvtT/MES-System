@@ -50,9 +50,9 @@ public class ProducePlanDController {
 
 	//CRUD
 	@RequestMapping(value="/prd/pln/ProducePlanUpdate")
-	public void producePlanUpdate(@RequestBody GridData gridData) throws Exception {
-		System.out.println(gridData);
-		producePlanDService.producePlanUpdate(gridData);
+	@ResponseBody
+	public String producePlanUpdate(@RequestBody GridData gridData) throws Exception {
+		return producePlanDService.producePlanUpdate(gridData);
 	}
 	
 	//master삭제 detail도 함께 삭제됌

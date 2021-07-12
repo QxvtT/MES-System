@@ -2,6 +2,8 @@ package mes.prd.pln.service;
 
 import java.util.List;
 
+import mes.prd.com.service.ProduceCommandDVO;
+
 /**
  * @Class Name : ProducePlanDService.java
  * @Description : ProducePlanD Business class
@@ -69,7 +71,7 @@ public interface ProducePlanDService {
 
 	ProducePlanDVO selectItem(ProducePlanDVO itmVO) throws Exception;
 
-	void producePlanUpdate(GridData gridData) throws Exception;
+	String producePlanUpdate(GridData gridData) throws Exception;
 
 	void producePlanDelete(ProducePlanDVO prdVO) throws Exception;
 
