@@ -104,10 +104,13 @@ $(function(){
 				empId2 = empId2 + employees.getCheckedRows()[i]['empId']+" , ";
 				empName = empName + employees.getCheckedRows()[i]['empName']+" , ";
 			}	
+			
 		}
 		
 		$('input[id="empId"]').val(empId2);
 		$('input[id="empName"]').val(empName);
+		
+		$("#employeesModal").modal("toggle");
 	});
 	
 	employees.on('check', (e) => {
@@ -121,6 +124,10 @@ $(function(){
 		}
 	})
 	
+	$('#btnE').click(function(){
+		
+		$("#employeesModal").modal("toggle");
+	})
 	
 })
 
@@ -150,9 +157,8 @@ $(function(){
 				<div class="form-group row"></div>
 				<div id="employees"></div>
 				<div class="modal-footer">
-					<button class="btn" id="choiceE" name="choiceE" type="button"
-						data-dismiss="modal">선택</button>
-					<button class="btn" type="reset" data-dismiss="modal">취소</button>
+					<button class="btn" id="choiceE" name="choiceE" type="button">선택</button>
+					<button class="btn" id="btnE" type="reset">취소</button>
 				</div>
 			</div>
 		</div>
