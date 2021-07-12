@@ -136,8 +136,8 @@ $(function(){
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>업체명</h4>
 					<input type="text" id="operNameM" name="operNameM"></input><br><br>
-							<button type="button" id="buttonO" name="buttonO">조회</button> &nbsp;
-							<button type="reset">리셋</button>
+							<button type="button" id="buttonO" name="buttonO" class="btn">조회</button> &nbsp;
+							<button type="reset" class="btn">리셋</button>
 				</div>
 
 				<div class="form-group row"></div>

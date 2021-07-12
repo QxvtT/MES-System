@@ -138,9 +138,9 @@ $(function(){
 					<h4>공정코드</h4>
 					<input type="text" id="prcCodeM" name="prcCode"></input><br>
 					<br>
-					<button type="button" id="buttonP" name="button">조회</button>
+					<button type="button" id="buttonP" name="button" class="btn">조회</button>
 					&nbsp;
-					<button type="reset">리셋</button>
+					<button type="reset" class="btn">리셋</button>
 				</div>
 
 				<div class="form-group row"></div>

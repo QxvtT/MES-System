@@ -135,9 +135,9 @@ $(function(){
 					<h4>설비</h4>
 					<input type="text" id="macCodeM" name="macCode"></input><br> <br>
 					
-					<button type="button" id="buttonM" name="button">조회</button>
+					<button type="button" id="buttonM" class="btn" name="button">조회</button>
 					&nbsp;
-					<button type="reset">리셋</button>
+					<button class="btn" type="reset">리셋</button>
 				</div>
 				<div class="form-group row"></div>
 				<div id="machine"></div>

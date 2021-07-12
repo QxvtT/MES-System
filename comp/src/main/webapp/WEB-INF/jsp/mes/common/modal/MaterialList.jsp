@@ -133,8 +133,8 @@ $(function(){
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>자재코드</h4>
 					<input type="text" id="matCodeM" name="matCode"></input><br><br>
-					<button type="button" id="buttonMat" name="button">조회</button> &nbsp;
-						<button type="reset">리셋</button>
+					<button type="button" id="buttonMat" class="btn" name="button">조회</button> &nbsp;
+						<button type="reset" class="btn">리셋</button>
 				</div>
 				<div class="form-group row"></div>
 				<div id="material">

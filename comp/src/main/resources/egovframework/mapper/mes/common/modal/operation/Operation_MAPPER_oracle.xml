@@ -173,7 +173,7 @@
 								and mac_code = #{macCode}
 							]]>
 			</if>
-			
+
 
 		</where>
 		order by mac_code
@@ -181,8 +181,40 @@
 		) A WHERE ROWNUM <= 10 )
 	]]>
 	</select>
-	
-	
-	
+
+	<select id="selectEmployeesList"
+		parameterType="mes.common.modal.service.EmployeesVO"
+		resultType="mes.common.modal.service.EmployeesVO">
+		
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+		
+
+		select emp_id, emp_name, department, position
+		from employees
+
+		<where>
+
+			<if test="empId1 != null and empId1 != ''">
+							<![CDATA[	
+								emp_id >  #{empId1}
+							]]>
+			</if>
+			<if test="empName != null and empName != ''">
+							<![CDATA[	
+								and emp_name = #{empName}
+							]]>
+			</if>
+
+
+		</where>
+		order by emp_id
+			<![CDATA[					
+		) A WHERE ROWNUM <= 10 )
+	]]>
+	</select>
+
+
+
 	<!-- -->
 </mapper>
