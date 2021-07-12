@@ -240,11 +240,11 @@ $(function(){
 			},
 			dataType: 'json',
 			success : function(result) {
-				autoItemInfo = result;
-				data = result;
+				for(i in result){
+					grid.appendRow(result[i]);
+				}
 			}
 		});
-		return data;
 	}
 	
 	// 조회에서 선택한 생산계획 디테일 테이블 Select 데이터
@@ -440,11 +440,7 @@ $(function(){
 	$('#unPrdSearchBtn').click(function() {
 		unpStartDate = $('#unpStartDate').val();
 		unpEndDate = $('#unpEndDate').val();
-		grid.resetData(getUnPrdList());
-		for(var i in autoItemInfo){
-			rowKey = autoItemInfo[i]['rowKey']
-			selectItem(autoItemInfo[i].itmCode);
-		}
+		getUnPrdList();
 	})
 	
 	// 추가 버튼 클릭 이벤트, 그리드 row 생성 미완성
@@ -513,6 +509,44 @@ $(function(){
 				  position : 'top-center'       // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
 				});
 			return false;
+		}
+		
+		for(let i = 0; i < grid.getRowCount(); i++){
+			if(grid.getValue(i, 'itmName') == null || grid.getValue(i, 'itmName') == ""){
+				let myToast = null;
+				//토스트메시지 테스트
+				myToast = $.toast({ 
+					  text : "제품코드가 비어있습니다.", 
+					  showHideTransition : 'slide',  // It can be plain, fade or slide
+					  bgColor : 'tomato',              // Background color for toast
+					  textColor : 'white',            // text color
+					  allowToastClose : false,       // Show the close button or not
+					  hideAfter : 2000,              // `false` to make it sticky or time in miliseconds to hide after
+					  stack : 5,                     // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
+					  textAlign : 'center',            // Alignment of text i.e. left, right, center
+					  position : 'top-center'       // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
+					});
+				return false;
+			}
+		}
+		
+		for(let i = 0; i < grid.getRowCount(); i++){
+			if(grid.getValue(i, 'prdWorkVol') == null || grid.getValue(i, 'prdWorkVol') == ""){
+				let myToast = null;
+				//토스트메시지 테스트
+				myToast = $.toast({ 
+					  text : "작업량이 비어있습니다.", 
+					  showHideTransition : 'slide',  // It can be plain, fade or slide
+					  bgColor : 'tomato',              // Background color for toast
+					  textColor : 'white',            // text color
+					  allowToastClose : false,       // Show the close button or not
+					  hideAfter : 2000,              // `false` to make it sticky or time in miliseconds to hide after
+					  stack : 5,                     // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
+					  textAlign : 'center',            // Alignment of text i.e. left, right, center
+					  position : 'top-center'       // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
+					});
+				return false;
+			}
 		}
 		
 		for(let i = 0; i < grid.getRowCount(); i++){
