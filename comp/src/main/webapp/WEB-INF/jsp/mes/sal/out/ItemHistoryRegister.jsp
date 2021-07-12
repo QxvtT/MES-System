@@ -59,6 +59,9 @@ let itmCode1 = null;
 let ordNum1 =null;
 let ordNum =null;
 
+//주문일련 계획일련 있는 row들 담을 변수
+let rows = null;
+
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -213,7 +216,13 @@ $(function(){
 			}
 		}
 		
-	grid.resetData(getList());
+		grid.resetData(getList());
+		// 주문일련이나 계획일련이 있는 row 구하기
+		rows = grid.findRows((row) => {
+		    return (row.ordNum != null);
+		});
+		console.log("row값");
+		console.log(rows);
 	}
 	
 	insert.onclick = function() {
@@ -256,40 +265,53 @@ $(function(){
 		
 	}
 	
-	grid.on('dblclick', () => { 
-		key = grid.getFocusedCell()['rowKey'];
-		if(grid.getFocusedCell()['columnName'] == "itmCode"){
-			grid3.resetData(setItemCode());
-			$('#selectItemCode').modal('toggle');
-			$('#selectItemCode').on('shown.bs.modal', function(){
-				 grid3.refreshLayout();
-					itmCodeY.onclick=function() {
-						grid.focusAt(0,1,false);
-						grid.setValue(key,'itmCode',grid3.getCheckedRows()[0]['itmCode']);
-						grid.setValue(key,'itmName',grid3.getCheckedRows()[0]['itmName']);
-						grid.setValue(key,'itmSize',grid3.getCheckedRows()[0]['itmSize']);
-						grid.setValue(key,'itmUnit',grid3.getCheckedRows()[0]['itmUnit']);
-						grid.setValue(key,'ordVol',grid3.getCheckedRows()[0]['ordVol']);
-						grid.setValue(key,'ordOutVol',grid3.getCheckedRows()[0]['ordOutVol']);
-						grid.setValue(key,'itmNoutVol',grid3.getCheckedRows()[0]['itmNoutVol']);
-						grid.focusAt(key,7,false);
-					}
-			});
+	// 주문일련이나 계획일련이 있으면 제품번호 수정 못하게 막는 function
+	grid.on('dblclick', (e) => { 
+		let check = false;
+		if(e.columnName == "itmCode") {
+			
+			for(let i=0; i<rows.length; i++) {
+				if(e.rowKey == rows[i].rowKey) {
+					check = true;
+					e.stop();
+				}
+			}
 		}
-		if(grid.getFocusedCell()['columnName'] == "lotNum" && grid.getData()[key]['itmCode'] != null && grid.getData()[key]['itmCode'] != "" && grid.getData()[key]['ordNum'] == null){
-		grid4.resetData(setLotNum(grid.getData()[key]['itmCode']));
-			$('#selectLotNum').modal('toggle');
-			$('#selectLotNum').on('shown.bs.modal', function(){
-				 grid4.refreshLayout();
-				 lotNoY.onclick=function() {
-						grid.focusAt(0,0,false);
-						grid.setValue(key,'lotNum',grid4.getCheckedRows()[0]['lotNum']);
-						grid.setValue(key,'itmStock',grid4.getCheckedRows()[0]['itmVol']);
-						grid.focusAt(key,7,false);
-					}
-				 
-				 
-			});
+		if(!check) {
+			key = grid.getFocusedCell()['rowKey'];
+			if(grid.getFocusedCell()['columnName'] == "itmCode"){
+				grid3.resetData(setItemCode());
+				$('#selectItemCode').modal('toggle');
+				$('#selectItemCode').on('shown.bs.modal', function(){
+					 grid3.refreshLayout();
+						itmCodeY.onclick=function() {
+							grid.focusAt(0,1,false);
+							grid.setValue(key,'itmCode',grid3.getCheckedRows()[0]['itmCode']);
+							grid.setValue(key,'itmName',grid3.getCheckedRows()[0]['itmName']);
+							grid.setValue(key,'itmSize',grid3.getCheckedRows()[0]['itmSize']);
+							grid.setValue(key,'itmUnit',grid3.getCheckedRows()[0]['itmUnit']);
+							grid.setValue(key,'ordVol',grid3.getCheckedRows()[0]['ordVol']);
+							grid.setValue(key,'ordOutVol',grid3.getCheckedRows()[0]['ordOutVol']);
+							grid.setValue(key,'itmNoutVol',grid3.getCheckedRows()[0]['itmNoutVol']);
+							grid.focusAt(key,7,false);
+						}
+				});
+			}
+			if(grid.getFocusedCell()['columnName'] == "lotNum" && grid.getData()[key]['itmCode'] != null && grid.getData()[key]['itmCode'] != "" && grid.getData()[key]['ordNum'] == null){
+			grid4.resetData(setLotNum(grid.getData()[key]['itmCode']));
+				$('#selectLotNum').modal('toggle');
+				$('#selectLotNum').on('shown.bs.modal', function(){
+					 grid4.refreshLayout();
+					 lotNoY.onclick=function() {
+							grid.focusAt(0,0,false);
+							grid.setValue(key,'lotNum',grid4.getCheckedRows()[0]['lotNum']);
+							grid.setValue(key,'itmStock',grid4.getCheckedRows()[0]['itmVol']);
+							grid.focusAt(key,7,false);
+						}
+					 
+					 
+				});
+			}
 		}
 		
 	});
@@ -463,7 +485,7 @@ $(function(){
 	grid5.on('scrollEnd', () => {
 	    grid5.appendRows(getList());
 	  })
-		
+	 
 })
 
 
