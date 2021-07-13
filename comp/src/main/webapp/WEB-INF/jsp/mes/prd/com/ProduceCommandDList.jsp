@@ -35,18 +35,39 @@ let prcFNo = null;
 let lotNum = null;
 let lotNum1 = null;
 let matCode = null;
+//생산계획일 범위 변수
+let prdDateS = null;
+let prdDateE = null;
 
 //주문일련 계획일련 있는 row들 담을 변수
 let rows = null;
 
 $(function(){
+	let today = new Date();
 	var datepicker = new tui.DatePicker('#date', {
-        date: new Date(),
+        date: today,
         language: 'ko',
         input: {
             element: '#prdComDate',
             format: 'yyyy-MM-dd'
         }
+    });
+	
+    let picker = tui.DatePicker.createRangePicker({
+        startpicker: {
+            date: today,
+            input: '#startpicker-input',
+            container: '#startpicker-container'
+        },
+        endpicker: {
+            date: today,
+            input: '#endpicker-input',
+            container: '#endpicker-container'
+        },
+        language: 'ko',
+        type: 'date',
+        format: 'yyyy-MM-dd'
+  
     });
 	
 	const grid = new tui.Grid({
@@ -131,17 +152,16 @@ $(function(){
 	
 	
 	//작업지시 조회용 모달
-	let today = new Date();
-    let picker = tui.DatePicker.createRangePicker({
+    let pickerModal = tui.DatePicker.createRangePicker({
         startpicker: {
             date: today,
-            input: '#startDate',
-            container: '#startpicker-container'
+            input: '#startD',
+            container: '#start-container'
         },
         endpicker: {
             date: today,
-            input: '#endDate',
-            container: '#endpicker-container'
+            input: '#endD',
+            container: '#end-container'
         },
         language: 'ko'
     });
@@ -391,6 +411,39 @@ $(function(){
 	}
 	//행에서 쓸 자재로트//
 	
+	//미지시 생산계획 불러오기
+	function getPlnList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "PrdPlnDList",
+			type : "get",
+			data : {prdComDNum1: prdComDNum1,
+					prdComNum: prdComNum
+					},
+			dataType: "json",
+			success : function(result){
+				console.log(prdComNum1);
+				if(result.length > 0) {
+					prdComDNum1 = result[result.length -1].prdComDNum;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	
+	
+	searchPlnBtn.onclick = function() {
+		prdDateS = $('#startpicker-input').val();
+		prdDateE = $('#endpicker-input').val();
+		console.log("일자");
+		console.log(prdDateS);
+		console.log(prdDateE);
+	}
+	
+	
 	//grid 행 더블클릭시 자재조회 및 공정흐름조회
 	grid.on('dblclick', (e) => {
 		if(grid.getValue(e.rowKey,'mat_out_chk') != 'Y') {
@@ -569,8 +622,8 @@ $(function(){
 	
 	// 작업지시 조회 모달 검색 버튼
 	$('#searchComBtn').click(function() {
-		startDate = $('#startDate').val();
-		endDate = $('#endDate').val();
+		startDate = $('#startD').val();
+		endDate = $('#endD').val();
 		console.log(startDate);
 		console.log(endDate);
 		grid2.resetData(getPrdComList());
@@ -661,12 +714,30 @@ $(function(){
 									</table>
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-6" style="z-index: 150">
 								<div class="card">
 									<div class="card-body">
-										<h5 class="d-inline">생산계획 조회</h5>
-										<button type="button" id="searchPlnBtn"
-											class="btn btn-sm btn-primary waves-effect waves-light ml-3">검색</button>
+										<div class="col-md-12 pl-3 mb-3 pb-3">
+											<h5 class="d-inline">생산계획 조회</h5>
+										</div>
+										<div class="col-md-12 align-items-center text-center mb-3 pb-3">
+										    <div class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3 d-inline-block">
+										        <input type="text" id="startpicker-input" class=" form-control w-25" aria-label="Date-Time" name="prdDate"/>
+										        <span class="tui-ico-date"></span>
+										        <div id="startpicker-container" style="margin-left: -1px;"></div>
+										    </div>
+										    <div id="date1" class="d-inline-block" style="margin-top: -1px;"></div>
+					
+											<label class="col-form-label text-center d-inline-block"> ~ </label>
+											<div class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3 d-inline-block">
+										        <input type="text" id="endpicker-input" class=" form-control w-25" aria-label="Date-Time" name="prdDate"/>
+										        <span class="tui-ico-date"></span>
+										        <div id="endpicker-container" style="margin-left: -1px;"></div>
+										    </div>
+										    <div id="date2" class="d-inline-block" style="margin-top: -1px;"></div>
+											<button type="button" id="searchPlnBtn"
+												class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -760,17 +831,17 @@ $(function(){
 					<div class="">
 						<div
 							class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3 d-inline-block">
-							<input type="text" id="startDate" class=" form-control w-25"
+							<input type="text" id="startD" class=" form-control w-25"
 								aria-label="Date-Time" /> <span class="tui-ico-date"></span>
-							<div id="startpicker-container" style="margin-left: -1px;"></div>
+							<div id="start-container" style="margin-left: -1px;"></div>
 						</div>
 
 						<label class="col-form-label text-center"> ~ </label>
 						<div
 							class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3 d-inline-block">
-							<input type="text" id="endDate" class=" form-control w-25"
+							<input type="text" id="endD" class=" form-control w-25"
 								aria-label="Date-Time" /> <span class="tui-ico-date"></span>
-							<div id="endpicker-container" style="margin-left: -1px;"></div>
+							<div id="end-container" style="margin-left: -1px;"></div>
 						</div>
 						<button type="button" id="searchComBtn"
 							class="btn btn-sm btn-primary waves-effect waves-light">검색</button>

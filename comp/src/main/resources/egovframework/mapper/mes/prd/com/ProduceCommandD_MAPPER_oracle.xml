@@ -4,6 +4,30 @@
 <mapper
 	namespace="mes.prd.com.service.impl.ProduceCommandDMapper">
 	
+	<!-- 조회화면에서 작업지시 조회 -->
+	<select id="produceCommandList"
+		parameterType="mes.prd.com.service.ProduceCommandDVO"
+		resultType="mes.prd.com.service.ProduceCommandDVO">
+		select 
+		      prd_com_d_date
+		    , prd_com_num
+		    , (select oper_name from order_d od, order_m om where od.ord_num = om.ord_num and pcd.ord_d_num = od.ord_d_num) oper_name 
+		    , itm_code
+		    , (select itm_name from item where itm_code = pcd.itm_code) itm_name
+		    , (select ord_num from order_d where ord_d_num = pcd.ord_d_num) ord_num
+		    , (select ord_request_date from order_m om inner join order_d od on om.ord_num = od.ord_num where pcd.ord_d_num = od.ord_d_num) ord_request_date
+		    , (select ord_vol from order_d where ord_d_num = pcd.ord_d_num) ord_vol
+		    , prd_com_vol
+		    , prc_com_div
+		    , lot_num
+		    , mat_vol
+		    , prc_com_no
+		    , prd_com_d_note
+		from produce_command_mat pcm, produce_command_d pcd
+		where pcm.prd_com_d_num = pcd.prd_com_d_num
+	</select>
+	
+	
 	<!-- 작업지시 조회 -->
 	<select id="selectProduceCommandList"
 		parameterType="mes.prd.com.service.ProduceCommandDVO"
@@ -30,6 +54,34 @@
 		<![CDATA[					
 		) A WHERE ROWNUM <= 10)
 		]]>
+	</select>
+	
+	<!-- 생산계획조회 리스트 수정중 -->
+	<select id="prdPlnList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.com.service.ProduceCommandDVO">
+		SELECT * FROM (
+			SELECT A.*, ROWNUM RNUM FROM ( 
+		        SELECT A.PRD_DATE
+				     , (SELECT OPER_NAME FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) as OPER_NAME
+				     , B.PRD_NUM
+				     , B.ITM_CODE
+				     , (SELECT ITM_NAME FROM ITEM WHERE ITM_CODE = B.ITM_CODE) as ITM_NAME
+				     , B.ORD_NUM
+				     , (SELECT ORD_DELIVERY_DATE FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) as ORD_DELIVERY_DATE
+				     , (SELECT ORD_VOL FROM ORDER_D WHERE ORD_NUM = B.ORD_NUM AND ORD_D_NUM = B.ORD_D_NUM) ORD_VOL
+				     , B.PRD_WORK_VOL
+				     , B.PRD_PLAN_DATE
+				     , B.PRD_NO
+				FROM PRODUCE_PLAN A
+				   , PRODUCE_PLAN_D B 
+				WHERE A.PRD_NUM = B.PRD_NUM
+				<![CDATA[
+				AND PRD_DATE >= #{startDate}
+		        AND PRD_DATE <= #{endDate}
+		        ]]>
+        <![CDATA[
+    	) A WHERE ROWNUM <= 10
+	)
+	]]>
 	</select>
 	
 	<!-- 작업지시디테일 조회 -->
