@@ -71,6 +71,8 @@ public interface ItemHistoryMapper {
     public List<?> setLotNum(ItemHistoryVO searchVO) throws Exception;
     public List<?> setOrdNum(ItemHistoryVO searchVO) throws Exception;
     public List<?> setItemCode(ItemHistoryVO searchVO) throws Exception;
+    public List<?> setItemCodeA(ItemHistoryVO searchVO) throws Exception;
+    public List<?> getItmHisNum(ItemHistoryVO searchVO) throws Exception;
     
     /**
 	 * ITEM_HISTORY 총 갯수를 조회한다.
@@ -79,6 +81,8 @@ public interface ItemHistoryMapper {
 	 * @exception
 	 */
     public int selectItemHistoryListTotCnt(ItemHistoryDefaultVO searchVO);
+    public int setOrdCheck(ItemHistoryVO searchVO);
+    
     public String getCount(ItemHistoryDefaultVO searchVO);
 
 }

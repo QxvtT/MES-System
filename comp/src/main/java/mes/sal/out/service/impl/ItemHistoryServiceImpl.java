@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import mes.sal.out.service.GridDataVO;
+import mes.sal.out.service.ItmOutGridDataVO;
 import mes.sal.out.service.ItemHistoryDefaultVO;
 import mes.sal.out.service.ItemHistoryService;
 import mes.sal.out.service.ItemHistoryVO;
@@ -103,23 +103,38 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
         return itemHistoryDAO.ItemHistoryRegist(searchVO);
     }
     public List<?> setItemCode(ItemHistoryVO searchVO) throws Exception {
-        return itemHistoryDAO.setItemCode(searchVO);
+    	if(setOrdCheck(searchVO) >0) {
+    		System.out.println("abcdefg");
+    		System.out.println("존재");
+    		return itemHistoryDAO.setItemCode(searchVO);
+    		
+    	}
+    	else {
+    		System.out.println("abcdefg");
+    		System.out.println("미존재");
+    		return itemHistoryDAO.setItemCodeA(searchVO);
+    	}
     }
+   
     public List<?> setLotNum(ItemHistoryVO searchVO) throws Exception {
         return itemHistoryDAO.setLotNum(searchVO);
     }
     public List<?> setOrdNum(ItemHistoryVO searchVO) throws Exception {
         return itemHistoryDAO.setOrdNum(searchVO);
     }
+    public List<?> getItmHisNum(ItemHistoryVO searchVO) throws Exception {
+        return itemHistoryDAO.getItmHisNum(searchVO);
+    }
     
     
-    public void itemHistoryUpdate(GridDataVO gridData) throws Exception {
+    public void itemHistoryUpdate(ItmOutGridDataVO gridData) throws Exception {
         if(gridData.getUpdatedRows() != null) {
         	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
         		itemHistoryDAO.updateItemHistory(gridData.getUpdatedRows().get(i));
         	}
         }
         if(gridData.getCreatedRows() != null) {
+        	System.out.println(gridData.getItemHistoryVO().getItmHisNum());
         	if(gridData.getItemHistoryVO().getItmHisNum()!=null && gridData.getItemHistoryVO().getItmHisNum()!="") {
 	        	
         		for(int i =0; i<gridData.getCreatedRows().size(); i++) {
@@ -131,7 +146,6 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
 	        		vo.setOperCode(gridData.getItemHistoryVO().getOperCode());
 	        			itemHistoryDAO.insertItemHistory(vo);
 	        	}
-	        	
         	}
         	else {
         		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -147,9 +161,7 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
 	        		vo.setItmHisRdy(gridData.getItemHistoryVO().getItmHisRdy());
 	        		vo.setItmNote(gridData.getItemHistoryVO().getItmNote());
 	        		vo.setOperCode(gridData.getItemHistoryVO().getOperCode());
-	        		if(i ==0) {
-	        			itemHistoryDAO.itemHistoryMaster(vo);
-	        		}
+	        		
 	        		itemHistoryDAO.itemHistoryNewInsert(vo);
 	        	}
         		
@@ -179,14 +191,16 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
     public int selectItemHistoryListTotCnt(ItemHistoryDefaultVO searchVO) {
 		return itemHistoryDAO.selectItemHistoryListTotCnt(searchVO);
 	}
-
+    public int setOrdCheck(ItemHistoryVO searchVO) {
+		return itemHistoryDAO.setOrdCheck(searchVO);
+	}
 	@Override
 	public String getCount(ItemHistoryVO searchVO) {
-		String a = "001";
+		String a = "000";
 		if(itemHistoryDAO.getCount(searchVO) != null) {
 			a=itemHistoryDAO.getCount(searchVO);
 		}
-		
+		System.out.println(a);
 		return a ;
 	}
     
