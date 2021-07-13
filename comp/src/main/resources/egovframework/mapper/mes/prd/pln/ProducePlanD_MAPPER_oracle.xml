@@ -165,16 +165,17 @@
 	<select id="producePlanList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.pln.service.ProducePlanDVO">
 		SELECT * FROM (
 			SELECT A.*, ROWNUM RNUM FROM ( 
-		        SELECT A.PRD_DATE
+		        SELECT 
+		        	   TO_CHAR(A.PRD_DATE, 'yyyy-MM-dd') PRD_DATE
 				     , (SELECT OPER_NAME FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) as OPER_NAME
 				     , B.PRD_NUM
 				     , B.ITM_CODE
 				     , (SELECT ITM_NAME FROM ITEM WHERE ITM_CODE = B.ITM_CODE) as ITM_NAME
 				     , B.ORD_NUM
-				     , (SELECT ORD_DELIVERY_DATE FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) as ORD_DELIVERY_DATE
+				     , TO_CHAR((SELECT ORD_DELIVERY_DATE FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM), 'yyyy-MM-dd') ORD_DELIVERY_DATE
 				     , (SELECT ORD_VOL FROM ORDER_D WHERE ORD_NUM = B.ORD_NUM AND ORD_D_NUM = B.ORD_D_NUM) ORD_VOL
 				     , B.PRD_WORK_VOL
-				     , B.PRD_PLAN_DATE
+				     , TO_CHAR(B.PRD_PLAN_DATE, 'yyyy-MM-dd') PRD_PLAN_DATE
 				     , B.PRD_NO
 				FROM PRODUCE_PLAN A
 				   , PRODUCE_PLAN_D B 

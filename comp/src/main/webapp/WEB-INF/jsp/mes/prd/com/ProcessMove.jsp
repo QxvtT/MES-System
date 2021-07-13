@@ -32,16 +32,14 @@ $(function(){
 	    rowWidth: 100,
 	    data: null,
 	    columns: [
-	    	{ header: '상태', name:'prdComDNum'},
-	    	{ header: '작업지시번호', name:'prdPlanDNum'},
-	    	{ header: '제품코드', name:'ordDNum'},
+	    	{ header: '작업지시번호', name:'prdComNum'},
+	    	{ header: '제품코드', name:'itmCode'},
 			{ header: '제품명', name:'itmName'},
-			{ header: '작업구분', name:'matName'},
-			{ header: '지시량', name:'operName'},
-			{ header: '작업일자', name:'itmCode'},
+			{ header: '작업구분', name:'prdComDiv'},
+			{ header: '지시량', name:'prdComVol'},
+			{ header: '작업일자', name:'prdComDDate'},
 			{ header: '작업순서', name:'prcComNo'},
-			{ header: '작업공정', name:'ordNum'},
-			{ header: '작업일자', name:'prdComDDate1'}
+			{ header: '작업공정', name:'prcCode'},
 	    ]
 	}); // end const grid
 	
@@ -226,7 +224,6 @@ $(function(){
 </style>
 </head>
 <body>
-
 	<!-- 생산계획조회 Title -->
 	<div class="page-header">
 		<div class="page-block">

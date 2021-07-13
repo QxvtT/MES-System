@@ -195,9 +195,10 @@ public class ProduceCommandDController {
         return "prd/com/ProduceCommandDList.page";
     }*/
     
-    @RequestMapping("/prd/com/ProduceCommandDView.do")
-    public String addProduceCommandDView(
-            @ModelAttribute("searchVO") ProduceCommandDVO searchVO, Model model)
+	/** 생산지시조회 페이지 **/
+    @RequestMapping("/ProduceCommandDView.do")
+    public String addProduceCommandDView(ProduceCommandDVO searchVO, 
+    		ModelMap model)
             throws Exception {
         return "prd/com/ProduceCommandDRegister.page";
     }
@@ -205,7 +206,8 @@ public class ProduceCommandDController {
  // 생산계획조회  리스트 ajax 처리
  	@RequestMapping(value = "/ProduceCommandSearch", method = RequestMethod.GET)
  	@ResponseBody
- 	public List<?> ajaxComList(@ModelAttribute("searchVO") ProduceCommandDVO searchVO) throws Exception {
+ 	public List<?> ajaxComList(ProduceCommandDVO searchVO, 
+    		ModelMap model) throws Exception {
  		System.out.println(searchVO);
  		// 업체 코드 다중 선택 처리
      	if(searchVO.getOperCodes() != null && searchVO.getOperCodes() != "") {

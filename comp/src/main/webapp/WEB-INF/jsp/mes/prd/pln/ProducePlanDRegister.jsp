@@ -37,43 +37,67 @@ $(function(){
 	    rowWidth: 100,
 	    data: null,
 	    columns: [
-	    	{ header: '계획일자', name:'prdDate'},
-	    	{ header: '고객사명', name:'operName'},
-	    	{ header: '제품코드', name:'itmCode'},
-			{ header: '제품명', name:'itmName'},
-			{ header: '주문번호', name:'ordNum'},
-			{ header: '납기일자', name:'ordDeliveryDate'},
+	    	{ header: '계획일자', name:'prdDate', align:'center'},
+	    	{ header: '고객사명', name:'operName', align:'center'},
+	    	{ header: '제품코드', name:'itmCode', align:'center'},
+			{ header: '제품명', name:'itmName', align:'center'},
+			{ header: '주문번호', name:'ordNum', align:'center'},
+			{ header: '납기일자', name:'ordDeliveryDate', align:'center'},
 			{ header: '주문량', name:'ordVol'},
 			{ header: '계획량', name:'prdWorkVol'},
-			{ header: '작업일자', name:'prdPlanDate'},
-			{ header: '순서', name:'prdNo'}
-	    ]
+			{ header: '작업일자', name:'prdPlanDate', align:'center'},
+			{ header: '순서', name:'prdNo', align:'center'}
+	    ],
+	    summary: {
+	        position: 'bottom',
+	        height: 50,
+	        columnContent: {
+	        	prdDate: {
+	        		template: function(valueMap) {
+	        			return `합계`;
+	        			},
+	        		align:'center'
+				},
+				ordVol: {
+					template: function(valueMap) {
+						return valueMap.sum;
+						}
+				},
+				prdWorkVol: {
+					template: function(valueMap) {
+						return valueMap.sum;
+						}
+				}
+	        }// end of columnContent
+	    }// end of summary
 	}); // end const grid
 	
 	grid.on('scrollEnd', () => {
 	  })
 	  
 	// toast datePicker 관련 Script
-	var today = new Date();
-	var preDay = new Date();
-	preDay.setDate(today.getDate() - 7);
-	
-	var picker = tui.DatePicker.createRangePicker({
-        startpicker: {
-            date: preDay,
-            input: '#startDate',
-            container: '#startDate-container'
-        },
-        endpicker: {
-            date: today,
-            input: '#endDate',
-            container: '#endDate-container'
-        },
-        language: 'ko',
-        type: 'date',
-        format: 'yyyy-MM-dd'
-    });
-    
+	function setDatePicker(){
+		var today = new Date();
+		var preDay = new Date();
+		preDay.setDate(today.getDate() - 7);
+		
+		var picker = tui.DatePicker.createRangePicker({
+	        startpicker: {
+	            date: preDay,
+	            input: '#startDate',
+	            container: '#startDate-container'
+	        },
+	        endpicker: {
+	            date: today,
+	            input: '#endDate',
+	            container: '#endDate-container'
+	        },
+	        language: 'ko',
+	        type: 'date',
+	        format: 'yyyy-MM-dd'
+	    });
+	}
+	setDatePicker();
 	// 생산계획조회 날짜조건
 	function getPrdComList() {
 		let data;
@@ -110,6 +134,13 @@ $(function(){
 		operCodes = $('#operCode').val();
 		grid.resetData(getPrdComList());
 	})
+	
+	// 새자료 버튼
+	$('#resetBtn').click(function() {
+		setDatePicker();
+		detailForm.reset();
+		grid.resetData([]);
+	}) 
 	
 	function s2ab(s) { 
 	    var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer

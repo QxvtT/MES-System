@@ -429,9 +429,9 @@ $(function(){
 	
 	// 새자료 버튼 클릭 이벤트, 마스터 Form과 디테일 그리드 데이터 remove, 날짜 정보 초기화를 위한 setDatePicker();
 	$('#resetBtn').click(function(){
+		prdNum = null;
 		master.reset();
 		grid.resetData([]);
-		prdNum = null;
 		grid2.clear();
 		setDatePicker();
 	});
