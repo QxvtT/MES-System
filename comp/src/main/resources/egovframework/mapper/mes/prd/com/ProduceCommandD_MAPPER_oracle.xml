@@ -27,6 +27,32 @@
 		where pcm.prd_com_d_num = pcd.prd_com_d_num
 	</select>
 	
+	<!-- 제품목록조회 모달 -->
+	<select id="selectItemList" resultType="mes.prd.com.service.ProduceCommandDVO">
+		SELECT * FROM (
+			SELECT A.*, ROWNUM RNUM FROM (
+				select itm_code, itm_name from item
+				<where>
+					<if test="itmCode1 != null and itmCode1 != ''">
+						<![CDATA[	
+							Prd_Com_Num > #{itmCode1}
+						]]>
+					</if> 
+				</where>
+				ORDER BY itm_code
+		<![CDATA[					
+		) A WHERE ROWNUM <= 10)
+		]]>
+	</select>
+	
+	<!-- 선택제품정보 한건 조회 -->
+	<select id="selectItem" resultType="mes.prd.com.service.ProduceCommandDVO">
+		select i.itm_code, i.itm_name, i.itm_day_output, m.mat_code, m.mat_name 
+		from item i, material m
+		where i.mat_code = m.mat_code
+		and i.itm_code = #{itmCode} 
+	</select>
+	
 	
 	<!-- 작업지시 조회 -->
 	<select id="selectProduceCommandList"
@@ -57,27 +83,47 @@
 	</select>
 	
 	<!-- 생산계획조회 리스트 수정중 -->
-	<select id="prdPlnList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.com.service.ProduceCommandDVO">
+	<select id="selectPrdPlnDList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.com.service.ProduceCommandDVO">
 		SELECT * FROM (
 			SELECT A.*, ROWNUM RNUM FROM ( 
-		        SELECT A.PRD_DATE
-				     , (SELECT OPER_NAME FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) as OPER_NAME
-				     , B.PRD_NUM
-				     , B.ITM_CODE
-				     , (SELECT ITM_NAME FROM ITEM WHERE ITM_CODE = B.ITM_CODE) as ITM_NAME
-				     , B.ORD_NUM
-				     , (SELECT ORD_DELIVERY_DATE FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) as ORD_DELIVERY_DATE
-				     , (SELECT ORD_VOL FROM ORDER_D WHERE ORD_NUM = B.ORD_NUM AND ORD_D_NUM = B.ORD_D_NUM) ORD_VOL
-				     , B.PRD_WORK_VOL
-				     , B.PRD_PLAN_DATE
-				     , B.PRD_NO
-				FROM PRODUCE_PLAN A
-				   , PRODUCE_PLAN_D B 
-				WHERE A.PRD_NUM = B.PRD_NUM
+		        select A.*, to_char(a.prd_com_d_date,'YYYY-MM-DD') as prd_com_d_date1, 
+		        		M.MAT_NAME, B.yes_Com_Vol,
+				        a.ord_vol - nvl(B.yes_Com_Vol,0) - NVL(a.ord_out_vol,0) as no_Com_Vol,
+				        a.itm_day_output/8 as UPH, a.prd_com_vol/a.itm_day_output as day_Num
+				from(SELECT A.PRD_DATE
+				         , (SELECT OPER_NAME FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) as OPER_NAME
+				         , B.prd_plan_d_num
+				         , B.ITM_CODE
+				         , (SELECT ITM_NAME FROM ITEM WHERE ITM_CODE = B.ITM_CODE) as ITM_NAME
+				         , (SELECT MAT_CODE FROM ITEM WHERE ITM_CODE = B.ITM_CODE) as MAT_CODE
+				         , (SELECT ITM_DAY_OUTPUT FROM ITEM WHERE ITM_CODE = B.ITM_CODE) as ITM_DAY_OUTPUT
+				         , B.ORD_NUM
+				         , B.ord_d_num
+				         , to_char((SELECT ORD_DELIVERY_DATE FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM),'YYYY-MM-DD') as ORD_DELIVERY_DATE
+				         , (SELECT ORD_VOL FROM ORDER_D WHERE ORD_NUM = B.ORD_NUM AND ORD_D_NUM = B.ORD_D_NUM) ORD_VOL
+				         , (SELECT ORD_OUT_VOL FROM ORDER_D WHERE ORD_NUM = B.ORD_NUM AND ORD_D_NUM = B.ORD_D_NUM) ORD_OUT_VOL
+				         , B.PRD_PLAN_DATE as prd_com_d_date
+				         , B.PRD_NO as prc_com_no
+				         , B.prd_work_vol as prd_com_vol
+				    FROM PRODUCE_PLAN A
+				       , PRODUCE_PLAN_D B 
+				    WHERE A.PRD_NUM = B.PRD_NUM
+				    and B.com_chk = 'N') A, 
+				        (select ord_d_num, NVL(sum(prd_com_vol),0) as yes_Com_Vol
+				        from produce_command_d
+				        group by ord_d_num) B, MATERIAL M
+				where a.ord_d_num = b.ord_d_num (+)
+				AND A.MAT_CODE = M.MAT_CODE
 				<![CDATA[
-				AND PRD_DATE >= #{startDate}
-		        AND PRD_DATE <= #{endDate}
+				AND A.prd_com_d_date >= #{prdDateS}
+		        AND A.prd_com_d_date <= #{prdDateE}
 		        ]]>
+		        <if test="prdPlnDNum1 != null and prdPlnDNum1 != ''">
+					<![CDATA[	
+						and prd_plan_d_num > #{prdPlnDNum1}
+					]]>
+				</if>
+		        ORDER BY prd_plan_d_num
         <![CDATA[
     	) A WHERE ROWNUM <= 10
 	)
@@ -113,7 +159,6 @@
 		</if>
 		ORDER BY
 		PRD_COM_D_NUM
-		
 		<![CDATA[					
 		) A WHERE ROWNUM <= 10)
 		]]>
@@ -129,9 +174,9 @@
 		from PRODUCE_COMMAND_MAT
 		where prd_com_d_num = #{prdComDNum}
 		<if test="prdComDNum1 != null and prdComDNum1 != ''">
-				<![CDATA[	
-					and Prd_Com_Mat_Num > #{prdComMatNum}
-				]]>
+			<![CDATA[	
+				and Prd_Com_Mat_Num > #{prdComMatNum}
+			]]>
 		</if>
 		ORDER BY
 		PRD_COM_MAT_NUM

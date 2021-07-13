@@ -76,6 +76,15 @@ public interface ProduceCommandDMapper {
 	 */
     /** 작업지시 조회 */
     public List<?> selectProduceCommandList(ProduceCommandDVO searchVO) throws Exception;
+    
+    /** 제품목록 조회 */
+    public List<?> selectItemList(ProduceCommandDVO searchVO) throws Exception;
+    
+    /** 선택제품 한건 조회 */
+    public ProduceCommandDVO selectItem(ProduceCommandDVO searchVO) throws Exception;
+    
+    /** 미지시계획 조회 */
+    public List<?> selectPrdPlnDList(ProduceCommandDVO searchVO) throws Exception;
 
     /** 작업지시디테일 조회 */
 	public List<?> selectProduceCommandDList(ProduceCommandDVO searchVO) throws Exception;

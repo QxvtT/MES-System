@@ -38,9 +38,16 @@ let matCode = null;
 //생산계획일 범위 변수
 let prdDateS = null;
 let prdDateE = null;
+//계획 스크롤용
+let prdPlnDNum1 = null;
 
 //주문일련 계획일련 있는 row들 담을 변수
 let rows = null;
+
+//제품조회 스크롤용
+let itmCode1 = null;
+
+let rowKey = null;
 
 $(function(){
 	let today = new Date();
@@ -108,7 +115,7 @@ $(function(){
 			},
 			{ header: '작업순서', name:'prcComNo', editor: 'text'},
 			{ header: '비고', name:'prdComDNote', editor: 'text'},
-			{ header: '출고여부', name:'mat_out_chk'}
+			{ header: '출고여부', name:'matOutChk', hidden: true}
 	    ]
 	}); // end const grid
 	
@@ -230,8 +237,13 @@ $(function(){
 		$('#prdComName').val(grid2.getValue(e.rowKey,'prdComName'));
 		$('#prdComNote').val(grid2.getValue(e.rowKey,'prdComNote'));
 		//$('#operName').val(grid2.getValue(e.rowKey,'operName'));
-		
 		grid.resetData(getList());
+		//출고여부가 Y면 체크박스를 막아 삭제못하게
+		let rowsY = grid.findRows((row) => {
+		    return (row.matOutChk == 'Y');
+		});
+		grid.
+		
 		// 이전 데이터들 초기화
 		gridMat.clear();
 		gridFlow.clear();
@@ -266,6 +278,7 @@ $(function(){
 			  position : 'top-center'       // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
 			});
 	}
+	
 	// 조회 모달에서 계획번호 cell만 선택하기 위해 조건문에서 사용되는 함수
 	function getKeyByValue(object, value) {
 		return Object.keys(object).find(key => object[key] === value);
@@ -418,14 +431,15 @@ $(function(){
 			async: false,
 			url : "PrdPlnDList",
 			type : "get",
-			data : {prdComDNum1: prdComDNum1,
-					prdComNum: prdComNum
+			data : {prdPlnDNum1: prdPlnDNum1,
+					prdDateS: prdDateS,
+					prdDateE: prdDateE
 					},
 			dataType: "json",
 			success : function(result){
 				console.log(prdComNum1);
 				if(result.length > 0) {
-					prdComDNum1 = result[result.length -1].prdComDNum;
+					prdPlnDNum1 = result[result.length -1].prdPlnDNum;
 				}
 				console.log(result);
 				data = result;
@@ -441,13 +455,42 @@ $(function(){
 		console.log("일자");
 		console.log(prdDateS);
 		console.log(prdDateE);
+		grid.clear();
+		let data = getPlnList();
+		for(let i in data) {
+			console.log(data[i]);
+			grid.appendRow(data[i]);
+		}
+		// 이전 데이터들 초기화
+		gridMat.clear();
+		gridFlow.clear();
+		$('#itmCode').val('');
+		$('#itmName').val('');
+		$('#prdComVol').val('');
+		$('#matCode').val('');
+		$('#matName').val('');
+		$('#operName').val('');
+		//지시번호, 작성일자, 지시명, 특이사항 리셋
+		$('#prdComNum').val('');
+		$('#prdComDate').val('');
+		$('#prdComName').val('');
+		$('#prdComNote').val('');
+		prdComNum = null;
+		
 	}
 	
-	
+
 	//grid 행 더블클릭시 자재조회 및 공정흐름조회
 	grid.on('dblclick', (e) => {
-		if(grid.getValue(e.rowKey,'mat_out_chk') != 'Y') {
+		gridMat.enable();
+		if(grid.getValue(e.rowKey,'matOutChk') != 'Y') {
 			outMatLotBtn.classList.remove('btn-disabled', 'disabled');
+			deleteMBtn.classList.remove('btn-disabled', 'disabled');
+		} else {
+			gridMat.disable();
+			deleteMBtn.classList.add('btn-disabled');
+			deleteMBtn.classList.add('disabled');
+			
 		}
 		prdComDNum = grid.getValue(e.rowKey,'prdComDNum');
 		itmCode = grid.getValue(e.rowKey,'itmCode');
@@ -515,6 +558,36 @@ $(function(){
 	
 	//작업지시 수정 및 생성
 	saveBtn.onclick = function(){
+		if($('#prdComDate').val() == '') {
+			//토스트메시지 
+			$.toast({ 
+				  text : "작성일자를 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		if($('#prdComName').val() == '') {
+			//토스트메시지 
+			$.toast({ 
+				  text : "작업지시명을 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
 		let gridData = grid.getModifiedRows({});
 		console.log(gridData);
 
@@ -524,6 +597,7 @@ $(function(){
 									prdComName : $('#prdComName').val(),
 									prdComNote : $('#prdComNote').val()
 									}
+		<%--
 		$.ajax({
 				async: false, 
 				url : "ProduceCommandUpdate",
@@ -557,7 +631,7 @@ $(function(){
 				console.log(data);
 			}
 		});
-		
+		--%>
 	}
 	
 	//자재 출고 관리
@@ -609,6 +683,9 @@ $(function(){
 		grid.resetData(getList());
 		outMatLotBtn.classList.add('btn-disabled');
 		outMatLotBtn.classList.add('disabled');
+		
+		//출고후 그리드 수정 및 삭제 불가 처리
+		gridMat.disable();
 		 
 	}
 	
@@ -627,7 +704,143 @@ $(function(){
 		console.log(startDate);
 		console.log(endDate);
 		grid2.resetData(getPrdComList());
-	})
+	});
+	
+	// 제품코드를 입력할 때 제품명 확인을 위한 모달에 사용되는 그리드
+	const grid3 = new tui.Grid({
+	    el: document.getElementById('grid3'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: getItemList(),
+	    rowHeaders: [{
+	            type: 'checkbox',
+	            header: ' '
+	    }],
+	    columns: [
+	    	{ 
+	    		header: '제품코드', 
+	    		name:'itmCode',
+	    		align: 'center'
+	    		},
+			{ 
+	    		header: '제품명', 
+	    		name:'itmName',
+	    		align: 'center'
+	    		}
+	    ]
+	}); 
+	
+	// 제품코드 입력 모달창 제품 테이블 Select 데이터
+	function getItemList() {
+		let data;
+		$.ajax({
+			async: false,
+			cache: false,
+			url : "ItemList",
+			type : "get",
+			data : {
+				itmCode1 : itmCode1
+				},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					itmCode1 = result[result.length -1].itmCode;
+				}
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	
+	// 선택한 제품코드 값만 받아오기
+	function selectItem(itmCode) {
+		let data;
+		$.ajax({
+			async: false,
+			cache: false,
+			url : "SelectItem",
+			type : "get",
+			data : {
+				itmCode : itmCode
+				},
+			dataType: "json",
+			success : function(result){
+				grid.setValue(rowKey, 'itmCode', result.itmCode);
+				grid.setValue(rowKey, 'itmName', result.itmName);
+				grid.setValue(rowKey, 'matCode', result.matCode);
+				grid.setValue(rowKey, 'matName', result.matName);
+				grid.setValue(rowKey, 'uph', result.itmDayOutput/8);
+				grid.setValue(rowKey, 'itmDayOutput', result.itmDayOutput);
+				data = result;
+			} // end success
+		}); // end ajax
+		return data;
+	}
+	
+	// 제품코드 입력란 더블클릭 시 제품코드별 제품명을 볼 수 있는 모달창 생성
+	grid.on('dblclick', (e) => {
+		var selectItm = grid.getFocusedCell();
+		if(getKeyByValue(selectItm, "itmCode") != null){
+			$('#itmModal').modal('toggle');
+			$('#itmModal').on('shown.bs.modal', function(){
+				rowKey = e['rowKey'];
+				grid3.refreshLayout();
+			});
+		}
+	});
+	
+	// 제품코드 모달창 단일 체크 구현
+	grid3.on('check', (e) => {
+		let rows = grid3.getCheckedRowKeys();
+		if(rows.length > 1) {
+			for(let i in rows){
+				if(e.rowKey != rows[i]){
+					grid3.uncheck(rows[i]);
+				}
+			}
+			rows = grid3.getCheckedRowKeys();
+		}
+		// 제품코드 모달창 제품코드 체크 로우 값 확인 클릭시 디테일 테이블 로우 데이터 값 수정
+		$('#itmCheckSearchBtn').click(function() {
+			$('#itmModal').modal("hide");
+			itmCode = grid3.getValue(rows, 'itmCode');
+			grid.blur();
+			selectItem(itmCode);
+		})
+	});
+
+	// 제품코드 모달창 제품코드 더블클릭 시 디테일 테이블 로우 데이터 값 수정
+	grid3.on('dblclick', (e) => {
+		var selectItm = grid.getFocusedCell();
+		if(getKeyByValue(selectItm, "itmCode") != null){
+			$('#itmModal').modal("hide");
+			let selectItm = grid3.getFocusedCell();
+			itmCode = selectItm.value;
+			grid.blur();
+			selectItem(itmCode);
+		}
+	});
+	
+	//리셋기능
+	resetBtn.onclick = function() {
+		// 이전 데이터들 초기화
+		grid.clear();
+		gridMat.clear();
+		gridFlow.clear();
+		$('#itmCode').val('');
+		$('#itmName').val('');
+		$('#prdComVol').val('');
+		$('#matCode').val('');
+		$('#matName').val('');
+		$('#operName').val('');
+		//지시번호, 작성일자, 지시명, 특이사항 리셋
+		$('#prdComNum').val('');
+		$('#prdComDate').val('');
+		$('#prdComName').val('');
+		$('#prdComNote').val('');
+		prdComNum = null;
+	}
 	
 })
 
@@ -684,8 +897,8 @@ $(function(){
 													<div
 														class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 														<input type="text" id="prdComDate" name="prdComDate"
-															class=" form-control w-25" aria-label="Date-Time" /> <span
-															class="tui-ico-date"></span>
+															class=" form-control w-25" aria-label="Date-Time" /> 
+														<span class="tui-ico-date"></span>
 													</div>
 													<div id="date" style="margin-top: -1px;"></div>
 												</div>
@@ -880,6 +1093,29 @@ $(function(){
 				<div class="modal-footer">
 					<a class="btn" id="modalLotY">예</a>
 					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 제품코드 선택 모달 -->
+	<div class="modal fade" id="itmModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="myModalLabel">제품 조회</h3>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="grid3"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="itmCheckSearchBtn">확인</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
 				</div>
 			</div>
 		</div>

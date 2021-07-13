@@ -84,6 +84,33 @@ public class ProduceCommandDController {
 		return list;
 	}
 	
+	/** 미생산 계획내역 조회 */
+	@RequestMapping(value ="/PrdPlnDList", method=RequestMethod.GET)
+	@ResponseBody
+	public List<?> ajaxSelectPrdPlnDList(ProduceCommandDVO searchVO) throws Exception {
+		System.out.println("이름 : ");
+		List<?> list = produceCommandDService.selectPrdPlnDList(searchVO); 
+		return list;
+	}
+	
+	/** 제품목록 조회 */
+	@RequestMapping(value ="/ItemList", method=RequestMethod.GET)
+	@ResponseBody
+	public List<?> ajaxSelectItemList(ProduceCommandDVO searchVO) throws Exception {
+		System.out.println("이름 : ");
+		List<?> list = produceCommandDService.selectItemList(searchVO); 
+		return list;
+	}
+	
+	/** 선택제품 조회 */
+	@RequestMapping(value ="/SelectItem", method=RequestMethod.GET)
+	@ResponseBody
+	public ProduceCommandDVO ajaxSelectItem(ProduceCommandDVO searchVO) throws Exception {
+		System.out.println("이름 : ");
+		searchVO = produceCommandDService.selectItem(searchVO); 
+		return searchVO;
+	}
+	
 	/** 작업지시자재 조회 */
 	@RequestMapping(value ="/ProduceCommandMatList", method=RequestMethod.GET)
 	@ResponseBody

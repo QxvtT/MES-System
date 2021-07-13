@@ -57,6 +57,15 @@ public interface ProduceCommandDService {
     /** 작업지시 조회 */
     List selectProduceCommandList(ProduceCommandDVO searchVO) throws Exception;
     
+    /** 제품목록 조회 */
+    List selectItemList(ProduceCommandDVO searchVO) throws Exception;
+    
+    /** 선택제품 조회 */
+    ProduceCommandDVO selectItem(ProduceCommandDVO searchVO) throws Exception;
+    
+    /** 미지시계획 조회 */
+    List selectPrdPlnDList(ProduceCommandDVO searchVO) throws Exception;
+    
     /** 작업지시디테일 조회 */
     List selectProduceCommandDList(ProduceCommandDVO searchVO) throws Exception;
     

@@ -31,6 +31,17 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     /** matLot모달 스크롤용 로트번호 */
     private java.lang.String lotNum1;
     
+    /** 미지시 계획 조회용 */
+    private java.lang.String prdDateS;
+    private java.lang.String prdDateE;
+    
+    /** 미지시 계획 스크롤용 일련번호 */
+    private java.math.BigDecimal prdPlnDNum1;
+    
+    /** 제품리스트모달 스크롤용 */
+    private java.lang.String itmCode1;
+    
+    
     /** 지시번호 */
     private java.lang.String prdComNum;
     /** 지시일자 */
@@ -100,6 +111,9 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     
     /** 비고 */
     private java.lang.String prdComDNote;
+    
+    /** 출고여부 */
+    private java.lang.String matOutChk;
     
     /** 자재코드 */
     private java.lang.String matCode;

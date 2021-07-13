@@ -112,6 +112,21 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
         return produceCommandDDAO.selectProduceCommandList(searchVO);
     }
     
+    /** 제품목록 조회 */
+    public List<?> selectItemList(ProduceCommandDVO searchVO) throws Exception {
+    	return produceCommandDDAO.selectItemList(searchVO);
+    }
+    
+    /** 선택제품 조회 */
+    public ProduceCommandDVO selectItem(ProduceCommandDVO searchVO) throws Exception {
+    	return produceCommandDDAO.selectItem(searchVO);
+    }
+    
+    /** 미지시계획 조회 */
+    public List<?> selectPrdPlnDList(ProduceCommandDVO searchVO) throws Exception {
+    	return produceCommandDDAO.selectPrdPlnDList(searchVO);
+    }
+    
     /** 작업지시디테일 조회 */
     public List<?> selectProduceCommandDList(ProduceCommandDVO searchVO) throws Exception {
         return produceCommandDDAO.selectProduceCommandDList(searchVO);
