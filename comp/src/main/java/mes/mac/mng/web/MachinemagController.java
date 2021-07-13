@@ -30,7 +30,7 @@ import mes.mac.mng.service.MachinemagVO;
  * @since 2021-07-02
  * @version 1.0
  * @see
- * 
+ *  
  *      Copyright (C) All right reserved.
  */
 
@@ -41,7 +41,7 @@ public class MachinemagController {
 	@Resource(name = "machineService")
 	private MachinemagService machineService;
 
-	/** EgovPropertyService */
+	/** Eg	ovPropertyService */
 	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertiesService;
 

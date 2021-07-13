@@ -1,149 +1,249 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
- /**
-  * @Class Name : MachineList.jsp
-  * @Description : Machine List 화면
-  * @Modification Information
-  * 
-  * @author sunghwan
-  * @since 2021-07-02
-  * @version 1.0
-  * @see
-  *  
-  * Copyright (C) All right reserved.
-  */
+	/**
+* @Class Name : MachineList.jsp
+* @Description : Machine List 화면
+* @Modification Information
+* 
+* @author sunghwan
+* @since 2021-07-02
+* @version 1.0
+* @see
+*  
+* Copyright (C) All right reserved.
+*/
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>"/>
+<link type="text/css" rel="stylesheet"
+	href="<c:url value='/css/egovframework/sample.css'/>" />
+<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
-<!--
-/* 글 수정 화면 function */
 
 
-function fn_egov_select(macCode) {
-	document.getElementById("listForm").macCode.value = macCode;
-   	document.getElementById("listForm").action = "<c:url value='/machine/updateMachineView.do'/>";
-   	document.getElementById("listForm").submit();
-}
+$(function(){
+	const machinemng = new tui.Grid({
+	    el: document.getElementById('machinemng'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: null,
+	    rowHeaders: ['rowNum'],
+	    columns: [
+	    	{ header: '설비코드', name:'macCode'},
+	    	{ header: '설비명', name:'macName'},
+	    	{ header: '사용여부', name:'use1'},
+	    	{ header: '설비구분', name:'macDiv'},
+			{ header: '모델명', name:'model'},
+			{ header: '제작업체', name:'proOper'},
+			{ header: '최근 작업자', name:'worker'},
+			{ header: '용도', name:'use'},
+			{ header: '구매금액', name:'buyPrice'},
+			{ header: '구매일자', name:'buyDate'},
+			{ header: '사용에너지', name:'usingEnergy'},
+			{ header: '부하율', name:'macLoadage'},
+			{ header: '온도', name:'macStdTemp'}
+	    ]
+	}); 
+	
+	function getMachineMngList() { 
+		$.ajax({
+			async: false, 
+			url : "MachineMngList",
+			type : "get",
+			data : {
+				macName : macName,
+				macCode : macCode
+				},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					macCode = result[result.length -1].macCode;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	
+	machinemng.on('scrollEnd', () => {
+		machinemng.appendRows(getMachineMngList());
+	  });
+	
+	$('#mobile-collapse').click(function() {
+		machinemng.refreshLayout();
+	   });
+	
+	/* grid 에서 실행 된 테이블을 더블 클릭 하는 것 
+	 grid.on('dblclick', () => { 
+		let key = grid.getFocusedCell()['rowKey'];
+		let result = grid.getColumnValues('prcResDNum')[key];
+		getProcessResultSelect(result);
+		prdComDNum = grid.getColumnValues('prdComDNum')[key];
+		prcCode = grid.getColumnValues('prcCode')[key];;
+		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
+		
+	}); */
+	
 
-/* 글 등록 화면 function */
-function fn_egov_addView() {
-   	document.getElementById("listForm").action = "<c:url value='/machine/addMachineView.do'/>";
-   	document.getElementById("listForm").submit();		
-}
 
-/* pagination 페이지 링크 function */
-function fn_egov_link_page(pageNo){
-	document.getElementById("listForm").pageIndex.value = pageNo;
-	document.getElementById("listForm").action = "<c:url value='/machine/MachineList.do'/>";
-   	document.getElementById("listForm").submit();
-}
-
- // -->
+	search.onclick = function() {
+		macCode = $("input#macCode").val();
+		machinemng.resetData(getMachineMngList());
+		$( 'input#macName' ).val(' ');
+		$( 'input#use1' ).val(' ');
+		$( 'input#macDiv' ).val(' ');
+		$( 'input#model' ).val(' ');
+		$( 'input#proOper' ).val(' ');	
+		$( 'input#worker' ).val(' ');
+		$( 'input#use' ).val(' ');
+		$( 'input#buyPrice' ).val(' ');
+		$( 'input#buyDate' ).val(' ');
+		$( 'input#usingEnergy' ).val(' ');
+		$( 'input#macLoadage' ).val(' ');
+		$( 'input#macStdTemp' ).val(' ');
+	}
+	
+// 체크하고 선택 했을때 불어 오는 값 
+	
+	function setProduceSelect(key) { 
+		$.ajax({
+			async: false, 
+			url : "SetProduceSelect",
+			type : "get",
+			data : {
+				prcResDNum : key
+				},
+			dataType: "json",
+			success : function(result){
+				console.log(result);
+				data = result;
+				$( 'input#prdComDDate' ).val(result[0]['prdComDDate']);
+				$( 'input#prdComNum' ).val(result[0]['prdComNum']);
+				$( 'input#prcName' ).val(result[0]['prcName']);
+				$( 'input#prcWorkNum' ).val(result[0]['prcWorkNum']);
+				$( 'input#empName' ).val(result[0]['empName']);
+				$( 'input#macName' ).val(result[0]['macName']);
+				
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	sibalY.onclick= function() {
+		let gridData = grid4.getModifiedRows({});
+		
+		gridData["ProcessResultVO"] ={
+										prcResDNum :prcResDNum,
+										prcState : grid4.getData()[0]['prcState'],
+										macCode : $('input#macCode').val(),
+										empId : $('input#empId').val()
+										}
+			$.ajax({
+			async: false, 
+			url : "resultSuccess",
+			type : "post",
+			data : JSON.stringify(gridData),
+			dataType: "json",
+			contentType:"application/json",
+			success : function(){
+				console.log("updatesuccess");
+						grid3.resetData(getProduceSelect(prdComDNum,prcCode))
+						grid.resetData(getProcessResulList());
+			}
+			});
+			
+	}
+})
+	
 </script>
 </head>
 <body>
-<form:form commandName="searchVO" name="listForm" id="listForm" method="post">
-	<input type="hidden" name="macCode" />
-<div id="content_pop">
-	<!-- 타이틀 -->
-	<div id="title">
-		<ul>
-			<li><img src="<c:url value='/images/egovframework/example/title_dot.gif'/>" alt="title" /> List </li>
-		</ul>
-	</div>
-	<!-- // 타이틀 -->
-	<!-- List -->
-	<div id="table">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-			<colgroup>
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-								<col/>				
-							</colgroup>		  
-			<tr>
-								<th align="center">MacCode</th>
-								<th align="center">MacName</th>
-								<th align="center">MacDiv</th>
-								<th align="center">MacSize</th>
-								<th align="center">Model</th>
-								<th align="center">ProOper</th>
-								<th align="center">Worker</th>
-								<th align="center">Use</th>
-								<th align="center">NomCap</th>
-								<th align="center">UsingEnergy</th>
-								<th align="center">Safety</th>
-								<th align="center">MacProDate</th>
-								<th align="center">BuyDate</th>
-								<th align="center">BuyPrice</th>
-								<th align="center">LineNum</th>
-								<th align="center">MacLoadage</th>
-								<th align="center">MacStdTemp</th>
-							</tr>
-			<c:forEach var="result" items="${resultList}" varStatus="status">
-			<tr>
-													<td align="center" class="listtd"><a href="javascript:fn_egov_select('<c:out value="${result.macCode}"/>')"><c:out value="${result.macCode}"/></a>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.macName}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.macDiv}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.macSize}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.model}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.proOper}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.worker}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.use}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.nomCap}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.usingEnergy}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.safety}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.macProDate}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.buyDate}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.buyPrice}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.lineNum}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.macLoadage}"/>&nbsp;</td>
-						<td align="center" class="listtd"><c:out value="${result.macStdTemp}"/>&nbsp;</td>
-				    			</tr>
-			</c:forEach>
-		</table>
-	</div>
-	<!-- /List -->
-	<div id="paging">
-		<ui:pagination paginationInfo = "${paginationInfo}"
-				   type="image"
-				   jsFunction="fn_egov_link_page"
-				   />
-		<form:hidden path="pageIndex" />
-	</div>
-	<div id="sysbtn1">
-		<ul>
-			<li>
-				<div id="sysbtn">
-					<span class="btn_blue_l"><a href="javascript:fn_egov_addView();">등록</a><img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" alt="" />
-					</span>
+	<!-- 		123 -->
+	<div class="pcoded-inner-content">
+		<div class="main-body">
+			<div class="page-wrapper">
+				<div class="row">
+					<div class="col-xl-4">
+						<div class="card">
+							<!-- 타이틀 -->
+							<div id="title" class="card-header">
+								<ul>
+									<li>작업실적대상제품자료</li>
+								</ul>
+							</div>
+							<!-- // 타이틀 -->
+							<!-- List -->
+
+							<div id="table1">
+								<table class="table">
+									<tr>
+										<th>설비코드</th>
+										<td><input type="text" id="macCode" name="macCode" /></td>
+									</tr>
+									<tr>
+										<th>설비명</th>
+										<td><input type="text" id="macName" name="macName" /></td>
+									</tr>
+									<tr>
+										<th>사용여부</th>
+										<td><input type="text" id="use1" name="use1" /></td>
+									</tr>
+									<tr>
+										<th>설비구분</th>
+										<td><input type="text" id="macDiv" name="macDiv" /></td>
+									</tr>
+									<tr>
+										<th>모델명</th>
+										<td><input type="text" id="model" name="model" /></td>
+									</tr>
+									<tr>
+										<th>제작업체</th>
+										<td><input type="text" id="proOper" name="proOper" /></td>
+									</tr>
+									<tr>
+										<th>최근 작업자</th>
+										<td><input type="text" id="worker" name="worker" /></td>
+									</tr>
+									<tr>
+										<th>용도</th>
+										<td><input type="text" id="use" name="use" /></td>
+									</tr>
+									<tr>
+										<th>구매금액</th>
+										<td><input type="text" id="buyPrice" name="buyPrice" /></td>
+									</tr>
+									<tr>
+										<th>구매일자</th>
+										<td><input type="date" id="buyDate" name="buyDate" /></td>
+									</tr>
+									<tr>
+										<th>사용에너지</th>
+										<td><input type="text" id="usingEnergy"
+											name="usingEnergy" /></td>
+									</tr>
+									<tr>
+										<th>부하율</th>
+										<td><input type="text" id="macLoadage" name="macLoadage" /></td>
+									</tr>
+									<tr>
+										<th>온도</th>
+										<td><input type="text" id="macStdTemp" name="macStdTemp" /></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
 				</div>
-			</li>
-		</ul>
+			</div>
+		</div>
 	</div>
-</div>
-</form:form>
 </body>
 </html>
