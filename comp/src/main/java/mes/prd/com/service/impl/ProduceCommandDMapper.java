@@ -1,5 +1,6 @@
 package mes.prd.com.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
@@ -47,6 +48,10 @@ public interface ProduceCommandDMapper {
     public void updateProduceCommand(ProduceCommandDVO vo) throws Exception;
     public void updateProduceCommandD(ProduceCommandDVO vo) throws Exception;
     public void updateProduceCommandMat(ProduceCommandDVO vo) throws Exception;
+    
+    public void updateOrdD(ProduceCommandDVO vo) throws Exception;
+    public void updateOrdDUpdate(ProduceCommandDVO vo) throws Exception;
+    public void updateOrdDDelete(ProduceCommandDVO vo) throws Exception;
     
     public void updatetMatStc(ProduceCommandDVO vo) throws Exception;
     public void updatePrdComDY(ProduceCommandDVO vo) throws Exception;
@@ -106,6 +111,9 @@ public interface ProduceCommandDMapper {
 	
 	/** 공정실적 이동번호 count */
 	public int getPrcResCount() throws Exception;
+	
+	/** mat선택한 지시일련 구하기 */
+	public BigDecimal selectPrdComDNum() throws Exception;
 	
     /**
 	 * PRODUCE_COMMAND_D 총 갯수를 조회한다.

@@ -79,7 +79,7 @@ public interface ProduceCommandDService {
     List selectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception;
     
     /** 작업지시 update */
-    String produceCommandUpdate(GridDataVO gridData) throws Exception;
+    ProduceCommandDVO produceCommandUpdate(GridDataVO gridData) throws Exception;
     
     /** 작업지시 mat update */
     void produceCommandMatUpdate(GridDataVO gridData) throws Exception;

@@ -139,6 +139,9 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     /** 자재비고 */
     private java.lang.String prdComMatNote;
     
+    //새행이라 지시일련 없을때 용
+    private java.math.BigDecimal rowKey1;
+    private java.math.BigDecimal matRowKey;
     
 //자재출고관련
     /** 자재입출반관리 번호 */

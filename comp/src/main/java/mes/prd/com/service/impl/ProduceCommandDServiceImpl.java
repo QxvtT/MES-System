@@ -148,8 +148,10 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
     }
     
     /** 작업지시 update 및 insert*/
-    public String produceCommandUpdate(GridDataVO gridData) throws Exception {
+    public ProduceCommandDVO produceCommandUpdate(GridDataVO gridData) throws Exception {
+    	ProduceCommandDVO result = new ProduceCommandDVO();
     	String newPrdComNum = null;
+    	BigDecimal prdComDNum = null;
     	if(gridData.getProduceCommandDVO().getPrdComNum() != null && gridData.getProduceCommandDVO().getPrdComNum() != "") {
     		produceCommandDDAO.updateProduceCommand(gridData.getProduceCommandDVO());
     	} else {
@@ -166,21 +168,42 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
     	
     	if(gridData.getDeletedRows() != null) {
         	for(int i =0; i<gridData.getDeletedRows().size(); i++) {
-        		produceCommandDDAO.deleteProduceCommandD(gridData.getDeletedRows().get(i));
+        		ProduceCommandDVO vo = gridData.getDeletedRows().get(i);
+        		produceCommandDDAO.deleteProduceCommandD(vo);
+        		//주문일련이 있으면 주문디테일에 지시량 업데이트
+        		if(vo.getOrdDNum() != null) {
+        			produceCommandDDAO.updateOrdDDelete(vo);
+        		}
         	}
         }
         if(gridData.getUpdatedRows() != null) {
         	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
-        		produceCommandDDAO.updateProduceCommandD(gridData.getUpdatedRows().get(i));
+        		ProduceCommandDVO vo = gridData.getUpdatedRows().get(i);
+        		//주문일련이 있으면 주문디테일에 지시량 업데이트
+        		if(vo.getOrdDNum() != null) {
+        			produceCommandDDAO.updateOrdDUpdate(vo);
+        		}
+        		produceCommandDDAO.updateProduceCommandD(vo);
         	}
         }
         if(gridData.getCreatedRows() != null) {
+        	//만들고 업데이트하고 지우고 할때 주문일련이 있으면 주문디테일테이블에 지시량 업데이트 해주기
         	if(gridData.getProduceCommandDVO().getPrdComNum()!=null && gridData.getProduceCommandDVO().getPrdComNum()!="") {
+        		BigDecimal matRowKey = gridData.getProduceCommandDVO().getMatRowKey();
         		
         		for(int i =0; i<gridData.getCreatedRows().size(); i++) {
+        			
         			ProduceCommandDVO vo= gridData.getCreatedRows().get(i);
         			vo.setPrdComNum(gridData.getProduceCommandDVO().getPrdComNum());
             		produceCommandDDAO.insertProduceCommandD(vo);
+            		
+            		if(matRowKey != null && vo.getRowKey1() == matRowKey) {
+            			prdComDNum = produceCommandDDAO.selectPrdComDNum();
+            		}
+            		//주문일련이 있으면 주문디테일에 지시량 업데이트
+            		if(vo.getOrdDNum() != null) {
+            			produceCommandDDAO.updateOrdD(vo);
+            		}
             	}
         	} else {
         		ProduceCommandDVO vo= null;
@@ -188,8 +211,9 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
         	
         }
         
-        
-        return newPrdComNum;
+        result.setPrdComNum(newPrdComNum);
+        result.setPrdComDNum(prdComDNum);
+        return result;
     }
     
     /** 작업지시 Mat update 및 insert*/

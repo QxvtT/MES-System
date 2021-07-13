@@ -69,8 +69,8 @@
 		</if>
 		<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
 		<![CDATA[
-			AND PRD_COM_DATE >= #{startDate}
-			AND PRD_COM_DATE <= #{endDate}
+			AND to_char(PRD_COM_DATE,'YYYY-MM-DD') >= #{startDate}
+			AND to_char(PRD_COM_DATE,'YYYY-MM-DD') <= #{endDate}
 			]]>
 		</if>
 		</where>
@@ -87,7 +87,7 @@
 		SELECT * FROM (
 			SELECT A.*, ROWNUM RNUM FROM ( 
 		        select A.*, to_char(a.prd_com_d_date,'YYYY-MM-DD') as prd_com_d_date1, 
-		        		M.MAT_NAME, B.yes_Com_Vol,
+		        		M.MAT_NAME, nvl(B.yes_Com_Vol,0) as yes_Com_Vol,
 				        a.ord_vol - nvl(B.yes_Com_Vol,0) - NVL(a.ord_out_vol,0) as no_Com_Vol,
 				        a.itm_day_output/8 as UPH, a.prd_com_vol/a.itm_day_output as day_Num
 				from(SELECT A.PRD_DATE
@@ -115,8 +115,8 @@
 				where a.ord_d_num = b.ord_d_num (+)
 				AND A.MAT_CODE = M.MAT_CODE
 				<![CDATA[
-				AND A.prd_com_d_date >= #{prdDateS}
-		        AND A.prd_com_d_date <= #{prdDateE}
+				AND to_char(A.prd_com_d_date,'YYYY-MM-DD') >= #{prdDateS}
+		        AND to_char(A.prd_com_d_date,'YYYY-MM-DD') <= #{prdDateE}
 		        ]]>
 		        <if test="prdPlnDNum1 != null and prdPlnDNum1 != ''">
 					<![CDATA[	
@@ -307,6 +307,11 @@
 			end;
 	</insert>
 	
+	<!-- mat선택한 행의 지시일련 구하기 -->
+	<select id="selectPrdComDNum" resultType="BigDecimal">
+		select produce_command_d_seq.currval from dual
+	</select>
+	
 	<!-- 작업지시 grid 행 update -->
 	<update id="updateProduceCommandD">
 	declare
@@ -388,6 +393,56 @@
 			</if>
 		end;
 	</delete>
+	
+	<!-- 주문디테일 지시량 update -->
+	<update id="updateOrdD">
+		declare
+			v_ordIndVol order_d.ord_ind_vol%type;
+		begin
+			select ord_ind_vol into v_ordIndVol 
+			from order_d
+			where ord_d_num = #{ordDNum};
+		
+			update order_d set
+			ord_ind_vol = v_ordIndVol + #{prdComVol}
+			where ord_d_num = #{ordDNum};
+		end;
+	</update>
+	
+	<!-- 지시update일때 주문디테일 지시량 update -->
+	<update id="updateOrdDUpdate">
+		declare
+			v_ordIndVol order_d.ord_ind_vol%type;
+			v_prdComVol produce_command_d.prd_com_vol%type;
+		begin
+			select ord_ind_vol into v_ordIndVol 
+			from order_d
+			where ord_d_num = #{ordDNum};
+			
+			select prd_com_vol into v_prdComVol
+			from produce_command_d
+			where prd_com_d_num = #{prdComDNum};
+		
+			update order_d set
+			ord_ind_vol = v_ordIndVol - v_prdComVol + #{prdComVol}
+			where ord_d_num = #{ordDNum};
+		end;
+	</update>
+	
+	<!-- 지시delete일때 주문디테일 지시량 update -->
+	<update id="updateOrdDDelete"> 
+		declare
+			v_ordIndVol order_d.ord_ind_vol%type;
+		begin
+			select ord_ind_vol into v_ordIndVol 
+			from order_d
+			where ord_d_num = #{ordDNum};
+		
+			update order_d set
+			ord_ind_vol = v_ordIndVol - #{prdComVol}
+			where ord_d_num = #{ordDNum};
+		end;
+	</update>
 	
 	<!-- 작업지시 마스터번호 구하기 -->
 	<select id="getPrdComCount" resultType="int">

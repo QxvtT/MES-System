@@ -47,6 +47,9 @@ let rows = null;
 //제품조회 스크롤용
 let itmCode1 = null;
 
+//새행 구분용
+let matRowKey = null;
+
 let rowKey = null;
 
 $(function(){
@@ -238,11 +241,16 @@ $(function(){
 		$('#prdComNote').val(grid2.getValue(e.rowKey,'prdComNote'));
 		//$('#operName').val(grid2.getValue(e.rowKey,'operName'));
 		grid.resetData(getList());
+		
 		//출고여부가 Y면 체크박스를 막아 삭제못하게
 		let rowsY = grid.findRows((row) => {
 		    return (row.matOutChk == 'Y');
 		});
-		grid.
+		console.log("rowY");
+		console.log(rowsY);
+		for(let i in rowsY) {
+			grid.disableRowCheck(rowsY[i].rowKey);
+		}
 		
 		// 이전 데이터들 초기화
 		gridMat.clear();
@@ -253,6 +261,7 @@ $(function(){
 		$('#matCode').val('');
 		$('#matName').val('');
 		$('#operName').val('');
+		matRowKey = null;
 		
 		// 주문일련이나 계획일련이 있는 row 구하기
 		rows = grid.findRows((row) => {
@@ -450,17 +459,6 @@ $(function(){
 	
 	
 	searchPlnBtn.onclick = function() {
-		prdDateS = $('#startpicker-input').val();
-		prdDateE = $('#endpicker-input').val();
-		console.log("일자");
-		console.log(prdDateS);
-		console.log(prdDateE);
-		grid.clear();
-		let data = getPlnList();
-		for(let i in data) {
-			console.log(data[i]);
-			grid.appendRow(data[i]);
-		}
 		// 이전 데이터들 초기화
 		gridMat.clear();
 		gridFlow.clear();
@@ -476,6 +474,18 @@ $(function(){
 		$('#prdComName').val('');
 		$('#prdComNote').val('');
 		prdComNum = null;
+		matRowKey = null;
+		prdDateS = $('#startpicker-input').val();
+		prdDateE = $('#endpicker-input').val();
+		console.log("일자");
+		console.log(prdDateS);
+		console.log(prdDateE);
+		grid.clear();
+		let data = getPlnList();
+		for(let i in data) {
+			console.log(data[i]);
+			grid.appendRow(data[i]);
+		}
 		
 	}
 	
@@ -492,7 +502,13 @@ $(function(){
 			deleteMBtn.classList.add('disabled');
 			
 		}
-		prdComDNum = grid.getValue(e.rowKey,'prdComDNum');
+		//새로 추가한 행이라 지시일련이 없는 경우 rowKey를 가져간다.
+		if(grid.getValue(e.rowKey,'prdComDNum') == null) {
+			matRowKey = e.rowKey;
+		} else {
+			matRowKey = null;
+			prdComDNum = grid.getValue(e.rowKey,'prdComDNum');
+		}
 		itmCode = grid.getValue(e.rowKey,'itmCode');
 		matCode = grid.getValue(e.rowKey,'matCode');
 		prdComMatNum = null;
@@ -505,6 +521,9 @@ $(function(){
 		$('#matCode').val(matCode);
 		$('#matName').val(grid.getValue(e.rowKey,'matName'));
 		$('#operName').val(grid.getValue(e.rowKey,'operName'));
+		console.log("이거 와이");
+		console.log(grid.getValue(e.rowKey,'itmCode'));
+		console.log(e);
 	});
 	
 	//공정흐름조회 그리드
@@ -590,14 +609,20 @@ $(function(){
 		}
 		let gridData = grid.getModifiedRows({});
 		console.log(gridData);
+		let created = gridData["createdRows"];
+		for(let i in created) {
+			created[i].rowKey1 = created[i].rowKey;
+		}
+		gridData["createdRows"] = created;
 
 		gridData["produceCommandDVO"] = {
 									prdComNum : $('#prdComNum').val(),
 									prdComDate : $('#prdComDate').val(),
 									prdComName : $('#prdComName').val(),
-									prdComNote : $('#prdComNote').val()
+									prdComNote : $('#prdComNote').val(),
+									matRowKey : matRowKey
 									}
-		<%--
+		console.log(gridData);
 		$.ajax({
 				async: false, 
 				url : "ProduceCommandUpdate",
@@ -607,7 +632,8 @@ $(function(){
 				contentType:"application/json",
 				success : function(data) {
 					console.log(data);
-					prdComNum = data;
+					prdComNum = data.prdComNum;
+					prdComDNum = data.prdComDNum;
 					$('#prdComNum').val(prdComNum);
 					prdComDNum1 = null;
 					grid.resetData(getList());
@@ -616,9 +642,10 @@ $(function(){
 		
 		//lot자재 수정
 		let gridDataM = gridMat.getModifiedRows({});
+		
 		gridDataM["produceCommandDVO"] = {
 				prdComDNum : prdComDNum,
-				matCode : matCode,
+				matCode : matCode
 				}
 		$.ajax({
 			async: false, 
@@ -631,7 +658,6 @@ $(function(){
 				console.log(data);
 			}
 		});
-		--%>
 	}
 	
 	//자재 출고 관리
@@ -840,6 +866,7 @@ $(function(){
 		$('#prdComName').val('');
 		$('#prdComNote').val('');
 		prdComNum = null;
+		matRowKey = null;
 	}
 	
 })
