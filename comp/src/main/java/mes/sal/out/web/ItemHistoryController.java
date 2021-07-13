@@ -23,7 +23,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import lombok.Data;
 import mes.sal.ord.service.OrderMVO;
-import mes.sal.out.service.GridDataVO;
+import mes.sal.out.service.ItmOutGridDataVO;
 import mes.sal.out.service.ItemHistoryDefaultVO;
 import mes.sal.out.service.ItemHistoryService;
 import mes.sal.out.service.ItemHistoryVO;
@@ -102,7 +102,7 @@ public class ItemHistoryController {
     }
     
     @RequestMapping(value="/ItemHistoryUpdate")
-  public void ItemHistoryUpdate(@RequestBody GridDataVO gridData) throws Exception {
+  public void ItemHistoryUpdate(@RequestBody ItmOutGridDataVO gridData) throws Exception {
     	
      itemHistoryService.itemHistoryUpdate(gridData);
   } 
@@ -111,7 +111,7 @@ public class ItemHistoryController {
     @RequestMapping(value="/setItemCode", method=RequestMethod.GET)
     @ResponseBody
     public List<?> setItemCode(ItemHistoryVO searchVO ) throws Exception {
-        List<?> orderMList = itemHistoryService.setItemCode(searchVO);
+    	List<?> orderMList = itemHistoryService.setItemCode(searchVO);
         return orderMList;
        
     }
@@ -128,6 +128,14 @@ public class ItemHistoryController {
     @ResponseBody
     public List<?> setOrdNum(ItemHistoryVO searchVO ) throws Exception {
         List<?> orderMList = itemHistoryService.setOrdNum(searchVO);
+        return orderMList;
+       
+    }
+    
+    @RequestMapping(value="/getItmHisNum", method=RequestMethod.GET)
+    @ResponseBody
+    public List<?> getItmHisNum(ItemHistoryVO searchVO ) throws Exception {
+        List<?> orderMList = itemHistoryService.getItmHisNum(searchVO);
         return orderMList;
        
     }

@@ -48,12 +48,15 @@
 			declare
 			v_ord_vol order_d.ord_vol%type;
             v_ord_out_vol order_d.ord_out_vol%type;
+            
 			begin
-				select ord_vol, ord_out_vol 
-				into v_ord_vol, v_ord_out_vol
-				from order_d
-				where ord_num = #{ordNum} and
-				      itm_code = #{itmCode};
+			    
+			   select ord_vol, ord_out_vol
+			   into v_ord_vol, v_ord_out_vol
+			   from order_d
+			   where ord_num =#{ordNum}
+			   and itm_code = #{itmCode};
+				      
 				insert into item_history_d
     				values
           					(item_history_d_seq.nextval
@@ -69,8 +72,8 @@
         			set itm_vol = itm_vol- #{itmVol}
        					 where 	itm_stc_num = #{lotNum}
         						and   itm_code = #{itmCode};
+        						
         		if v_ord_out_vol + #{itmVol} = v_ord_vol then
-        		
           			update order_d
         			set ord_out_vol = ord_out_vol+#{itmVol},
         			    ord_status = '완료'
@@ -78,32 +81,51 @@
         				and itm_code = #{itmCode};
           		
           		else
-          		
           			update order_d
         			set ord_out_vol = ord_out_vol+#{itmVol}
         				where ord_num =  #{ordNum} 
         				and itm_code = #{itmCode};
           			
           		end if;
-        
-        		
-        				
-        				
-        					
-					end;
+			end;
 					
 	</insert>
 	<insert id="itemHistoryMaster">
-				INSERT INTO item_history 
-					VALUES ( #{itmHisNum}
-				  			, #{ordNum}
-				  			, '출고'
-				  			, to_date(#{itmHisRdy},'yyyy-MM-dd')
-                			, #{itmNote})
+				
 	</insert>
 	
 	<insert id="itemHistoryNewInsert">
+			declare
+				v_ord_vol order_d.ord_vol%type;
+	            v_ord_out_vol order_d.ord_out_vol%type;
+				v_count number;
 			begin
+			   select ord_vol, ord_out_vol
+			   into v_ord_vol, v_ord_out_vol
+			   from order_d
+			   where ord_num =#{ordNum}
+			   and itm_code = #{itmCode};
+				
+				select count(*)
+			    into v_count 
+			    from item_history
+			    where itm_his_num = #{itmHisNum};
+			    
+			    if v_count = 0 then
+			      INSERT INTO item_history 
+					VALUES ( #{itmHisNum}
+				  			, #{ordNum}
+				  			, '출고'
+				  			,to_date(to_char(#{itmHisRdy},'yyyy-MM-dd'),'yyyy-MM-dd')
+                			, #{itmNote});
+			    end if;
+			
+				select ord_vol, ord_out_vol 
+				into v_ord_vol, v_ord_out_vol
+				from order_d
+				where ord_num = #{ordNum} and
+				      itm_code = #{itmCode};
+			
 				insert into item_history_d
     				values
           					(item_history_d_seq.nextval
@@ -118,10 +140,19 @@
        					 where 	itm_stc_num = #{lotNum}
         						and   itm_code = #{itmCode};
         
-        		update order_d
+        		if v_ord_out_vol + #{itmVol} = v_ord_vol then
+          			update order_d
+        			set ord_out_vol = ord_out_vol+#{itmVol},
+        			    ord_status = '완료'
+        				where ord_num =  #{ordNum} 
+        				and itm_code = #{itmCode};
+          		
+          		else
+          			update order_d
         			set ord_out_vol = ord_out_vol+#{itmVol}
         				where ord_num =  #{ordNum} 
-        				and itm_code = #{itmCode};	
+        				and itm_code = #{itmCode};
+          		end if;
 					end;
 					
 	</insert>
@@ -151,18 +182,6 @@
 				]]>
 	</delete>
 
-	<select id="selectItemHistory" resultMap="itemHistory">
-		<![CDATA[
-			SELECT
-				ITM_HIS_NUM
-				, ORD_NUM
-				, ITM_DIV
-				, ITM_HIS_RDY
-				, ITM_NOTE
-			FROM ITEM_HISTORY
-						WHERE ITM_HIS_NUM=#{itmHisNum}
-				]]>
-	</select>
 
 	<select id="selectItemHistoryList"
 		parameterType="mes.sal.out.service.ItemHistoryVO"
@@ -235,18 +254,10 @@
 							, item.itm_size
 							, item.itm_unit
 							, o.ord_num
-							, od.ord_vol
-							, (  select sum(id.itm_vol) 
-							     from item_history_d id, item_history i
-								 where id.itm_his_num = i.itm_his_num
-								 and id.itm_his_num =  #{itmHisNum}
-							     group by i.ord_num) as ord_out_vol
+							, od.ord_vol 
+							, od.ord_out_vol-id.itm_vol ord_out_vol
 							, id.itm_vol
-							, (od.ord_vol-(select sum(id.itm_vol) 
-											from item_history_d id,item_history i
-											where id.itm_his_num = i.itm_his_num
-											 and id.itm_his_num = #{itmHisNum}
-											group by i.ord_num)-id.itm_vol) as itm_nout_vol
+							, (od.ord_vol+id.itm_vol- vol.volume) as itm_nout_vol 
 							, its.itm_vol as itm_stock
 							, id.lot_num
 							, id.itm_price
@@ -258,18 +269,27 @@
 				      order_m o, 
 				      order_d od, 
 				      item,
-					  item_stock its
+					  item_stock its,
+					  					(select sum(id.itm_vol) as volume, id.itm_code
+										     from item_history_d id, item_history i, order_d od
+											 where id.itm_his_num = i.itm_his_num
+                                             and od.ord_num = i.ord_num
+											 and od.ord_num = (select ord_num from item_history
+                                                                where itm_his_num = #{itmHisNum})
+										     group by id.itm_code) vol
+					
 				where i.itm_his_num = id.itm_his_num and
 				i.ord_num = o.ord_num and
 				i.ord_num = od.ord_num and
 				item.itm_code = its.itm_code and
-				item.itm_code = od.itm_code
-				<if test="ordNum !=null and ordNum !=''">and
+				item.itm_code = od.itm_code and
+				vol.itm_code = od.itm_code
+				<if test="ordNum !=null and ordNum !=''">
 				and o.ord_num = #{ordNum}
 				</if>
-				<if test="itmHisDNum != null">
+				<if test="itmHisDNum1 != null">
 								<![CDATA[	
-									and id.ITM_HIS_D_NUM < #{itmHisDNum}
+									and id.ITM_HIS_D_NUM < #{itmHisDNum1}
 								]]>
 				</if>
 				<if test="itmHisRdy != null and itmHisRdy != ''">and 
@@ -286,7 +306,7 @@
 				
 				
 				ORDER BY
-				id.itm_his_d_num desc
+				id.itm_his_d_num 
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )
@@ -299,16 +319,16 @@
 		SELECT * FROM (
 			SELECT A.*, ROWNUM RNUM FROM (
 				select 
-					to_char(i.itm_his_rdy,'yyyy-MM-dd') as itm_his_rdy
+					to_char(i.itm_his_rdy+1,'yyyy-MM-dd') as itm_his_rdy
 					,i.itm_his_num
 					,o.oper_name
 					,i.itm_note
 				from item_history i, order_m o
 				where
 						i.ord_num = o.ord_num 
-			<if test="itmHisDNum != null">
+			<if test="itmHisDNum2 != null">
 				<![CDATA[	
-					and i.itm_his_d_num < #{itmHisDNum}
+					and i.itm_his_d_num < #{itmHisDNum2}
 				]]>
 			</if>
 		<if
@@ -331,8 +351,8 @@
 
 	
 	<select id="getCount" parameterType="mes.sal.out.service.ItemHistoryVO" resultType="String">
-		select max(substr(itm_his_num,-4)) from item_history
-		where to_char(itm_his_rdy,'yyyy-MM-dd') = #{itmHisRdy}
+		select max(substr(itm_his_num,-3)) from item_history
+		where to_char(itm_his_rdy,'yyyy-MM-dd') = to_char(#{itmHisRdy},'yyyy-MM-dd')
 		
 	</select>
 	<select id="setItemCode"
@@ -340,16 +360,28 @@
 		resultType="mes.sal.out.service.ItemHistoryVO">
 		SELECT * FROM (
 			SELECT A.*, ROWNUM RNUM FROM (
-				select item.itm_code
-				       ,item.itm_name
-				       ,item.itm_size
-				       ,item.itm_unit
-				       ,od.ord_vol
-				from order_d od, item
-				where ord_num = #{ordNum} and
-				
-				item.itm_code = od.itm_code
-				
+				select a.ord_num
+				       , a.itm_code
+					   , a.total_vol
+					   , od.ord_vol
+					   , od.ord_out_vol
+				       , item.itm_name
+				       , item.itm_size
+				       , item.itm_unit
+				       , (od.ord_vol-a.total_vol) as itm_nout_vol
+				from order_d od
+				     ,(select it.ord_num
+				             ,itd.itm_code
+				             ,sum(itd.itm_vol) as total_vol
+				        from item_history it
+				            , item_history_d itd
+				        where it.itm_his_num = itd.itm_his_num
+				        group by it.ord_num, itd.itm_code) a
+				    ,item
+				where od.ord_num = a.ord_num 
+				   and  od.itm_code = a.itm_code 
+				   and od.itm_code = item.itm_code
+				   and od.ord_num = #{ordNum}
 				<if test="itmCode1 != null and itmCode1 != ''" >
 				<![CDATA[	
 					and itm_code < #{itmCode1}
@@ -362,7 +394,41 @@
 )
 ]]>
 	</select>
+	
 
+	
+	<select id="setItemCodeA"
+		parameterType="mes.sal.out.service.ItemHistoryVO"
+		resultType="mes.sal.out.service.ItemHistoryVO">
+		SELECT * FROM (
+			SELECT A.*, ROWNUM RNUM FROM (
+				select od.ord_num
+                       ,od.itm_code  
+        			   ,0 as ord_out_vol
+                       ,od.ord_vol
+				       , item.itm_name
+				       , item.itm_size
+				       , item.itm_unit
+				       , (od.ord_vol) as itm_nout_vol
+				from order_d od
+				    ,item
+				where
+				    od.itm_code = item.itm_code
+				   and od.ord_num = #{ordNum}
+				<if test="itmCode1 != null and itmCode1 != ''" >
+				<![CDATA[	
+					and itm_code < #{itmCode1}
+				]]>
+			</if>
+		ORDER BY
+		itm_code 
+		<![CDATA[					
+	) A WHERE ROWNUM <= 10
+)
+]]>
+	</select>
+	
+	
 
 	<select id="setLotNum"
 		parameterType="mes.sal.out.service.ItemHistoryVO"
@@ -406,6 +472,20 @@
 					and ord_num < #{ordNum1}
 				]]>
 			</if>
+				<if test = "ordADate !=null and ordADate != '' and ordBDate != null and ordBDate !=''"> and
+	            		<if test = "date == 'request'"> 
+		        			<![CDATA[			    			
+		           			ord_request_date >= to_date(#{ordBDate} ,'yyyy-MM-dd') and
+		           			ord_request_date <= to_date(#{ordADate} ,'yyyy-MM-dd')
+		           			]]>
+	            		</if>
+	            		<if test = "date == 'delivery'"> 
+		        			<![CDATA[			    			
+		           			ORD_DELIVERY_DATE >= to_date(#{ordBDate} ,'yyyy-MM-dd') and
+		           			ORD_DELIVERY_DATE <= to_date(#{ordADate} ,'yyyy-MM-dd')
+		           			]]>
+	            		</if>
+            	</if>
 		ORDER BY
 		ord_num desc 
 		
@@ -415,5 +495,22 @@
 ]]>
 	</select>
 	
+	
+	<select  id ="setOrdCheck" resultType="int" parameterType="mes.sal.out.service.ItemHistoryVO">
+		select count(*) from item_history where ord_num =#{ordNum}
+	</select>
+	
+	<select  id ="getItmHisNum" resultType="mes.sal.out.service.ItemHistoryVO" parameterType="mes.sal.out.service.ItemHistoryVO">
+		select ih.itm_his_num 
+		from item_history_d ihd
+		     , item_history ih
+		      ,(  select max(itm_his_d_num) as itm_his_d_num 
+		          from item_history ih
+		             , item_history_d ihd
+                   where ord_num = #{ordNum} 
+                    and ih.itm_his_num = ihd.itm_his_num) a
+		where ihd.itm_his_num = ih.itm_his_num 
+ 				 and a.itm_his_d_num = ihd.itm_his_d_num
+	</select>
 
 </mapper>

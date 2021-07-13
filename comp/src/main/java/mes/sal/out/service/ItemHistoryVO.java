@@ -49,6 +49,8 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     
     /** 디테일일련번호 */
     private java.math.BigDecimal itmHisDNum;
+    private java.math.BigDecimal itmHisDNum1;
+    private java.math.BigDecimal itmHisDNum2;
     private java.math.BigDecimal count;
     
     /** 제품코드-제품명 */
@@ -79,6 +81,11 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     /** 기간검색 bDate ~ aDate */
     private java.lang.String aDate;
     private java.lang.String bDate;
+    private java.lang.String ordADate;
+    private java.lang.String ordBDate;
+    private java.lang.String date;
+    
+    
     /** 업체코드-업체명 */
     private java.lang.String operCode;
     private java.lang.String operName;
@@ -86,6 +93,7 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     
     /** 제품금액 수량*단가*/
     private java.math.BigDecimal totalPrice;
+    
     /** 중복검색 sql  */
     private java.lang.String str;
     
@@ -101,6 +109,10 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     
     /** 납기일자 */
     private java.lang.String ordDeliveryDate;
+    
+    /** 제품금액 수량*단가*/
+    private java.math.BigDecimal totalOutVol;
+    
     
     
    

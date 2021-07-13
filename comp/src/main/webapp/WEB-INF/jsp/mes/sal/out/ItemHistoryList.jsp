@@ -97,6 +97,10 @@ $(function(){
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
 	   });
+	reset.onclick = function() {
+		let list=[];
+		grid.resetData(list);
+	}
 })
 </script>
 </head>
@@ -136,7 +140,7 @@ $(function(){
 		제품명<input type="text" id="itmName" name = "itmName"/>
 		<br/>
 		<button type="button" class="btn btn-info btn-sm" id="getItemHistory">검색</button>
-		<button type="reset" class="btn btn-info btn-sm" id="button">리셋</button>
+		<button type="reset" class="btn btn-info btn-sm" id="reset">리셋</button>
 	</form>
 	
 		<div class="pcoded-inner-content">

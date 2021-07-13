@@ -37,6 +37,8 @@
 
 // 전체주문페이지 
 let itmHisDNum = null;
+let itmHisDNum1 = null;
+let itmHisDNum2 = null;
 let itmHisRdy = null;
 let operCode = null;
 
@@ -46,16 +48,15 @@ let bDate = null;
 let test = null;
 let ordDNum = null;
 let itmHisNum = null;
-
-let data;
-
 let oldVal;
 let newVal;
-
 let key =0;
 let itmCode1 = null;
 let ordNum1 =null;
 let ordNum =null;
+let ordADate = null;
+let ordBDate = null;
+let date = null;
 
 //주문일련 계획일련 있는 row들 담을 변수
 let rows = null;
@@ -80,7 +81,7 @@ $(function(){
 			{ header: '현재고', name:'itmStock'},
 			{ header: '자재LOT_NO', name:'lotNum',editor:"text"},
 			{ header: '단가', name:'itmPrice',editor:"text"},
-			{ header: '금액', name:'totalPrice',editor:"text"},
+			{ header: '금액', name:'totalPrice'},
 			{ header: '비고', name:'itmNoteD',editor:"text"}
 	    ]
 	}); // end const grid
@@ -90,12 +91,13 @@ $(function(){
 	  })
 	  
 	function getList() { 
+		let data;
 		$.ajax({
 			async: false, 
 			url : "ItemHistoryRegist",
 			type : "get",
 			data : {
-  				 itmHisDNum : itmHisDNum
+  				 itmHisDNum1 : itmHisDNum1
   				,itmHisRdy : itmHisRdy
   				,operCode : operCode
   				,itmHisNum : itmHisNum
@@ -104,7 +106,7 @@ $(function(){
 			dataType: "json",
 			success : function(result){
 						if(result.length > 0) {
-							itmHisDNum = result[result.length -1].itmHisDNum;
+							itmHisDNum1 = result[result.length -1].itmHisDNum1;
 							}
 						console.log(result);
 						if(result.length !=0){
@@ -121,22 +123,17 @@ $(function(){
 		return data;
 	}
 		
-	//조회버튼
-	button.onclick = function(){
-		itmHisDNum = null;
-		test = null;
-		ordNum = $( 'input#ordNum' ).val();
-		grid.resetData(getList());
-		grid2.resetData(getItemHisNumList());
-		
-		
 
-	} 
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
 	   });
-	
-// 	주문번호 검색 모달
+	reset.onclick = function() {
+		itmHisNum = null;
+		ordNum = null;
+		let list = [];
+		grid.resetData(list);
+	}
+// 출고번호검색 모달
 	const grid2 = new tui.Grid({
 		
 		el: document.getElementById('grid2'),
@@ -154,11 +151,7 @@ $(function(){
 	    ]
 	});
 	function getItemHisNumList() {
-		if(test ==null && itmHisDNum !=null) {
-		itmHisDNum = null;
-		test = 'test';
-		}
-		let data2;
+		let data;
 		$.ajax({
 			async: false,
 			url : "ItemHisNumList",
@@ -166,20 +159,20 @@ $(function(){
 			data : {
 				 aDate : aDate
 				,bDate : bDate
-				,itmHisDNum: itmHisDNum
+				,itmHisDNum2: itmHisDNum2
 				
 				},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					itmHisDNum = result[result.length -1].itmHisDNum;
+					itmHisDNum2 = result[result.length -1].itmHisDNum2;
 				}
 				console.log(result);
-				data2 = result;
+				data = result;
 				
 			} // end success
 		}); // end ajax 
-		return data2;
+		return data;
 	} 
 	
 	grid2.on('scrollEnd', () => {
@@ -190,35 +183,38 @@ $(function(){
 		$("#myModal").on('shown.bs.modal', function () {
 			grid2.refreshLayout();
 		});
-	})
-	ordNumSearch.onclick = function(){
-		console.log('test')
-		itmHisDNum = null;
-		aDate = $(".modal-body").find('input[name="aDate"]').val();
-		console.log(aDate)
-		bDate = $(".modal-body").find('input[name="bDate"]').val();
-		grid2.resetData(getItemHisNumList());
-	}
-	hisNumY.onclick=function() {
-		itmHisDNum = null;
-		itmHisNum = grid2.getCheckedRows()[0]['itmHisNum'];
-		test = null;
-		grid.resetData(getList());
+		hisNumSearch.onclick = function() {
+			aDate = $(".modal-body").find('input[name="aDate"]').val();
+			bDate = $(".modal-body").find('input[name="bDate"]').val();
+			
+			
+			grid2.resetData(getItemHisNumList());
+		}
+		hisNumSearchReset.onclick = function() {
+			aDate = null;
+			bDate = null;
+			grid2.resetData(getItemHisNumList());
+		}
 		
-		// 주문일련이나 계획일련이 있는 row 구하기
-		rows = grid.findRows((row) => {
-		    return (row.ordNum != null);
-		});
-	}
+		hisNumY.onclick=function() {
+			itmHisNum = grid2.getCheckedRows()[0]['itmHisNum'];
+			ordNum = null;
+			grid.resetData(getList());
+			
+			// 주문일련이나 계획일련이 있는 row 구하기
+			rows = grid.findRows((row) => {
+			    return (row.ordNum != null);
+			});
+		}
+		
+	})
+	
 	
 	insert.onclick = function() {
 		grid.appendRow();
 	}
 	
 	save.onclick = function() {
-		itmHisDNum = null;
-		test = null;
-		console.log(grid.getModifiedRows({}));
 		let gridData = grid.getModifiedRows({});
 		gridData["itemHistoryVO"] ={
 									itmHisRdy : $("#itmHisRdy").val()
@@ -226,7 +222,7 @@ $(function(){
 								   ,itmHisNum : $("#itmHisNum").val()
 								   ,operCode : $("#operCode").val()
 								   ,itmNote : $("#itmNote").val()
-									}
+									};
 		$.ajax({
 				async: false, 
 				url : "ItemHistoryUpdate",
@@ -235,15 +231,32 @@ $(function(){
 				dataType: "json",
 				contentType:"application/json",
 				success : console.log("updatesuccess")
+				
 				});
-		
-		grid2.resetData(getItemHisNumList());
-		
+		if($( 'input#itmHisNum' ).val()==null || $( 'input#itmHisNum' ).val()==""){
+			$.ajax({
+				async: false,
+				url : "getItmHisNum",
+				type : "get",
+				data : {
+					ordNum : $('input#ordNum' ).val()
+					},
+				dataType: "json",
+				success : function(result){
+					itmHisNum = result[0]['itmHisNum'];
+					$( 'input#itmHisRdy' ).val(result[0]['itmHisRdy']);
+					$( 'input#operCode' ).val(result[0]['operCode']);
+					$( 'input#itmNote' ).val(result[0]['itmNote']);
+					$( 'input#itmHisNum' ).val(result[0]['itmHisNum']);
+					$( 'input#operName' ).val(result[0]['operName']);
+					$( 'input#ordNum' ).val(result[0]['ordNum']);
+				} // end success
+			});
+			grid.resetData(getList());
+			grid2.resetData(getItemHisNumList());
+		}
 		
 	}
-	
-	
-
 	
 	deleteItm.onclick = function() {
 		grid.removeCheckedRows()
@@ -253,17 +266,17 @@ $(function(){
 	
 	// 주문일련이나 계획일련이 있으면 제품번호 수정 못하게 막는 function
 	grid.on('dblclick', (e) => { 
-		let check = false;
-		if(e.columnName == "itmCode") {
+// 		let check = false;
+// 		if(e.columnName == "itmCode") {
 			
-			for(let i=0; i<rows.length; i++) {
-				if(e.rowKey == rows[i].rowKey) {
-					check = true;
-					e.stop();
-				}
-			}
-		}
-		if(!check) {
+// 			for(let i=0; i<rows.length; i++) {
+// 				if(e.rowKey == rows[i].rowKey) {
+// 					check = true;
+// 					e.stop();
+// 				}
+// 			}
+// 		}
+// 		if(!check) {
 			key = grid.getFocusedCell()['rowKey'];
 			if(grid.getFocusedCell()['columnName'] == "itmCode"){
 				grid3.resetData(setItemCode());
@@ -298,7 +311,7 @@ $(function(){
 					 
 				});
 			}
-		}
+// 		}
 		
 	});
 	
@@ -379,17 +392,29 @@ $(function(){
 		$('#selectOrdNum').modal('toggle');
 		$('#selectOrdNum').on('shown.bs.modal', function(){
 			grid5.refreshLayout();
+			
+			ordNumSearch.onclick = function() {
+				date = $(".modal-body").find("input[name='date']:checked").val();
+				ordADate = $(".modal-body").find('input[name="ordADate"]').val();
+				ordBDate = $(".modal-body").find('input[name="ordBDate"]').val();
+				grid5.resetData(setOrdNum());
+			}
+			ordNumSearchReset.onclick = function() {
+				date = null;
+				ordADate = null;
+				ordBDate = null;
+				grid5.resetData(setOrdNum());
+			}
 			ordNumY.onclick = function() {
+				ordNum = grid5.getCheckedRows()[0]['ordNum'];
 				$('input#ordNum' ).val(grid5.getCheckedRows()[0]['ordNum']);
 				$('input#operCode' ).val(grid5.getCheckedRows()[0]['operCode']);
 				$('input#operName' ).val(grid5.getCheckedRows()[0]['operName']);
-				ordNum = grid5.getCheckedRows()[0]['ordNum'];
-				$( 'input#itmHisNum' ).val(' ');
-				$( 'input#itmNote').val(' ');
-				itmHisDNum = null;
-				itmHisNum = null;
-				grid.resetData(getList());
-				itmHisDNum = null;
+				$( 'input#itmHisNum' ).val(null);
+				$( 'input#itmNote').val(null);
+				let list = [];
+				grid.resetData(list);
+				
 			}
 			
 		})
@@ -416,6 +441,9 @@ $(function(){
 				type : "get",
 				data : {
 					ordNum1 : ordNum1
+					,ordADate : ordADate
+					,ordBDate : ordBDate
+					,date : date
 					},
 				dataType: "json",
 				success : function(result){
@@ -550,7 +578,6 @@ $(function(){
 						
 						
 					</table>
-					<button type="button" id="button" name="button">조회</button>
 				</div>
 			</form>
 
@@ -593,14 +620,17 @@ $(function(){
 					</button>
 				</div>
 				<div class="modal-body" >
+					<form>
 						<div class="form-group row">
 							<div class="col">
-								납기일자<input type="date" name="bDate" /> ~ <input type="date" name="aDate" /><br> 
+								출고일자<input type="date" name="bDate" /> ~ <input type="date" name="aDate" /><br> 
 							</div>
 						</div>
 						<div class="col-md-3">
-							<button type="button" class="btn btn-info btn-sm" id="ordNumSearch">검색</button>
+							<button type="button" class="btn btn-info btn-sm" id="hisNumSearch">검색</button>
+							<button type="reset" class="btn btn-info btn-sm" id="hisNumSearchReset">초기화</button>
 						</div>
+					</form>
 					<br />
 					<div id="grid2"></div>
 				</div>
@@ -611,7 +641,7 @@ $(function(){
 			</div>
 		</div>
 	</div>
-	<!-- 주쿤코드 검색 모달 종료-->
+	<!-- 출고번호 검색 모달 종료-->
 	
 	<!-- 제품코드 검색 해당 주문에 해당하는 제품코드 -->
 	<div class="modal fade" id="selectItemCode" tabindex="-1" role="dialog"
@@ -680,11 +710,19 @@ $(function(){
 					</button>
 				</div>
 				<div class="modal-body" >
+						<form>
 						<div class="form-group row">
+							<div class="col">
+								주문일자<input type ="radio" id="date" name = "date" value = "request" checked="checked"/>
+								납기일자<input type ="radio" id="date" name = "date" value = "delivery"/><br/>
+								<input type="date" name="ordBDate" /> ~ <input type="date" name="ordADate" /><br> 
+							</div>
 						</div>
 						<div class="col-md-3">
-							<button type="button" class="btn btn-info btn-sm" id="ordNumSearch">검색</button>
+							<button type="button" class="btn btn-info btn-sm" id="ordNumSearch">검색</button>&nbsp;&nbsp;
+							<button type="reset" class="btn btn-info btn-sm" id="ordNumSearchReset" >초기화</button>
 						</div>
+						</form>
 					<br />
 					<div id="grid5"></div>
 				</div>
