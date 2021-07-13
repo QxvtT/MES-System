@@ -37,16 +37,20 @@ $(function(){
 	    rowWidth: 100,
 	    data: null,
 	    columns: [
-	    	{ header: '계획일자', name:'prdDate'},
-	    	{ header: '고객사명', name:'operName'},
-	    	{ header: '제품코드', name:'itmCode'},
+	    	{ header: '작업일자', name:'prdDate'},
+	    	{ header: '지시번호', name:'operName'},
+	    	{ header: '고객사명', name:'itmCode'},
+			{ header: '제품코드', name:'itmName'},
 			{ header: '제품명', name:'itmName'},
 			{ header: '주문번호', name:'ordNum'},
 			{ header: '납기일자', name:'ordDeliveryDate'},
 			{ header: '주문량', name:'ordVol'},
-			{ header: '계획량', name:'prdWorkVol'},
-			{ header: '작업일자', name:'prdPlanDate'},
-			{ header: '순서', name:'prdNo'}
+			{ header: '지시량', name:'prdWorkVol'},
+			{ header: '작업구분', name:'prdPlanDate'},
+			{ header: '소재 LOT_NO', name:'prdPlanDate'},
+			{ header: '수량', name:'prdPlanDate'},
+			{ header: '순서', name:'prdNo'},
+			{ header: '비고', name:'prdNo'}
 	    ]
 	}); // end const grid
 	
@@ -102,7 +106,7 @@ $(function(){
 	});
 	
 	
-	// 생산계획조회 그리드 생성
+	// 생산지시조회 그리드 생성
 	$('#searchBtn').click(function() {
 		startDate = $('#startDate').val();
 		endDate = $('#endDate').val();
@@ -168,7 +172,7 @@ $(function(){
 				<div class="row align-items-center">
 					<div class="col-md-8">
 						<div class="page-header-title">
-							<h5 class="m-b-10">생산계획조회</h5>
+							<h5 class="m-b-10">생산지시조회</h5>
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -177,7 +181,7 @@ $(function(){
 									class="fa fa-home"></i>
 							</a></li>
 							<li class="breadcrumb-item">생산관리</li>
-							<li class="breadcrumb-item">생산계획조회</li>
+							<li class="breadcrumb-item">생산지시조회</li>
 						</ul>
 					</div>
 				</div>

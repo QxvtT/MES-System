@@ -176,7 +176,7 @@ public class ProduceCommandDController {
     }
     
  // 생산계획조회  리스트 ajax 처리
- 	@RequestMapping(value = "/ProduceCommandList", method = RequestMethod.GET)
+ 	@RequestMapping(value = "/ProduceCommandSearch", method = RequestMethod.GET)
  	@ResponseBody
  	public List<?> ajaxComList(@ModelAttribute("searchVO") ProduceCommandDVO searchVO) throws Exception {
  		System.out.println(searchVO);
