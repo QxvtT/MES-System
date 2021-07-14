@@ -94,6 +94,11 @@ public class ProcessResultController {
   public void updatePrcEnd(@RequestBody ProcessResultVO processResultVO) throws Exception {
     	processResultService.updatePrcEnd(processResultVO);
   } 
+    @RequestMapping(value="updatePrcStr")
+    @ResponseBody
+  public void updatePrcStr(@RequestBody ProcessResultVO processResultVO) throws Exception {
+    	processResultService.updatePrcStr(processResultVO);
+  } 
     
     
     

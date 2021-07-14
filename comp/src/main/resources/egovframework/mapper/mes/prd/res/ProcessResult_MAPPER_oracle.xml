@@ -28,13 +28,13 @@
 	
 	<update id ="updatePrcEnd">
 		update process_result_d
-		set prc_end_time = to_date(#{prcEndTime},'HH24:mm:ss')
+		set prc_end_time = to_date(#{prcEndTime},'yyyy-MM-dd:HH24:mi:ss')
 		where prc_res_d_num = #{prcResDNum}
 	</update>
 	
 	<update id ="updatePrcStr">
 		update process_result_d
-		set prc_str_time = to_date(#{prcStrTime},'HH24:mm:ss')
+		set prc_str_time = to_date(#{prcStrTime},'yyyy-MM-dd:HH24:mi:ss')
 		where prc_res_d_num = #{prcResDNum}
 
 	</update>

@@ -41,6 +41,8 @@ let matVol = 0;
 let empId = null;
 let macCode = null;
 let prcState = null;
+let prcEndTime = null;
+let prcStrTime = null;
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -256,6 +258,9 @@ function getProcessResultSelect(key) {
 				$( 'input#macCode' ).val(result[0]['macCode']);
 				$( 'input#prcStrTime' ).val(result[0]['prcStrTime']);
 				$( 'input#prcEndTime' ).val(result[0]['prcEndTime']);
+				prcStrTime =result[0]['prcStrTime'];
+				prcEndTime =result[0]['prcEndTime'];
+					
 				
 			} // end success
 		}); // end ajax 
@@ -314,48 +319,77 @@ function getProcessResultSelect(key) {
 			});
 			
 	}
-	sibal.onclick = function() {
-		let date = new Date();
-		date.toString();
-		console.log(date.getSeconds())
-	}
+
 	prcEnd.onclick = function() {
-		if($('input#prcEnd').val()!=null){
+		console.log($('input#prcEndTime').val());
+		if(prcEndTime != null){
 			alert("종료된작업입니다");
 			
-			return null;
+			return null; 
 		}
-		
-		let date = new Date();
-		function formatDate(datet){
-		    datet = datet.getHours() + ":" + datet.getMinutes() + ":" + datet.getSeconds();
-		    
-		    return datet;
-		}
-		let prcEndTime = formatDate(date);
-		console.log(prcEndTime);
+		let dateTime = new Date();
+		let dateDate = new Date();
+		let time = formatTime(dateTime);
+		let date = formatDate(dateDate);
+		$('input#prcEndTime').val(time);
+		let list = {prcEndTime : date
+					,prcResDNum : prcResDNum} ;
+			
 		$.ajax({
 			async: false, 
 			url : "updatePrcEnd",
 			type : "post",
-			data : {
-				prcEndTime : prcEndTime
-				,prcResDNum : prcResDNum
-				},
+			data : JSON.stringify(list),
 			dataType: "json",
 			contentType:"application/json",
 			success : function(){
-				$('input#prcEnd').val(prcEndTime);
+				
 				}
 			});
 	}
 	prcStr.onclick = function() {
-		if($('input#prcStr').val()!="" || $('input#prcStr').val()!=null){
+		if(prcStrTime != null){
 			alert("이미시작한작업입니다");
 			return null;
 		}
+		let dateTime = new Date();
+		let dateDate = new Date();
+		let time = formatTime(dateTime);
+		let date = formatDate(dateDate);
+		 $("input#prcStrTime").val(time);
+		let list = {prcStrTime : date
+					,prcResDNum : prcResDNum} ;
+			
+		$.ajax({
+			async: false, 
+			url : "updatePrcStr",
+			type : "post",
+			data : JSON.stringify(list),
+			dataType: "json",
+			contentType:"application/json",
+			success : function(){
+				
+				}
+			});
 		
 	}
+	 function leadZero(num, n) {
+         var leadZero = "";
+         num = num.toString();
+         if (num.length < n) { for (var i = 0; i < n - num.length; i++) leadZero += "0"; }
+         return leadZero + num;
+     }
+	 function formatDate(dateDate) {
+			let date =dateDate.getFullYear() + "-" + leadZero((dateDate.getMonth() + 1), 2) + "-" 
+         + leadZero(dateDate.getDate(), 2) + "  " + leadZero(dateDate.getHours(), 2) + ":" 
+         + leadZero(dateDate.getMinutes(), 2) + ":" + leadZero(dateDate.getSeconds(), 2);
+         return date;
+     }
+	 function formatTime(dateTime){
+			let time = leadZero(dateTime.getHours(), 2) + ":" 
+	         + leadZero(dateTime.getMinutes(), 2) + ":" + leadZero(dateTime.getSeconds(), 2);
+		    return time;
+		}
 })
 	
 </script>
@@ -470,7 +504,7 @@ function getProcessResultSelect(key) {
 				<div class="modal-header">
 					<h4 class="modal-title" id="exampleModalLabel">공정실적관리</h4>
 				</div>
-				<div class="modal-body" >
+				<div class="modal-body" name = "res" id = "res" >
 						<div class="form-group row">
 							<table class="table">
 								<tr>
@@ -526,3 +560,5 @@ function getProcessResultSelect(key) {
 
 </body>
 </html>
+
+

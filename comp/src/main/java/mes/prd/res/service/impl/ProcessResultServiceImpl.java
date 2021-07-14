@@ -83,6 +83,7 @@ public class ProcessResultServiceImpl extends EgovAbstractServiceImpl implements
         processResultDAO.deleteProcessResult(vo);
     }
     public void updatePrcEnd(ProcessResultVO vo) throws Exception {
+    	System.out.println(vo.getPrcEndTime());
         processResultDAO.updatePrcEnd(vo);
     }
     public void updatePrcStr(ProcessResultVO vo) throws Exception {
