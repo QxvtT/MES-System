@@ -145,6 +145,14 @@ public class ProduceCommandDController {
     				throws Exception {
     	return "prd/com/ProcessMove.page";
     }
+    
+    /** 공정이동표 인쇄 페이지 */
+    @RequestMapping(value="/ProcessMovePrt.do")
+    public String processMovePrt(ProduceCommandDVO searchVO, 
+    		ModelMap model)
+    				throws Exception {
+    	return "/mes/prd/com/ProcessMovePrt";
+    }
 	
 	/*업데이트*/
 	@RequestMapping(value="/ProduceCommandUpdate")
@@ -247,7 +255,7 @@ public class ProduceCommandDController {
  		List<?> list = produceCommandDService.produceCommandList(searchVO);
  		return list;
  	}
-    
+ 	
     @RequestMapping("/prd/com/addProduceCommandD.do")
     public String addProduceCommandD(
             ProduceCommandDVO produceCommandDVO,

@@ -18,6 +18,7 @@ let prcFNo = null;
 let lotNum = null;
 let lotNum1 = null;
 let matCode = null;
+let movNum = null;
 
 //주문일련 계획일련 있는 row들 담을 변수
 let rows = null;
@@ -43,7 +44,7 @@ $(function(){
 	}); // end const grid
 	
 	grid.on('scrollEnd', () => {
-	    grid.appendRows(getList());
+	    grid.appendRows(getPrdComList());
 	    });
 	  
 	const grid2 = new tui.Grid({
@@ -75,35 +76,13 @@ $(function(){
 	    data: null,
 	    columns: [
 	    	{ header: '상태', name:'prcState'},
-	    	{ header: '순번', name:'prcResNo'},
-	    	{ header: '공정명', name:'prcCode'}
+	    	{ header: '순번', name:'prcFNo'},
+	    	{ header: '공정명', name:'prcName'}
 	    ]
 	}); // end const grid
 	
 	grid3.on('scrollEnd', () => {
 	  })
-	  
-	function getList() {
-		let data;
-		$.ajax({
-			async: false,
-			url : "ProduceCommandDList",
-			type : "get",
-			data : {prdComDNum1: prdComDNum1,
-					prdComNum: prdComNum
-					},
-			dataType: "json",
-			success : function(result){
-				console.log(prdComNum1);
-				if(result.length > 0) {
-					prdComDNum1 = result[result.length -1].prdComDNum;
-				}
-				console.log(result);
-				data = result;
-			} // end success
-		}); // end ajax 
-		return data;
-	}
 	  
 	function getPrdComList() {
 		let data;
@@ -160,7 +139,7 @@ $(function(){
 		prdComMatNum = null;
 		prcFNo = null;
 		grid2.resetData(getComMatList());
-		grid3.resetData(getFlowList());
+		grid3.resetData([]);
 		matCode = grid.getValue(e.rowKey,'matCode');
 		$('#itmCode').val(grid.getValue(e.rowKey,'itmCode'));
 		$('#itmName').val(grid.getValue(e.rowKey,'itmName'));
@@ -170,29 +149,31 @@ $(function(){
 		$('#operName').val(grid.getValue(e.rowKey,'operName'));
 	});
 	
+	grid2.on('dblclick', (e) => {
+		movNum = grid2.getValue(e.rowKey, 'movNum');
+		prcFNo = null;
+		grid3.resetData(getFlowList());
+	})
+	
 	//공정흐름조회 그리드
-	  
 	function getFlowList() {
 		let data;
 		$.ajax({
 			async: false,
 			url : "ProduceCommandFlowList",
 			type : "get",
-			data : {itmCode: itmCode,
-					prcFNo: prcFNo
+			data : {
+				itmCode: itmCode,
+				movNum: movNum
 					},
 			dataType: "json",
 			success : function(result){
-				if(result.length > 0) {
-					prcFNo = result[result.length -1].prcFNo;
-				}
 				console.log(result);
 				data = result;
 			} // end success
 		}); // end ajax 
 		return data;
 	} 
-	//공정흐름조회 그리드//
 	
 	var today = new Date();
 	var preDay = new Date();
@@ -220,7 +201,9 @@ $(function(){
 		grid3.refreshLayout();
 	});
 	
-	
+	$('#printBtn').click(function() {
+		window.open("ProcessMovePrt.do")
+	})
 	
 })
 
@@ -265,7 +248,7 @@ $(function(){
 			</div>
 			<div class="row">
 				<div class="col-xl-12">
-					<form>
+					<form id="pmFrm" action="ProcessMovePrt.do" onsubmit="return false">
 						<div class="table">
 							<table class="table">
 								<tr>
