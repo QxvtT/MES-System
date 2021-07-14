@@ -104,14 +104,10 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
     }
     public List<?> setItemCode(ItemHistoryVO searchVO) throws Exception {
     	if(setOrdCheck(searchVO) >0) {
-    		System.out.println("abcdefg");
-    		System.out.println("존재");
     		return itemHistoryDAO.setItemCode(searchVO);
     		
     	}
     	else {
-    		System.out.println("abcdefg");
-    		System.out.println("미존재");
     		return itemHistoryDAO.setItemCodeA(searchVO);
     	}
     }
@@ -134,7 +130,6 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
         	}
         }
         if(gridData.getCreatedRows() != null) {
-        	System.out.println(gridData.getItemHistoryVO().getItmHisNum());
         	if(gridData.getItemHistoryVO().getItmHisNum()!=null && gridData.getItemHistoryVO().getItmHisNum()!="") {
 	        	
         		for(int i =0; i<gridData.getCreatedRows().size(); i++) {

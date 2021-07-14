@@ -215,47 +215,65 @@ $(function(){
 	}
 	
 	save.onclick = function() {
-		let gridData = grid.getModifiedRows({});
-		gridData["itemHistoryVO"] ={
-									itmHisRdy : $("#itmHisRdy").val()
-								   ,ordNum : $("#ordNum").val()
-								   ,itmHisNum : $("#itmHisNum").val()
-								   ,operCode : $("#operCode").val()
-								   ,itmNote : $("#itmNote").val()
-									};
-		$.ajax({
-				async: false, 
-				url : "ItemHistoryUpdate",
-				type : "post",
-				data : JSON.stringify(gridData),
-				dataType: "json",
-				contentType:"application/json",
-				success : console.log("updatesuccess")
-				
+		if($("#itmHisRdy").val()==""){
+			
+			$.toast({ 
+				  text : "출고일자를 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
 				});
-		if($( 'input#itmHisNum' ).val()==null || $( 'input#itmHisNum' ).val()==""){
-			$.ajax({
-				async: false,
-				url : "getItmHisNum",
-				type : "get",
-				data : {
-					ordNum : $('input#ordNum' ).val()
-					},
-				dataType: "json",
-				success : function(result){
-					itmHisNum = result[0]['itmHisNum'];
-					$( 'input#itmHisRdy' ).val(result[0]['itmHisRdy']);
-					$( 'input#operCode' ).val(result[0]['operCode']);
-					$( 'input#itmNote' ).val(result[0]['itmNote']);
-					$( 'input#itmHisNum' ).val(result[0]['itmHisNum']);
-					$( 'input#operName' ).val(result[0]['operName']);
-					$( 'input#ordNum' ).val(result[0]['ordNum']);
-				} // end success
-			});
-			grid.resetData(getList());
-			grid2.resetData(getItemHisNumList());
+			return null;
 		}
 		
+		
+		 
+			let gridData = grid.getModifiedRows({});
+			gridData["itemHistoryVO"] ={
+										itmHisRdy : $("#itmHisRdy").val()
+									   ,ordNum : $("#ordNum").val()
+									   ,itmHisNum : $("#itmHisNum").val()
+									   ,operCode : $("#operCode").val()
+									   ,itmNote : $("#itmNote").val()
+										};
+			$.ajax({
+					async: false, 
+					url : "ItemHistoryUpdate",
+					type : "post",
+					data : JSON.stringify(gridData),
+					dataType: "json",
+					contentType:"application/json",
+					success : console.log("updatesuccess")
+					
+					});
+			if($( 'input#itmHisNum' ).val()==null || $( 'input#itmHisNum' ).val()==""){
+				$.ajax({
+					async: false,
+					url : "getItmHisNum",
+					type : "get",
+					data : {
+						ordNum : $('input#ordNum' ).val()
+						},
+					dataType: "json",
+					success : function(result){
+						itmHisNum = result[0]['itmHisNum'];
+						$( 'input#itmHisRdy' ).val(result[0]['itmHisRdy']);
+						$( 'input#operCode' ).val(result[0]['operCode']);
+						$( 'input#itmNote' ).val(result[0]['itmNote']);
+						$( 'input#itmHisNum' ).val(result[0]['itmHisNum']);
+						$( 'input#operName' ).val(result[0]['operName']);
+						$( 'input#ordNum' ).val(result[0]['ordNum']);
+					} // end success
+				});
+				grid.resetData(getList());
+				grid2.resetData(getItemHisNumList());
+			
+		}
 	}
 	
 	deleteItm.onclick = function() {
@@ -552,11 +570,11 @@ $(function(){
 							
 						</c:if>
 						<tr>
-							<th>출고일자</th>
+							<th>출고일자*</th>
 							<td><input type="date" name="itmHisRdy" id="itmHisRdy"/>
 						</tr>
 						<tr>
-							<th>주문번호</th>
+							<th>주문번호*</th>
 							<td><input type="text" name="ordNum" id="ordNum" readonly="readonly"/>
 						</tr>
 						<tr>
@@ -564,7 +582,7 @@ $(function(){
 							<td><input type="text" name="itmHisNum" id="itmHisNum" readonly="readonly"/>
 						</tr>
 						<tr>
-							<th>고객사코드</th>
+							<th>고객사코드*</th>
 							<td><input type="text" name="operCode" id="operCode" />
 						</tr>
 						<tr>

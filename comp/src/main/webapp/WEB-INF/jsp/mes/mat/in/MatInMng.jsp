@@ -99,7 +99,7 @@ $(function(){
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
-	    data: getList(),
+	    data: null,
 	    rowHeaders: ['rowNum', 'checkbox'],
 	    columns: [
 	    	{ 
@@ -145,7 +145,8 @@ $(function(){
 	    	},
 			{ 
 	    		header: 'Lot No', 
-	    		name:'lotNum'
+	    		name:'lotNum',
+	    		editor: "text"
 	    	},
 			{ 
 	    		header: '자재재고', 
@@ -219,14 +220,15 @@ $(function(){
 			data : {
 				matHisNum: matHisNum,
 				matOrdNum: matOrdNum,
-				matHisDNum2: matHisDNum2,
+				matHisDNum1: matHisDNum1,
 				matComDateS: matComDateS,
-				matComDateE: matComDateE
+				matComDateE: matComDateE,
+				operName: operName
 			},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					matHisDNum2 = result[result.length -1].matHisDNum;
+					matHisDNum1 = result[result.length -1].matHisDNum;
 				}
 				console.log(result);
 				data = result;
@@ -331,9 +333,14 @@ $(function(){
 		gridData["materialHistoryVO"]={
  				matHisDate : $("#MatInpicker-input").val()
 				,operCode : $("#operCode").val()
+				,operName : $("#operName").val()
 				,matHisNum :  matHisNum
 				}
 		console.log(gridData);
+		
+		if($('#operCode').val()==""){
+			alert('입고 업체를 넣어주세요.');
+		} else {
 		
 		$.ajax({
 			async: false,
@@ -349,7 +356,9 @@ $(function(){
 		});
 		
 		matHisDNum1 = null;
+		matHisNum = null;
 		grid.resetData(getList());
+		}
 		
 	}
 	
@@ -393,6 +402,7 @@ $(function(){
 	document.getElementById("MatInpicker-input").value=matHisDate;
 	document.getElementById("operCode").value=operCode;
 	document.getElementById("operName").value=operName;
+	document.getElementById("matHisNum").value=matHisNum;
 	}
 	
 	grid2.on('scrollEnd', () => {
@@ -423,16 +433,32 @@ $(function(){
 	
 	nOrdBtn.onclick = function(){
 		matHisDNum1 = null;
+		matHisNum = null;
 		console.log(matHisDNum1)
+		grid.clear();
 
 		matComDateS = $('input[name="matComDateS"]').val();
 		console.log(matComDateS)
 		matComDateE = $('input[name="matComDateE"]').val();
 		console.log(matComDateE)
+		operCode = $('input[name="operCode"]').val();
+		console.log(operCode)
+		operName = $('input[name="operName"]').val();
+		console.log(operName)
 		
-		let nordList = getNordList();
-		for(let i in nordList){
-			grid.appendRow(nordList[i]);
+		if($('#operCode').val()==""){
+			alert('입고 업체를 넣어주세요.');
+		} else{
+			let nordList = getNordList();
+			for(let i in nordList){
+				grid.appendRow(nordList[i]);
+				/* if(grid.getCheckedRows() != null){
+					matHisDNum1 = null;
+					console.log("미입고 자료 조회 버튼");
+					matHisNum = grid2.getCheckedRows()[0].matHisNum;
+					console.log(matHisNum)
+				} */
+			}
 		}
 	}
 	
@@ -477,27 +503,38 @@ $(function(){
 												<td>
 													<div class="row align-items-center text-center col-lg-12">
 														<div
-														class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-														<input type="text" id="MatInpicker-input"
-															class=" form-control w-25" aria-label="Date-Time"
-															name="matHisDate" /> <span class="tui-ico-date"></span>
-														<div id="MatInpicker-container" style="margin-left: -1px;"></div>
-													</div>
-													<div id="date1" style="margin-top: -1px;"></div>
+															class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+															<input type="text" id="MatInpicker-input"
+																class=" form-control w-25" aria-label="Date-Time"
+																name="matHisDate" /> <span class="tui-ico-date"></span>
+															<div id="MatInpicker-container"
+																style="margin-left: -1px;"></div>
+														</div>
+														<div id="date1" style="margin-top: -1px;"></div>
 													</div>
 												</td>
 											</tr>
 											<tr>
-												<td><label class="col-form-label text-center">입고업체 *</label>
-												</td>
+												<td><label class="col-form-label text-center">입고업체
+														*</label></td>
 												<td>
 													<div class="row align-items-center text-center col-lg-12">
 														<input type="text" class="form-control w-25 ml-3"
-															id="operCode" name="operCode"></input>
-														<input type="text" class="form-control w-25 ml-3"
-															id="operName" name="operName" readonly></input>
+															id="operCode" name="operCode"></input> <input type="text"
+															class="form-control w-25 ml-3" id="operName"
+															name="operName" readonly></input>
 														<%@ include
 															file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label class="col-form-label text-center">입고번호</label>
+												</td>
+												<td>
+													<div class="row align-items-center text-center col-lg-12">
+														<input type="text" readonly name="matHisNum"
+															id="matHisNum" class=" form-control w-25 ml-3" />
 													</div>
 												</td>
 											</tr>
@@ -507,9 +544,9 @@ $(function(){
 								<div class="col-md-6">
 									<div class="card">
 										<div class="card-body">
-											<h5 class="d-inline">미입고 자료</h5>
-											<div class="row  mt-3">
-												<div class="d-inline-block align-middle ml-3"> 일자 *</div>
+											<h5 class="d-inline-block pt-3">미입고 자료</h5>
+											<div class="row mt-3 mb-3 pb-3 pt-3">
+												<div class="d-inline-block align-middle ml-3">일자 *</div>
 												<div
 													class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 													<input type="text" id="nStartpicker-input"
@@ -527,34 +564,34 @@ $(function(){
 												</div>
 												<div id="date5" style="margin-top: -1px;"></div>
 												<input type="button" id="nOrdBtn" name="nOrdBtn"
-												value="미입고 자료 조회" />
-								
+													class="btn btn-info btn-sm" value="미입고 자료 조회" />
+
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-								
-								<div class="row">
-									<div class="col-sm-12 text-right">
-										<button type="button" class="btn btn-primary btn-sm"
-											id="addRowBtn">추가</button>
-										<button type="button" class="btn btn-primary btn-sm"
-											id="deleteRowBtn">삭제</button>
-									</div>
+
+							<div class="row">
+								<div class="col-sm-12 text-right">
+									<button type="button" class="btn btn-primary btn-sm"
+										id="addRowBtn">추가</button>
+									<button type="button" class="btn btn-primary btn-sm"
+										id="deleteRowBtn">삭제</button>
 								</div>
-								<div class="row">
-									<div class="col-xl-12">
-										<div id="grid" />
-									</div>
-								</div>
-								
-								
 							</div>
+							<div class="row">
+								<div class="col-xl-12">
+									<div id="grid" />
+								</div>
+							</div>
+
+
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
 	</form:form>
 
 	<!-- 일 입고 자료 리스트 -->
@@ -565,7 +602,9 @@ $(function(){
 				<div class="modal-header">
 					<h4 class="modal-title" id="exampleModalLabel">일 입고 자료 LIST</h4>
 					<button class="close" type="button" data-dismiss="modal"
-						aria-label="Close">&times;</button>
+						aria-label="Close">
+						&times;
+					</button>
 				</div>
 				<div class="modal-body">
 					<div>

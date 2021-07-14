@@ -102,6 +102,7 @@ public class ItemHistoryController {
     }
     
     @RequestMapping(value="/ItemHistoryUpdate")
+    @ResponseBody
   public void ItemHistoryUpdate(@RequestBody ItmOutGridDataVO gridData) throws Exception {
     	
      itemHistoryService.itemHistoryUpdate(gridData);

@@ -29,7 +29,7 @@ public class MachinemagVO extends MachinemagDefaultVO{
     private java.lang.String macDiv;
     
     /** MAC_SIZE */
-    private java.lang.String macSize;
+    private java.lang.String use1;
     
     /** MODEL */
     private java.lang.String model;
@@ -43,27 +43,15 @@ public class MachinemagVO extends MachinemagDefaultVO{
     /** USE */
     private java.lang.String use;
     
-    /** NOM_CAP */
-    private java.lang.String nomCap;
-    
     /** USING_ENERGY */
     private java.lang.String usingEnergy;
-    
-    /** SAFETY */
-    private java.lang.String safety;
-    
-    /** MAC_PRO_DATE */
-    private java.sql.Date macProDate;
-    
+
     /** BUY_DATE */
     private java.sql.Date buyDate;
     
     /** BUY_PRICE */
     private java.math.BigDecimal buyPrice;
-    
-    /** LINE_NUM */
-    private java.math.BigDecimal lineNum;
-    
+
     /** MAC_LOADAGE */
     private java.math.BigDecimal macLoadage;
     
