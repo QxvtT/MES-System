@@ -35,11 +35,10 @@ $(function(){
 	    	{ header: '작업지시번호', name:'prdComNum'},
 	    	{ header: '제품코드', name:'itmCode'},
 			{ header: '제품명', name:'itmName'},
-			{ header: '작업구분', name:'prdComDiv'},
+			{ header: '작업구분', name:'prcComDiv'},
 			{ header: '지시량', name:'prdComVol'},
-			{ header: '작업일자', name:'prdComDDate'},
-			{ header: '작업순서', name:'prcComNo'},
-			{ header: '작업공정', name:'prcCode'},
+			{ header: '작업일자', name:'prdComDDate1'},
+			{ header: '작업순서', name:'prcComNo'}
 	    ]
 	}); // end const grid
 	
@@ -56,11 +55,11 @@ $(function(){
 	    data: null,
 	    columns: [
 	    	{ header: '순번', name:'prdComDNum'},
-	    	{ header: '소재 LOT_NO', name:'prdPlanDNum'},
-	    	{ header: '수량', name:'ordDNum'},
-			{ header: '상태', name:'itmName'},
-			{ header: '작업공정', name:'matName'},
-			{ header: '이동NO', name:'operName'}
+	    	{ header: '소재 LOT_NO', name:'lotNum'},
+	    	{ header: '수량', name:'matVol'},
+			{ header: '상태', name:''},
+			{ header: '작업공정', name:'prcCode'},
+			{ header: '이동NO', name:'movNum'}
 	    ]
 	}); // end const grid
 	
@@ -75,9 +74,9 @@ $(function(){
 	    rowWidth: 100,
 	    data: null,
 	    columns: [
-	    	{ header: '상태', name:'prdComDNum'},
-	    	{ header: '순번', name:'prdPlanDNum'},
-	    	{ header: '공정명', name:'ordDNum'}
+	    	{ header: '상태', name:'prcState'},
+	    	{ header: '순번', name:'prcResNo'},
+	    	{ header: '공정명', name:'prcCode'}
 	    ]
 	}); // end const grid
 	
@@ -112,7 +111,33 @@ $(function(){
 			async: false,
 			url : "ProduceCommandDList",
 			type : "get",
+			data : {
+				startDate : startDate,
+				endDate : endDate
+			},
+			dataType: 'json',
 			success : function(result){
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	
+	function getComMatList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "ProduceCommandMatList",
+			type : "get",
+			data : {prdComMatNum: prdComMatNum,
+					prdComDNum: prdComDNum
+					},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					prdComMatNum = result[result.length -1].prdComMatNum;
+				}
 				console.log(result);
 				data = result;
 			} // end success
@@ -123,6 +148,8 @@ $(function(){
 	$('#searchBtn').click(function(){
 		startDate = $('#startDate').val();
 		endDate = $('#endDate').val();
+		console.log(startDate);
+		console.log(endDate);
 		grid.resetData(getPrdComList());
 	})
 	
@@ -132,8 +159,8 @@ $(function(){
 		itmCode = grid.getValue(e.rowKey,'itmCode');
 		prdComMatNum = null;
 		prcFNo = null;
-		gridMat.resetData(getComMatList());
-		gridFlow.resetData(getFlowList());
+		grid2.resetData(getComMatList());
+		grid3.resetData(getFlowList());
 		matCode = grid.getValue(e.rowKey,'matCode');
 		$('#itmCode').val(grid.getValue(e.rowKey,'itmCode'));
 		$('#itmName').val(grid.getValue(e.rowKey,'itmName'));
@@ -143,26 +170,7 @@ $(function(){
 		$('#operName').val(grid.getValue(e.rowKey,'operName'));
 	});
 	
-	/* //공정흐름조회 그리드
-	const gridFlow = new tui.Grid({
-	    el: document.getElementById('gridFlow'),
-	    scrollX: false,
-	    scrollY: true,
-	    bodyHeight: 200,
-	    rowWidth: 100,
-	    data: null,
-	    rowHeaders: ['rowNum'],
-	    columns: [
-			{ header: '순서', name:'prcFNo', hidden: true},
-			{ header: '공정코드', name:'prcCode', hidden: true},
-			{ header: '공정명', name:'prcName'},
-			{ header: '비고', name:'prcFExplain'}
-	    ]
-	}); // end const gridFlow
-	
-	gridFlow.on('scrollEnd', () => {
-		gridFlow.appendRows(getFlowList());
-	  })
+	//공정흐름조회 그리드
 	  
 	function getFlowList() {
 		let data;
@@ -183,7 +191,7 @@ $(function(){
 			} // end success
 		}); // end ajax 
 		return data;
-	} */
+	} 
 	//공정흐름조회 그리드//
 	
 	var today = new Date();
@@ -218,9 +226,9 @@ $(function(){
 
 </script>
 <style>
-	.form-control {
-		width: 1px;
-	}
+.form-control {
+	width: 1px;
+}
 </style>
 </head>
 <body>
@@ -282,8 +290,7 @@ $(function(){
 												<div id="endDate-container" style="margin-left: -1px;"></div>
 											</div>
 											<div>
-												<button type="button" class="btn btn-primary"
-													id="searchBtn">검색</button>
+												<button type="button" class="btn btn-primary" id="searchBtn">검색</button>
 											</div>
 										</div>
 									</td>
@@ -360,9 +367,12 @@ $(function(){
 					</form>
 				</div>
 			</div>
-
 		</div>
 	</div>
+
+	<table>
+		<tr></tr>
+	</table>
 
 </body>
 </html>

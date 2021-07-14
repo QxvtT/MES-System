@@ -99,26 +99,29 @@ $(function(){
 	  })
 	  
 	// toast datePicker 관련 Script
-	var today = new Date();
-	var preDay = new Date();
-	preDay.setDate(today.getDate() - 7);
+	function setDatePicker() {
+		var today = new Date();
+		var preDay = new Date();
+		preDay.setDate(today.getDate() - 7);
+		
+		var picker = tui.DatePicker.createRangePicker({
+	        startpicker: {
+	            date: preDay,
+	            input: '#startDate',
+	            container: '#startDate-container'
+	        },
+	        endpicker: {
+	            date: today,
+	            input: '#endDate',
+	            container: '#endDate-container'
+	        },
+	        language: 'ko',
+	        type: 'date',
+	        format: 'yyyy-MM-dd'
+	    });
+	}
+	setDatePicker();
 	
-	var picker = tui.DatePicker.createRangePicker({
-        startpicker: {
-            date: preDay,
-            input: '#startDate',
-            container: '#startDate-container'
-        },
-        endpicker: {
-            date: today,
-            input: '#endDate',
-            container: '#endDate-container'
-        },
-        language: 'ko',
-        type: 'date',
-        format: 'yyyy-MM-dd'
-    });
-    
 	// 생산지시조회 ajax
 	function getPrdComList() {
 		let data;
@@ -126,12 +129,12 @@ $(function(){
 			async: false,
 			url : "ProduceCommandSearch",
 			type : "get",
-			/* data : {
+			data : {
 				startDate : startDate,
 				endDate : endDate,
 				itemCodes : itemCodes,
 				operCodes : operCodes
-				}, */
+				},
 			dataType: "json",
 			success : function(result){
 				console.log(result);
@@ -169,9 +172,9 @@ $(function(){
 	
 	// 새자료 버튼
 	$('#resetBtn').click(function() {
-		setDatePicker();
 		detailForm.reset();
 		grid.resetData([]);
+		setDatePicker();
 	}) 
 	
 })

@@ -137,9 +137,9 @@ $(function(){
 	
 	// 새자료 버튼
 	$('#resetBtn').click(function() {
-		setDatePicker();
 		detailForm.reset();
 		grid.resetData([]);
+		setDatePicker();
 	}) 
 	
 	function s2ab(s) { 
