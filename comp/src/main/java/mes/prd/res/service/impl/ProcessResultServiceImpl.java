@@ -82,7 +82,15 @@ public class ProcessResultServiceImpl extends EgovAbstractServiceImpl implements
     public void deleteProcessResult(ProcessResultVO vo) throws Exception {
         processResultDAO.deleteProcessResult(vo);
     }
+    public void updatePrcEnd(ProcessResultVO vo) throws Exception {
+        processResultDAO.updatePrcEnd(vo);
+    }
+    public void updatePrcStr(ProcessResultVO vo) throws Exception {
+        processResultDAO.updatePrcStr(vo);
+    }
 
+    
+    
     /**
 	 * PROCESS_RESULT을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 ProcessResultVO
@@ -120,9 +128,8 @@ public class ProcessResultServiceImpl extends EgovAbstractServiceImpl implements
         return list;
     }
     public void resultSuccess(GridDataVO gridDataVO) throws Exception {
+    	System.out.println(gridDataVO.getProcessResultVO().getMacCode());
     	 if(gridDataVO.getUpdatedRows() != null) {
-    		 System.out.println("test");
-    		 System.out.println(gridDataVO.getProcessResultVO().getEmpId());
     		 if(gridDataVO.getUpdatedRows().get(0).getPrcState().equals("진행")) {
 	    			 ProcessResultVO vo= gridDataVO.getUpdatedRows().get(0);
 	    			 vo.setEmpId(gridDataVO.getProcessResultVO().getEmpId());
@@ -130,16 +137,13 @@ public class ProcessResultServiceImpl extends EgovAbstractServiceImpl implements
 	    			 vo.setPrcWorkNum(gridDataVO.getProcessResultVO().getPrcWorkNum());
 	    			 processResultDAO.resultSuccess(gridDataVO.getUpdatedRows().get(0));
 	    		 }
-    		 
-    		 else {
-    			 
-    		 }
-    		 
     			 
     	 }
     	
     }
-
+    
+ 
+    
     
     /**
 	 * PROCESS_RESULT 총 갯수를 조회한다.
@@ -150,5 +154,8 @@ public class ProcessResultServiceImpl extends EgovAbstractServiceImpl implements
     public int selectProcessResultListTotCnt(ProcessResultDefaultVO searchVO) {
 		return processResultDAO.selectProcessResultListTotCnt(searchVO);
 	}
+
+	
+
     
 }

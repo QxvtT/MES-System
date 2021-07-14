@@ -31,12 +31,16 @@
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
 let prcResDNum = null;
+let prcResDNum1 = null;
 let prdComNum = null;
 let prdComDNum = null
 let data;
 let prcCode = null;
 
 let matVol = 0;
+let empId = null;
+let macCode = null;
+let prcState = null;
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -63,13 +67,13 @@ $(function(){
 			url : "ProcessResultList",
 			type : "get",
 			data : {
-				prcResDNum : prcResDNum,
+				prcResDNum1 : prcResDNum1,
 				prcCode : prcCode
 				},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					prcResDNum = result[result.length -1].prcResDNum;
+					prcResDNum1 = result[result.length -1].prcResDNum1;
 				}
 				console.log(result);
 				data = result;
@@ -92,7 +96,6 @@ $(function(){
 			{ header: '미실적량', name:'prcNVol'},
 			{ header: '불량량', name:'prcErrVol'},
 			{ header: '상태', name:'prcFState'},
-			
 	    ]
 	});
 	
@@ -103,7 +106,33 @@ $(function(){
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
 	   });
-	
+	search.onclick = function() {
+		if($('#prcCode').val() == '') {
+			$.toast({ 
+				  text : "공정코드입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+			}
+			prcCode = $("input#prcCode").val();
+			grid.resetData(getProcessResulList());
+			$( 'td#prdComNum' ).text('');
+			$( 'td#itmCode' ).text('');
+			$( 'td#itmName' ).text('');
+			$( 'td#operName' ).text('');
+			$( 'td#prcComDVol' ).text('');
+			$( 'td#prcResVol' ).text('');
+			$( 'td#prcNVol' ).text('');
+			let testt=[];
+			grid3.resetData(testt);
+		}
 	grid.on('dblclick', () => { 
 		let key = grid.getFocusedCell()['rowKey'];
 		let result = grid.getColumnValues('prcResDNum')[key];
@@ -173,21 +202,7 @@ function getProcessResultSelect(key) {
 		return data;
 	}
 
-	search.onclick = function() {
-		prcResDNum = null;
-		prcCode = $("input#prcCode").val();
-		console.log(prcCode);
-		grid.resetData(getProcessResulList());
-		$( 'td#prdComNum' ).text(' ');
-		$( 'td#itmCode' ).text(' ');
-		$( 'td#itmName' ).text(' ');
-		$( 'td#operName' ).text(' ');
-		$( 'td#prcComDVol' ).text(' ');
-		$( 'td#prcResVol' ).text(' ');
-		$( 'td#prcNVol' ).text(' ');
-		let testt=[];
-		grid3.resetData(testt);
-	}
+	
 	
 
 	const grid4 = new tui.Grid({
@@ -207,7 +222,8 @@ function getProcessResultSelect(key) {
 	grid3.on('dblclick', () => { 
 		let key = grid3.getFocusedCell()['rowKey'];
 		prcResDNum = grid3.getColumnValues('prcResDNum')[key];
-		setProduceSelect(prcResDNum);
+		empId = grid3.getColumnValues('empId')[key]
+		macCode = grid3.getColumnValues('macCode')[key]
 		grid4.resetData(setProduceSelect(prcResDNum));
 		console.log(prcResDNum);
 		$('#myModal').modal('toggle');
@@ -223,6 +239,8 @@ function getProcessResultSelect(key) {
 			type : "get",
 			data : {
 				prcResDNum : key
+				,empId : empId
+				,macCode : macCode
 				},
 			dataType: "json",
 			success : function(result){
@@ -233,25 +251,53 @@ function getProcessResultSelect(key) {
 				$( 'input#prcName' ).val(result[0]['prcName']);
 				$( 'input#prcWorkNum' ).val(result[0]['prcWorkNum']);
 				$( 'input#empName' ).val(result[0]['empName']);
+				$( 'input#empId' ).val(result[0]['empId']);
 				$( 'input#macName' ).val(result[0]['macName']);
+				$( 'input#macCode' ).val(result[0]['macCode']);
+				$( 'input#prcStrTime' ).val(result[0]['prcStrTime']);
+				$( 'input#prcEndTime' ).val(result[0]['prcEndTime']);
 				
 			} // end success
 		}); // end ajax 
 		return data;
 	}
 	sibalY.onclick= function() {
+		if($('input#empId').val() == '') {
+			//토스트메시지 
+			$.toast({ 
+				  text : "작업자를 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		if($('input#macCode').val() == '') {
+			//토스트메시지 
+			$.toast({ 
+				  text : "설비를 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
 		let gridData = grid4.getModifiedRows({});
-		console.log('start');
-		console.log(gridData);
-		console.log(prcResDNum);
-		console.log($('input#macCode').val());
-		console.log($('input#empId').val());
-		gridData["ProcessResultVO"] ={
-										prcResDNum :prcResDNum,
-										prcState : grid4.getData()[0]['prcState'],
+		gridData["processResultVO"] ={
 										macCode : $('input#macCode').val(),
 										empId : $('input#empId').val()
 										}
+		console.log(gridData);
 			$.ajax({
 			async: false, 
 			url : "resultSuccess",
@@ -259,19 +305,63 @@ function getProcessResultSelect(key) {
 			data : JSON.stringify(gridData),
 			dataType: "json",
 			contentType:"application/json",
-			success : function(){
+			success : function(result){
 				console.log("updatesuccess");
-						grid3.resetData(getProduceSelect(prdComDNum,prcCode))
+				
+						grid3.resetData(getProduceSelect(prdComDNum,prcCode));
 						grid.resetData(getProcessResulList());
 			}
 			});
 			
+	}
+	sibal.onclick = function() {
+		let date = new Date();
+		date.toString();
+		console.log(date.getSeconds())
+	}
+	prcEnd.onclick = function() {
+		if($('input#prcEnd').val()!=null){
+			alert("종료된작업입니다");
+			
+			return null;
+		}
+		
+		let date = new Date();
+		function formatDate(datet){
+		    datet = datet.getHours() + ":" + datet.getMinutes() + ":" + datet.getSeconds();
+		    
+		    return datet;
+		}
+		let prcEndTime = formatDate(date);
+		console.log(prcEndTime);
+		$.ajax({
+			async: false, 
+			url : "updatePrcEnd",
+			type : "post",
+			data : {
+				prcEndTime : prcEndTime
+				,prcResDNum : prcResDNum
+				},
+			dataType: "json",
+			contentType:"application/json",
+			success : function(){
+				$('input#prcEnd').val(prcEndTime);
+				}
+			});
+	}
+	prcStr.onclick = function() {
+		if($('input#prcStr').val()!="" || $('input#prcStr').val()!=null){
+			alert("이미시작한작업입니다");
+			return null;
+		}
+		
 	}
 })
 	
 </script>
 </head>
 <body>
+<button id ="sibal" name ="sibal">sibal</button>
 <!-- 공정실적관리List -->
 	<div class="pcoded-inner-content">
 			<div class="main-body">
@@ -317,11 +407,8 @@ function getProcessResultSelect(key) {
 										<li>작업실적대상제품자료</li>
 									</ul>
 								</div>
-
-								<!-- // 타이틀 -->
-								<!-- List -->
 								<div id="table1">
-									<table class = "table">
+									<table class = "table" >
 										<tr>
 											<th>작업 지시 번호</th>
 											<td id="prdComNum" name="prdComNum"></td>
@@ -387,50 +474,36 @@ function getProcessResultSelect(key) {
 						<div class="form-group row">
 							<table class="table">
 								<tr>
-									<td>
-										<table class ="table">
-											<tr>
-												<th>작업일자</th>
-												<td><input id = "prdComDDate" namd = "prdComDDate"/></td>
-											</tr>
-											<tr>
-												<th>지시번호</th>
-												<td><input id = "prdComNum" namd = "prdComNum" readonly="readonly"/></td>
-											</tr>
-										</table>
+										
+									<th>작업일자</th>
+									<td><input id = "prdComDDate" namd = "prdComDDate"/></td>
+									<th>공정명</th>
+									<td><input id = "prcName" namd = "prcName" readonly="readonly"/></td>
+									<th>작업자</th>
+									<td><input id = "empName" namd = "empName" /><%@ include file="/WEB-INF/jsp/mes/common/modal/EmployeesList.jsp" %></td>									
+								   <input type="hidden" id="empId" name = "empId"/>
 									
-									</td>
-									<td>
-										<table class ="table">
-											<tr>
-												<th>공정명</th>
-												<td><input id = "prcName" namd = "prcName" readonly="readonly"/></td>
-											</tr>
-											<tr>
-												<th>작업번호</th>
-												<td><input id = "prcWorkNum" namd = "prcWorkNum" readonly="readonly"/></td>
-											</tr>
-										</table>
 									
-									</td>
-									<td>
-										<table class ="table">
-											<tr>
-												<th>작업자</th>
-												<td><input id = "empName" namd = "empName" /><%@ include file="/WEB-INF/jsp/mes/common/modal/EmployeesList.jsp" %></td>
-												<input type="hidden" id="empId" name = "empId"/>
-											</tr>
-											<tr>
-												<th>설비</th>
-												<td><input id = "macName" namd = "macName" /><%@ include file="/WEB-INF/jsp/mes/common/modal/MachineList.jsp" %></td>
-												<input type="hidden" id="macCode" name = "macCode"/>
-											</tr>
-										</table>
-									
-									</td>
 								</tr>
-								
-								
+								<tr >
+									<th>지시번호</th>
+									<td><input id = "prdComNum" namd = "prdComNum" readonly="readonly"/></td>
+									<th>작업번호</th>
+									<td><input id = "prcWorkNum" namd = "prcWorkNum" readonly="readonly"/></td>
+									<th>설비</th>
+									<td><input id = "macName" namd = "macName" /><%@ include file="/WEB-INF/jsp/mes/common/modal/MachineList.jsp" %></td>
+									<input type="hidden" id="macCode" name = "macCode"/>
+								</tr>
+								<tr>
+									<th colspan="2" style="text-align: center;">시작시간</th>
+									<td ><input id = "prcStrTime" namd = "prcStrTime" readonly="readonly"/></td>
+									<th colspan="2" style="text-align: center;" >종료시간</th>
+									<td ><input id = "prcEndTime" namd = "prcEndTime" readonly="readonly"/></td>
+								</tr>
+								<tr>
+									<td colspan="3" align="center"><button  class="btn btn-info btn-sm" id ="prcStr" name ="prcStr">작업시작</button></td>
+									<td colspan="3" align="center"><button class="btn btn-info btn-sm" id ="prcEnd" name ="prcEnd">작업종료</button></td>								
+								</tr>
 							</table>
 							
 							
@@ -438,23 +511,10 @@ function getProcessResultSelect(key) {
 						<div class="col-lg-4">
 						</div>
 					<br />
-					<div class="col-xl-4">
 					
-						<table border="1">
-							<tr>
-								<td></td>
-								<td></td>
-							</tr>
-						</table>
-					</div>
-				<div class="col-xl-8">
-					<table>
-						<tr>
-							<td></td>
-							<td><div id="grid4"></div></td>
-						</tr>
-					</table>
-				</div>
+						
+						<div id="grid4"></div>
+				
 				</div>
 				<div class="modal-footer">
 					<a class="btn" id="sibalY" >예</a>

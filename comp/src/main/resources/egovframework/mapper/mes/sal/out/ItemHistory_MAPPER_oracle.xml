@@ -163,8 +163,16 @@
 		<![CDATA[
 			declare
 				itmVol item_history_d.itm_vol%type := #{itmVol};
+				v_status order_d.ord_status%type;
 				
 			begin
+				
+				
+				select ord_status
+				into v_status
+				from order_d
+				where ord_num = #{ordNum} and itm_code = #{itmCode};
+			
 				DELETE FROM ITEM_HISTORY_D
 						WHERE ITM_HIS_D_NUM=#{itmHisDNum};
                 
@@ -173,11 +181,18 @@
         		set itm_vol = itm_vol+ #{itmVol}
        					 where 	itm_stc_num = #{lotNum}
         						and   itm_code = #{itmCode};
-        
-        		update order_d
-        			set ord_out_vol = ord_out_vol-#{itmVol}
-        				where ord_num =  #{ordNum} 
-        				and itm_code = #{itmCode};	
+	        if v_status = '진행' then
+	        		update order_d
+	        		set ord_out_vol = ord_out_vol-#{itmVol}
+	        		where ord_num =  #{ordNum} 
+	        				and itm_code = #{itmCode};
+	        else	
+	        		update order_d
+	        		set ord_out_vol = ord_out_vol-#{itmVol}
+	        						, ord_status='진행'
+	        		where ord_num =  #{ordNum} 
+	        				and itm_code = #{itmCode};
+	        end if
 					end;
 				]]>
 	</delete>
@@ -255,10 +270,10 @@
 							, item.itm_unit
 							, o.ord_num
 							, od.ord_vol 
-							, od.ord_out_vol-id.itm_vol ord_out_vol
+							, od.ord_out_vol
 							, id.itm_vol
-							, (od.ord_vol+id.itm_vol- vol.volume) as itm_nout_vol 
-							, its.itm_vol as itm_stock
+							, (od.ord_vol- vol.volume) as itm_nout_vol 
+							, its.itm_stock
 							, id.lot_num
 							, id.itm_price
 							, (id.itm_vol*id.itm_price) total_price
@@ -269,7 +284,9 @@
 				      order_m o, 
 				      order_d od, 
 				      item,
-					  item_stock its,
+					  (select sum(itm_vol) as itm_stock, itm_code
+                		from item_stock
+                		group by itm_code) its,
 					  					(select sum(id.itm_vol) as volume, id.itm_code
 										     from item_history_d id, item_history i, order_d od
 											 where id.itm_his_num = i.itm_his_num
@@ -443,7 +460,6 @@
 					itm_code = #{itmCode} and 
 						<![CDATA[	
 					itm_vol>0
-							
 						]]>
 		ORDER BY
 		itm_stc_num 

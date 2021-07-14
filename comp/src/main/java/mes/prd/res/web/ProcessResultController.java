@@ -87,7 +87,18 @@ public class ProcessResultController {
         return setProduceSelect;
     }
     
+    
+    
+    @RequestMapping(value="updatePrcEnd")
+    @ResponseBody
+  public void updatePrcEnd(@RequestBody ProcessResultVO processResultVO) throws Exception {
+    	processResultService.updatePrcEnd(processResultVO);
+  } 
+    
+    
+    
     @RequestMapping(value="resultSuccess")
+    @ResponseBody
   public void ItemHistoryUpdate(@RequestBody GridDataVO gridData) throws Exception {
     	
     	processResultService.resultSuccess(gridData);

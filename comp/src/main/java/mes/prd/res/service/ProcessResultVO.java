@@ -65,6 +65,7 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     
     /** 일련번호*/
     private java.math.BigDecimal prcResDNum;
+    private java.math.BigDecimal prcResDNum1;
     
    
     /** 순서*/
@@ -86,7 +87,7 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     /** 작업번호*/
     private java.lang.String prcWorkNum;
     
-    /** 작업자 */
+    /** 작업자코드 */
     private java.lang.String empId;
     
     /** 작업자 */
