@@ -507,7 +507,7 @@
 				where prd_com_mat_num = #{prdComMatNum};
 			else
 				delete from produce_command_mat
-				where prd_com_d_num = #{prd_com_d_num};
+				where prd_com_d_num = #{prdComDNum};
 			end if;
 		end;
 	</delete>
