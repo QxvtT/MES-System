@@ -157,6 +157,12 @@ public class ProduceCommandDController {
 		return produceCommandDService.produceCommandUpdate(gridData);
 	}
 	
+	@RequestMapping(value="/ProduceCommandDelete")
+	@ResponseBody
+	public void ProduceCommandDelete(ProduceCommandDVO searchVO) throws Exception {
+		produceCommandDService.ProduceCommandDelete(searchVO);
+	}
+	
 	@RequestMapping(value="/ProduceCommandMatUpdate")
 	@ResponseBody
 	public String ProduceCommandMatUpdate(@RequestBody GridDataVO gridData) throws Exception {

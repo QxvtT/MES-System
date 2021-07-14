@@ -62,6 +62,7 @@ public interface ProduceCommandDMapper {
 	 * @return void형 
 	 * @exception Exception
 	 */
+    public void deleteProduceCommand(ProduceCommandDVO vo) throws Exception;
     public void deleteProduceCommandD(ProduceCommandDVO vo) throws Exception;
     public void deleteProduceCommandMat(ProduceCommandDVO vo) throws Exception;
 
@@ -91,7 +92,10 @@ public interface ProduceCommandDMapper {
     /** 미지시계획 조회 */
     public List<?> selectPrdPlnDList(ProduceCommandDVO searchVO) throws Exception;
 
-    /** 작업지시디테일 조회 */
+    /** 작업지시디테일 일련번호 조회 */
+	public List<ProduceCommandDVO> selectPrdComDNumList(ProduceCommandDVO searchVO) throws Exception;
+	
+	/** 작업지시디테일 조회 */
 	public List<?> selectProduceCommandDList(ProduceCommandDVO searchVO) throws Exception;
 	
 	/** 작업지시자재 조회 */

@@ -198,6 +198,12 @@
 		]]>
 	</select>
 	
+	<!-- 전체삭제용 작업지시 디테일 일련번호등 리스트 -->
+	<select id="selectPrdComDNumList" resultType="mes.prd.com.service.ProduceCommandDVO">
+		select prd_com_d_num, prd_plan_d_num, ord_d_num, prd_com_vol, Prc_com_div from produce_command_d
+		where prd_com_num = #{prdComNum}
+	</select>
+	
 	<!-- 작업지시자재 조회 -->
 	<select id="selectProduceCommandMatList"
 		parameterType="mes.prd.com.service.ProduceCommandDVO"
@@ -287,6 +293,12 @@
 			prd_com_note = #{prdComNote}
 		where prd_com_num = #{prdComNum}
 	</update>
+	
+	<!-- 작업지시 master delete -->
+	<delete id="deleteProduceCommand">
+		delete from Produce_Command
+		where prd_com_num = #{prdComNum}
+	</delete>
 	
 	<!-- 작업지시 grid 행 insert -->
 	<insert id="insertProduceCommandD">
@@ -389,7 +401,7 @@
 			v_ordIndVol order_d.ord_ind_vol%type;
 		begin
 			delete from Produce_Command_D 
-			where prd_com_d_num = #{prdComDNum}
+			where prd_com_d_num = #{prdComDNum};
 			
 			if #{prdPlanDNum} is not null then
 				select prd_work_vol into v_prdWorkVol
@@ -489,8 +501,15 @@
 	
 	<!-- 작업지시 Mat 행 delete -->
 	<delete id="deleteProduceCommandMat">
-		delete from produce_command_mat
-		where prd_com_mat_num = #{prdComMatNum}
+		begin
+			if #{prdComMatNum} is not null then
+				delete from produce_command_mat
+				where prd_com_mat_num = #{prdComMatNum};
+			else
+				delete from produce_command_mat
+				where prd_com_d_num = #{prd_com_d_num};
+			end if;
+		end;
 	</delete>
 	
 	<!-- 입출반관리 마스터번호 구하기 -->
@@ -546,13 +565,13 @@
 	<!-- 공정실적 detail 추가(첫) -->
 	<insert id="insertPrcResDF">
 		insert into process_result_d(prc_res_d_num, mov_num, prc_res_no, prc_code, prc_state, prc_com_d_vol)
-		values(PROCESS_RESULT_D_SEQ.nextval, #{movNum}, #{prcFNo}, #{prcCode}, '준비',#{matVol})
+		values(PROCESS_RESULT_D_SEQ.nextval, #{movNum}, #{prcFNo}, #{prcCode}, '진행',#{matVol})
 	</insert>
 	
 	<!-- 공정실적 detail 추가(이후) -->
 	<insert id="insertPrcResD">
 		insert into process_result_d(prc_res_d_num, mov_num, prc_res_no, prc_code, prc_state, prc_com_d_vol)
-		values(PROCESS_RESULT_D_SEQ.nextval, #{movNum}, #{prcFNo}, #{prcCode}, '준비', 0)
+		values(PROCESS_RESULT_D_SEQ.nextval, #{movNum}, #{prcFNo}, #{prcCode}, '진행', 0)
 	</insert>
 
 	<!-- 작업지시디테일 출고여부 Y update -->

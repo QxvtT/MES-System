@@ -52,7 +52,13 @@ let matRowKey = null;
 
 let rowKey = null;
 
+//삭제수정 막을 로우
+let rowsY = [];
+
 $(function(){
+	outMatLotBtn.classList.add('btn-disabled');
+	outMatLotBtn.classList.add('disabled');
+	
 	let today = new Date();
 	var datepicker = new tui.DatePicker('#date', {
         date: today,
@@ -243,13 +249,14 @@ $(function(){
 		grid.resetData(getList());
 		
 		//출고여부가 Y면 체크박스를 막아 삭제못하게
-		let rowsY = grid.findRows((row) => {
+		rowsY = grid.findRows((row) => {
 		    return (row.matOutChk == 'Y');
 		});
 		console.log("rowY");
 		console.log(rowsY);
 		for(let i in rowsY) {
 			grid.disableRowCheck(rowsY[i].rowKey);
+			grid.disableRow(rowsY[i].rowKey);
 		}
 		
 		// 이전 데이터들 초기화
@@ -508,6 +515,8 @@ $(function(){
 		} else {
 			matRowKey = null;
 			prdComDNum = grid.getValue(e.rowKey,'prdComDNum');
+			console.log("지시일련 있나 보자");
+			console.log(prdComDNum);
 		}
 		itmCode = grid.getValue(e.rowKey,'itmCode');
 		matCode = grid.getValue(e.rowKey,'matCode');
@@ -575,6 +584,42 @@ $(function(){
 		gridFlow.refreshLayout();
 	});
 	
+	//작업지시 전체삭제
+	removeBtn.onclick = function() {
+		if(rowsY.length != 0) {
+			//토스트메시지 
+			$.toast({ 
+				  text : "출고된 내역은 삭제할수 없습니다.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		if(prdComNum != null) {
+			console.log("지시번호로 삭제");
+			console.log(prdComNum);
+			$.ajax({
+				async: false, 
+				url : "ProduceCommandDelete",
+				type : "post",
+				data : {prdComNum : prdComNum},
+				dataType: "json",
+				contentType:"application/json",
+				success : function(data) {
+					console.log(data);
+				}
+			});
+		}
+		//초기화
+		reset();
+	}
+	
 	//작업지시 수정 및 생성
 	saveBtn.onclick = function(){
 		if($('#prdComDate').val() == '') {
@@ -641,7 +686,12 @@ $(function(){
 				});
 		
 		//lot자재 수정
-		if(prdComDNum == null || prdComDNum == ''){
+		
+		if(prdComDNum == '' || prdComDNum == null){
+				prdComDNum = gridMat.getValue(0, "prdComDNum");
+				console.log("rowCount");	
+				console.log(gridMat.getRowCount());	
+				console.log(prdComDNum);
 			return console.log("지시일련이 없어서 자재등록이 안됌");
 		}
 		let gridDataM = gridMat.getModifiedRows({});
@@ -715,7 +765,17 @@ $(function(){
 		
 		//출고후 그리드 수정 및 삭제 불가 처리
 		gridMat.disable();
-		 
+		//출고여부가 Y면 체크박스를 막아 삭제못하게
+		rowsY = grid.findRows((row) => {
+		    return (row.matOutChk == 'Y');
+		});
+		console.log("rowY");
+		console.log(rowsY);
+		for(let i in rowsY) {
+			grid.disableRowCheck(rowsY[i].rowKey);
+			grid.disableRow(rowsY[i].rowKey);
+		}
+		
 	}
 	
 	// 작업지시 조회 모달창 팝업 버튼
@@ -723,6 +783,7 @@ $(function(){
 		$("#searchComModal").modal("toggle");
 		$("#searchComModal").on('shown.bs.modal', function () {
 			grid2.refreshLayout();
+			grid2.clear();
 		});
 	})
 	
@@ -730,6 +791,7 @@ $(function(){
 	$('#searchComBtn').click(function() {
 		startDate = $('#startD').val();
 		endDate = $('#endD').val();
+		prdComNum1 = null;
 		console.log(startDate);
 		console.log(endDate);
 		grid2.resetData(getPrdComList());
@@ -851,8 +913,8 @@ $(function(){
 		}
 	});
 	
-	//리셋기능
-	resetBtn.onclick = function() {
+	//초기화 함수
+	function reset() {
 		// 이전 데이터들 초기화
 		grid.clear();
 		gridMat.clear();
@@ -870,6 +932,10 @@ $(function(){
 		$('#prdComNote').val('');
 		prdComNum = null;
 		matRowKey = null;
+	}
+	//리셋기능
+	resetBtn.onclick = function() {
+		reset();
 	}
 	
 })

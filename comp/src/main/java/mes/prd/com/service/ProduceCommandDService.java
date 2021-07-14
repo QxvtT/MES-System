@@ -81,6 +81,9 @@ public interface ProduceCommandDService {
     /** 작업지시 update */
     ProduceCommandDVO produceCommandUpdate(GridDataVO gridData) throws Exception;
     
+    /** 작업지시 delete */
+    void ProduceCommandDelete(ProduceCommandDVO searchVO) throws Exception;
+    
     /** 작업지시 mat update */
     void produceCommandMatUpdate(GridDataVO gridData) throws Exception;
 

@@ -147,6 +147,28 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
     	return produceCommandDDAO.selectProduceCommandFlowList(searchVO);
     }
     
+    /** 작업지시 delete*/
+    public void ProduceCommandDelete(ProduceCommandDVO searchVO) throws Exception {
+    	
+    	produceCommandDDAO.deleteProduceCommand(searchVO);
+    	
+    	List<ProduceCommandDVO> list = produceCommandDDAO.selectPrdComDNumList(searchVO);
+    	if(list.size() != 0) {
+    		for(ProduceCommandDVO vo : list) {
+        		produceCommandDDAO.deleteProduceCommandD(vo);
+        		//주문일련이 있으면 주문디테일에 지시량 업데이트
+        		if(vo.getOrdDNum() != null && vo.getPrcComDiv().equals("정상")) {
+        			produceCommandDDAO.updateOrdDDelete(vo);
+        		}
+        		
+        		//각 지시mat 삭제
+        		produceCommandDDAO.deleteProduceCommandMat(vo);
+    		}
+    	}
+    	
+    }
+    
+    
     /** 작업지시 update 및 insert*/
     public ProduceCommandDVO produceCommandUpdate(GridDataVO gridData) throws Exception {
     	ProduceCommandDVO result = new ProduceCommandDVO();
@@ -172,7 +194,7 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
         		ProduceCommandDVO vo = gridData.getDeletedRows().get(i);
         		produceCommandDDAO.deleteProduceCommandD(vo);
         		//주문일련이 있으면 주문디테일에 지시량 업데이트
-        		if(vo.getOrdDNum() != null && vo.getPrcComDiv() == "정상") {
+        		if(vo.getOrdDNum() != null && vo.getPrcComDiv().equals("정상")) {
         			produceCommandDDAO.updateOrdDDelete(vo);
         		}
         	}
@@ -181,7 +203,9 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
         	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
         		ProduceCommandDVO vo = gridData.getUpdatedRows().get(i);
         		//주문일련이 있으면 주문디테일에 지시량 업데이트
-        		if(vo.getOrdDNum() != null && vo.getPrcComDiv() == "정상") {
+        		System.out.println("이거 왜 안되냐");
+        		System.out.println(vo.getPrcComDiv());
+        		if(vo.getOrdDNum() != null && vo.getPrcComDiv().equals("정상")) {
         			produceCommandDDAO.updateOrdDUpdate(vo);
         		}
         		produceCommandDDAO.updateProduceCommandD(vo);
@@ -206,7 +230,7 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
             			prdComDNum = produceCommandDDAO.selectPrdComDNum();
             		}
             		//주문일련이 있으면 주문디테일에 지시량 업데이트
-            		if(vo.getOrdDNum() != null && vo.getPrcComDiv() == "정상") {
+            		if(vo.getOrdDNum() != null && vo.getPrcComDiv().equals("정상")) {
             			produceCommandDDAO.updateOrdD(vo);
             		}
             	}
@@ -291,8 +315,8 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
 				for(int j =0; j<gridData.getFlowRows().size(); j++) {
 					vo = gridData.getFlowRows().get(j);
 					vo.setMovNum(newMovNum);
-					vo.setMatVol(gridData.getMatRows().get(j).getMatVol());
 					if(j == 0) {
+						vo.setMatVol(gridData.getMatRows().get(i).getMatVol());
 						produceCommandDDAO.insertPrcResDF(vo);
 					} else {
 						produceCommandDDAO.insertPrcResD(vo);
