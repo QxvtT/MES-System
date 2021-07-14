@@ -170,7 +170,7 @@
 		      OD.ord_vol, OD.ord_out_vol, I.itm_day_output
 		      from PRODUCE_COMMAND_d C, item I, order_d OD, order_m  OM, material M
 		      where c.itm_code = i.itm_code
-		      <if test="#{prdComNum} != null and #{prdComNum} != ''">
+		      <if test="prdComNum != null and prdComNum != ''">
 		      	and c.prd_com_num = #{prdComNum}
 		      </if>
 		      	and i.mat_code = m.mat_code
@@ -185,7 +185,7 @@
 					and Prd_Com_D_Num > #{prdComDNum1}
 				]]>
 		</if>
-		<if test="#{prdComNum} == null or #{prdComNum} == ''">
+		<if test="prdComNum == null or prdComNum == ''">
 				<![CDATA[	
 					and prd_com_d_date1 >= #{startDate}
 					and prd_com_d_date1 <= #{endDate}
@@ -332,15 +332,7 @@
 				end if;
 				]]>
 			end if;
-			if #{ordDNum} is not null then
-				select nvl(sum(prd_com_vol),0) into v_ordIndVol
-				from produce_command_d
-				where ord_d_num = #{ordDNum} and prc_com_div = '정상';
-				
-				update order_d
-				set ord_ind_vol = v_ordIndVol
-				where ord_d_num = #{ordDNum};
-			end if;
+			
 			end;
 	</insert>
 	
@@ -385,15 +377,7 @@
 				end if;
 				]]>
 			end if;
-			if #{ordDNum} is not null then
-				select nvl(sum(prd_com_vol),0) into v_ordIndVol
-				from produce_command_d
-				where ord_d_num = #{ordDNum} and prc_com_div = '정상';
-				
-				update order_d
-				set ord_ind_vol = v_ordIndVol
-				where ord_d_num = #{ordDNum};
-			end if;
+			
 		end;
 	</update>
 	
@@ -423,15 +407,7 @@
 				end if;
 				]]>
 			end if;
-			if #{ordDNum} is not null then
-				select nvl(sum(prd_com_vol),0) into v_ordIndVol
-				from produce_command_d
-				where ord_d_num = #{ordDNum} and prc_com_div = '정상';
-				
-				update order_d
-				set ord_ind_vol = v_ordIndVol
-				where ord_d_num = #{ordDNum};
-			end if;
+			
 		end;
 	</delete>
 	

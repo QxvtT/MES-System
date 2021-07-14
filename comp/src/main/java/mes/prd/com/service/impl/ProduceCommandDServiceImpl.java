@@ -172,7 +172,7 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
         		ProduceCommandDVO vo = gridData.getDeletedRows().get(i);
         		produceCommandDDAO.deleteProduceCommandD(vo);
         		//주문일련이 있으면 주문디테일에 지시량 업데이트
-        		if(vo.getOrdDNum() != null) {
+        		if(vo.getOrdDNum() != null && vo.getPrcComDiv() == "정상") {
         			produceCommandDDAO.updateOrdDDelete(vo);
         		}
         	}
@@ -181,7 +181,7 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
         	for(int i =0; i<gridData.getUpdatedRows().size(); i++) {
         		ProduceCommandDVO vo = gridData.getUpdatedRows().get(i);
         		//주문일련이 있으면 주문디테일에 지시량 업데이트
-        		if(vo.getOrdDNum() != null) {
+        		if(vo.getOrdDNum() != null && vo.getPrcComDiv() == "정상") {
         			produceCommandDDAO.updateOrdDUpdate(vo);
         		}
         		produceCommandDDAO.updateProduceCommandD(vo);
@@ -206,7 +206,7 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
             			prdComDNum = produceCommandDDAO.selectPrdComDNum();
             		}
             		//주문일련이 있으면 주문디테일에 지시량 업데이트
-            		if(vo.getOrdDNum() != null) {
+            		if(vo.getOrdDNum() != null && vo.getPrcComDiv() == "정상") {
             			produceCommandDDAO.updateOrdD(vo);
             		}
             	}

@@ -153,7 +153,7 @@ public class ProduceCommandDController {
 		System.out.println("들어가는 숫자값 확인용");
 		System.out.println(gridData.getProduceCommandDVO());
 		System.out.println(gridData.getCreatedRows());
-		System.out.println(gridData.getCreatedRows().get(1));
+		
 		return produceCommandDService.produceCommandUpdate(gridData);
 	}
 	
