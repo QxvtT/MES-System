@@ -106,6 +106,8 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 			for (int i = 0; i < gridDataVO.getDeletedRows().size(); i++) {
 				materialHistoryDAO.deleteMatInMngD(gridDataVO.getDeletedRows().get(i));
 			}
+//			int r = gridDataVO.getDeletedRows().size();
+//			materialHistoryDAO.updateMatHisVol(gridDataVO.getMaterialHistoryVO().setActiveVol(r));
 		}
 		return newMatHisNum;
 	}

@@ -36,6 +36,8 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     private java.lang.String matComDateS;
     private java.lang.String matComDateE;
     
+    private java.lang.String operName;
+    
     /** 입고일자 검색 **/
     private java.lang.String sDate;
     private java.lang.String eDate;
@@ -148,15 +150,14 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     /** MAT_OUT */
     private java.lang.String matOut;
     
-    /** MAT_HIS_VOL */
+    /** 건수 */
     private java.math.BigDecimal matHisVol;
     
-
-    
-    
+    /** 변동 건수 */
+    private java.math.BigDecimal activeVol;
     
     /** LOT_NUM */
-    private java.math.BigDecimal lotNum;
+    private java.lang.String lotNum;
     
     /** MAT_VOL */
     private java.math.BigDecimal matVol;

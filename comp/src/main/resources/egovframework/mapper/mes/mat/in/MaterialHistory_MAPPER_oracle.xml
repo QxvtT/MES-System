@@ -157,8 +157,11 @@ SELECT * FROM (
 				      AND MO.MAT_COM_NUM = MHD.MAT_COM_NUM
 				      AND MH.MAT_HIS_DIV='입고'
 				      AND MO.MAT_NORD_VOL > 0
-				 <if test= "matHisDNum2 != null and matHisDNum2 != ''">
-			      		and mhd.mat_his_d_num > #{matHisDNum2}
+			     <if test= "operName != null and operName != ''">
+			      		and mh.mat_ord_oper = #{operName}
+			     </if>
+				 <if test= "matHisDNum1 != null and matHisDNum1 != ''">
+			      		and mhd.mat_his_d_num > #{matHisDNum1}
 			     </if>
 			     <if test="matComDateS != null and matComDateS != '' and matComDateE != null and matComDateE != ''"> AND
 				     <![CDATA[			    			
@@ -291,9 +294,9 @@ SELECT * FROM (
 		                            , MAT_HIS_VOL) 
 		VALUES( #{matHisNum}
 				, TO_DATE(#{matHisDate}, 'yyyy-MM-dd')
-				, #{matOrdOper}
-			 	, #{matHisDiv}
-			 	, #{matHisVol})
+				, #{operName}
+			 	, '입고'
+			 	, 1)
 	</insert>
 	<!-- END 자재 입고 관리  master insert -->
 	
@@ -345,13 +348,15 @@ SELECT * FROM (
 			, mat_his_num
 			, mat_code
 			, mat_his_d_vol
-			, mat_his_price)
+			, mat_his_price
+			, LOT_NUM)
 			values(
 				material_history_seq.nextval,
 				#{matHisNum},
 				#{matCode},
 				#{matHisDVol},
-				#{matHisPrice}
+				#{matHisPrice},
+				#{lotNum}
 			)
 	</insert>
 	<!-- END 자재 입고 관리 grid 행 insert -->
@@ -379,21 +384,6 @@ SELECT * FROM (
 			MAT_HIS_D_VOL = #{matHisDVol},
 			MAT_HIS_PRICE = #{matHisPrice}
 		WHERE MAT_HIS_D_NUM = #{matHisDNum}
-	
-	<!-- 	DECLARE
-			V_MAT_ORD_VOL NUMBER := #{matHisDVol};
-			V_MAT_ORD_NUM NUMBER := #{matOrdNum};		  
-		BEGIN
-		UPDATE MATERIAL_ORDER SET
-		    MAT_ORD_VOL = (V_MAT_ORD_VOL + MAT_ORD_VOL)
-		    WHERE MAT_ORD_NUM = V_MAT_ORD_NUM; 
-		UPDATE MATERIAL_ORDER SET
-		    MAT_NORD_VOL = (MAT_VOL - MAT_ORD_VOL)
-		    WHERE MAT_ORD_NUM = V_MAT_ORD_NUM;
-		UPDATE MATERIAL_HISTORY_D SET
-		    MAT_HIS_D_VOL = (V_MAT_ORD_VOL + MAT_HIS_D_VOL)
-		    WHERE MAT_ORD_NUM = V_MAT_ORD_NUM;
-		END; -->
 	</update>
 	
 	<!-- 자재 출고 관리 grid 행 update -->
@@ -412,9 +402,16 @@ SELECT * FROM (
 	</delete>
 	<!-- END 작업지시 grid 행 delete -->
 	
+	<!-- 건수 수정 -->
+<!-- 	<update id="updateMatHisVol"> -->
+<!-- 		UPDATE FROM MATERIAL_HISTORY -->
+<!-- 		WHERE MAT_HIS_VOL = #{} -->
+<!-- 	</update> -->
+	<!-- 건수 수정 -->
+	
 	<!-- 자재 입고 관리 마스터번호 구하기 -->
 	<select id="getMatInMngCount" resultType="int">
-		select nvl(to_number(max(substr(mat_his_num,11))),0) + 1
+		select nvl(to_number(max(substr(mat_his_num,14))),0) + 1
 		from material_history
 		where to_char(mat_his_date,'yyyy-MM-dd') = #{matHisDate}
 	</select>
