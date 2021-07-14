@@ -60,7 +60,7 @@ public interface MachinemagMapper {
 	 * @return MACHINE 목록
 	 * @exception Exception
 	 */
-    public List<?> selectMachineList(MachinemagDefaultVO searchVO) throws Exception;
+    public List<?> selectMachineList(MachinemagVO searchVO) throws Exception;
 
     /**
 	 * MACHINE 총 갯수를 조회한다.
