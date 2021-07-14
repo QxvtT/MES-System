@@ -104,6 +104,19 @@ $(function(){
 			{ header: '제품코드', name:'itmCode', editor: 'text'},
 			{ header: '제품이름', name:'itmName'},
 			{ header: '구분', name:'prcComDiv', editor: 'text'},
+				<%-- 셀렉트박스 사용하려면 받는 값 형식을 바꿔줘야하나? https://ui.toast.com/select-box
+				formatter: 'listItemText',
+		          editor: {
+		            type: 'select',
+		            options: {
+		              listItems: [
+		                { text: '정상', value: '1' },
+		                { text: '재작업', value: '2' },
+		              ]
+		            }
+		          }
+		         
+			}, --%>
 			{ header: '주문번호', name:'ordNum'},
 			{ header: '납기일자', name:'ordDeliveryDate'},
 			{ header: '주문량', name:'ordVol'},
@@ -677,16 +690,19 @@ $(function(){
 				contentType:"application/json",
 				success : function(data) {
 					console.log(data);
-					prdComNum = data.prdComNum;
-					prdComDNum = data.prdComDNum;
-					$('#prdComNum').val(prdComNum);
+					if(data.prdComNum != null) {
+						prdComNum = data.prdComNum;
+						$('#prdComNum').val(prdComNum);
+					}
+					if(data.prdComDNum != null) {
+						prdComDNum = data.prdComDNum;
+					}
 					prdComDNum1 = null;
 					grid.resetData(getList());
 				}
 				});
 		
 		//lot자재 수정
-		
 		if(prdComDNum == '' || prdComDNum == null){
 				prdComDNum = gridMat.getValue(0, "prdComDNum");
 				console.log("rowCount");	
@@ -711,10 +727,27 @@ $(function(){
 				console.log(data);
 			}
 		});
+		gridMat.resetData(getComMatList());
 	}
 	
 	//자재 출고 관리
 	outMatLotBtn.onclick = function() {
+		if(gridMat.getRowCount() < 1){
+			console.log(gridMat.getRowCount());
+			//토스트메시지 
+			$.toast({ 
+				  text : "출고할 자재가 없습니다.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
 		if(gridMat.isModified()) {
 			//수정사항이 있는경우
 			//토스트메시지 
@@ -730,6 +763,30 @@ $(function(){
 				  position : 'top-center'
 				});
 			return false;
+		}
+		
+		//지시량이랑 자재수량 비교해서 자재가 지시량보다 적으면 alert return하기
+		let vols = gridMat.getColumnValues('matVol');
+		let sum = 0;
+		for(let i in vols) {
+			sum = sum + parseInt(vols[i]);
+		}
+		console.log(prdComVol.value);
+		console.log(sum);
+		if(parseInt(prdComVol.value) > sum) {
+			//토스트메시지 
+			$.toast({ 
+				  text : "자재수량이 지시량보다 적습니다.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
 		}
 		//저장안된 수정사항이 없는지 체크하고 이미 출고된 녀셕은 못하게 하고 수행하기
 		//1. 지시디테일 출고여부 Y로 업데이트, 2. 자재입출반관리 출고 추가, 3.자재현재고 -업데이트, 4.공정실적관리 생성
@@ -775,7 +832,6 @@ $(function(){
 			grid.disableRowCheck(rowsY[i].rowKey);
 			grid.disableRow(rowsY[i].rowKey);
 		}
-		
 	}
 	
 	// 작업지시 조회 모달창 팝업 버튼
