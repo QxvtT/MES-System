@@ -8,23 +8,49 @@
 	<select id="produceCommandList"
 		parameterType="mes.prd.com.service.ProduceCommandDVO"
 		resultType="mes.prd.com.service.ProduceCommandDVO">
-		select 
-		      prd_com_d_date
-		    , prd_com_num
-		    , (select oper_name from order_d od, order_m om where od.ord_num = om.ord_num and pcd.ord_d_num = od.ord_d_num) oper_name 
-		    , itm_code
-		    , (select itm_name from item where itm_code = pcd.itm_code) itm_name
-		    , (select ord_num from order_d where ord_d_num = pcd.ord_d_num) ord_num
-		    , (select ord_request_date from order_m om inner join order_d od on om.ord_num = od.ord_num where pcd.ord_d_num = od.ord_d_num) ord_request_date
-		    , (select ord_vol from order_d where ord_d_num = pcd.ord_d_num) ord_vol
-		    , prd_com_vol
-		    , prc_com_div
-		    , lot_num
-		    , mat_vol
-		    , prc_com_no
-		    , prd_com_d_note
-		from produce_command_mat pcm, produce_command_d pcd
-		where pcm.prd_com_d_num = pcd.prd_com_d_num
+		SELECT 
+         TO_CHAR(PRD_COM_D_DATE, 'yyyy-MM-dd') PRD_COM_D_DATE
+       , PRD_COM_NUM
+       , (SELECT OPER_NAME FROM ORDER_D OD, ORDER_M OM WHERE OD.ORD_NUM = OM.ORD_NUM AND PCD.ORD_D_NUM = OD.ORD_D_NUM) OPER_NAME 
+       , ITM_CODE
+       , (SELECT ITM_NAME FROM ITEM WHERE ITM_CODE = PCD.ITM_CODE) ITM_NAME
+       , (SELECT ORD_NUM FROM ORDER_D WHERE ORD_D_NUM = PCD.ORD_D_NUM) ORD_NUM
+       , TO_CHAR((SELECT ORD_DELIVERY_DATE FROM ORDER_M OM INNER JOIN ORDER_D OD ON OM.ORD_NUM = OD.ORD_NUM WHERE PCD.ORD_D_NUM = OD.ORD_D_NUM), 'yyyy-MM-dd') ORD_DELIVERY_DATE
+       , (SELECT ORD_VOL FROM ORDER_D WHERE ORD_D_NUM = PCD.ORD_D_NUM) ORD_VOL
+       , PRD_COM_VOL
+       , PRC_COM_DIV
+       , LOT_NUM
+       , MAT_VOL
+       , PRC_COM_NO
+       , PRD_COM_D_NOTE
+      FROM PRODUCE_COMMAND_MAT PCM, PRODUCE_COMMAND_D PCD
+      WHERE PCM.PRD_COM_D_NUM = PCD.PRD_COM_D_NUM
+      <![CDATA[
+      AND PRD_COM_D_DATE >= #{startDate}
+      AND PRD_COM_D_DATE <= #{endDate}
+      ]]>
+      <if test="itemCodeList != null">
+      <if test="itemCodeList.size != 0">
+      <![CDATA[
+      AND ITM_CODE IN 
+      ]]>
+        <foreach item="item" index="index" collection="itemCodeList"
+        open="(" separator="," close=")">
+        #{item}
+        </foreach>
+        </if>
+        </if>
+        <if test="operCodeList != null">
+      <if test="operCodeList.size != 0">
+        <![CDATA[
+      AND (SELECT OPER_CODE FROM ORDER_D OD, ORDER_M OM WHERE OD.ORD_NUM = OM.ORD_NUM AND PCD.ORD_D_NUM = OD.ORD_D_NUM) IN
+      ]]>
+            <foreach item="operCode" index="index" collection="operCodeList"
+            open="(" separator="," close=")">
+            #{operCode}
+            </foreach>
+        </if>
+        </if>
 	</select>
 	
 	<!-- 제품목록조회 모달 -->
@@ -143,8 +169,10 @@
 		from(select C.*, TO_CHAR(C.prd_com_d_date, 'yyyy-MM-dd') as prd_com_d_date1, I.itm_name, M.mat_name, OD.ord_num, to_char(OM.ord_delivery_date,'yyyy-MM-dd') ord_delivery_date, OM.oper_name,
 		      OD.ord_vol, OD.ord_out_vol, I.itm_day_output
 		      from PRODUCE_COMMAND_d C, item I, order_d OD, order_m  OM, material M
-		      where c.prd_com_num = #{prdComNum}
-		      	and c.itm_code = i.itm_code
+		      where c.itm_code = i.itm_code
+		      <if test="#{prdComNum} != null and #{prdComNum} != ''">
+		      	and c.prd_com_num = #{prdComNum}
+		      </if>
 		      	and i.mat_code = m.mat_code
 		        and c.ord_d_num = od.ord_d_num (+)
 		        and od.ord_num = om.ord_num (+)) A, 
@@ -155,6 +183,12 @@
 		<if test="prdComDNum1 != null and prdComDNum1 != ''">
 				<![CDATA[	
 					and Prd_Com_D_Num > #{prdComDNum1}
+				]]>
+		</if>
+		<if test="#{prdComNum} == null or #{prdComNum} == ''">
+				<![CDATA[	
+					and prd_com_d_date1 >= #{startDate}
+					and prd_com_d_date1 <= #{endDate}
 				]]>
 		</if>
 		ORDER BY
@@ -193,11 +227,12 @@
 		SELECT A.*, ROWNUM RNUM FROM ( 
 			select a.lot_num, a.mat_code, (a.mat_vol - nvl(b.mat_vol,0)) as mat_vol
 			from material_stock a,
-			(select lot_num, mat_vol
+			(select lot_num, sum(mat_vol) as mat_vol
 			from produce_command_mat
 			where prd_com_d_num in 
 			    (select prd_com_d_num from produce_command_d 
-			    where mat_out_chk = 'N')) b
+			    where mat_out_chk = 'N')
+                group by lot_num) b
 			where a.lot_num = b.lot_num (+)
 			and mat_code = #{matCode}
 		<if test="lotNum1 != null and lotNum1 != ''">
@@ -266,8 +301,10 @@
 			where itm_code = #{itmCode};
 		
 			insert into Produce_Command_D
-				(prd_com_d_num, prd_com_num, itm_code, mat_code, prd_com_vol, prd_com_d_date, prc_com_no, prc_com_div, prd_com_d_note) 
+				(prd_plan_d_num, ord_d_num, prd_com_d_num, prd_com_num, itm_code, mat_code, prd_com_vol, prd_com_d_date, prc_com_no, prc_com_div, prd_com_d_note) 
 				values(
+					#{prdPlanDNum},
+					#{ordDNum},
 					produce_command_d_seq.nextval,
 					#{prdComNum},
 					#{itmCode},
@@ -279,7 +316,7 @@
 					#{prdComDNote}
 				);
 			
-			<if test="#{prdPlanDNum} != null">
+			if #{prdPlanDNum} is not null then
 				select prd_work_vol into v_prdWorkVol
 				from produce_plan_d
 				where prd_plan_d_num = #{prdPlanDNum};
@@ -294,8 +331,8 @@
 					where prd_plan_d_num = #{prdPlanDNum};
 				end if;
 				]]>
-			</if>
-			<if test="#{ordDNum} != null">
+			end if;
+			if #{ordDNum} is not null then
 				select nvl(sum(prd_com_vol),0) into v_ordIndVol
 				from produce_command_d
 				where ord_d_num = #{ordDNum} and prc_com_div = '정상';
@@ -303,13 +340,13 @@
 				update order_d
 				set ord_ind_vol = v_ordIndVol
 				where ord_d_num = #{ordDNum};
-			</if>
+			end if;
 			end;
 	</insert>
 	
 	<!-- mat선택한 행의 지시일련 구하기 -->
 	<select id="selectPrdComDNum" resultType="BigDecimal">
-		select produce_command_d_seq.currval from dual
+		select max(prd_com_d_num) from Produce_Command_D
 	</select>
 	
 	<!-- 작업지시 grid 행 update -->
@@ -328,7 +365,7 @@
 				prd_com_d_note = #{prdComDNote}
 			where prd_com_d_num = #{prdComDNum};
 			
-			<if test="#{prdPlanDNum} != null">
+			if #{prdPlanDNum} is not null then
 				select prd_work_vol into v_prdWorkVol
 				from produce_plan_d
 				where prd_plan_d_num = #{prdPlanDNum};
@@ -341,10 +378,14 @@
 					update produce_plan_d 
 					set com_chk = 'N'
 					where prd_plan_d_num = #{prdPlanDNum};
+				else
+					update produce_plan_d 
+					set com_chk = 'Y'
+					where prd_plan_d_num = #{prdPlanDNum};
 				end if;
 				]]>
-			</if>
-			<if test="#{ordDNum} != null">
+			end if;
+			if #{ordDNum} is not null then
 				select nvl(sum(prd_com_vol),0) into v_ordIndVol
 				from produce_command_d
 				where ord_d_num = #{ordDNum} and prc_com_div = '정상';
@@ -352,7 +393,7 @@
 				update order_d
 				set ord_ind_vol = v_ordIndVol
 				where ord_d_num = #{ordDNum};
-			</if>
+			end if;
 		end;
 	</update>
 	
@@ -366,7 +407,7 @@
 			delete from Produce_Command_D 
 			where prd_com_d_num = #{prdComDNum}
 			
-			<if test="#{prdPlanDNum} != null">
+			if #{prdPlanDNum} is not null then
 				select prd_work_vol into v_prdWorkVol
 				from produce_plan_d
 				where prd_plan_d_num = #{prdPlanDNum};
@@ -381,8 +422,8 @@
 					where prd_plan_d_num = #{prdPlanDNum};
 				end if;
 				]]>
-			</if>
-			<if test="#{ordDNum} != null">
+			end if;
+			if #{ordDNum} is not null then
 				select nvl(sum(prd_com_vol),0) into v_ordIndVol
 				from produce_command_d
 				where ord_d_num = #{ordDNum} and prc_com_div = '정상';
@@ -390,7 +431,7 @@
 				update order_d
 				set ord_ind_vol = v_ordIndVol
 				where ord_d_num = #{ordDNum};
-			</if>
+			end if;
 		end;
 	</delete>
 	

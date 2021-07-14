@@ -90,8 +90,8 @@ $(function(){
 	    rowHeaders: ['checkbox'],
 	    columns: [
 	    	{ header: '일련번호', name:'prdComDNum', hidden: true},
-	    	{ header: '계획일련번호', name:'prdPlanDNum', hidden: true},
-	    	{ header: '주문일련번호', name:'ordDNum', hidden: true},
+	    	{ header: '계획일련번호', name:'prdPlanDNum'},
+	    	{ header: '주문일련번호', name:'ordDNum'},
 			{ header: '자재코드', name:'matCode', hidden: true},
 			{ header: '자재명', name:'matName', hidden: true},
 			{ header: '업체명', name:'operName', hidden: true},
@@ -503,7 +503,7 @@ $(function(){
 			
 		}
 		//새로 추가한 행이라 지시일련이 없는 경우 rowKey를 가져간다.
-		if(grid.getValue(e.rowKey,'prdComDNum') == null) {
+		if(grid.getValue(e.rowKey,'prdComDNum') == null || grid.getValue(e.rowKey,'prdComDNum') == '') {
 			matRowKey = e.rowKey;
 		} else {
 			matRowKey = null;
@@ -641,6 +641,9 @@ $(function(){
 				});
 		
 		//lot자재 수정
+		if(prdComDNum == null || prdComDNum == ''){
+			return console.log("지시일련이 없어서 자재등록이 안됌");
+		}
 		let gridDataM = gridMat.getModifiedRows({});
 		
 		gridDataM["produceCommandDVO"] = {

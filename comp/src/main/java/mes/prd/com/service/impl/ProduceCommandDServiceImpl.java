@@ -154,6 +154,7 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
     	BigDecimal prdComDNum = null;
     	if(gridData.getProduceCommandDVO().getPrdComNum() != null && gridData.getProduceCommandDVO().getPrdComNum() != "") {
     		produceCommandDDAO.updateProduceCommand(gridData.getProduceCommandDVO());
+    		newPrdComNum = gridData.getProduceCommandDVO().getPrdComNum();
     	} else {
     		String date = gridData.getProduceCommandDVO().getPrdComDate().replace("-", "");      
     		int a = produceCommandDDAO.getPrdComCount(gridData.getProduceCommandDVO());
@@ -196,8 +197,12 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
         			ProduceCommandDVO vo= gridData.getCreatedRows().get(i);
         			vo.setPrdComNum(gridData.getProduceCommandDVO().getPrdComNum());
             		produceCommandDDAO.insertProduceCommandD(vo);
-            		
+            		System.out.println("matRowKey는:");
+        			System.out.println(matRowKey);
+        			System.out.println("rowKey1는:");
+        			System.out.println(vo.getRowKey1());
             		if(matRowKey != null && vo.getRowKey1() == matRowKey) {
+            			System.out.println("if안에 들어갑니까?");
             			prdComDNum = produceCommandDDAO.selectPrdComDNum();
             		}
             		//주문일련이 있으면 주문디테일에 지시량 업데이트
@@ -210,9 +215,12 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
         	}
         	
         }
-        
         result.setPrdComNum(newPrdComNum);
         result.setPrdComDNum(prdComDNum);
+        System.out.println("지시번호:");
+        System.out.println(result.getPrdComNum());
+        System.out.println("지시일련:");
+        System.out.println(result.getPrdComDNum());
         return result;
     }
     

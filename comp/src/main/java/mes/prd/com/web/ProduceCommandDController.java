@@ -150,8 +150,10 @@ public class ProduceCommandDController {
 	@RequestMapping(value="/ProduceCommandUpdate")
 	@ResponseBody
 	public ProduceCommandDVO ProduceCommandUpdate(@RequestBody GridDataVO gridData) throws Exception {
-		System.out.println("rowKey 받아오는지 테스트");
-		System.out.println(gridData.getCreatedRows().get(0).getRowKey1());
+		System.out.println("들어가는 숫자값 확인용");
+		System.out.println(gridData.getProduceCommandDVO());
+		System.out.println(gridData.getCreatedRows());
+		System.out.println(gridData.getCreatedRows().get(1));
 		return produceCommandDService.produceCommandUpdate(gridData);
 	}
 	
