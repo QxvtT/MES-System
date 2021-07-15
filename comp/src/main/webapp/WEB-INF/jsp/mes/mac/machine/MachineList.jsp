@@ -29,7 +29,8 @@
 	let macCode;
 	let macCode1;
 	let data;
-
+	
+	
 	$(function() {
 		const machine = new tui.Grid({
 			el : document.getElementById('machine'),
@@ -47,6 +48,17 @@
 				name : 'macName'
 			} ]
 		}); // end const grid
+		
+		// 이쁜달력
+		let today = new Date();
+		var datepicker = new tui.DatePicker('#date', {
+	        date: today,
+	        language: 'ko',
+	        input: {
+	            element: '#buyDate1',
+	            format: 'yyyy-MM-dd'
+	        }
+	    });
 
 		// date 불러오는 친구 
 		function getMachineMngList() {
@@ -82,10 +94,10 @@
 		$('input#macDiv').val(machine.getData()[key]['macDiv']);
 		$('input#model').val(machine.getData()[key]['model']);
 		$('input#proOper').val(machine.getData()[key]['proOper']);
-		$('input#worker').val(machine.getData()[key]['worker']);
+		$('input#empName').val(machine.getData()[key]['worker']);
 		$('input#use').val(machine.getData()[key]['use']);
 		$('input#usingEnergy').val(machine.getData()[key]['usingEnergy']);
-		$('input#buyDate').val(machine.getData()[key]['buyDate']);
+		$('input#buyDate1').val(machine.getData()[key]['buyDate1']);
 		$('input#buyPrice').val(machine.getData()[key]['buyPrice']);
 		$('input#macLoadage').val(machine.getData()[key]['macLoadage']);
 		$('input#macStdTemp').val(machine.getData()[key]['macStdTemp']);
@@ -93,8 +105,7 @@
 		
 		
 		 }); 
-		 
-		 $("#myimage").attr("src", "main/down.do?fileName=02.PNG");
+
 		 
 		 machine.on('check', (e) => {
 				let rows = machine.getCheckedRowKeys(); 
@@ -170,7 +181,7 @@
 			<div class="row align-items-center">
 				<div class="col-md-8">
 					<div class="page-header-title">
-						<h5 class="m-b-10">주문관리</h5>
+						<h5 class="m-b-10">설비 관리</h5>
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -198,7 +209,6 @@
 									<li><h5>설비 데이터</h5></li>
 									<br />
 								</ul>
-
 								<table class="table">
 									<tr>
 										<th>설비코드 *</th>
@@ -220,10 +230,9 @@
 										<td align="right"><input style="text-align: center"
 											class="form-control" type="text" id="macDiv" name="macDiv" /></td>
 									</tr>
-									<tr>
-										<th>모델명</th>
-										<td align="right"><input style="text-align: center"
-											class="form-control" type="text" id="model" name="model" /></td>
+									<th>모델명</th>
+									<td align="right"><input style="text-align: center"
+										class="form-control" type="text" id="model" name="model" /></td>
 									</tr>
 									<tr>
 										<th>제작업체</th>
@@ -231,9 +240,10 @@
 											class="form-control" type="text" id="proOper" name="proOper" /></td>
 									</tr>
 									<tr>
-										<th>최근 작업자</th>
+										<th>사용 작업자 &nbsp;<%@ include
+												file="/WEB-INF/jsp/mes/common/modal/EmployeesList.jsp"%></th>
 										<td align="right"><input style="text-align: center"
-											class="form-control" type="text" id="worker" name="worker" /></td>
+											class="form-control" type="text" id="empName" name="empName"></td>
 									</tr>
 									<tr>
 										<th>용도</th>
@@ -248,14 +258,20 @@
 									</tr>
 									<tr>
 										<th>구매일자</th>
-										<td align="right"><input style="text-align: center"
-											class="form-control" type="date" id="buydate" name="buydate" /></td>
+										<td align="right">
+											<div
+												class="tui-datepicker-input tui-datetime-input tui-has-focus">
+												<input type="text" id="buyDate1" name="buyDate1"
+													class=" form-control" aria-label="Date-Time" /> <span
+													class="tui-ico-date"></span>
+											</div>
+											<div id="date" style="margin-top: -1px;"></div></td>
 									</tr>
 									<tr>
 										<th>사용에너지</th>
 										<td align="right"><input style="text-align: center"
-											class="form-control" type="text" id="usingEne"
-											name="usingEne" /></td>
+											class="form-control" type="text" id="usingEnergy"
+											name="usingEnergy" /></td>
 									</tr>
 									<tr>
 										<th>부하율 (%)</th>
@@ -279,9 +295,17 @@
 							<!-- 타이틀 -->
 
 							<div id="title" class="card-header">
-								<ul>
-									<li><h5>설비 List</h5></li>
-								</ul>
+								<div class="row col-xl-12">
+									<div class="d-inline-block col-xl-6">
+										<ul>
+											<li><h5>설비 List</h5></li>
+										</ul>
+									</div>
+									<div class="d-inline-block text-right col-xl-6">
+										<button class="btn btn-success waves-effect waves-light">저장</button>
+										<button class="btn btn-danger waves-effect waves-light">삭제</button>
+									</div>
+								</div>
 							</div>
 							<div class="col-xl-12">
 								<div id="machine"></div>
@@ -292,6 +316,7 @@
 						<!-- 타이틀 -->
 						<div class="card">
 							<div id="title" class="card-header">
+
 								<ul>
 									<li><h5>* 설비 이미지 등록</h5></li>
 
@@ -299,7 +324,7 @@
 								<br />
 								<div class="form-group row">
 									<div class="img_wrap"
-										style="height: 380px; width: 88%; margin: 0 auto">
+										style="height: 370px; width: 85%; margin: 0 auto">
 										<img id="img" style="height: 100%; width: 100%"
 											src="${pageContext.request.contextPath}/images/noimage.png" />
 									</div>
@@ -361,14 +386,14 @@ function fn_submit(){
         form.append( "file1", $("#file1")[0].files[0] );
         
          jQuery.ajax({
-             url : "/myapp/result"
+             url : "${pageContext.request.contextPath}/result"
            , type : "POST"
            , processData : false
            , contentType : false
            , data : form
-           , success:function(response) {
+           , success:function(success) {
                alert("성공하였습니다.");
-               console.log(response);
+               console.log(success);
            }
            ,error: function (jqXHR) 
            { 
