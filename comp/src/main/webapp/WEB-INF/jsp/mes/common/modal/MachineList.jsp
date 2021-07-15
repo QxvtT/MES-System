@@ -37,7 +37,7 @@ $(function(){
 	    bodyHeight: 200,
 	    rowWidth: 100,
 	    data: getMachineList(),
-	    rowHeaders: ['rowNum','checkbox'],
+	    rowHeaders: ['rowNum',{type:'checkbox',header:' '}],
 	    columns: [
 	    	{ header: '설비코드', name:'macCode'},
 			{ header: '설비명', name:'macName'},
@@ -114,6 +114,17 @@ $(function(){
 	
 	$('#btnM').click(function(){
 		$("#macModal").modal("toggle");
+	})
+	
+		machine.on('check', (e) => {
+		let rows = machine.getCheckedRowKeys(); 
+		if(rows.length > 1) { 
+			for(let i in rows){ 
+				if(e.rowKey != rows[i]){ 
+					machine.uncheck(rows[i]); 
+					} 
+				}
+		}
 	})
 	
 	
