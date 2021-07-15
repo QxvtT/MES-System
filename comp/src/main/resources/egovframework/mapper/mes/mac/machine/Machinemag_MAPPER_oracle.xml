@@ -108,41 +108,45 @@
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 		SELECT
-		MAC_CODE
-		, MAC_NAME
-		, MAC_DIV
-		, MAC_SIZE
-		, MODEL
-		, PRO_OPER
-		, WORKER
-		, USE
-		, NOM_CAP
-		,
-		USING_ENERGY
-		, SAFETY
-		, MAC_PRO_DATE
-		, BUY_DATE
-		, BUY_PRICE
-		, LINE_NUM
-		,
-		MAC_LOADAGE
-		, MAC_STD_TEMP
-		FROM MACHINE
-		WHERE 1=1
-		<if test="searchKeyword != null and searchKeyword != ''">
-			<if test="searchCondition == 0">AND
-				MAC_CODE = #{searchKeyword}
-			</if>
-			<if test="searchCondition == 1">AND
-				MAC_NAME LIKE '%' || #{searchKeyword} || '%'
-			</if>
-		</if>
+				mac.MAC_CODE
+				, mac.MAC_NAME
+				, mac.MAC_DIV
+				, mac.MAC_SIZE
+				, mac.MODEL
+				, mac.PRO_OPER
+				, mac.WORKER
+				, mac.USE
+				, mac.NOM_CAP
+				, mac.USING_ENERGY
+				, mac.SAFETY
+				, mac.MAC_PRO_DATE
+				, mac.BUY_DATE
+				, mac.BUY_PRICE
+				, mac.LINE_NUM
+				, mac.MAC_LOADAGE
+				, mac.MAC_STD_TEMP
+				, e.emp_name 
+		FROM MACHINE mac
+		     , employees e
+		     , (select prd.emp_id
+		             , prd.mac_code
+                from process_result_d prd
+                     ,(select max(prd.prc_end_time) as time
+                             , prd.mac_code
+                       from process_result_d prd
+                            , machine m
+                       where prd.mac_code = m.mac_code
+                       group by prd.mac_code) sibal
+                where prc_end_time = sibal.time) sibal
+		where sibal.mac_code = mac.mac_code and
+		      e.emp_id = sibal.emp_id
+		     
 		ORDER BY
 		MAC_CODE DESC
 		
 		<![CDATA[					
-	) A WHERE ROWNUM <= #{lastIndex}
-)WHERE RNUM > #{firstIndex}
+	) A WHERE ROWNUM <= 10
+)
 ]]>
 	</select>
 
