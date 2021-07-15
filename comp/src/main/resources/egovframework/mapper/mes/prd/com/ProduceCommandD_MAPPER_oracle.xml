@@ -215,7 +215,7 @@
        pr.mov_num
 		from PRODUCE_COMMAND_MAT pcm, process_result pr
 		where pcm.prd_com_d_num = #{prdComDNum}
-		and pcm.lot_num = pr.lot_num
+		and pcm.lot_num = pr.lot_num (+)
 		<if test="prdComDNum1 != null and prdComDNum1 != ''">
 			<![CDATA[	
 				and pcm.Prd_Com_Mat_Num > #{prdComMatNum}
@@ -262,9 +262,9 @@
 		resultType="mes.prd.com.service.ProduceCommandDVO">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-		select f.*, p.prc_name, 
+		select f.*, p.prc_name
 		<if test="movNum != null and movNum != ''">
-		(select prc_state from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code)
+		,(select prc_state from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code)
 		</if>
 		from process_flow F, process P
 		where f.prc_code = p.prc_code
@@ -380,7 +380,7 @@
 				from produce_plan_d
 				where prd_plan_d_num = #{prdPlanDNum};
 				
-				select sum(prd_com_vol) into v_prdComVol
+				select nvl(sum(prd_com_vol),0) into v_prdComVol
 				from produce_command_d
 				where prd_plan_d_num = #{prdPlanDNum} and prc_com_div = '정상';
 				<![CDATA[					
