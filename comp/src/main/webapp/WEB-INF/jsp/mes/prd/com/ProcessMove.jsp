@@ -20,6 +20,25 @@ let lotNum1 = null;
 let matCode = null;
 let movNum = null;
 
+// 각 그리드 추출 값
+let grid1Data = null;
+let grid2Data = null;
+let grid3Data = null;
+var gridData = {};
+
+// Prt로 보낼 데이터
+let prdComDDate2 = null
+let movNum2 = null;
+let prdComNum2 = null;
+let prdComDate2 = null;
+let itmCode2 = null;
+let itmName2 = null;
+let matName2 = null;
+let lotNum2 = null;
+let prdComVol2 = null;
+let matHisDate2 = null;
+let prdComNote2 = null;
+
 //주문일련 계획일련 있는 row들 담을 변수
 let rows = null;
 
@@ -107,7 +126,7 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
-			url : "ProduceCommandMatList",
+			url : "ProcessMatList",
 			type : "get",
 			data : {prdComMatNum: prdComMatNum,
 					prdComDNum: prdComDNum
@@ -140,6 +159,10 @@ $(function(){
 		prcFNo = null;
 		grid2.resetData(getComMatList());
 		grid3.resetData([]);
+		
+		grid1Data = grid.getRow(e.rowKey);
+		console.log(grid1Data);
+		
 		matCode = grid.getValue(e.rowKey,'matCode');
 		$('#itmCode').val(grid.getValue(e.rowKey,'itmCode'));
 		$('#itmName').val(grid.getValue(e.rowKey,'itmName'));
@@ -152,6 +175,11 @@ $(function(){
 	grid2.on('dblclick', (e) => {
 		movNum = grid2.getValue(e.rowKey, 'movNum');
 		prcFNo = null;
+		
+		grid2Data = grid2.getRow(e.rowKey);
+		console.log(grid2Data);
+		
+		grid3.clear();
 		grid3.resetData(getFlowList());
 	})
 	
@@ -168,7 +196,8 @@ $(function(){
 					},
 			dataType: "json",
 			success : function(result){
-				console.log(result);
+				grid3Data = result;
+				console.log(grid3Data);
 				data = result;
 			} // end success
 		}); // end ajax 
@@ -202,8 +231,77 @@ $(function(){
 	});
 	
 	$('#printBtn').click(function() {
+		getPrtInfo();
+		//getFlowPrtInfo();
 		window.open("ProcessMovePrt.do")
 	})
+	
+	function getPrtInfo() {
+		/* prdComDDate2 = grid1Data.prdComDDate1;
+		prdComNum2 = grid1Data.prdComNum;
+		prdComDate2 = grid1Data.prdComDate;
+		itmCode2 = grid1Data.itmCode;
+		itmName2 = grid1Data.itmName;
+		matName2 = grid1Data.matName;
+		prdComVol2 = grid1Data.prdComVol;
+		movNum2 = grid2Data.movNum;
+		lotNum2 = grid2Data.lotNum;
+		matHisDate2 = null;
+		prdComNote2 = null; */
+		
+		
+		/* {
+		prdComDDate : prdComDDate2,
+		prdComNum : prdComNum2,
+		prdComDate : prdComDate2,
+		itmCode : itmCode2,
+		itmName : itmName2,
+		matName : matName2,
+		prdComVol : prdComVol2,
+		movNum : movNum2,
+		lotNum : lotNum2,
+		matHisDate : matHisDate2,
+		prdComNote : prdComNote2
+			} */
+			
+		gridData['grid1Data'] = {
+					prdComDDate : grid1Data.prdComDDate,
+					prdComNum : grid1Data.prdComNum,
+					prdComDate : grid1Data.prdComDate,
+					itmCode : grid1Data.itmCode,
+					itmName : grid1Data.itmName,
+					matName : grid1Data.matName,
+					prdComVol : grid1Data.prdComVol,
+					movNum : grid2Data.movNum,
+					lotNum : grid2Data.lotNum
+					};
+		gridData['grid3Data'] = grid3Data;
+					
+		console.log(gridData);
+		console.log(JSON.stringify(gridData));
+		$.ajax({
+			async: false,
+			url : "ProcessMovePrt",
+			type : "POST",
+			data : JSON.stringify(gridData),
+			dataType: "json",
+			contentType:"application/json",
+		}); // end ajax 
+	}
+	
+	/* function getFlowPrtInfo() {
+		$.ajax({
+			async: false,
+			url : "ProcessMovePrt",
+			type : "POST",
+			data : JSON.stringify(grid3Data),
+			dataType: "json",
+			contentType:"application/json",
+			success: function(result) {
+				console.log(grid3Data);
+			}
+		})
+	} */
 	
 })
 

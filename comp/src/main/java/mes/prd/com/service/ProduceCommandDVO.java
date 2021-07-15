@@ -173,6 +173,7 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     private java.lang.String itemCodes;
     private List<String> itemCodeList;
     
+    private java.lang.String prcState;
 
     
     

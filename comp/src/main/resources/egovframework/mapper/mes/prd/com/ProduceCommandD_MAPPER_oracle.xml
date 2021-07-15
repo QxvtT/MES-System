@@ -211,11 +211,9 @@
 		resultType="mes.prd.com.service.ProduceCommandDVO">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-		select pcm.*, 
-       pr.mov_num
-		from PRODUCE_COMMAND_MAT pcm, process_result pr
-		where pcm.prd_com_d_num = #{prdComDNum}
-		and pcm.lot_num = pr.lot_num (+)
+		select *
+		from PRODUCE_COMMAND_MAT
+		where prd_com_d_num = #{prdComDNum}
 		<if test="prdComDNum1 != null and prdComDNum1 != ''">
 			<![CDATA[	
 				and pcm.Prd_Com_Mat_Num > #{prdComMatNum}
@@ -224,6 +222,30 @@
 		ORDER BY
 		PRD_COM_MAT_NUM
 		
+		<![CDATA[					
+		) A WHERE ROWNUM <= 10)
+		]]>
+	</select>
+	
+	<!-- 공정이동표 소요 자재 조회 -->
+	<select id="selectProcessMatList"
+		parameterType="mes.prd.com.service.ProduceCommandDVO"
+		resultType="mes.prd.com.service.ProduceCommandDVO">
+		SELECT * FROM (
+		SELECT A.*, ROWNUM RNUM FROM (
+		select pcm.*, 
+      	pr.mov_num
+		from PRODUCE_COMMAND_MAT pcm, process_result pr
+		where pcm.prd_com_d_num = pr.prd_com_d_num
+		and pcm.prd_com_d_num = #{prdComDNum}
+		and pcm.lot_num = pr.lot_num
+		<if test="prdComDNum1 != null and prdComDNum1 != ''">
+			<![CDATA[	
+				and pcm.Prd_Com_Mat_Num > #{prdComMatNum}
+			]]>
+		</if>
+		ORDER BY
+		PRD_COM_MAT_NUM
 		<![CDATA[					
 		) A WHERE ROWNUM <= 10)
 		]]>
@@ -264,7 +286,7 @@
 		SELECT A.*, ROWNUM RNUM FROM (
 		select f.*, p.prc_name
 		<if test="movNum != null and movNum != ''">
-		,(select prc_state from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code) AS PRC_STATE
+		,NVL((select prc_state from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code), '완료') AS PRC_STATE
 		</if>
 		from process_flow F, process P
 		where f.prc_code = p.prc_code

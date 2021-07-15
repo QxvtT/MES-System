@@ -81,37 +81,33 @@
 			<th class="tg-dvpl" style="border-right: 0px;" colspan="3"></th>
 			<th class="tg-7btt" style="border-left: 0px; border-right: 0px;">작업일자
 				:</th>
-			<th class="tg-0pky" style="border-left: 0px;" colspan="2">prdComDDate</th>
+			<th class="tg-0pky" style="border-left: 0px;" colspan="2">${vo.prdComDDate}</th>
 		</tr>
 		<tr>
 			<td class="tg-7btt">이동번호</td>
-			<td class="tg-0pky" colspan="5">movNum</td>
+			<td class="tg-0pky" colspan="5">${vo.movNum}</td>
 		</tr>
 		<tr>
 			<td class="tg-7btt">지시번호</td>
-			<td class="tg-0pky" colspan="2">prdComNum</td>
+			<td class="tg-0pky" colspan="2">${vo.prdComNum}</td>
 			<td class="tg-7btt">지시일자</td>
-			<td class="tg-0pky" colspan="2">prdComDate</td>
+			<td class="tg-0pky" colspan="2">${vo.prdComDate}</td>
 		</tr>
 		<tr>
 			<td class="tg-7btt">제품코드</td>
-			<td class="tg-0pky" colspan="2">itmCode</td>
+			<td class="tg-0pky" colspan="2">${vo.itmCode}</td>
 			<td class="tg-7btt">제품명</td>
-			<td class="tg-0pky" colspan="2">itmName</td>
+			<td class="tg-0pky" colspan="2">${vo.itmName}</td>
 		</tr>
 		<tr>
 			<td class="tg-7btt">소재명</td>
-			<td class="tg-0pky" colspan="2">matName</td>
+			<td class="tg-0pky" colspan="2">${vo.matName}</td>
 			<td class="tg-7btt">소재LOT NO</td>
-			<td class="tg-0pky" colspan="2">lotNum</td>
+			<td class="tg-0pky" colspan="2">${vo.lotNum}</td>
 		</tr>
 		<tr>
 			<td class="tg-7btt">지시량</td>
-			<td class="tg-0pky" colspan="5">prdComVol</td>
-		</tr>
-		<tr>
-			<td class="tg-7btt">출고일</td>
-			<td class="tg-0pky" colspan="5">matHistDate</td>
+			<td class="tg-0pky" colspan="5">${vo.prdComVol}</td>
 		</tr>
 		<tr>
 			<td class="tg-7btt">출력일자</td>
@@ -137,16 +133,19 @@
 			<td class="tg-7btt">실적량</td>
 			<td class="tg-7btt">작업자</td>
 		</tr>
-		<tr>
-			<td class="tg-0pky" style="text-align: center; padding: 0px;">prcFNo</td>
-			<td class="tg-0pky" style="text-align: center; padding: 0px;">prcName</td>
-			<td class="tg-0pky" style="text-align: center; padding: 0px;">prcResVol</td>
-			<td class="tg-0pky" style="text-align: center; padding: 0px;">prcState</td>
-			<td class="tg-0pky" style="text-align: center; padding: 0px;">prcResVol - prcErrVol</td>
-			<td class="tg-0pky" style="text-align: center; padding: 0px;">empId</td>
-		</tr>
+		<c:forEach items="${list }" var="item">
+			<tr>
+				<td class="tg-0pky" style="text-align: center; padding: 0px;">${item.prcFNo}</td>
+				<td class="tg-0pky" style="text-align: center; padding: 0px;">${item.prcName}</td>
+				<td class="tg-0pky" style="text-align: center; padding: 0px;">prcResVol</td>
+				<td class="tg-0pky" style="text-align: center; padding: 0px;">${item.prcState}</td>
+				<td class="tg-0pky" style="text-align: center; padding: 0px;">prcResVol
+					- prcErrVol</td>
+				<td class="tg-0pky" style="text-align: center; padding: 0px;">${item.empId}</td>
+			</tr>
+		</c:forEach>
 	</table>
-	<br/>
+	<br />
 	<table class="tg" style="width: 750px">
 		<tr>
 			<td class="tg-7btt" colspan="6"><span style="font-weight: bold">비고</span></td>
@@ -157,7 +156,7 @@
 	</table>
 </body>
 <script>
-	$("#bcTarget3").barcode("MV210706_0001", "code128", {
+	$("#bcTarget3").barcode("${vo.movNum}", "code128", {
 		barWidth : 2,
 		barHeight : 50,
 		bgColor : "white"

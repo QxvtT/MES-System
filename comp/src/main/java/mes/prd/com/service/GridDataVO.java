@@ -13,6 +13,10 @@ public class GridDataVO {
 	List<ProduceCommandDVO> matRows;
 	List<ProduceCommandDVO> flowRows;
 	
-	ProduceCommandDVO produceCommandDVO; 
+	ProduceCommandDVO produceCommandDVO;
+	
+	ProduceCommandDVO grid1Data;
+	ProduceCommandDVO grid2Data;
+	List<ProduceCommandDVO> grid3Data;
 }
  

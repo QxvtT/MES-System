@@ -145,13 +145,41 @@ public class ProduceCommandDController {
     	return "prd/com/ProcessMove.page";
     }
     
-    /** 공정이동표 인쇄 페이지 */
-    @RequestMapping(value="/ProcessMovePrt.do")
-    public String processMovePrt(ProduceCommandDVO searchVO, 
-    		ModelMap model)
-    				throws Exception {
-    	return "/mes/prd/com/ProcessMovePrt";
-    }
+    /** 공정이동표 자재 조회 */
+   	@RequestMapping(value ="/ProcessMatList", method=RequestMethod.GET)
+   	@ResponseBody
+   	public List<?> ajaxSelectProcessMatList(ProduceCommandDVO searchVO) throws Exception {
+   		System.out.println("이름 : ");
+   		List<?> list = produceCommandDService.selectProcessMatList(searchVO);
+   		return list;
+   	}
+       
+       /** 공정이동표 인쇄 페이지 */
+       @RequestMapping(value="/ProcessMovePrt.do")
+       public String processMovePrt(ProduceCommandDVO searchVO, 
+       		ModelMap model)
+       				throws Exception {
+       	return "mes/prd/com/ProcessMovePrt";
+       }
+       
+       /** 공정이동표 ajax 전송 */
+    	@RequestMapping(value = "/ProcessMovePrt")
+    	@ResponseBody
+    	public String ajaxProcessMovePrt(@RequestBody GridDataVO gridData, Model model) throws Exception {
+    		List<ProduceCommandDVO> list = gridData.getGrid3Data();
+    		model.addAttribute("vo", gridData.getGrid1Data());
+    		model.addAttribute("list", gridData.getGrid3Data());
+    		return "mes/prd/com/ProcessMovePrt";
+    	}
+    	
+    	/** 공정이동표 flow ajax 전송 */
+   	@RequestMapping(value ="/ProcessMoveFlowPrt")
+   	@ResponseBody
+   	public String ajaxProcessMoveFlowPrt(@RequestBody List<ProduceCommandDVO> list, Model model) throws Exception {
+   		System.out.println(list);
+   		model.addAttribute("list", list);
+   		return "mes/prd/com/ProcessMovePrt";
+   	}
 	
 	/*업데이트*/
 	@RequestMapping(value="/prd/com/ProduceCommandUpdate")

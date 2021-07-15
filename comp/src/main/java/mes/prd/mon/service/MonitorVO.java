@@ -1,4 +1,4 @@
-package mes.prd.mov.service;
+package mes.prd.mon.service;
 
 public class MonitorVO {
 

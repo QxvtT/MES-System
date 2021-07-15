@@ -344,5 +344,10 @@ public class ProduceCommandDServiceImpl extends EgovAbstractServiceImpl implemen
 	public List<?> produceCommandList(ProduceCommandDVO searchVO) throws Exception {
 		return produceCommandDDAO.produceCommandList(searchVO);
 	}
+
+	// 공정이동표 자재 조회
+	public List<?> selectProcessMatList(ProduceCommandDVO searchVO) throws Exception {
+		return produceCommandDDAO.selectProcessMatList(searchVO);
+	}
     
 }

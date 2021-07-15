@@ -129,5 +129,8 @@ public interface ProduceCommandDMapper {
     
     /** 생산지시조회 count */
 	public List<?> produceCommandList(ProduceCommandDVO searchVO);
+		
+	/** 공정이동표 자재 조회 */
+	public List<?> selectProcessMatList(ProduceCommandDVO searchVO);
 
 }

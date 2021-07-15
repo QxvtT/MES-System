@@ -1,4 +1,4 @@
-package mes.prd.mov.service.impl;
+package mes.prd.mon.service.impl;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import mes.prd.mov.service.MonitorService;
-import mes.prd.mov.service.MonitorVO;
+import mes.prd.mon.service.MonitorService;
+import mes.prd.mon.service.MonitorVO;
 
 @Service("monitorService")
 public class MonitorServiceImpl extends EgovAbstractServiceImpl implements MonitorService{

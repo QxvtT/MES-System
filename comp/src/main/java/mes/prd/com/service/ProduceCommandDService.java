@@ -99,5 +99,8 @@ public interface ProduceCommandDService {
 
     /** 생산지시조회*/
 	List<?> produceCommandList(ProduceCommandDVO searchVO) throws Exception;
+	
+	/** 공정이동표 자재 조회 **/
+	List<?> selectProcessMatList(ProduceCommandDVO searchVO) throws Exception;
     
 }

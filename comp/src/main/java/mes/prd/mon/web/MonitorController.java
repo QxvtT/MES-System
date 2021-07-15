@@ -1,4 +1,4 @@
-package mes.prd.mov.web;
+package mes.prd.mon.web;
 
 import javax.annotation.Resource;
 
@@ -7,8 +7,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
-import mes.prd.mov.service.MonitorService;
-import mes.prd.mov.service.MonitorVO;
+import mes.prd.mon.service.MonitorService;
+import mes.prd.mon.service.MonitorVO;
 
 @Controller
 public class MonitorController {
