@@ -216,5 +216,28 @@
 
 
 
-	<!-- -->
+    <select id="usableMachine"
+		parameterType="mes.common.modal.service.MachineVO"
+		resultType="mes.common.modal.service.MachineVO">
+		SELECT * FROM (
+			SELECT A.*, ROWNUM RNUM FROM (
+
+				select  m.mac_code
+				      , m.mac_name
+				from process_result_d prd
+				     , machine_process mp
+				     , machine m
+				where prd.prc_code = mp.prc_code 
+				and prd.mac_code is null
+				and m.mac_code=mp.mac_code
+				and mp.mac_code not in(select mac_code from process_result_d where prc_state = '진행' and prc_com_d_vol >0 and mac_code is not null)
+				and prc_res_d_num = #{prcResDNum}
+				
+				order by mac_code
+					<![CDATA[					
+				) A WHERE ROWNUM <= 10 )
+					]]>
+	</select>
+    
+    
 </mapper>

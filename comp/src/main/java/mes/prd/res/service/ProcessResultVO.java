@@ -54,7 +54,7 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     
     /** 작업시작날짜 produce_command*/
     private java.lang.String prdComDDate;
-    
+    private java.lang.String ordDNum;
     
     
     /** 일련번호*/

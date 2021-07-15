@@ -34,15 +34,18 @@ let prcResDNum = null;
 let prcResDNum1 = null;
 let prdComNum = null;
 let prdComDNum = null
+let ordDNum = null
 let data;
 let prcCode = null;
 
 let matVol = 0;
 let empId = null;
 let macCode = null;
+let macName = null;
 let prcState = null;
 let prcEndTime = null;
 let prcStrTime = null;
+let macCode1 = null;
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -138,6 +141,8 @@ $(function(){
 	grid.on('dblclick', () => { 
 		let key = grid.getFocusedCell()['rowKey'];
 		let result = grid.getColumnValues('prcResDNum')[key];
+		ordDNum = grid.getData()[key]['ordDNum'];
+		console.log(ordDNum);
 		getProcessResultSelect(result);
 		prdComDNum = grid.getColumnValues('prdComDNum')[key];
 		prcCode = grid.getColumnValues('prcCode')[key];;
@@ -152,6 +157,7 @@ function getProcessResultSelect(key) {
 			type : "get",
 			data : {
 				prcResDNum : key
+				,ordDNum : ordDNum
 				},
 			dataType: "json",
 			success : function(result){
@@ -159,10 +165,17 @@ function getProcessResultSelect(key) {
 				$( 'td#prdComNum' ).text(result[0]['prdComNum']);
 				$( 'td#itmCode' ).text(result[0]['itmCode']);
 				$( 'td#itmName' ).text(result[0]['itmName']);
-				$( 'td#operName' ).text(result[0]['operName']);
 				$( 'td#prcComDVol' ).text(result[0]['prcComDVol']);
 				$( 'td#prcResVol' ).text(result[0]['prcResVol']);
 				$( 'td#prcNVol' ).text(result[0]['prcNVol']);
+				if( result[0]['operName'] == null || result[0]['operName'] ==""){
+					
+					$( 'td#operName' ).text('');
+					
+				}
+				else{
+					$( 'td#operName' ).text(result[0]['operName']);
+				}
 				
 				data = result;
 			} // end success
@@ -177,7 +190,8 @@ function getProcessResultSelect(key) {
 			type : "get",
 			data : {
 				prdComDNum : prdComDNum,
-				prcCode : prcCode
+				prcCode : prcCode,
+				ordDNum : ordDNum
 				},
 			dataType: "json",
 			success : function(result){
@@ -224,6 +238,7 @@ function getProcessResultSelect(key) {
 	grid3.on('dblclick', () => { 
 		let key = grid3.getFocusedCell()['rowKey'];
 		prcResDNum = grid3.getColumnValues('prcResDNum')[key];
+		
 		empId = grid3.getColumnValues('empId')[key]
 		macCode = grid3.getColumnValues('macCode')[key]
 		grid4.resetData(setProduceSelect(prcResDNum));
@@ -313,10 +328,10 @@ function getProcessResultSelect(key) {
 			success : function(result){
 				console.log("updatesuccess");
 				
-						grid3.resetData(getProduceSelect(prdComDNum,prcCode));
-						grid.resetData(getProcessResulList());
 			}
 			});
+		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
+		grid.resetData(getProcessResulList());
 			
 	}
 
@@ -346,6 +361,8 @@ function getProcessResultSelect(key) {
 				
 				}
 			});
+		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
+		grid.resetData(getProcessResulList());
 	}
 	prcStr.onclick = function() {
 		if(prcStrTime != null){
@@ -376,7 +393,8 @@ function getProcessResultSelect(key) {
 	 function leadZero(num, n) {
          var leadZero = "";
          num = num.toString();
-         if (num.length < n) { for (var i = 0; i < n - num.length; i++) leadZero += "0"; }
+         if (num.length < n) {
+        	 for (var i = 0; i < n - num.length; i++) leadZero += "0"; }
          return leadZero + num;
      }
 	 function formatDate(dateDate) {
@@ -390,12 +408,88 @@ function getProcessResultSelect(key) {
 	         + leadZero(dateTime.getMinutes(), 2) + ":" + leadZero(dateTime.getSeconds(), 2);
 		    return time;
 		}
+	 
+	 
+	 const usableMachine = new tui.Grid({
+		    el: document.getElementById('usableMachine'),
+		    scrollX: false,
+		    scrollY: true,
+		    bodyHeight: 200,
+		    rowWidth: 100,
+		    data: null,
+		    rowHeaders: ['rowNum',{type:'checkbox',header:' '}],
+		    columns: [
+		    	{ header: '설비코드', name:'macCode'},
+				{ header: '설비명', name:'macName'},
+		    ]
+		}); // end const grid
+		
+		
+		  
+		function getUsalbeMachine() {
+			let data;
+			$.ajax({
+				async: false,
+				url : "${pageContext.request.contextPath}/usableMachine",
+				type : "get",
+				data : {macCode1: macCode1,
+					    prcResDNum : prcResDNum},
+				dataType: "json",
+				success : function(result){
+					if(result.length > 0) {
+						macCode1 = result[result.length -1].macCode1;
+					}
+					console.log(result);
+					data = result;
+				} // end success
+			}); // end ajax 
+			return data;
+		}
+		usableMachine.on('scrollEnd', () => {
+			usableMachine.appendRows(getUsalbeMachine());
+		  })
+		  
+		$('#mobile-collapse').click(function() {
+			usableMachine.refreshLayout();
+		});
+		
+		$('#searchMacBtn').click(function(){
+			usableMachine.resetData(getUsalbeMachine());
+			$("#macModal").modal("toggle");
+			$("#macModal").on('shown.bs.modal', function () {
+				usableMachine.refreshLayout();
+			});
+		});
+		
+		$('#choiceM').click(function(){
+			
+			$('input[id="macCode"]').val(usableMachine.getCheckedRows()[0]['macCode']);
+			$('input[id="macName"]').val(usableMachine.getCheckedRows()[0]['macName']);
+			$("#macModal").modal("toggle");
+		});
+		
+		$('#btnM').click(function(){
+			$("#macModal").modal("toggle");
+		});
+		
+			usableMachine.on('check', (e) => {
+		let rows = usableMachine.getCheckedRowKeys(); 
+		if(rows.length > 1) { 
+			for(let i in rows){ 
+				if(e.rowKey != rows[i]){ 
+					usableMachine.uncheck(rows[i]); 
+					} 
+				}
+		}
+	})
+		
+	 
+	 
 })
 	
 </script>
 </head>
 <body>
-<button id ="sibal" name ="sibal">sibal</button>
 <!-- 공정실적관리List -->
 	<div class="pcoded-inner-content">
 			<div class="main-body">
@@ -525,7 +619,10 @@ function getProcessResultSelect(key) {
 									<th>작업번호</th>
 									<td><input id = "prcWorkNum" namd = "prcWorkNum" readonly="readonly"/></td>
 									<th>설비</th>
-									<td><input id = "macName" namd = "macName" /><%@ include file="/WEB-INF/jsp/mes/common/modal/MachineList.jsp" %></td>
+									<td><input id = "macName" namd = "macName" />
+									<button type="button" class="btn btn-info btn-sm" id="searchMacBtn"
+									 data-toggle="modal" data-target="#macModal">검색</button></td>
+									
 									<input type="hidden" id="macCode" name = "macCode"/>
 								</tr>
 								<tr>
@@ -536,7 +633,7 @@ function getProcessResultSelect(key) {
 								</tr>
 								<tr>
 									<td colspan="3" align="center"><button  class="btn btn-info btn-sm" id ="prcStr" name ="prcStr">작업시작</button></td>
-									<td colspan="3" align="center"><button class="btn btn-info btn-sm" id ="prcEnd" name ="prcEnd">작업종료</button></td>								
+									<td colspan="3" align="center"><button class="btn btn-info btn-sm" id ="prcEnd" name ="prcEnd"  data-dismiss="modal">작업종료</button></td>								
 								</tr>
 							</table>
 							
@@ -545,19 +642,36 @@ function getProcessResultSelect(key) {
 						<div class="col-lg-4">
 						</div>
 					<br />
-					
+					<div align="right">
+					<a class="btn" id="sibalY">저장</a>
+					</div>
 						
 						<div id="grid4"></div>
 				
 				</div>
 				<div class="modal-footer">
-					<a class="btn" id="sibalY" >예</a>
-					<button class="btn" type="button" data-dismiss="modal">아니요</button>
+					<button class="btn" type="button" data-dismiss="modal">닫기</button>
 				</div>
 			</div>
 		</div>
 	</div>
+<div class="modal fade" id="macModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="exampleModalLabel" align="center">설비선택</h3>
 
+				</div>
+
+				<div class="form-group row"></div>
+				<div id="usableMachine"></div>
+				<div class="modal-footer">
+					<button class="btn" id="choiceM" name="choiceM" type="button">선택</button>
+					<button class="btn" type="reset" id="btnM">취소</button>
+				</div>
+			</div>
+		</div>
 </body>
 </html>
 

@@ -118,7 +118,7 @@
 				, mac.USE
 				, mac.NOM_CAP
 				, mac.USING_ENERGY
-				, mac.SAFETY
+				, mac.SAFETY 
 				, mac.MAC_PRO_DATE
 				, mac.BUY_DATE
 				, mac.BUY_PRICE

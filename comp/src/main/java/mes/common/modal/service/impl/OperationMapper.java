@@ -135,7 +135,8 @@ public interface OperationMapper {
 	 * @exception Exception
 	 */
 	public List<?> selectMachineList(MachineVO searchVO) throws Exception;
-
+	public List<?> usableMachine(MachineVO searchVO) throws Exception;
+	
 	//
 
 	public EmployeesVO selectEmployees(EmployeesVO vo) throws Exception;

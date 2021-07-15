@@ -136,7 +136,7 @@ public interface OperationService {
 	 */
     
     List selectMachineList(MachineVO searchVO) throws Exception;
-    
+    List usableMachine(MachineVO searchVO) throws Exception;
     
     //
     

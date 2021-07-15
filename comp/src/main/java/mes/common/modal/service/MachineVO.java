@@ -30,6 +30,9 @@ public class MachineVO extends OperationDefaultVO{
     
     private java.lang.String macSize;
     
+    //사용가능한 설비명 검색
+    private java.lang.String prcResDNum;
+    
     
     //스크롤용
     private java.lang.String macCode1;

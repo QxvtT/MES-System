@@ -196,6 +196,11 @@ public class OperationServiceImpl extends EgovAbstractServiceImpl implements Ope
 	public List<?> selectMachineList(MachineVO searchVO) throws Exception {
 		return operationDAO.selectMachineList(searchVO);
 	}
+	public List<?> usableMachine(MachineVO searchVO) throws Exception {
+		return operationDAO.usableMachine(searchVO);
+	}
+	
+	
 
 	//////////////
 

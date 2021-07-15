@@ -29,6 +29,7 @@
 	<update id ="updatePrcEnd">
 		update process_result_d
 		set prc_end_time = to_date(#{prcEndTime},'yyyy-MM-dd:HH24:mi:ss')
+		, PRC_STATE = '완료'
 		where prc_res_d_num = #{prcResDNum}
 	</update>
 	
@@ -59,6 +60,7 @@ SELECT * FROM (
                        ,prd.prc_code
                        ,prd.emp_id
                        ,prd.mac_code
+                       ,pcd.ord_d_num
 				from produce_command_d pcd
                      , process_result pr
                      , process_result_d prd
@@ -95,20 +97,26 @@ SELECT * FROM (
 				       ,item.itm_name
                        ,prd.prc_com_d_vol
                        ,prd.prc_res_vol
+                       <if test = "ordDNum !=null and ordDNum !=''">
                        ,om.oper_name
+                       </if>
                        ,(prd.prc_com_d_vol-prd.prc_res_vol) as prc_n_vol
 				from produce_command_d pcd
                      , process_result_d prd
                      , process_result pr
                      , item 
+                     <if test = "ordDNum !=null and ordDNum !=''">
                      , order_d od
                      , order_m om
+                     </if>
 				where 
 				      item.itm_code=pcd.itm_code and
                       pcd.prd_com_d_num = pr.prd_com_d_num and
                       pr.mov_num = prd.mov_num and
+                      <if test = "ordDNum !=null and ordDNum !=''">
                       od.ord_d_num = pcd.ord_d_num and
                       od.ord_num = om.ord_num and
+                      </if>
 					  prd.prc_res_d_num = #{prcResDNum}
 
 		<![CDATA[					
@@ -256,12 +264,18 @@ SELECT * FROM (
 		    v_old_err_vol process_result_d.prc_err_vol%type;
 		    v_mov_num process_result_d.mov_num%type;
 		    v_prc_res_no process_result_d.prc_res_no%type;
-		    v_start_vol process_result_d.prc_com_d_vol%type;
-		    v_cha_res_vol number := #{prcResVol};
-		    v_cha_err_vol number := #{prcErrVol};
+
+		    v_cha_res_vol number := ${prcResVol};
+		    v_cha_err_vol number := ${prcErrVol};
+		    
 		    v_test number;
+		    v_last_prc_res_no process_result_d.prc_res_no%type;
 	begin
-		
+			select max(prc_res_no) 
+			into v_last_prc_res_no 
+			from process_result_d
+			where mov_num = #{movNum};
+				
 			update process_result_d 
 			set emp_id = #{empId},
 				mac_code = #{macCode},
@@ -273,61 +287,45 @@ SELECT * FROM (
 		    from process_result_d
 		    where prc_res_d_num=#{prcResDNum};
 		    
-		    if v_prc_res_no = 1 then
-		        select prc_com_d_vol 
-		        into v_start_vol
-		        from process_result_d
-		        where prc_res_d_num=#{prcResDNum};
-		    else
-		        select (prc_com_d_vol- prc_err_vol)
-		        into v_start_vol
-		        from process_result_d
-		        where mov_num = v_mov_num and
-		        prc_res_no = v_prc_res_no-1;
-		    end if;
-	    
+		    
+		    update process_result_d
+		    set prc_res_vol = v_cha_res_vol
+		    , prc_err_vol = v_cha_err_vol
+		    where prc_res_d_num = #{prcResDNum};
+		    
 		    select count(*) 
 		        into v_test
 		        from item_stock
 		        where itm_stc_num = #{lotNum};
-	    
-		    if v_cha_res_vol+v_cha_err_vol = v_start_vol then
-		        
-		        update process_result_d
-		        set prc_res_vol = v_cha_res_vol,
-		        prc_err_vol = v_cha_err_vol,
-		        PRC_STATE = '완료',
-		        PRC_END_TIME = sysdate
-		        where prc_res_d_num=#{prcResDNum};
-		        
-		        
-		        
-			        if(v_test >0) then
-			        
-			        	update item_stock
-			        	set itm_vol = itm_vol+(v_cha_res_vol - v_old_res_vol)
-			        	where lot_num =#{lotNum};
-			        	
-			        else
-			        
-			        	insert into item_stock
-			        	values(#{lotNum},#{itmCode},v_char_res_vol);
-			        	
-			        end if;
-		    else
 		    
-		        update process_result_d
-		        set prc_res_vol = v_cha_res_vol,
-		        prc_err_vol = v_cha_err_vol
-		        where prc_res_d_num=#{prcResDNum};
-		        
+		    <![CDATA[
+		    if v_prc_res_no < v_last_prc_res_no then
+		    ]]>
+		    update process_result_d
+		    set prc_com_d_vol = prc_com_d_vol + v_cha_res_vol - v_old_res_vol
+		    where mov_num = #{movNum} and
+		          prc_res_no = ${prcResNo}+1;
 		    end if;
-	    
-	    update process_result_d
-	    set prc_com_d_vol = prc_com_d_vol+(v_cha_res_vol-v_old_res_vol)
-	    where mov_num = v_mov_num and
-	    prc_res_no = v_prc_res_no+1;
-	            
+		    
+      
+		    if v_prc_res_no = v_last_prc_res_no then
+		      
+		      if v_test =0 then
+		         insert into item_stock
+		         values(#{lotNum},#{itmCode},(v_cha_res_vol-v_old_res_vol)
+		         );
+		      else
+		      	update item_stock
+		      	set itm_vol = itm_vol+(v_cha_res_vol-v_old_res_vol)
+		      	where ITM_STC_NUM = #{lotNum};
+		      end if; 
+		      
+		      update process_result
+		      set PRC_BCK_VOL = PRC_BCK_VOL+(v_cha_res_vol-v_old_res_vol)
+		      where mov_num = #{movNum};
+      
+		    end if;
+
 	end;
 	</update>
 	

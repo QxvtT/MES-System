@@ -140,6 +140,17 @@ public class OperationController {
 
 		return EmployeesList;
 	}
+	
+	@RequestMapping(value = "/usableMachine")
+	@ResponseBody
+	public List<?> usableMachine(MachineVO searchVO) throws Exception {
+
+		List<?> EmployeesList = operationService.usableMachine(searchVO);
+		return EmployeesList;
+	}
+
+	
+	
 
 	@RequestMapping(value = "/EmployeesList.page")
 	public String selectSelectEmployeesList(EmployeesVO searchVO, ModelMap model) throws Exception {
