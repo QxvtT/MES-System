@@ -74,7 +74,7 @@
 		 machine.on('dblclick', () => { 
 		 let key = machine.getFocusedCell()['rowKey'];
 		 macCode = machine.getColumnValues('macCode')[key];
-		 
+		 machine.check(key);
 		
 		$('input#macCode').val(machine.getData()[key]['macCode']);
 		$('input#macName').val(machine.getData()[key]['macName']);
