@@ -264,7 +264,7 @@
 		SELECT A.*, ROWNUM RNUM FROM (
 		select f.*, p.prc_name
 		<if test="movNum != null and movNum != ''">
-		,(select prc_state from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code)
+		,(select prc_state from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code) AS PRC_STATE
 		</if>
 		from process_flow F, process P
 		where f.prc_code = p.prc_code
