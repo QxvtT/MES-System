@@ -7,10 +7,11 @@
 	<div class="pcoded-inner-navbar main-menu">
 		<div class="">
 			<div class="main-menu-header">
-				<img class="img-80 img-radius"
+				<div style="height: 10px"></div>
+				<%--<img class="img-80 img-radius"
 					src="${pageContext.request.contextPath}/assets/images/avatar-4.jpg"
-					alt="User-Profile-Image">
-				<div class="user-details">
+					alt="User-Profile-Image"> --%>
+				<div class="user-details pt-3 pb-3">
 					<span id="more-details">John Doe<i class="fa fa-caret-down"></i></span>
 				</div>
 			</div>
@@ -192,7 +193,7 @@
 					</a></li>
 				</ul></li>
 		</ul>
-		<div class="pcoded-navigation-label">Forms</div>
+		<%--<div class="pcoded-navigation-label">Forms</div>
 		<ul class="pcoded-item pcoded-left-item">
 			<li class=""><a href="form-elements-component.html"
 				class="waves-effect waves-dark"> <span class="pcoded-micon"><i
@@ -247,6 +248,6 @@
 					</a></li>
 				</ul></li>
 				
-		</ul>
+		</ul> --%>
 	</div>
 </nav>

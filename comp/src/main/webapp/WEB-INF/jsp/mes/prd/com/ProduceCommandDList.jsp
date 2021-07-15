@@ -53,6 +53,8 @@ let rowKey = null;
 
 //삭제수정 막을 로우
 let rowsY = [];
+//입력데이터 부족할때 확인용
+let rowsNo = [];
 
 $(function(){
 	outMatLotBtn.classList.add('btn-disabled');
@@ -95,35 +97,43 @@ $(function(){
 	    rowHeaders: ['checkbox'],
 	    columns: [
 	    	{ header: '일련번호', name:'prdComDNum', hidden: true},
-	    	{ header: '계획일련번호', name:'prdPlanDNum'},
-	    	{ header: '주문일련번호', name:'ordDNum'},
+	    	{ header: '계획일련번호', name:'prdPlanDNum', hidden: true},
+	    	{ header: '주문일련번호', name:'ordDNum', hidden: true},
 			{ header: '자재코드', name:'matCode', hidden: true},
 			{ header: '자재명', name:'matName', hidden: true},
 			{ header: '업체명', name:'operName', hidden: true},
 			{ header: '제품코드', name:'itmCode', editor: 'text'},
 			{ header: '제품이름', name:'itmName'},
-			{ header: '구분', name:'prcComDiv', editor: 'text'},
-				<%-- 셀렉트박스 사용하려면 받는 값 형식을 바꿔줘야하나? https://ui.toast.com/select-box
+			{ header: '구분', name:'prcComDiv', editor: 'text',
 				formatter: 'listItemText',
 		          editor: {
 		            type: 'select',
 		            options: {
 		              listItems: [
-		                { text: '정상', value: '1' },
-		                { text: '재작업', value: '2' },
+		                { text: '정상', value: '정상' },
+		                { text: '재작업', value: '재작업' }
 		              ]
 		            }
 		          }
-		         
-			}, --%>
+			},
 			{ header: '주문번호', name:'ordNum'},
 			{ header: '납기일자', name:'ordDeliveryDate'},
-			{ header: '주문량', name:'ordVol'},
-			{ header: '기지시량', name:'yesComVol'},
-			{ header: '미지시량', name:'noComVol'},
-			{ header: '지시량', name:'prdComVol', editor: 'text'},
+			{ header: '주문량', name:'ordVol',
+				formatter: (ev)=>{return ev.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
+			},
+			{ header: '기지시량', name:'yesComVol',
+				formatter: (ev)=>{return ev.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
+			},
+			{ header: '미지시량', name:'noComVol',
+				formatter: (ev)=>{return ev.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
+			},
+			{ header: '지시량', name:'prdComVol', editor: 'text', 
+				formatter: (ev)=>{return ev.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+			},
 			{ header: 'UPH', name:'uph'},
-			{ header: '일생산량', name:'itmDayOutput'},
+			{ header: '일생산량', name:'itmDayOutput',
+				formatter: (ev)=>{return ev.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
+			},
 			{ header: '일수', name:'dayNum'},
 			{ header: '작업일자', name:'prdComDDate1', 
 				editor: {
@@ -664,6 +674,81 @@ $(function(){
 				});
 			return null;
 		}
+		
+		//아이템코드, 구분, 지시량, 작업일자 없을때 막기
+		rowsNo = [];
+		rowsNo = grid.findRows((row) => {
+		    return (row.itmCode == '');
+		});
+		if(rowsNo.length > 0) {
+			$.toast({ 
+				  text : "제품코드를 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		rowsNo = [];
+		rowsNo = grid.findRows((row) => {
+		    return (row.prcComDiv == '');
+		});
+		if(rowsNo.length > 0) {
+			$.toast({ 
+				  text : "작업구분을 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		rowsNo = [];
+		rowsNo = grid.findRows((row) => {
+		    return (row.prdComVol == '');
+		});
+		if(rowsNo.length > 0) {
+			$.toast({ 
+				  text : "지시량을 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		rowsNo = [];
+		rowsNo = grid.findRows((row) => {
+		    return (row.prdComDDate1 == '');
+		});
+		if(rowsNo.length > 0) {
+			$.toast({ 
+				  text : "작업일자를 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		
 		let gridData = grid.getModifiedRows({});
 		console.log(gridData);
 		let created = gridData["createdRows"];
@@ -709,6 +794,26 @@ $(function(){
 				console.log(prdComDNum);
 			return console.log("지시일련이 없어서 자재등록이 안됌");
 		}
+		//자재수량 없으면 저장막기
+		rowsNo = [];
+		rowsNo = gridMat.findRows((row) => {
+		    return (row.matVol == '');
+		});
+		if(rowsNo.length > 0) {
+			$.toast({ 
+				  text : "자재수량을 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		
 		let gridDataM = gridMat.getModifiedRows({});
 		
 		gridDataM["produceCommandDVO"] = {
