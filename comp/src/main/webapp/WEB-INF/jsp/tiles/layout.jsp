@@ -71,6 +71,10 @@
 	
 	<!-- jquery toast message js -->
 	<script src="${pageContext.request.contextPath}/js/toast/jquery.toast.min.js"></script>
+	
+	<!-- excel, print -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jQuery.print.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.table2excel.js"></script>
 </head>
 
 <body>

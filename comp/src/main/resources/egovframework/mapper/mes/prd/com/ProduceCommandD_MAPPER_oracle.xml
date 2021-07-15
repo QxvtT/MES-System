@@ -168,6 +168,7 @@
 		        a.itm_day_output/8 as UPH, a.prd_com_vol/a.itm_day_output as day_Num
 		from(select C.*, TO_CHAR(C.prd_com_d_date, 'yyyy-MM-dd') as prd_com_d_date1, I.itm_name, M.mat_name, OD.ord_num, to_char(OM.ord_delivery_date,'yyyy-MM-dd') ord_delivery_date, OM.oper_name,
 		      OD.ord_vol, OD.ord_out_vol, I.itm_day_output
+		      , TO_CHAR((select prd_com_date from produce_command where prd_com_num = C.prd_com_num), 'yyyy-MM-dd') prd_com_date
 		      from PRODUCE_COMMAND_d C, item I, order_d OD, order_m  OM, material M
 		      where c.itm_code = i.itm_code
 		      <if test="prdComNum != null and prdComNum != ''">

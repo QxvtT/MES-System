@@ -175,7 +175,49 @@ $(function(){
 		detailForm.reset();
 		grid.resetData([]);
 		setDatePicker();
-	}) 
+	})
+	
+	// 엑셀
+	function ReportToExcelConverter() { 
+		$("#grid").table2excel({ 
+			exclude: ".noExl", 
+			name: "Excel Document Name", 
+			filename: "report" +'.xls', //확장자를 여기서 붙여줘야한다. fileext: ".xls", exclude_img: true, exclude_links: true, exclude_inputs: true 
+			}); 
+		};
+
+	$('#excelBtn').click(function() {
+		ReportToExcelConverter();
+	})
+	
+	// 프린트
+	function info_print() {
+		var initBody = document.body.innerHTML;
+		window.onbeforeprint = function () {
+			document.body.innerHTML = document.getElementById("grid").innerHTML;
+		}
+		window.onafterprint = function () {
+			document.body.innerHTML = initBody;
+		}
+		window.print();
+	}
+
+	$('#printBtn').click(function() {	
+		$("#grid").print({
+        	globalStyles: true,
+        	mediaPrint: false,
+        	stylesheet: null,
+        	noPrintSelector: ".no-print",
+        	iframe: true,
+        	append: null,
+        	prepend: null,
+        	manuallyCopyFormValues: true,
+        	deferred: $.Deferred(),
+        	timeout: 750,
+        	title: null,
+        	doctype: '<!doctype html>'
+		});
+	})
 	
 })
 
