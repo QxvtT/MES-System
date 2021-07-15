@@ -119,20 +119,20 @@ $(function(){
 			{ header: '주문번호', name:'ordNum'},
 			{ header: '납기일자', name:'ordDeliveryDate'},
 			{ header: '주문량', name:'ordVol',
-				formatter: (ev)=>{return ev.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
+				formatter: (ev)=>{console.log(ev);}	
 			},
 			{ header: '기지시량', name:'yesComVol',
-				formatter: (ev)=>{return ev.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
 			},
 			{ header: '미지시량', name:'noComVol',
-				formatter: (ev)=>{return ev.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
 			},
 			{ header: '지시량', name:'prdComVol', editor: 'text', 
-				formatter: (ev)=>{return ev.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 			},
 			{ header: 'UPH', name:'uph'},
 			{ header: '일생산량', name:'itmDayOutput',
-				formatter: (ev)=>{return ev.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
 			},
 			{ header: '일수', name:'dayNum'},
 			{ header: '작업일자', name:'prdComDDate1', 

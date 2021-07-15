@@ -52,11 +52,10 @@ public class ProduceCommandDController {
     protected EgovPropertyService propertiesService;
 	
     /** 화면 조회 */
-    @RequestMapping(value="/ProduceCommandDList.do")
-    public String produceCommandDList(ProduceCommandDVO searchVO, 
-    		ModelMap model)
+    @RequestMapping(value="/prd/com/PrdComMng.do")
+    public String produceCommandDList(ProduceCommandDVO searchVO)
     				throws Exception {
-    	return "prd/com/ProduceCommandDList.page";
+    	return "prd/com/PrdComMng.page";
     }
     
     /**
@@ -66,7 +65,7 @@ public class ProduceCommandDController {
 	 * @exception Exception
 	 */
     /** 작업지시 조회 */
-	@RequestMapping(value ="/ProduceCommandList", method=RequestMethod.GET)
+	@RequestMapping(value ="/prd/com/ProduceCommandList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajax(ProduceCommandDVO searchVO) throws Exception {
 		
@@ -76,7 +75,7 @@ public class ProduceCommandDController {
     }
 	
 	/** 작업지시디테일 조회 */
-	@RequestMapping(value ="/ProduceCommandDList", method=RequestMethod.GET)
+	@RequestMapping(value ="/prd/com/ProduceCommandDList", method=RequestMethod.GET)
 	@ResponseBody
 	public List<?> ajaxSelectProduceCommandDList(ProduceCommandDVO searchVO) throws Exception {
 		System.out.println("이름 : ");
@@ -85,7 +84,7 @@ public class ProduceCommandDController {
 	}
 	
 	/** 미생산 계획내역 조회 */
-	@RequestMapping(value ="/PrdPlnDList", method=RequestMethod.GET)
+	@RequestMapping(value ="/prd/com/PrdPlnDList", method=RequestMethod.GET)
 	@ResponseBody
 	public List<?> ajaxSelectPrdPlnDList(ProduceCommandDVO searchVO) throws Exception {
 		System.out.println("이름 : ");
@@ -94,7 +93,7 @@ public class ProduceCommandDController {
 	}
 	
 	/** 제품목록 조회 */
-	@RequestMapping(value ="/ItemList", method=RequestMethod.GET)
+	@RequestMapping(value ="/prd/com/ItemList", method=RequestMethod.GET)
 	@ResponseBody
 	public List<?> ajaxSelectItemList(ProduceCommandDVO searchVO) throws Exception {
 		System.out.println("이름 : ");
@@ -103,7 +102,7 @@ public class ProduceCommandDController {
 	}
 	
 	/** 선택제품 조회 */
-	@RequestMapping(value ="/SelectItem", method=RequestMethod.GET)
+	@RequestMapping(value ="/prd/com/SelectItem", method=RequestMethod.GET)
 	@ResponseBody
 	public ProduceCommandDVO ajaxSelectItem(ProduceCommandDVO searchVO) throws Exception {
 		System.out.println("이름 : ");
@@ -112,7 +111,7 @@ public class ProduceCommandDController {
 	}
 	
 	/** 작업지시자재 조회 */
-	@RequestMapping(value ="/ProduceCommandMatList", method=RequestMethod.GET)
+	@RequestMapping(value ="/prd/com/ProduceCommandMatList", method=RequestMethod.GET)
 	@ResponseBody
 	public List<?> ajaxSelectProduceCommandMatList(ProduceCommandDVO searchVO) throws Exception {
 		System.out.println("이름 : ");
@@ -121,7 +120,7 @@ public class ProduceCommandDController {
 	}
 	
 	/** 모달 lotno자재 조회 */
-	@RequestMapping(value ="/MatStockList", method=RequestMethod.GET)
+	@RequestMapping(value ="/prd/com/MatStockList", method=RequestMethod.GET)
 	@ResponseBody
 	public List<?> ajaxMatStockList(ProduceCommandDVO searchVO) throws Exception {
 		System.out.println("이름 : ");
@@ -130,7 +129,7 @@ public class ProduceCommandDController {
 	}
 	
 	/** 작업지시공정흐름 조회 */
-	@RequestMapping(value ="/ProduceCommandFlowList", method=RequestMethod.GET)
+	@RequestMapping(value ="/prd/com/ProduceCommandFlowList", method=RequestMethod.GET)
 	@ResponseBody
 	public List<?> ajaxSelectProduceCommandFlowList(ProduceCommandDVO searchVO) throws Exception {
 		System.out.println("이름 : ");
@@ -155,7 +154,7 @@ public class ProduceCommandDController {
     }
 	
 	/*업데이트*/
-	@RequestMapping(value="/ProduceCommandUpdate")
+	@RequestMapping(value="/prd/com/ProduceCommandUpdate")
 	@ResponseBody
 	public ProduceCommandDVO ProduceCommandUpdate(@RequestBody GridDataVO gridData) throws Exception {
 		System.out.println("들어가는 숫자값 확인용");
@@ -165,53 +164,25 @@ public class ProduceCommandDController {
 		return produceCommandDService.produceCommandUpdate(gridData);
 	}
 	
-	@RequestMapping(value="/ProduceCommandDelete")
+	@RequestMapping(value="/prd/com/ProduceCommandDelete")
 	@ResponseBody
 	public void ProduceCommandDelete(ProduceCommandDVO searchVO) throws Exception {
 		produceCommandDService.ProduceCommandDelete(searchVO);
 	}
 	
-	@RequestMapping(value="/ProduceCommandMatUpdate")
+	@RequestMapping(value="/prd/com/ProduceCommandMatUpdate")
 	@ResponseBody
 	public String ProduceCommandMatUpdate(@RequestBody GridDataVO gridData) throws Exception {
 		produceCommandDService.produceCommandMatUpdate(gridData);
 		return null;
 	}
 	
-	@RequestMapping(value="/MatOutUpdate")
+	@RequestMapping(value="/prd/com/MatOutUpdate")
 	@ResponseBody
 	public String MatOutUpdate(@RequestBody GridDataVO gridData) throws Exception {
 		produceCommandDService.matOutUpdate(gridData);
 		return null;
 	}
-	
-    /*
-    @RequestMapping(value="/prd/com/ProduceCommandDList.do")
-    public String selectProduceCommandDList(@ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, 
-    		ModelMap model)
-            throws Exception {
-    	
-    	searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
-    	searchVO.setPageSize(propertiesService.getInt("pageSize"));
-    	
-    	PaginationInfo paginationInfo = new PaginationInfo();
-		paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
-		paginationInfo.setPageSize(searchVO.getPageSize());
-		
-		searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
-		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-		
-        List<?> produceCommandDList = produceCommandDService.selectProduceCommandDList(searchVO);
-        model.addAttribute("resultList", produceCommandDList);
-        
-        int totCnt = produceCommandDService.selectProduceCommandDListTotCnt(searchVO);
-		paginationInfo.setTotalRecordCount(totCnt);
-        model.addAttribute("paginationInfo", paginationInfo);
-        
-        return "prd/com/ProduceCommandDList.page";
-    }*/
     
 	/** 생산지시조회 페이지 **/
     @RequestMapping("/ProduceCommandDView.do")
@@ -255,56 +226,7 @@ public class ProduceCommandDController {
  		List<?> list = produceCommandDService.produceCommandList(searchVO);
  		return list;
  	}
- 	
-    @RequestMapping("/prd/com/addProduceCommandD.do")
-    public String addProduceCommandD(
-            ProduceCommandDVO produceCommandDVO,
-            @ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, SessionStatus status)
-            throws Exception {
-        produceCommandDService.insertProduceCommandD(produceCommandDVO);
-        status.setComplete();
-        return "forward:/prd/com/ProduceCommandDList.do";
-    }
     
-	/*
-	 * @RequestMapping("/prd/com/updateProduceCommandDView.do") public String
-	 * updateProduceCommandDView(
-	 * 
-	 * @RequestParam("prdComDNum") java.math.BigDecimal prdComDNum ,
-	 * 
-	 * @ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, Model model)
-	 * throws Exception { ProduceCommandDVO produceCommandDVO = new
-	 * ProduceCommandDVO(); produceCommandDVO.setPrdComDNum(prdComDNum); // 변수명은 CoC
-	 * 에 따라 produceCommandDVO
-	 * model.addAttribute(selectProduceCommandD(produceCommandDVO, searchVO));
-	 * return "prd/com/ProduceCommandDRegister.page"; }
-	 
-    @RequestMapping("/prd/com/selectProduceCommandD.do")
-    public @ModelAttribute("produceCommandDVO")
-    ProduceCommandDVO selectProduceCommandD(
-            ProduceCommandDVO produceCommandDVO,
-            @ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO) throws Exception {
-        return produceCommandDService.selectProduceCommandD(produceCommandDVO);
-    }
 	
-    @RequestMapping("/prd/com/updateProduceCommandD.do")
-    public String updateProduceCommandD(
-            ProduceCommandDVO produceCommandDVO,
-            @ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, SessionStatus status)
-            throws Exception {
-        produceCommandDService.updateProduceCommandD(produceCommandDVO);
-        status.setComplete();
-        return "forward:/prd/com/ProduceCommandDList.do";
-    }
-    
-    @RequestMapping("/prd/com/deleteProduceCommandD.do")
-    public String deleteProduceCommandD(
-            ProduceCommandDVO produceCommandDVO,
-            @ModelAttribute("searchVO") ProduceCommandDDefaultVO searchVO, SessionStatus status)
-            throws Exception {
-        produceCommandDService.deleteProduceCommandD(produceCommandDVO);
-        status.setComplete();
-        return "forward:/prd/com/ProduceCommandDList.do";
-    }*/
 
 }
