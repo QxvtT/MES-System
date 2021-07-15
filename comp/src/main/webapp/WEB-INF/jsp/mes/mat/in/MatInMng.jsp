@@ -31,6 +31,7 @@
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
 let matHisNum1 = null;
+let matHisNum2 = null;
 let matHisDNum = null;
 let matHisDNum1 = null;
 let matHisDNum2 = null;
@@ -131,17 +132,20 @@ $(function(){
 			{ 
 	    		header: '입고량', 
 	    		name:'matHisDVol',
-    			editor: "text"
+    			editor: "text",
+    			formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 	    	},
 			{ 
 	    		header: '단가', 
 	    		name:'matHisPrice',
-    			editor: "text"
+    			editor: "text",
+    			formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 	    	},
 			{ 
 	    		header: '금액', 
 	    		name:'amount',
-    			editor: "text"
+    			editor: "text",
+    			formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 	    	},
 			{ 
 	    		header: 'Lot No', 
@@ -150,7 +154,8 @@ $(function(){
 	    	},
 			{ 
 	    		header: '자재재고', 
-	    		name:'matVol'
+	    		name:'matVol',
+	    		formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 	    	},
 	    	{ 
 	    		header: '관리번호', 
@@ -337,6 +342,7 @@ $(function(){
 				,matHisNum :  matHisNum
 				}
 		console.log(gridData);
+		console.log(matHisNum);
 		
 		if($('#operCode').val()==""){
 			alert('입고 업체를 넣어주세요.');
@@ -354,10 +360,8 @@ $(function(){
 				matHisNum = data;
 			}
 		});
-		
+		console.log(matHisNum);
 		matHisDNum1 = null;
-		matHisNum = null;
-		grid.resetData(getList());
 		}
 		
 	}

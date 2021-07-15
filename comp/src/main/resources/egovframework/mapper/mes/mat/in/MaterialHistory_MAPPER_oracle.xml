@@ -300,21 +300,6 @@ SELECT * FROM (
 	</insert>
 	<!-- END 자재 입고 관리  master insert -->
 	
-	<!-- 자재 출고 관리  master insert -->
-	<insert id="insertMatOutMng">
-		INSERT INTO MATERIAL_HISTORY(MAT_HIS_NUM
-		                            , MAT_HIS_DATE
-		                            , MAT_OUT
-		                            , MAT_HIS_DIV
-		                            , MAT_HIS_VOL) 
-		VALUES( #{matHisNum}
-		, TO_DATE(#{matHisDate}, 'yyyy-MM-dd')
-		, #{matOut}
-		, #{matHisDiv}
-		, #{matHisVol})
-	</insert>
-	<!-- END 자재 출고 관리  master insert -->
-	
 	<!-- 자재 입고 관리 master update -->
 	<update id="updateMatInMng">
 		<selectKey resultType="string" keyProperty="matOrdOper" order="BEFORE">
@@ -328,54 +313,34 @@ SELECT * FROM (
 	</update>
 	<!-- END 자재 입고 관리 master update -->
 	
-	<!-- 자재 출고 관리 master update -->
-	<update id="updateMatOutMng">
-		<selectKey resultType="string" keyProperty="matOut" order="BEFORE">
-	        SELECT prc_name FROM process   
-	        where prc_code = #{prcCode}   
-	    </selectKey>
-		UPDATE MATERIAL_HISTORY
-		SET MAT_HIS_DATE = TO_DATE(#{matHisDate}, 'yyyy-MM-dd'),
-			MAT_OUT = #{matOut}
-		WHERE MAT_HIS_NUM = #{matHisNum}
-	</update>
-	<!-- END 자재 출고 관리 master update -->
-	
 	<!-- 자재 입고 관리 grid 행 insert -->
 	<insert id="insertMatInMngD">
-		insert into material_history_d
-			(mat_his_d_num
-			, mat_his_num
-			, mat_code
-			, mat_his_d_vol
-			, mat_his_price
-			, LOT_NUM)
-			values(
-				material_history_seq.nextval,
-				#{matHisNum},
-				#{matCode},
-				#{matHisDVol},
-				#{matHisPrice},
-				#{lotNum}
-			)
+			DECLARE
+			V_MAT_HIS_NUM MATERIAL_HISTORY_D.MAT_HIS_NUM%type := #{matHisNum};
+			V_MAT_CODE MATERIAL_HISTORY_D.MAT_CODE%TYPE := #{matCode};
+			V_MAT_HIS_D_VOL MATERIAL_HISTORY_D.MAT_HIS_D_VOL%TYPE := #{matHisDVol};
+			V_MAT_HIS_PRICE MATERIAL_HISTORY_D.MAT_HIS_PRICE%TYPE := #{matHisPrice};
+			V_LOT_NUM MATERIAL_HISTORY_D.LOT_NUM%TYPE := #{lotNum};
+			BEGIN
+			insert into material_history_d
+						(mat_his_d_num
+						, mat_his_num
+						, mat_code
+						, mat_his_d_vol
+						, mat_his_price
+						, LOT_NUM)
+						values(
+							material_history_seq.nextval,
+							V_MAT_HIS_NUM,
+							V_MAT_CODE,
+							V_MAT_HIS_D_VOL,
+							V_MAT_HIS_PRICE,
+							V_LOT_NUM
+						);
+			insert into material_stock VALUES (V_LOT_NUM, V_MAT_CODE, V_MAT_HIS_D_VOL);
+			END;
 	</insert>
 	<!-- END 자재 입고 관리 grid 행 insert -->
-	
-	<!-- 자재 출고 관리 grid 행 insert -->
-	<insert id="insertMatOutMngD">
-		insert into material_history_d
-			(mat_his_d_num
-			, mat_his_num
-			, mat_code
-			, mat_his_d_vol)
-			values(
-				material_history_seq.nextval,
-				#{matHisNum},
-				#{matCode},
-				#{matHisDVol}
-			)
-	</insert>
-	<!-- END 자재 출고 관리 grid 행 insert -->
 	
 	<!-- 자재 입고 관리 grid 행 update -->
 	<update id="updateMatInMngD">
@@ -386,15 +351,6 @@ SELECT * FROM (
 		WHERE MAT_HIS_D_NUM = #{matHisDNum}
 	</update>
 	
-	<!-- 자재 출고 관리 grid 행 update -->
-	<update id="updateMatOutMngD">
-		UPDATE MATERIAL_HISTORY_D SET 
-			MAT_CODE = #{matCode},
-			MAT_HIS_D_VOL = #{matHisDVol}
-		WHERE MAT_HIS_D_NUM = #{matHisDNum}
-	</update>
-	<!-- END 자재 입고 관리 grid 행 update -->
-	
 	<!-- 작업지시 grid 행 delete -->
 	<delete id="deleteMatInMngD">
 		delete from MATERIAL_HISTORY_D 
@@ -402,12 +358,21 @@ SELECT * FROM (
 	</delete>
 	<!-- END 작업지시 grid 행 delete -->
 	
+	<!-- 건수 삭제 -->
+	<update id="deleteMatHisVol" parameterType="mes.mat.in.service.MaterialHistoryVO">
+		UPDATE MATERIAL_HISTORY
+		SET MAT_HIS_VOL = (MAT_HIS_VOL - #{activeVol})
+		WHERE MAT_HIS_NUM = #{matHisNum}
+	</update>
 	<!-- 건수 수정 -->
-<!-- 	<update id="updateMatHisVol"> -->
-<!-- 		UPDATE FROM MATERIAL_HISTORY -->
-<!-- 		WHERE MAT_HIS_VOL = #{} -->
-<!-- 	</update> -->
-	<!-- 건수 수정 -->
+	
+	<!-- 건수 추가 -->
+	<update id="addMatHisVol" parameterType="mes.mat.in.service.MaterialHistoryVO">
+		UPDATE MATERIAL_HISTORY
+		SET MAT_HIS_VOL = (MAT_HIS_VOL + #{activeVol})
+		WHERE MAT_HIS_NUM = #{matHisNum}
+	</update>
+	<!-- 건수 추가 -->
 	
 	<!-- 자재 입고 관리 마스터번호 구하기 -->
 	<select id="getMatInMngCount" resultType="int">

@@ -53,7 +53,7 @@ $(function(){
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
-	    data: getList(),
+	    data: null,
 	    rowHeaders: ['rowNum'],
 	    columns: [
 	    	{ 

@@ -53,6 +53,11 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     /** 수량x단가 **/
     private java.math.BigDecimal amount;
     
+    /** 변동 건수 **/
+    private java.lang.Integer r;
+    
+    
+    
     /** mat_code */
     private java.lang.String matCode;
     
@@ -154,7 +159,7 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     private java.math.BigDecimal matHisVol;
     
     /** 변동 건수 */
-    private java.math.BigDecimal activeVol;
+    private int activeVol;
     
     /** LOT_NUM */
     private java.lang.String lotNum;

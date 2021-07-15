@@ -1,5 +1,6 @@
 package mes.mat.in.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -98,6 +99,14 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 					vo.setMatHisNum(gridDataVO.getMaterialHistoryVO().getMatHisNum());
 					materialHistoryDAO.insertMatInMngD(vo);
 				}
+				Integer r = gridDataVO.getCreatedRows().size();
+				System.out.println(r);
+				MaterialHistoryVO mvo = new MaterialHistoryVO();
+				mvo.setActiveVol(r);
+				mvo.setMatHisNum(gridDataVO.getMaterialHistoryVO().getMatHisNum());
+				System.out.println(mvo.getActiveVol());
+				System.out.println(mvo.getMatHisNum());
+				materialHistoryDAO.addMatHisVol(mvo);
 			} else {
 				MaterialHistoryVO vo = null;
 			}
@@ -106,8 +115,14 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 			for (int i = 0; i < gridDataVO.getDeletedRows().size(); i++) {
 				materialHistoryDAO.deleteMatInMngD(gridDataVO.getDeletedRows().get(i));
 			}
-//			int r = gridDataVO.getDeletedRows().size();
-//			materialHistoryDAO.updateMatHisVol(gridDataVO.getMaterialHistoryVO().setActiveVol(r));
+			Integer r = gridDataVO.getDeletedRows().size();
+			System.out.println(r);
+			MaterialHistoryVO mvo = new MaterialHistoryVO();
+			mvo.setActiveVol(r);
+			mvo.setMatHisNum(gridDataVO.getMaterialHistoryVO().getMatHisNum());
+			System.out.println(mvo.getActiveVol());
+			System.out.println(mvo.getMatHisNum());
+			materialHistoryDAO.deleteMatHisVol(mvo);
 		}
 		return newMatHisNum;
 	}
@@ -141,4 +156,17 @@ public class MaterialHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 	public int selectMaterialHistoryListTotCnt(MaterialHistoryDefaultVO searchVO) {
 		return materialHistoryDAO.selectMaterialHistoryListTotCnt(searchVO);
 	}
+	
+	/** 건수 수정 **/
+	@Override
+	public void addMatHisVol(MaterialHistoryVO vo) throws Exception {
+		materialHistoryDAO.addMatHisVol(vo);
+	}
+
+	@Override
+	public void deleteMatHisVol(MaterialHistoryVO vo) throws Exception {
+		materialHistoryDAO.deleteMatHisVol(vo);
+	}
+	/** end 건수 수정 **/
+
 }

@@ -33,4 +33,7 @@ public interface MaterialHistoryService {
     public void updateMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 그리드 행 수정
     public void deleteMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 행 삭제
     
+    public void addMatHisVol(MaterialHistoryVO vo) throws Exception; // 건수 추가
+    public void deleteMatHisVol(MaterialHistoryVO vo) throws Exception; // 건수 삭제
+    
 }

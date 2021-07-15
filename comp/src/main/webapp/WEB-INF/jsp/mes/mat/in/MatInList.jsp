@@ -31,6 +31,7 @@ let matCodes = null;
 let operCode = null;
 let matHisNum = null;
 let matHisDNum = null;
+let matHisDNum1 = null;
 
 $(function(){
 	let today = new Date();
@@ -56,22 +57,47 @@ $(function(){
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
-	    data: getList(),
+	    data: null,
 	    rowHeaders: ['rowNum'],
 	    columns: [
-	    	{ header: '입고일자', name:'matHisDate', editor: {type: 'datePicker', options: {language: 'ko'}}},
+	    	{ header: '입고일자', name:'matHisDate' 
+	    		//editor: {type: 'datePicker', options: {language: 'ko'}}
+	    	},
 	    	{ header: '자재코드', name:'matCode'},
 			{ header: '자재명', name:'matName'},
 			{ header: '규격', name:'matSize'},
-			{ header: '업체명', name:'matOutOper'},
+			{ header: '업체명', name:'matOrdOper'},
 			{ header: '발주번호', name:'matComNum'},
-			{ header: '입고량', name:'matHisDVol'},
-			{ header: '단가', name:'matHisPrice'},
-			{ header: '금액', name:'amount'},
-			{ header: 'Lot No', name:'lotNo'},
-			{ header: '관리번호', name:'matHisNum', hidden: true},
+			{ header: '입고량', name:'matHisDVol',
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
+			},
+			{ header: '단가', name:'matHisPrice',
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+			},
+			{ header: '금액', name:'amount',
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+			},
+			{ header: 'Lot No', name:'lotNum'},
+			{ header: '입고번호', name:'matHisNum', hidden: true},
 			{ header: '일련번호', name:'matHisDNum', hidden: true}
-	    ]
+	    ],
+	    summary: {
+	        position: 'bottom',
+	        height: 30,  // by pixel
+	        columnContent: {
+	          matCode: '합계',
+	          matHisDVol: {
+	            template(valueMap) {
+	             return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	            }
+	          },
+	          amount: {
+	            template(valueMap) {
+	              return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	            }
+	          }
+	        }
+	    }
 	}); // end const grid
 	
 	grid.on('scrollEnd', () => {
@@ -87,12 +113,13 @@ $(function(){
 			data : {matCode: matCode,
 					matCodes: matCodes,
 					matHisDateS: matHisDateS,
-					matHisDateE: matHisDateE
+					matHisDateE: matHisDateE,
+					matHisDNum1: matHisDNum1
 					},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					matCode = result[result.length -1].matCode;
+					matHisDNum1 = result[result.length -1].matHisDNum;
 				}
 				console.log(result);
 				data = result;

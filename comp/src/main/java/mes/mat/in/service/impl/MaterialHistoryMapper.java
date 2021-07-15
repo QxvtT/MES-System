@@ -54,6 +54,9 @@ public interface MaterialHistoryMapper {
     public void updateMatInMng(MaterialHistoryVO vo) throws Exception;
     public void updateMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 그리드 행 수정
     
+    public void deleteMatHisVol(MaterialHistoryVO vo) throws Exception; // 건수 삭제
+    public void addMatHisVol(MaterialHistoryVO vo) throws Exception; // 건수 추가
+    
     public void deleteMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 행 삭제
     
     public int getMatInMngCount(MaterialHistoryVO searchVO) throws Exception; // 입고 번호 count
