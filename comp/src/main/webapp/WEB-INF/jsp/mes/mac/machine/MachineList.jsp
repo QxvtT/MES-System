@@ -38,7 +38,7 @@
 			bodyHeight : 200,
 			rowWidth : 100,
 			data : getMachineMngList(),
-			rowHeaders : [ 'rowNum' ],
+			rowHeaders : [ 'rowNum',{type:'checkbox',header:' '}],
 			columns : [ {
 				header : '설비코드',
 				name : 'macCode'
@@ -74,6 +74,7 @@
 		 machine.on('dblclick', () => { 
 		 let key = machine.getFocusedCell()['rowKey'];
 		 macCode = machine.getColumnValues('macCode')[key];
+		 
 		
 		$('input#macCode').val(machine.getData()[key]['macCode']);
 		$('input#macName').val(machine.getData()[key]['macName']);
@@ -92,6 +93,19 @@
 		
 		
 		 }); 
+		 
+		 $("#myimage").attr("src", "main/down.do?fileName=02.PNG");
+		 
+		 machine.on('check', (e) => {
+				let rows = machine.getCheckedRowKeys(); 
+				if(rows.length > 1) { 
+					for(let i in rows){ 
+						if(e.rowKey != rows[i]){ 
+							machine.uncheck(rows[i]); 
+							} 
+						}
+				}
+			})
 		 
 		// 스크롤 엔드 함수 ***.on tui 에서 제공하는 함수다. 'scrollEnd'
 		/* 	machinemng.on('scrollEnd', () => {
@@ -280,22 +294,25 @@
 							<div id="title" class="card-header">
 								<ul>
 									<li><h5>* 설비 이미지 등록</h5></li>
-								</ul>
-								<div class="card-header">
-									<div align="center"></div>
-								</div>
 
+								</ul>
+								<br />
 								<div class="form-group row">
-									<div>
-										<div class="img_wrap">
-											<img id="img" />
-										</div>
+									<div class="img_wrap"
+										style="height: 380px; width: 88%; margin: 0 auto">
+										<img id="img" style="height: 100%; width: 100%"
+											src="${pageContext.request.contextPath}/images/noimage.png" />
 									</div>
-									<div>
-										<label for="file1">파일</label> <input type="file" id="file1"
+
+								</div>
+								<div class="row col-xl-12">
+									<div class="d-inline-block col-xl-6">
+										<label for="file1"></label> <input type="file" id="file1"
 											name="file1">
+									</div>
+									<div class="d-inline-block text-right col-xl-6">
 										<button class="btn" id="btn_submit"
-											onclick="javascript:fn_submit()">전송</button>
+											onclick="javascript:fn_submit()" style="">전송</button>
 									</div>
 								</div>
 							</div>
@@ -305,8 +322,7 @@
 			</div>
 		</div>
 	</div>
-</body>
-<script type="text/javascript">
+	<script type="text/javascript">
     //이미지 미리보기
     var sel_file;
  
@@ -337,7 +353,7 @@
     }
 </script>
 
-<script>
+	<script>
 //파일 업로드
 function fn_submit(){
         
@@ -361,4 +377,5 @@ function fn_submit(){
        });
 }
 </script>
+</body>
 </html>

@@ -1,8 +1,14 @@
 package mes.mac.web;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import egovframework.com.cmm.EgovWebUtil;
+import egovframework.com.cmm.util.EgovResourceCloseHelper;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import mes.mac.service.MachinemagDefaultVO;
 import mes.mac.service.MachinemagService;
@@ -49,7 +57,7 @@ public class MachinemagController {
 	 * @return "/machine/MachineList"
 	 * @exception Exception
 	 */
-///////////////////// select
+
 	@RequestMapping(value = "/mac/machine/MachineList.do")
 	@ResponseBody
 	public List<?> ajaxselectMachineList(MachinemagVO searchVO) throws Exception {
@@ -60,12 +68,12 @@ public class MachinemagController {
 	}
 
 	@RequestMapping("/mac/machine/MacMng.do")
-	public String MacMng(MachinemagVO searchVO)
-			throws Exception {
+	public String MacMng(MachinemagVO searchVO) throws Exception {
 		return "mac/machine/MachineList.page";
 	}
-////////////////////////
+
 	
+
 	@RequestMapping("/machine/addMachineView.do")
 	public String addMachineView(@ModelAttribute("searchVO") MachinemagDefaultVO searchVO, Model model)
 			throws Exception {
