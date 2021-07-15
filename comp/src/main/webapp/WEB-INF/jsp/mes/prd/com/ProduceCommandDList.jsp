@@ -22,7 +22,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-
 <script type="text/javaScript" language="javascript" defer="defer">
 let myToast = null;
 let prdComDNum1 = null;
