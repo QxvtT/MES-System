@@ -159,7 +159,6 @@ $(function(){
 		<button type="button" id ="button" name="button">조회</button>
 	<button type="reset" >리셋</button>
 	</form>
-	<button type="button" id ="test" name="test">test</button>
 	<form:form commandName="searchVO" name="listForm" id="listForm" method="post">
 		<input type="hidden" name="ordDNum" />
 		<div class="pcoded-inner-content">

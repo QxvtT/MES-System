@@ -282,6 +282,10 @@ SELECT * FROM (
 				prc_work_num = #{prcWorkNum}
 			where prc_res_d_num = #{prcResDNum};
 			
+			update machine
+			set worker = (select emp_name from employees where emp_id = #{empId})
+			where mac_code = #{macCode};
+			
 		    select prc_res_vol , prc_err_vol   , mov_num   , prc_res_no
 		    into v_old_res_vol , v_old_err_vol , v_mov_num ,v_prc_res_no
 		    from process_result_d

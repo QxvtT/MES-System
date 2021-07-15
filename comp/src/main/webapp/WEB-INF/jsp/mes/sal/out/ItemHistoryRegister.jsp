@@ -92,7 +92,7 @@ $(function(){
 	  
 	function getList() { 
 		let data;
-		$.ajax({
+		$.ajax({ 
 			async: false, 
 			url : "ItemHistoryRegist",
 			type : "get",

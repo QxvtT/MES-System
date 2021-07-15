@@ -269,6 +269,14 @@ function getProcessResultSelect(key) {
 				$( 'input#prcWorkNum' ).val(result[0]['prcWorkNum']);
 				$( 'input#empName' ).val(result[0]['empName']);
 				$( 'input#empId' ).val(result[0]['empId']);
+				if(result[0]['macCode'] !=null){
+				macCode = result[0]['macCode'];
+					
+				}
+				if(result[0]['empId'] !=null){
+				empId = result[0]['empId'];
+						
+					}
 				$( 'input#macName' ).val(result[0]['macName']);
 				$( 'input#macCode' ).val(result[0]['macCode']);
 				$( 'input#prcStrTime' ).val(result[0]['prcStrTime']);
@@ -301,6 +309,36 @@ function getProcessResultSelect(key) {
 			//토스트메시지 
 			$.toast({ 
 				  text : "설비를 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		if($('input#empId').val() != empId && empId !=null) {
+			//토스트메시지 
+			$.toast({ 
+				  text : "작업자 변경 불가", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		if($('input#macCode').val() != macCode && macCode !=null) {
+			//토스트메시지 
+			$.toast({ 
+				  text : "작업중인 설비 변경 불가", 
 				  showHideTransition : 'slide',
 				  bgColor : 'red',
 				  textColor : 'white',
@@ -490,6 +528,25 @@ function getProcessResultSelect(key) {
 </script>
 </head>
 <body>
+	<div class="page-header">
+		<div class="page-block">
+			<div class="row align-items-center">
+				<div class="col-md-8">
+					<div class="page-header-title">
+						<h5 class="m-b-10">공정실적관리</h5>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<ul class="breadcrumb">
+						<li class="breadcrumb-item"><a href="index.jsp"> <i
+								class="fa fa-home"></i>
+						</a></li>
+						<li class="breadcrumb-item"><a href="#!">공정실적관리</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 <!-- 공정실적관리List -->
 	<div class="pcoded-inner-content">
 			<div class="main-body">
