@@ -65,6 +65,7 @@ public interface ProcessResultService {
     void resultSuccess(GridDataVO gridDataVO) throws Exception;
     void updatePrcEnd(ProcessResultVO gridDataVO) throws Exception;
     void updatePrcStr(ProcessResultVO gridDataVO) throws Exception;
+    void dataReset(ProcessResultVO gridDataVO) throws Exception;
     
     
     

@@ -27,15 +27,93 @@
 	
 	
 	<update id ="updatePrcEnd">
-		update process_result_d
-		set prc_end_time = to_date(#{prcEndTime},'yyyy-MM-dd:HH24:mi:ss')
-		, PRC_STATE = '완료'
-		where prc_res_d_num = #{prcResDNum}
+		
+		
+		declare
+			v_num number;
+			v_mov_num process_result.mov_num%type;
+			v_mov_num_v process_result.mov_num%type;
+			v_prc_state process_result_d.prc_state%type;
+			v_count number :=0;
+			begin
+			
+				update process_result_d
+				set prc_end_time = to_date(#{prcEndTime},'yyyy-MM-dd:HH24:mi:ss')
+					, PRC_STATE = '완료'
+				where prc_res_d_num = #{prcResDNum};
+			
+				select mov_num
+				into v_mov_num_v
+				from process_result_d
+				where prc_res_d_num = #{prcResDNum};
+
+			    select count(*) 
+			    into v_num
+			    from process_result
+			    where prd_com_d_num =(
+			                        select prd_com_d_num from process_result
+			                        where mov_num = v_mov_num_v); 
+			    for i in 1..v_num loop
+	        
+			        select mov_num
+			        into v_mov_num
+			        from (
+			                select mov_num, rownum as rnum
+			                from process_result
+			                where prd_com_d_num = (select prd_com_d_num 
+			                                        from process_result
+			                                        where mov_num = v_mov_num_v)) A
+			        where a.rnum =i;
+	        
+			        select prc_state
+			        into v_prc_state
+			        from process_result_d
+			        where prc_res_no =(
+			                            select max(prc_res_no) 
+			                            from process_result_d
+			                            where mov_num = v_mov_num) 
+			        and mov_num = v_mov_num;
+	        
+				    if v_prc_state = '완료' then
+				        v_count := v_count+1;
+				    end if;
+	    		end loop;	
+	    
+			    if v_num =v_count then
+			        update produce_command_d
+			        set prc_com_Y = 'Y'
+			        where prd_com_d_num = (select prd_com_d_num 
+			                                        from process_result
+			                                        where mov_num = v_mov_num);
+			    end if;
+    
+		end;
+
+		
+		
+		
+		
+		 
+		
 	</update>
 	
 	<update id ="updatePrcStr">
 		update process_result_d
 		set prc_str_time = to_date(#{prcStrTime},'yyyy-MM-dd:HH24:mi:ss')
+		where prc_res_d_num = #{prcResDNum}
+
+	</update>
+	<update id ="dataReset">
+		update process_result_d
+		set prc_str_time = null,
+		    mac_code = null,
+		    emp_id = null,
+		    prc_res_vol = 0,
+		    prc_err_vol = 0,
+		    prc_result_d_note = null
+		    
+		    
+		    
 		where prc_res_d_num = #{prcResDNum}
 
 	</update>
@@ -195,6 +273,16 @@ SELECT * FROM (
 				        ,prd.PRC_COM_D_VOL
 				        ,pr.lot_num
 				        ,pr.itm_code
+				        ,(select prc_state 
+						  from process_result_d
+                          where prc_res_no =(
+						                    select prc_res_no 
+						                    from process_result_d
+						                    where prc_res_d_num = #{prcResDNum})-1
+						and mov_num = (
+						                select mov_num
+						                from process_result_d
+						                where prc_res_d_num = #{prcResDNum})) as prc_bef_state
 				from process_result_d prd
 				    , process p
 				    , produce_command_d pcd
@@ -327,6 +415,10 @@ SELECT * FROM (
 		      update process_result
 		      set PRC_BCK_VOL = PRC_BCK_VOL+(v_cha_res_vol-v_old_res_vol)
 		      where mov_num = #{movNum};
+		      
+		      
+		     
+		      
       
 		    end if;
 

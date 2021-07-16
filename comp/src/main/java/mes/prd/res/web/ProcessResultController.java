@@ -98,6 +98,12 @@ public class ProcessResultController {
     @ResponseBody
   public void updatePrcStr(@RequestBody ProcessResultVO processResultVO) throws Exception {
     	processResultService.updatePrcStr(processResultVO);
+  }
+    
+    @RequestMapping(value="dataReset")
+    @ResponseBody
+  public void dataReset(@RequestBody ProcessResultVO processResultVO) throws Exception {
+    	processResultService.dataReset(processResultVO);
   } 
     
     

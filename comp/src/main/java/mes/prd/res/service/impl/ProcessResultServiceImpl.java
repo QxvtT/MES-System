@@ -89,7 +89,9 @@ public class ProcessResultServiceImpl extends EgovAbstractServiceImpl implements
     public void updatePrcStr(ProcessResultVO vo) throws Exception {
         processResultDAO.updatePrcStr(vo);
     }
-
+    public void dataReset(ProcessResultVO vo) throws Exception {
+        processResultDAO.dataReset(vo);
+    }
     
     
     /**

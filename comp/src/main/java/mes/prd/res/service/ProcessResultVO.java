@@ -78,6 +78,7 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     
     /** 공정상태*/
     private java.lang.String prcState;
+    private java.lang.String prcBefState;
     
     /** 설비코드*/
     private java.lang.String macCode;

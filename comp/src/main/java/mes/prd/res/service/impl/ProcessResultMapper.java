@@ -50,6 +50,7 @@ public interface ProcessResultMapper {
     public void deleteProcessResult(ProcessResultVO vo) throws Exception;
     public void updatePrcEnd (ProcessResultVO vo) throws Exception;
     public void updatePrcStr (ProcessResultVO vo) throws Exception;
+    public void dataReset (ProcessResultVO vo) throws Exception;
     
     /**
 	 * PROCESS_RESULT을 조회한다.

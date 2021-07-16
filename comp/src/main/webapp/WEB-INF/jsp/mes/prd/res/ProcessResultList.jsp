@@ -46,6 +46,10 @@ let prcState = null;
 let prcEndTime = null;
 let prcStrTime = null;
 let macCode1 = null;
+
+
+let prcBefState = null;
+
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -242,7 +246,7 @@ function getProcessResultSelect(key) {
 		empId = grid3.getColumnValues('empId')[key]
 		macCode = grid3.getColumnValues('macCode')[key]
 		grid4.resetData(setProduceSelect(prcResDNum));
-		console.log(prcResDNum);
+		
 		$('#myModal').modal('toggle');
 		$('#myModal').on('shown.bs.modal', function(){
 			 grid4.refreshLayout();
@@ -275,7 +279,6 @@ function getProcessResultSelect(key) {
 				}
 				if(result[0]['empId'] !=null){
 				empId = result[0]['empId'];
-						
 					}
 				$( 'input#macName' ).val(result[0]['macName']);
 				$( 'input#macCode' ).val(result[0]['macCode']);
@@ -283,13 +286,13 @@ function getProcessResultSelect(key) {
 				$( 'input#prcEndTime' ).val(result[0]['prcEndTime']);
 				prcStrTime =result[0]['prcStrTime'];
 				prcEndTime =result[0]['prcEndTime'];
-					
+				prcBefState =result[0]['prcBefState'];
 				
 			} // end success
 		}); // end ajax 
 		return data;
 	}
-	sibalY.onclick= function() {
+	save.onclick= function() {
 		if($('input#empId').val() == '') {
 			//토스트메시지 
 			$.toast({ 
@@ -374,11 +377,56 @@ function getProcessResultSelect(key) {
 	}
 
 	prcEnd.onclick = function() {
-		console.log($('input#prcEndTime').val());
-		if(prcEndTime != null){
-			alert("종료된작업입니다");
-			
-			return null; 
+		if(prcEndTime != null) {
+			//토스트메시지 
+			$.toast({ 
+				  text : "종료된작업입니다", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		if(prcBefState != "완료") {
+			//토스트메시지 
+			$.toast({ 
+				  text : "이전공정이 완료되지 않았습니다", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		let prcErrVol = grid4.getData()[0]['prcErrVol'];
+		prcErrVol *=1;
+		let prcResVol = grid4.getData()[0]['prcResVol'];
+		prcResVol *=1;
+		let prcStrVol = grid4.getData()[0]['prcComDVol']
+		prcStrVol *=1;
+		if(prcStrVol !=  prcErrVol+prcResVol){
+			$.toast({ 
+				  text : "작업이종료되지않았습니다", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+					  
+				});
+			return null;
 		}
 		let dateTime = new Date();
 		let dateDate = new Date();
@@ -401,10 +449,23 @@ function getProcessResultSelect(key) {
 			});
 		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
 		grid.resetData(getProcessResulList());
+	$("#myModal").modal("toggle");
 	}
+		
 	prcStr.onclick = function() {
-		if(prcStrTime != null){
-			alert("이미시작한작업입니다");
+		if(prcStrTime != null) {
+			//토스트메시지 
+			$.toast({ 
+				  text : "이미시작된작업입니다", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
 			return null;
 		}
 		let dateTime = new Date();
@@ -520,6 +581,39 @@ function getProcessResultSelect(key) {
 				}
 		}
 	})
+	dataReset.onclick = function() {
+				if(grid4.getData()[0]['prcState'] == "완료"){
+					$.toast({ 
+						  text : "종료된작업은 초기화불가", 
+						  showHideTransition : 'slide',
+						  bgColor : 'red',
+						  textColor : 'white',
+						  allowToastClose : false,
+						  hideAfter : 2000,
+						  stack : 1,
+						  textAlign : 'center',
+						  position : 'top-center'
+						});
+					return null;
+				}
+			let list = {prcResDNum : prcResDNum} ;
+				
+			$.ajax({
+				async: false, 
+				url : "dataReset",
+				type : "post",
+				data : JSON.stringify(list),
+				dataType: "json",
+				contentType:"application/json",
+				success : function(){
+					
+					}
+				});
+			grid3.resetData(getProduceSelect(prdComDNum,prcCode));
+			grid4.resetData(setProduceSelect(prcResDNum));
+			
+	}
+		
 		
 	 
 	 
@@ -690,7 +784,7 @@ function getProcessResultSelect(key) {
 								</tr>
 								<tr>
 									<td colspan="3" align="center"><button  class="btn btn-info btn-sm" id ="prcStr" name ="prcStr">작업시작</button></td>
-									<td colspan="3" align="center"><button class="btn btn-info btn-sm" id ="prcEnd" name ="prcEnd"  data-dismiss="modal">작업종료</button></td>								
+									<td colspan="3" align="center"><button class="btn btn-info btn-sm" id ="prcEnd" name ="prcEnd">작업종료</button></td>								
 								</tr>
 							</table>
 							
@@ -700,7 +794,8 @@ function getProcessResultSelect(key) {
 						</div>
 					<br />
 					<div align="right">
-					<a class="btn" id="sibalY">저장</a>
+					<button class="btn" id="save">저장</a>
+					<button class="btn" id="dataReset">작업초기화</a>
 					</div>
 						
 						<div id="grid4"></div>
