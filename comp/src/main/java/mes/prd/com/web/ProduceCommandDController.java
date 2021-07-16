@@ -4,28 +4,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import mes.prd.com.service.GridDataVO;
-import mes.prd.com.service.ProduceCommandDDefaultVO;
 import mes.prd.com.service.ProduceCommandDService;
 import mes.prd.com.service.ProduceCommandDVO;
-import mes.prd.pln.service.ProducePlanDVO;
 
 /**
  * @Class Name : ProduceCommandDController.java
@@ -41,7 +34,7 @@ import mes.prd.pln.service.ProducePlanDVO;
  */
 
 @Controller
-@SessionAttributes(types=ProduceCommandDVO.class)
+//@SessionAttributes(types=ProduceCommandDVO.class)
 public class ProduceCommandDController {
 
     @Resource(name = "produceCommandDService")
@@ -154,25 +147,15 @@ public class ProduceCommandDController {
    		return list;
    	}
        
-       /** 공정이동표 인쇄 페이지 */
-       @RequestMapping(value="/ProcessMovePrt.do")
-       public String processMovePrt(ProduceCommandDVO searchVO, 
-       		ModelMap model)
-       				throws Exception {
-       	return "mes/prd/com/ProcessMovePrt";
-       }
-       
-       /** 공정이동표 ajax 전송 */
-    	@RequestMapping(value = "/ProcessMovePrt")
-    	@ResponseBody
-    	public String ajaxProcessMovePrt(@RequestBody GridDataVO gridData, Model model) throws Exception {
-    		List<ProduceCommandDVO> list = gridData.getGrid3Data();
-    		model.addAttribute("vo", gridData.getGrid1Data());
-    		model.addAttribute("list", gridData.getGrid3Data());
-    		return "mes/prd/com/ProcessMovePrt";
-    	}
-    	
-    	/** 공정이동표 flow ajax 전송 */
+   /** 공정이동표 인쇄 페이지 */
+   @RequestMapping(value="/ProcessMovePrt.do")
+   public String processMovePrt(ProduceCommandDVO searchVO, 
+   		ModelMap model)
+   				throws Exception {
+   	return "mes/prd/com/ProcessMovePrt";
+   }
+   
+    /** 공정이동표 flow ajax 전송 */
    	@RequestMapping(value ="/ProcessMoveFlowPrt")
    	@ResponseBody
    	public String ajaxProcessMoveFlowPrt(@RequestBody List<ProduceCommandDVO> list, Model model) throws Exception {
