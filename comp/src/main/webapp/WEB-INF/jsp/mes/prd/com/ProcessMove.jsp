@@ -107,7 +107,7 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
-			url : "ProduceCommandDList",
+			url : "prd/com/ProduceCommandDList",
 			type : "get",
 			data : {
 				startDate : startDate,
@@ -188,7 +188,7 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
-			url : "ProduceCommandFlowList",
+			url : "prd/com/ProduceCommandFlowList",
 			type : "get",
 			data : {
 				itmCode: itmCode,
@@ -232,38 +232,29 @@ $(function(){
 	
 	$('#printBtn').click(function() {
 		getPrtInfo();
-		//getFlowPrtInfo();
-		window.open("ProcessMovePrt.do")
+		if(grid3Data) == null){
+			let myToast = null;
+			//토스트메시지 테스트
+			myToast = $.toast({ 
+				  text : "로드된 데이터가 부족합니다.", 
+				  showHideTransition : 'slide',  // It can be plain, fade or slide
+				  bgColor : 'tomato',              // Background color for toast
+				  textColor : 'white',            // text color
+				  allowToastClose : false,       // Show the close button or not
+				  hideAfter : 2000,              // `false` to make it sticky or time in miliseconds to hide after
+				  stack : 5,                     // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
+				  textAlign : 'center',            // Alignment of text i.e. left, right, center
+				  position : 'top-center'       // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
+			});
+			return false;
+		} else {
+			window.open("ProcessMovePrt.do");
+		}
 	})
 	
+
+	
 	function getPrtInfo() {
-		/* prdComDDate2 = grid1Data.prdComDDate1;
-		prdComNum2 = grid1Data.prdComNum;
-		prdComDate2 = grid1Data.prdComDate;
-		itmCode2 = grid1Data.itmCode;
-		itmName2 = grid1Data.itmName;
-		matName2 = grid1Data.matName;
-		prdComVol2 = grid1Data.prdComVol;
-		movNum2 = grid2Data.movNum;
-		lotNum2 = grid2Data.lotNum;
-		matHisDate2 = null;
-		prdComNote2 = null; */
-		
-		
-		/* {
-		prdComDDate : prdComDDate2,
-		prdComNum : prdComNum2,
-		prdComDate : prdComDate2,
-		itmCode : itmCode2,
-		itmName : itmName2,
-		matName : matName2,
-		prdComVol : prdComVol2,
-		movNum : movNum2,
-		lotNum : lotNum2,
-		matHisDate : matHisDate2,
-		prdComNote : prdComNote2
-			} */
-			
 		gridData['grid1Data'] = {
 					prdComDDate : grid1Data.prdComDDate,
 					prdComNum : grid1Data.prdComNum,
@@ -271,40 +262,27 @@ $(function(){
 					itmCode : grid1Data.itmCode,
 					itmName : grid1Data.itmName,
 					matName : grid1Data.matName,
-					prdComVol : grid1Data.prdComVol,
-					movNum : grid2Data.movNum,
-					lotNum : grid2Data.lotNum
+					prdComVol : grid1Data.prdComVol
 					};
+		gridData['grid2Data'] = {
+				movNum : grid2Data.movNum,
+				lotNum : grid2Data.lotNum
+		}
 		gridData['grid3Data'] = grid3Data;
-					
-		console.log(gridData);
-		console.log(JSON.stringify(gridData));
-		$.ajax({
-			async: false,
-			url : "ProcessMovePrt",
-			type : "POST",
-			data : JSON.stringify(gridData),
-			dataType: "json",
-			contentType:"application/json",
-		}); // end ajax 
+	}
+})// end of ready function
+
+	function getProcessMov() {
+		return grid1Data;
 	}
 	
-	/* function getFlowPrtInfo() {
-		$.ajax({
-			async: false,
-			url : "ProcessMovePrt",
-			type : "POST",
-			data : JSON.stringify(grid3Data),
-			dataType: "json",
-			contentType:"application/json",
-			success: function(result) {
-				console.log(grid3Data);
-			}
-		})
-	} */
+	function getProcessMat() {
+		return grid2Data;
+	}
 	
-})
-
+	function getProcessFlow() {
+		return grid3Data;
+	}
 </script>
 <style>
 .form-control {

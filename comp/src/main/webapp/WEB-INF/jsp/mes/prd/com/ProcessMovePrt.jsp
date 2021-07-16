@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -12,6 +13,7 @@
 	src="${pageContext.request.contextPath}/assets/js/jquery-barcode.js"></script>
 <style type="text/css">
 .tg {
+	border-color: black;
 	border-collapse: collapse;
 	border-spacing: 0;
 }
@@ -68,7 +70,7 @@
 </head>
 <body>
 	<h2>공정이동표</h2>
-	<table class="tg" style="table-layout: fixed; width: 750px">
+	<table class="tg" style="table-layout: fixed; width: 750px" id="table">
 		<colgroup>
 			<col style="width: 72px">
 			<col style="width: 127px">
@@ -81,33 +83,33 @@
 			<th class="tg-dvpl" style="border-right: 0px;" colspan="3"></th>
 			<th class="tg-7btt" style="border-left: 0px; border-right: 0px;">작업일자
 				:</th>
-			<th class="tg-0pky" style="border-left: 0px;" colspan="2">${vo.prdComDDate}</th>
+			<th class="tg-0pky" style="border-left: 0px;" colspan="2" id="prdComDDate"></th>
 		</tr>
 		<tr>
 			<td class="tg-7btt">이동번호</td>
-			<td class="tg-0pky" colspan="5">${vo.movNum}</td>
+			<td class="tg-0pky" colspan="5" id="movNum"></td>
 		</tr>
 		<tr>
 			<td class="tg-7btt">지시번호</td>
-			<td class="tg-0pky" colspan="2">${vo.prdComNum}</td>
+			<td class="tg-0pky" colspan="2" id="prdComNum"></td>
 			<td class="tg-7btt">지시일자</td>
-			<td class="tg-0pky" colspan="2">${vo.prdComDate}</td>
+			<td class="tg-0pky" colspan="2" id="prdComDate"></td>
 		</tr>
 		<tr>
 			<td class="tg-7btt">제품코드</td>
-			<td class="tg-0pky" colspan="2">${vo.itmCode}</td>
+			<td class="tg-0pky" colspan="2" id="itmCode"></td>
 			<td class="tg-7btt">제품명</td>
-			<td class="tg-0pky" colspan="2">${vo.itmName}</td>
+			<td class="tg-0pky" colspan="2" id="itmName"></td>
 		</tr>
 		<tr>
 			<td class="tg-7btt">소재명</td>
-			<td class="tg-0pky" colspan="2">${vo.matName}</td>
+			<td class="tg-0pky" colspan="2" id="matName"></td>
 			<td class="tg-7btt">소재LOT NO</td>
-			<td class="tg-0pky" colspan="2">${vo.lotNum}</td>
+			<td class="tg-0pky" colspan="2" id="lotNum"></td>
 		</tr>
 		<tr>
 			<td class="tg-7btt">지시량</td>
-			<td class="tg-0pky" colspan="5">${vo.prdComVol}</td>
+			<td class="tg-0pky" colspan="5" id="prdComVol"></td>
 		</tr>
 		<tr>
 			<td class="tg-7btt">출력일자</td>
@@ -133,17 +135,6 @@
 			<td class="tg-7btt">실적량</td>
 			<td class="tg-7btt">작업자</td>
 		</tr>
-		<c:forEach items="${list }" var="item">
-			<tr>
-				<td class="tg-0pky" style="text-align: center; padding: 0px;">${item.prcFNo}</td>
-				<td class="tg-0pky" style="text-align: center; padding: 0px;">${item.prcName}</td>
-				<td class="tg-0pky" style="text-align: center; padding: 0px;">prcResVol</td>
-				<td class="tg-0pky" style="text-align: center; padding: 0px;">${item.prcState}</td>
-				<td class="tg-0pky" style="text-align: center; padding: 0px;">prcResVol
-					- prcErrVol</td>
-				<td class="tg-0pky" style="text-align: center; padding: 0px;">${item.empId}</td>
-			</tr>
-		</c:forEach>
 	</table>
 	<br />
 	<table class="tg" style="width: 750px">
@@ -156,25 +147,51 @@
 	</table>
 </body>
 <script>
-	$("#bcTarget3").barcode("${vo.movNum}", "code128", {
+	let data1 = opener.getProcessMov();
+	let data2 = opener.getProcessMat();
+	let data3 = opener.getProcessFlow();
+	
+	console.log(data1);
+	console.log(data2);
+	console.log(data3);
+	
+	$('#prdComDDate').text(data1.prdComDDate1);
+	$('#movNum').text(data1.movNum);
+	$('#prdComNum').text(data1.prdComNum);
+	$('#prdComDate').text(data1.prdComDate);
+	$('#itmCode').text(data1.itmCode);
+	$('#itmName').text(data1.itmName);
+	$('#matName').text(data1.matName);
+	$('#lotNum').text(data1.lotNum);
+	$('#prdComVol').text(data1.prdComVol);
+	
+	var date = new Date();
+	var year = date.getFullYear(); //년도
+	var month = date.getMonth() + 1; //월
+	var day = date.getDate(); //일
+	if ((day + "").length < 2) { // 일이 한자리 수인 경우 앞에 0을 붙여주기 위해
+		day = "0" + day;
+	}
+	var getToday = year + "-" + month + "-" + day;
+	$('#printDate').text(getToday);
+	
+	$("#bcTarget3").barcode(data2.movNum, "code128", {
 		barWidth : 2,
 		barHeight : 50,
 		bgColor : "white"
 	});
+	
+	for(i in data3){
+		$('<tr>')
+			.append($('<td>').html(data3[i].prcFNo)).attr('align', 'center')
+			.append($('<td>').html(data3[i].prcName))
+			.append($('<td>').html('prcComDVol'))
+			.append($('<td>').html('prcUnit'))
+			.append($('<td>').html('prcResVol'))
+			.append($('<td>').html('empId'))
+			.appendTo('#table')
+	};
 
-	var date = new Date();
-
-	var year = date.getFullYear(); //년도
-	var month = date.getMonth() + 1; //월
-	var day = date.getDate(); //일
-
-	if ((day + "").length < 2) { // 일이 한자리 수인 경우 앞에 0을 붙여주기 위해
-		day = "0" + day;
-	}
-
-	var getToday = year + "-" + month + "-" + day;
-
-	$('#printDate').text(getToday);
 
 	window.print();
 </script>
