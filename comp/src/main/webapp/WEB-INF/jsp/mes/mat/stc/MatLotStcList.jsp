@@ -66,7 +66,7 @@ $(function(){
 	    	},
 			{
 	    		header: '규격',
-	    		name:'matUnit'
+	    		name:'matSize'
 	    	},
 			{ 
 	    		header: '자재구분', 
@@ -78,15 +78,18 @@ $(function(){
 	    	},
 			{ 
 	    		header: '입고량', 
-	    		name:'invol'
+	    		name:'invol',
+	    		formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 	    	},
  			{ 
 	    		header: '출고량', 
-	    		name:'outvol'
+	    		name:'outvol',
+	    		formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 	    	},
 			{ 
 	    		header: '현재고', 
-	    		name:'matVol'
+	    		name:'matVol',
+	    		formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 	    	}
 	    ],
 	    summary: {
@@ -96,17 +99,17 @@ $(function(){
 	          matCode: '합계',
 	          invol: {
 	            template(valueMap) {
-	              return valueMap.sum;
+	              return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	            }
 	          },
 	          outvol: {
 	        	template(valueMap) {
-	              return valueMap.sum;
+	              return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	            }
 	          },
 	          matVol: {
 	        	template(valueMap) {
-	              return valueMap.sum;
+	              return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	            }
 	          }
 	        }

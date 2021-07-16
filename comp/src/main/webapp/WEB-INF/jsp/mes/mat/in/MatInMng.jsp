@@ -185,7 +185,7 @@ $(function(){
 	          matCode: '합계',
 	          matHisDVol: {
 	            template(valueMap) {
-	              return valueMap.sum;
+	              return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	            }
 	          }
 	        }

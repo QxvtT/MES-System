@@ -57,7 +57,7 @@
 	</select>
 	<!-- 자재 LOT 재고 조회 -->
 	
-	<select id="selectMatLotStcList1" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="mes.mat.stc.service.MaterialStockVO">
+	<select id="selectMatStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="mes.mat.stc.service.MaterialStockVO">
 	SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
 				select b.* , nvl(c.MAT_HIS_D_VOL, 0) as out
@@ -74,22 +74,51 @@
 				  and m.mat_code=mhd.mat_code 
 				  and mh.mat_his_num=mhd.mat_his_num 
 				  and MH.mat_his_div='입고'
-			  	<if test="str != null and str != ''"> AND
-				  	<![CDATA[
-					M.MAT_CODE IN ('${str}')
-					]]>
+				  <if test=" matCode3 != null and matCode3 != ''">
+			      <![CDATA[	
+			      		AND M.MAT_CODE > #{matCode3}
+			      ]]>
+	       		</if>
+			  	<if test="matCodeList != null">
+			     <if test="matCodeList.size != 0">
+				      AND M.MAT_CODE IN 
+			     	<foreach item="item" index="index" collection="matCodeList"
+					      open="(" separator="," close=")">
+					        #{item}
+					</foreach>
+	     		 </if>	
+		     </if>
+				<if test="sDate != null and sDate !='' and eDate != null and eDate !=''">
+				<![CDATA[
+					AND mh.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
+						mh.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
+				]]>
 				</if>
-				  and mh.mat_his_date BETWEEN TO_DATE('2021-06-09', 'YYYY-MM-DD') AND TO_DATE('2021-06-24', 'YYYY-MM-DD')
 				  ) b left outer join
 				  (select mat_code, MAT_HIS_D_VOL from material_history_d mhd, material_history mh
 				  where mh.mat_his_num=mhd.mat_his_num 
-				  and mh.mat_his_div='출고' 
-			  	<if test="str != null and str != ''"> AND
-				  	<![CDATA[
-					MHD.MAT_CODE IN ('${str}')
-					]]>
+				  and mh.mat_his_div='출고'
+				  <if test=" matCode3 != null and matCode3 != ''">
+			      <![CDATA[	
+			      		AND mhd.MAT_CODE > #{matCode3}
+			      ]]>
+	       		</if>
+			  	<if test="matCodeList != null">
+			     <if test="matCodeList.size != 0">
+				      AND mhd.MAT_CODE IN 
+			     	<foreach item="item" index="index" collection="matCodeList"
+					      open="(" separator="," close=")">
+					        #{item}
+					</foreach>
+	     		 </if>	
+		     </if>
+				<if test="sDate != null and sDate !='' and eDate != null and eDate !=''">
+				<![CDATA[
+					AND mh.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
+						mh.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
+				]]>
 				</if>
-				  and mh.mat_his_date BETWEEN TO_DATE('2021-06-09', 'YYYY-MM-DD') AND TO_DATE('2021-06-24', 'YYYY-MM-DD')) c
+				) c
 				  on c.mat_code = b.mat_code
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
@@ -98,7 +127,7 @@
 	</select>	
 	
 	<!-- 자재 재고 조회 -->
-	<select id="selectMatStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
+	<select id="selectMatStcList1" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 			SELECT M.MAT_CODE, 

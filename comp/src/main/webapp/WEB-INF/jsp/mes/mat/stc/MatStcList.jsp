@@ -31,6 +31,11 @@
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
 let matCode = null;
+let matCode3 = null;
+let matCodes = null;
+let sDate = null;
+let eDate = null;
+
 $(function(){
 	
 	let StcDate = new Date();
@@ -69,7 +74,29 @@ $(function(){
 			{ header: '현재고', name:'matVol'},
 			{ header: '미달량', name:'mShort'},
 // 			{ header: '특기사항', name:''},
-	    ]
+	    ],
+	    summary: {
+	        position: 'bottom',
+	        height: 30,  // by pixel
+	        columnContent: {
+	          matCode: '합계',
+	          invol: {
+	            template(valueMap) {
+	              return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	            }
+	          },
+	          outvol: {
+	        	template(valueMap) {
+	              return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	            }
+	          },
+	          matVol: {
+	        	template(valueMap) {
+	              return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	            }
+	          }
+	        }
+	    }
 	}); // end const grid
 	
 	function getList() {
@@ -78,11 +105,15 @@ $(function(){
 			async: false,
 			url : "MatStcList",
 			type : "get",
-			data : {matCode: matCode},
+			data : { matCode3: matCode3,
+					 matCodes: matCodes,
+					 sDate: sDate,
+					 eDate: eDate
+				},
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					matCode = result[result.length -1].matCode;
+					matCode3 = result[result.length -1].matCode;
 				}
 				console.log(result);
 				data = result;
@@ -99,50 +130,19 @@ $(function(){
 	      grid.refreshLayout();
 	   });
 	   
-/* 	$('#searchMatBtn').click(function(){
-		grid2.clear();
-		grid2.resetData(getMatCodeList());
-		$("#myModal").modal("toggle");
-		$("#myModal").on('shown.bs.modal', function () {
-			grid2.refreshLayout();
-		});
-	}) */
-	
-/* 	searchMatCodeBtn.onclick = function(){
-		matCode = null;
-		matName = null;
+	searchBtn.onclick = function(){
+		matCode3 = null;
+		console.log(matCode3)
 		
-		console.log('test')
+		sDate = $('input[name="sDate"]').val();
+		console.log(sDate);
+		eDate = $('input[name="eDate"]').val();
+		console.log(eDate);
+		matCodes = $('#matCode').val();
+		console.log(matCodes);
 		
-		matCode = $(".modal-body").find('input[name="matCode"]').val();	
-		console.log(matCode)
-		
-		matName = $(".modal-body").find('input[name="matName"]').val();
-		console.log(matName)
-		
-		grid2.resetData(getMatCodeList());
-	} */
-	
-/* 	modalY.onclick=function() {
-		matCode = null;
-		matName = null;
-		test = null;
-		str = '';
-		for(let i =0; i<grid2.getCheckedRows().length; i++) {
-			if(i == grid2.getCheckedRows().length-1){
-				str = str + grid2.getCheckedRows()[i]['matCode'];
-			}
-			else{
-				str = str + grid2.getCheckedRows()[i]['matCode']+"' , '";
-			}
-		}
-		console.log(str);
-		console.log('======================');
-	grid.resetData(getList());
-	grid2.resetData(getMatCodeList());
-	document.getElementById("matCode").value=matCode;
-	document.getElementById("matName").value=matName;
-	}*/
+		grid.resetData(getList());
+	}
 	
 	resetBtn.onclick=function(){
 		grid.clear();
@@ -172,7 +172,7 @@ $(function(){
 								<div class="col-sm-6"></div>
 								<div class="col-sm-6 text-right">
 									<div class="btn-group">
-										<button type="button" id="testBtn"
+										<button type="button" id="searchBtn" name="searchBtn"										
 											class="btn waves-effect waves-light btn-primary btn-outline-primary">
 											조회</button>
 										<input type="button" id="resetBtn" value="리셋 "
@@ -217,8 +217,8 @@ $(function(){
 												</td>
 												<td>
 													<div class="row align-items-center text-center col-lg-8">
-														<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode" value="${result.matCode }"></input> 
-														<input type="text" class="form-control w-25 ml-3" id="matName" name="matName" value="${result.matName }" readonly></input>
+														<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode"></input> 
+														<input type="text" class="form-control w-25 ml-3" id="matName" name="matName" readonly></input>
 														<%@ include
 															file="/WEB-INF/jsp/mes/common/modal/MaterialList.jsp"%>
 													</div>
