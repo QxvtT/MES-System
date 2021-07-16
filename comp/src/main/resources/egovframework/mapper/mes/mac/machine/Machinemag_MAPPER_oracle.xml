@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="mes.mac.service.impl.MachineMapper">
+<mapper namespace="mes.mac.service.impl.MachinemagMapper">
 
 
 
@@ -12,35 +12,27 @@
 				( MAC_CODE
 				  , MAC_NAME
 				  , MAC_DIV
-				  , MAC_SIZE
+				 , USE_1
 				  , MODEL
 				  , PRO_OPER
 				  , WORKER
 				  , USE
-				  , NOM_CAP
 				  , USING_ENERGY
-				  , SAFETY
-				  , MAC_PRO_DATE
 				  , BUY_DATE
 				  , BUY_PRICE
-				  , LINE_NUM
 				  , MAC_LOADAGE
 				  , MAC_STD_TEMP )
 			VALUES ( #{macCode}
 				  , #{macName}
 				  , #{macDiv}
-				  , #{macSize}
+				  , #{use1}
 				  , #{model}
 				  , #{proOper}
 				  , #{worker}
 				  , #{use}
-				  , #{nomCap}
 				  , #{usingEnergy}
-				  , #{safety}
-				  , #{macProDate}
 				  , #{buyDate}
 				  , #{buyPrice}
-				  , #{lineNum}
 				  , #{macLoadage}
 				  , #{macStdTemp} )
 		]]>
@@ -62,8 +54,12 @@
 
 	<delete id="deleteMachine">
 		<![CDATA[
-			DELETE FROM MACHINE 
-						WHERE MAC_CODE=#{macCode}
+			begin delete from machine_process
+			where mac_code = #{macCode};
+
+			delete from machine
+			where mac_code = #{macCode};
+			end;
 				]]>
 	</delete>
 

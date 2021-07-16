@@ -98,6 +98,8 @@ public class MachinemagController {
 		model.addAttribute(selectMachine(machineVO, searchVO));
 		return "/machine/MachineRegister";
 	}
+	
+	
 
 	@RequestMapping("/machine/selectMachine.do")
 	public @ModelAttribute("machineVO") MachinemagVO selectMachine(MachinemagVO machineVO,
@@ -105,18 +107,24 @@ public class MachinemagController {
 		return machineService.selectMachine(machineVO);
 	}
 
-	@RequestMapping(value = "/mac/machine/maachineUdate")
+	@RequestMapping(value = "/mac/machine/machineUdate")
 	@ResponseBody
 	public void maachineUdate(@RequestBody MachinemagVO MachinemagVO) throws Exception {
 		machineService.updatemachine(MachinemagVO);
 	}
-
-	@RequestMapping("/machine/deleteMachine.do")
-	public String deleteMachine(MachinemagVO machineVO, @ModelAttribute("searchVO") MachinemagDefaultVO searchVO,
-			SessionStatus status) throws Exception {
-		machineService.deleteMachine(machineVO);
-		status.setComplete();
-		return "forward:/machine/MachineList.do";
+	
+	@RequestMapping(value = "/mac/machine/machineInsert")
+	@ResponseBody
+	public void machineInsert(@RequestBody MachinemagVO MachinemagVO) throws Exception {
+		machineService.insertMachine(MachinemagVO);
 	}
+	
+	@RequestMapping(value = "/mac/machine/machineDelete")
+	@ResponseBody
+	public void machineDelete(@RequestBody MachinemagVO MachinemagVO) throws Exception {
+		machineService.deleteMachine(MachinemagVO);
+	}
+
+
 
 }

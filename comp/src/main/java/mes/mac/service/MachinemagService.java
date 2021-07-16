@@ -25,7 +25,7 @@ public interface MachinemagService {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-    String insertMachine(MachinemagVO vo) throws Exception;
+
     
     /**
 	 * MACHINE을 수정한다.
@@ -34,6 +34,10 @@ public interface MachinemagService {
 	 * @exception Exception
 	 */
     void updatemachine(MachinemagVO vo) throws Exception;
+  
+    void insertMachine(MachinemagVO vo) throws Exception;
+    
+    void deleteMachine(MachinemagVO vo) throws Exception;
     
     /**
 	 * MACHINE을 삭제한다.
@@ -41,7 +45,7 @@ public interface MachinemagService {
 	 * @return void형 
 	 * @exception Exception
 	 */
-    void deleteMachine(MachinemagVO vo) throws Exception;
+  
     
     /**
 	 * MACHINE을 조회한다.

@@ -27,8 +27,9 @@
 <script type="text/javaScript" language="javascript" defer="defer">
 	let macName;
 	let macCode;
-	let macCode1;
+	let macCode1= null;
 	let data;
+	
 	
 	
 	$(function() {
@@ -69,13 +70,13 @@
 				url : "${pageContext.request.contextPath}/MachineList",
 				type : "get",
 				data : {
-					macName : macName,
+					
 					macCode1 : macCode1
 				},
 				dataType : "json",
 				success : function(result) {
 					if (result.length > 0) {
-						macCode1 = result[result.length - 1].macCode1;
+						macCode1 = result[result.length - 1].macCode;
 					}
 					console.log(result);
 					data = result;
@@ -92,7 +93,7 @@
 		
 		$('input#macCode').val(machine.getData()[key]['macCode']);
 		$('input#macName').val(machine.getData()[key]['macName']);
-		$('input#use1').val(machine.getData()[key]['use1']);
+		$('select#use1').val(machine.getData()[key]['use1']);
 		$('input#macDiv').val(machine.getData()[key]['macDiv']);
 		$('input#model').val(machine.getData()[key]['model']);
 		$('input#proOper').val(machine.getData()[key]['proOper']);
@@ -106,7 +107,12 @@
 		
 		
 		
+		
 		 }); 
+		 
+		 machine.on('scrollEnd', () => {
+				machine.appendRows(getMachineMngList());
+			  })
 		 
 	
 		 
@@ -121,25 +127,89 @@
 				}
 			})
 			
-			
-	
-				
-		 
-		 	
+			//저장
 			 sibar.onclick = function (){ 
+			 
+			 macCode1 = null;
+			 if ($('input#macCode').val() == '' || $('input#macName').val() == '') {
+					$.toast({ 
+						  text : "멈춰 !!", 
+						  showHideTransition : 'slide',
+						  bgColor : 'red',
+						  textColor : 'white',
+						  allowToastClose : false,
+						  hideAfter : 2000,
+						  stack : 1,
+						  textAlign : 'center',
+						  position : 'top-center'
+						});
+					return null; 
+			 }
+			 
+				 
+			 let list = {macCode : $('input#macCode').val(),
+					 macName : $('input#macName').val(),
+					 use1 : $('select#use1').val(),
+					 macDiv : $('input#macDiv').val(),
+					 model : $('input#model').val(),
+					 proOper : $('input#proOper').val(),
+					 empName : $('input#empName').val(),
+					 use : $('input#use').val(),
+					 usingEnergy : $('input#usingEnergy').val(),
+					 buyDate1 : $('input#buyDate1').val(),
+					 buyPrice : $('input#buyPrice').val(),
+					 macLoadage : $('input#macLoadage').val(),
+					 macStdTemp : $('input#macStdTemp').val()
+				
+					 
+					 
+			 };
+			 
+			 console.log(list);
+			 
+			 $.ajax({
+					async: false, 
+					url : "machineInsert",
+					type : "post",
+					data : JSON.stringify(list),
+					dataType: "json",
+					contentType:"application/json",
+					success : function(){
+						
+						}
+					});
+			 machine.resetData(getMachineMngList());
+			 
+		 }
+			//수정
+			 sibar1.onclick = function (){ 
+				macCode1=null;
+				if ($('input#macCode').val() == '' || $('input#macName').val() == '') {
+					$.toast({ 
+						  text : "멈춰 !!", 
+						  showHideTransition : 'slide',
+						  bgColor : 'red',
+						  textColor : 'white',
+						  allowToastClose : false,
+						  hideAfter : 2000,
+						  stack : 1,
+						  textAlign : 'center',
+						  position : 'top-center'
+						});
+					return null; 
+			 }
+				
+						
 				 let list = {macCode : $('input#macCode').val(),
-							 use1 :  $('input#use1').val(),
-				 			empName :  $('input#empName').val(),
+							 use1 :  $('select#use1').val(),
+				 			worker :  $('input#empName').val(),
 				 			use :  $('input#use').val(),
 				 			usingEnergy : 	 $('input#usingEnergy').val(),
 				 			macLoadage :  $('input#macLoadage').val(),
 				 			macStdTemp :  $('input#macStdTemp').val()} ;
-				 
-				 console.log(list);
-				 
 				 $.ajax({
 						async: false, 
-						url : "maachineUdate",
+						url : "machineUdate",
 						type : "post",
 						data : JSON.stringify(list),
 						dataType: "json",
@@ -148,67 +218,39 @@
 							
 							}
 						});
+				 machine.resetData(getMachineMngList());
+				 
 			 }
-			 
-			 
-			 
-			 
-				
-		 
-		// 스크롤 엔드 함수 ***.on tui 에서 제공하는 함수다. 'scrollEnd'
-		/* 	machinemng.on('scrollEnd', () => {
-		 machinemng.appendRows(getMachineMngList());
-		 });
+		 	//삭제
+		 	
+		 	
+			 	
+			 mimi.onclick = function (){ 
+			macCode1 = null;
+			let list = {macCode : machine.getCheckedRows()[0]['macCode']};
+			
+			 $.ajax({
+					async: false, 
+					url : "machineDelete",
+					type : "post",
+					data : JSON.stringify(list),
+					dataType: "json",
+					contentType:"application/json",
+					success : function(){
+						
+						}
+					});
+			 machine.resetData(getMachineMngList());
+	
 		
-		 // 왼쪽 메뉴 를 열고 할때 grid 를 화면길이를 재설정.
-		 $('#mobile-collapse').click(function() {
-		 machinemng.refreshLayout();
-		 }); */
-
-		/* search.onclick = function() {
-			macCode = $("input#macCode").val();
-			machinemng.resetData(getMachineMngList());
-			$( 'input#macName' ).val(' ');
-			$( 'input#use1' ).val(' ');
-			$( 'input#macDiv' ).val(' ');
-			$( 'input#model' ).val(' ');
-			$( 'input#proOper' ).val(' ');	
-			$( 'input#worker' ).val(' ');
-			$( 'input#use' ).val(' ');
-			$( 'input#buyPrice' ).val(' ');
-			$( 'input#buyDate' ).val(' ');
-			$( 'input#usingEnergy' ).val(' ');
-			$( 'input#macLoadage' ).val(' ');
-			$( 'input#macStdTemp' ).val(' ');
-		} */
-
-		// 체크하고 선택 했을때 불어 오는 값 
-
-		/* 	sibalY.onclick= function() {
-		 let gridData = grid4.getModifiedRows({});
-		
-		 gridData["ProcessResultVO"] ={
-		 prcResDNum :prcResDNum,
-		 prcState : grid4.getData()[0]['prcState'],
-		 macCode : $('input#macCode').val(),
-		 empId : $('input#empId').val()
-		 }
-		 $.ajax({
-		 async: false, 
-		 url : "resultSuccess",
-		 type : "post",
-		 data : JSON.stringify(gridData),
-		 dataType: "json",
-		 contentType:"application/json",
-		 success : function(){
-		 console.log("updatesuccess");
-		 grid3.resetData(getProduceSelect(prdComDNum,prcCode))
-		 grid.resetData(getProcessResulList());
-		 }
-		 });
-		
-		 } */
-
+			 	}
+		 	
+		 	
+					 
+					 
+		 	
+	 
+			 
 	})
 </script>
 <style type="">
@@ -246,15 +288,22 @@
 		<div class="main-body">
 			<div class="page-wrapper">
 				<div class="row">
-
 					<div class="col-xl-6">
-						<div class="card">
-							<!-- 타이틀 -->
-							<div id="title" class="card-header">
-								<ul>
-									<li><h5>설비 데이터</h5></li>
-									<br />
-								</ul>
+						<form>
+							<div class="card">
+								<!-- 타이틀 -->
+								<div id="title" class="card-header">
+									<div class="row col-xl-12">
+										<div class="d-inline-block col-xl-6">
+											<ul>
+												<li><h5>설비 자료</h5></li>
+											</ul>
+										</div>
+										<div class="d-inline-block text-right col-xl-6">
+											<button class="btn" type="reset">새 자료</button>
+										</div>
+									</div>
+								</div>
 								<table class="table">
 									<tr>
 										<th>설비코드 *</th>
@@ -262,26 +311,29 @@
 											class="form-control" type="text" id="macCode" name="macCode" /></td>
 									</tr>
 									<tr>
-										<th>설비명</th>
+										<th>설비명 *</th>
 										<td align="right"><input style="text-align: center"
 											class="form-control" type="text" id="macName" name="macName" /></td>
 									</tr>
 									<tr>
 										<th>사용 여부</th>
-										<td align="right"><input style="text-align: center"
-											class="form-control" type="text" id="use1" name="use1" /></td>
+										<td align="right"><select id="use1" name="use1"
+											class="form-control fill">
+												<option value="사용">사용</option>
+												<option value="미 사용">미 사용</option>
+										</select></td>
 									</tr>
 									<tr>
-										<th>설비구분</th>
+										<th>설비구분 *</th>
 										<td align="right"><input style="text-align: center"
 											class="form-control" type="text" id="macDiv" name="macDiv" /></td>
 									</tr>
-									<th>모델명</th>
+									<th>모델명 *</th>
 									<td align="right"><input style="text-align: center"
 										class="form-control" type="text" id="model" name="model" /></td>
 									</tr>
 									<tr>
-										<th>제작업체</th>
+										<th>제작업체 *</th>
 										<td align="right"><input style="text-align: center"
 											class="form-control" type="text" id="proOper" name="proOper" /></td>
 									</tr>
@@ -297,13 +349,13 @@
 											class="form-control" type="text" id="use" name="use" /></td>
 									</tr>
 									<tr>
-										<th>구매금액</th>
+										<th>구매금액 *(만)</th>
 										<td align="right"><input style="text-align: center"
 											class="form-control" type="text" id="buyPrice"
 											name="buyPrice" /></td>
 									</tr>
 									<tr>
-										<th>구매일자</th>
+										<th>구매일자 *</th>
 										<td align="right">
 											<div
 												class="tui-datepicker-input tui-datetime-input tui-has-focus">
@@ -334,8 +386,9 @@
 											name="macStdTemp" /></td>
 									</tr>
 								</table>
+
 							</div>
-						</div>
+						</form>
 					</div>
 
 					<div class="col-xl-6">
@@ -353,6 +406,8 @@
 										<button id="sibar"
 											class="btn btn-success waves-effect waves-light">저장</button>
 										<button id="sibar1"
+											class="btn btn-info waves-effect waves-light">수정</button>
+										<button id="mimi"
 											class="btn btn-danger waves-effect waves-light">삭제</button>
 									</div>
 								</div>
