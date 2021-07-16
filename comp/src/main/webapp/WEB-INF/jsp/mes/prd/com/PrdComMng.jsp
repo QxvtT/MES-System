@@ -832,6 +832,17 @@ $(function(){
 			}
 		});
 		gridMat.resetData(getComMatList());
+		
+		//출고여부가 Y면 체크박스를 막아 삭제못하게
+		rowsY = grid.findRows((row) => {
+		    return (row.matOutChk == 'Y');
+		});
+		console.log("rowY");
+		console.log(rowsY);
+		for(let i in rowsY) {
+			grid.disableRowCheck(rowsY[i].rowKey);
+			grid.disableRow(rowsY[i].rowKey);
+		}
 	}
 	
 	//자재 출고 관리
