@@ -66,7 +66,7 @@ public class MachinemagServiceImpl extends EgovAbstractServiceImpl implements
 	 * @return void형
 	 * @exception Exception
 	 */
-    public void updateMachine(MachinemagVO vo) throws Exception {
+    public void updatemachine(MachinemagVO vo) throws Exception {
         machineDAO.updateMachine(vo);
     }
 

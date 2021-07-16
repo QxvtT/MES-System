@@ -59,6 +59,8 @@
 	            format: 'yyyy-MM-dd'
 	        }
 	    });
+		
+
 
 		// date 불러오는 친구 
 		function getMachineMngList() {
@@ -105,7 +107,8 @@
 		
 		
 		 }); 
-
+		 
+	
 		 
 		 machine.on('check', (e) => {
 				let rows = machine.getCheckedRowKeys(); 
@@ -117,6 +120,40 @@
 						}
 				}
 			})
+			
+			
+	
+				
+		 
+		 	
+			 sibar.onclick = function (){ 
+				 let list = {macCode : $('input#macCode').val(),
+							 use1 :  $('input#use1').val(),
+				 			empName :  $('input#empName').val(),
+				 			use :  $('input#use').val(),
+				 			usingEnergy : 	 $('input#usingEnergy').val(),
+				 			macLoadage :  $('input#macLoadage').val(),
+				 			macStdTemp :  $('input#macStdTemp').val()} ;
+				 
+				 console.log(list);
+				 
+				 $.ajax({
+						async: false, 
+						url : "maachineUdate",
+						type : "post",
+						data : JSON.stringify(list),
+						dataType: "json",
+						contentType:"application/json",
+						success : function(){
+							
+							}
+						});
+			 }
+			 
+			 
+			 
+			 
+				
 		 
 		// 스크롤 엔드 함수 ***.on tui 에서 제공하는 함수다. 'scrollEnd'
 		/* 	machinemng.on('scrollEnd', () => {
@@ -174,6 +211,15 @@
 
 	})
 </script>
+<style type="">
+.tui-datetime-input {
+	width: 100%;
+}
+
+.card .card-header span {
+	margin-top: -6px;
+}
+</style>
 </head>
 <body>
 	<div class="page-header">
@@ -261,11 +307,13 @@
 										<td align="right">
 											<div
 												class="tui-datepicker-input tui-datetime-input tui-has-focus">
+
 												<input type="text" id="buyDate1" name="buyDate1"
-													class=" form-control" aria-label="Date-Time" /> <span
-													class="tui-ico-date"></span>
+													class=" form-control" aria-label="Date-Time"
+													style="text-align: center;" /> <span class="tui-ico-date"></span>
 											</div>
-											<div id="date" style="margin-top: -1px;"></div></td>
+											<div id="date" style="margin-top: -1px;"></div>
+										</td>
 									</tr>
 									<tr>
 										<th>사용에너지</th>
@@ -302,8 +350,10 @@
 										</ul>
 									</div>
 									<div class="d-inline-block text-right col-xl-6">
-										<button class="btn btn-success waves-effect waves-light">저장</button>
-										<button class="btn btn-danger waves-effect waves-light">삭제</button>
+										<button id="sibar"
+											class="btn btn-success waves-effect waves-light">저장</button>
+										<button id="sibar1"
+											class="btn btn-danger waves-effect waves-light">삭제</button>
 									</div>
 								</div>
 							</div>

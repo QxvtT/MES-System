@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +26,7 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 import mes.mac.service.MachinemagDefaultVO;
 import mes.mac.service.MachinemagService;
 import mes.mac.service.MachinemagVO;
+import mes.prd.res.service.ProcessResultVO;
 
 /**
  * @Class Name : MachineController.java
@@ -72,8 +74,6 @@ public class MachinemagController {
 		return "mac/machine/MachineList.page";
 	}
 
-	
-
 	@RequestMapping("/machine/addMachineView.do")
 	public String addMachineView(@ModelAttribute("searchVO") MachinemagDefaultVO searchVO, Model model)
 			throws Exception {
@@ -105,12 +105,10 @@ public class MachinemagController {
 		return machineService.selectMachine(machineVO);
 	}
 
-	@RequestMapping("/machine/updateMachine.do")
-	public String updateMachine(MachinemagVO machineVO, @ModelAttribute("searchVO") MachinemagDefaultVO searchVO,
-			SessionStatus status) throws Exception {
-		machineService.updateMachine(machineVO);
-		status.setComplete();
-		return "forward:/machine/MachineList.do";
+	@RequestMapping(value = "/mac/machine/maachineUdate")
+	@ResponseBody
+	public void maachineUdate(@RequestBody MachinemagVO MachinemagVO) throws Exception {
+		machineService.updatemachine(MachinemagVO);
 	}
 
 	@RequestMapping("/machine/deleteMachine.do")

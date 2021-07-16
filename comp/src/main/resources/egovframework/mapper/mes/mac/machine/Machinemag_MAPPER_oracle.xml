@@ -49,24 +49,14 @@
 	<update id="updateMachine">
 		<![CDATA[
 			UPDATE MACHINE
-			SET MAC_CODE=#{macCode}
-				, MAC_NAME=#{macName}
-				, MAC_DIV=#{macDiv}
-				, MAC_SIZE=#{macSize}
-				, MODEL=#{model}
-				, PRO_OPER=#{proOper}
+			SET 
+				USE_1=#{use1}
 				, WORKER=#{worker}
 				, USE=#{use}
-				, NOM_CAP=#{nomCap}
 				, USING_ENERGY=#{usingEnergy}
-				, SAFETY=#{safety}
-				, MAC_PRO_DATE=#{macProDate}
-				, BUY_DATE=#{buyDate}
-				, BUY_PRICE=#{buyPrice}
-				, LINE_NUM=#{lineNum}
 				, MAC_LOADAGE=#{macLoadage}
 				, MAC_STD_TEMP=#{macStdTemp}
-						WHERE MAC_CODE=#{macCode}
+				WHERE MAC_CODE=#{macCode}
 				]]>
 	</update>
 
@@ -118,15 +108,17 @@
 		, PRO_OPER
 		, USE
 		, NOM_CAP
-		, USING_ENERGY
+		,
+		USING_ENERGY
 		, SAFETY
 		, MAC_PRO_DATE
 		, BUY_DATE
 		, BUY_PRICE
 		, LINE_NUM
-		, MAC_LOADAGE
+		,
+		MAC_LOADAGE
 		, MAC_STD_TEMP
-	
+
 		FROM MACHINE
 		ORDER BY
 		MAC_CODE DESC

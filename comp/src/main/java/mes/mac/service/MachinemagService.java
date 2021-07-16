@@ -33,7 +33,7 @@ public interface MachinemagService {
 	 * @return void형
 	 * @exception Exception
 	 */
-    void updateMachine(MachinemagVO vo) throws Exception;
+    void updatemachine(MachinemagVO vo) throws Exception;
     
     /**
 	 * MACHINE을 삭제한다.
