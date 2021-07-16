@@ -28,25 +28,38 @@
 	
 	<update id ="updatePrcEnd">
 		
-		
 		declare
 			v_num number;
 			v_mov_num process_result.mov_num%type;
 			v_mov_num_v process_result.mov_num%type;
 			v_prc_state process_result_d.prc_state%type;
 			v_count number :=0;
+            v_total_res_vol process_result_d.prc_res_vol%type;
+            v_prd_com_vol produce_command_d.prd_com_vol%type;
+            v_remake produce_command_d.prd_com_div%type;
+            v_remake_vol produce_command_d.prd_com_div%type;
+            v_prd_com_d_num produce_command_d.prd_com_d_num%type;
+            v_count_remake number :=0;
+            v_total_re_res_vol number;
 			begin
 			
 				update process_result_d
 				set prc_end_time = to_date(#{prcEndTime},'yyyy-MM-dd:HH24:mi:ss')
 					, PRC_STATE = '완료'
-				where prc_res_d_num = #{prcResDNum};
+				where prc_res_d_num = #{prcResDNum}; 
 			
 				select mov_num
 				into v_mov_num_v
 				from process_result_d
-				where prc_res_d_num = #{prcResDNum};
-
+				where prc_res_d_num = #{prcResDNum}; 
+				
+				select prd_com_d_num
+				 into v_prd_com_d_num
+			    from process_result
+			    where mov_num = v_mov_num_v;
+               
+                
+                
 			    select count(*) 
 			    into v_num
 			    from process_result
@@ -60,13 +73,11 @@
 			        from (
 			                select mov_num, rownum as rnum
 			                from process_result
-			                where prd_com_d_num = (select prd_com_d_num 
-			                                        from process_result
-			                                        where mov_num = v_mov_num_v)) A
+			                where prd_com_d_num = v_prd_com_d_num) A
 			        where a.rnum =i;
 	        
-			        select prc_state
-			        into v_prc_state
+			        select prc_state,prc_res_vol
+			        into v_prc_state,v_total_res_vol
 			        from process_result_d
 			        where prc_res_no =(
 			                            select max(prc_res_no) 
@@ -75,19 +86,76 @@
 			        and mov_num = v_mov_num;
 	        
 				    if v_prc_state = '완료' then
-				        v_count := v_count+1;
+				    
+                        update process_result
+                        set prc_bck_vol = v_total_res_vol
+                        where mov_num =v_mov_num;
+
 				    end if;
+				    
 	    		end loop;	
+	    		
+	    		 select sum(prc_bck_vol)
+                 into v_total_res_vol
+			     from process_result
+			     where prd_com_d_num = v_prd_com_d_num
+			     group by prd_com_d_num;
+			     
+			     select prd_com_vol, prd_com_div
+			     into v_prd_com_vol, v_remake
+			     from produce_command_d
+			     where prd_com_d_num = v_prd_com_d_num;
+			    
+			    if v_remake ='정상' then
+			    
+	                if v_prd_com_vol = v_total_res_vol then
+	                
+	                	update produce_command_d
+	                	set prc_com_y = 'Y'
+	                	where prd_com_d_num = v_prd_com_d_num;
+				    end if;  
+				   
+				else
+				
+					select count(*)
+					into v_count_remake
+					from produce_command_d
+					where prd_remake = v_prd_com_d_num;
+					
+					
+			         select sum(prc_bck_vol) 
+			         into v_total_re_res_vol
+			         from process_result
+			         where prd_com_d_num in (select prd_com_d_num
+			                                from produce_command_d
+			                                 where prd_remake = v_prd_com_d_num);
+					
+					 if v_prd_com_vol = v_total_re_res_vol then
+					 
+
+			         	update produce_command_d
+	                	set prc_com_y = 'Y'
+	                	where prd_com_d_num = v_prd_com_d_num;
+				                               
+				                               
+				        update produce_command_d
+	                	set prc_com_y = 'Y'
+	                	where prd_remake = v_prd_com_d_num;
+			         
+			         
+			         
+			         end if;
+				   			
+				
+
+                end if;
+                
+                
 	    
-			    if v_num =v_count then
-			        update produce_command_d
-			        set prc_com_Y = 'Y'
-			        where prd_com_d_num = (select prd_com_d_num 
-			                                        from process_result
-			                                        where mov_num = v_mov_num);
-			    end if;
+			
     
 		end;
+        
 
 		
 		

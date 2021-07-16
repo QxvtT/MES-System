@@ -41,6 +41,9 @@
 			    set itm_vol = itm_vol - changeVol
 			    where itm_stc_num = #{lotNum} and
 			    itm_code = #{itmCode};
+			    
+			    update order_m
+			    
 			
 			end;
 	</update>
