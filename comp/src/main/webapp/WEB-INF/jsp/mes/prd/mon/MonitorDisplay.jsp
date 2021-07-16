@@ -11,6 +11,8 @@
 	src="${pageContext.request.contextPath}/assets/js/bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/assets/css/bootstrap/css/bootstrap.min.css" />
+<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css">
 <script>
 	$(function() {
 		function getToday() {
@@ -31,17 +33,13 @@
 			var hur = d.getHours(); // 시
 			var min = d.getMinutes(); //분
 			var sec = d.getSeconds(); //초
-
 			var timeBoard = document.getElementById("currentTime"); // 값이 입력될 공간
-
 			var time = hur + "시 " + min + "분 " + sec + "초" // 형식 지정
-
 			timeBoard.innerHTML = time; // 출력
-
 			setTimeout(getTime, 1000); //1000밀리초(1초) 마다 반복
 		}
 		getTime();
-
+		
 	});
 </script>
 <style>
@@ -125,34 +123,8 @@ ul {
 				<th>현재불량</th>
 				<th>실적율</th>
 			</tr>
-			<tr>
-				<th>A</th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-			</tr>
-			<tr>
-				<th>B</th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-			</tr>
-			<tr>
-				<th>C</th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-			</tr>
 		</table>
+		<div id="grid2"></div>
 	</div>
 </body>
 </html>

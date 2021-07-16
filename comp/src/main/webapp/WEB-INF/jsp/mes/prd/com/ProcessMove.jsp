@@ -232,24 +232,7 @@ $(function(){
 	
 	$('#printBtn').click(function() {
 		getPrtInfo();
-		if(grid3Data) == null){
-			let myToast = null;
-			//토스트메시지 테스트
-			myToast = $.toast({ 
-				  text : "로드된 데이터가 부족합니다.", 
-				  showHideTransition : 'slide',  // It can be plain, fade or slide
-				  bgColor : 'tomato',              // Background color for toast
-				  textColor : 'white',            // text color
-				  allowToastClose : false,       // Show the close button or not
-				  hideAfter : 2000,              // `false` to make it sticky or time in miliseconds to hide after
-				  stack : 5,                     // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
-				  textAlign : 'center',            // Alignment of text i.e. left, right, center
-				  position : 'top-center'       // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
-			});
-			return false;
-		} else {
-			window.open("ProcessMovePrt.do");
-		}
+		window.open("ProcessMovePrt.do");
 	})
 	
 
