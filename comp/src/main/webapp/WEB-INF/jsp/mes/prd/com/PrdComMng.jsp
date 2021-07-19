@@ -847,6 +847,10 @@ $(function(){
 	
 	//자재 출고 관리
 	outMatLotBtn.onclick = function() {
+		if($('#outMatLotBtn').hasClass('disabled')) {
+			console.log("초건에 걸렸음");
+			return null;
+		}
 		if(gridMat.getRowCount() < 1){
 			console.log(gridMat.getRowCount());
 			//토스트메시지 
