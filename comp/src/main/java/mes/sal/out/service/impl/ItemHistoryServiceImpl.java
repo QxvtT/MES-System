@@ -103,13 +103,9 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
         return itemHistoryDAO.ItemHistoryRegist(searchVO);
     }
     public List<?> setItemCode(ItemHistoryVO searchVO) throws Exception {
-    	if(setOrdCheck(searchVO) >0) {
+    	
     		return itemHistoryDAO.setItemCode(searchVO);
-    		
-    	}
-    	else {
-    		return itemHistoryDAO.setItemCodeA(searchVO);
-    	}
+ 
     }
    
     public List<?> setLotNum(ItemHistoryVO searchVO) throws Exception {
@@ -186,9 +182,7 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
     public int selectItemHistoryListTotCnt(ItemHistoryDefaultVO searchVO) {
 		return itemHistoryDAO.selectItemHistoryListTotCnt(searchVO);
 	}
-    public int setOrdCheck(ItemHistoryVO searchVO) {
-		return itemHistoryDAO.setOrdCheck(searchVO);
-	}
+  
 	@Override
 	public String getCount(ItemHistoryVO searchVO) {
 		String a = "000";
@@ -198,6 +192,8 @@ public class ItemHistoryServiceImpl extends EgovAbstractServiceImpl implements
 		System.out.println(a);
 		return a ;
 	}
+
+
     
 
 

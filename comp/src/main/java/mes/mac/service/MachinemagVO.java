@@ -22,6 +22,9 @@ public class MachinemagVO extends MachinemagDefaultVO{
     /** MAC_CODE */
     private java.lang.String macCode;
     
+    /** MAC_CODE */
+    private java.lang.String prcCode;
+    
     /** MAC_NAME */
     private java.lang.String macName;
     
@@ -47,7 +50,7 @@ public class MachinemagVO extends MachinemagDefaultVO{
     private java.lang.String usingEnergy;
 
     /** BUY_DATE */
-    private java.sql.Date buyDate;
+    private java.lang.String buyDate;
     
     /** BUY_PRICE */
     private java.math.BigDecimal buyPrice;

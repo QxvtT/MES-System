@@ -71,7 +71,8 @@ public interface ProcessResultMapper {
     public List<?> produceSelect(ProcessResultVO searchVO) throws Exception;
     public List<?> setProduceSelect(ProcessResultVO searchVO) throws Exception;
     public List<?> setProduceSelect2(ProcessResultVO searchVO) throws Exception;
-    
+    public List<?> ProcessListR(ProcessResultVO searchVO) throws Exception;
+    public List<?> processSelectMovNum(ProcessResultVO searchVO) throws Exception;
    
     
     

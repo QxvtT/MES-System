@@ -109,7 +109,8 @@ $(function(){
 		
 		$('input[id="empId"]').val(empId2);
 		$('input[id="empName"]').val(empName);
-		
+		empId1 = null;
+		employees.resetData(getEmployeesList());
 		$("#employeesModal").modal("toggle");
 	});
 	

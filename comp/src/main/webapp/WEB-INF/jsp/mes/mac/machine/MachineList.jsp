@@ -92,6 +92,8 @@
 		 machine.check(key);
 		
 		$('input#macCode').val(machine.getData()[key]['macCode']);
+		$('input#prcCode').val(machine.getData()[key]['prcCode']);
+		$('input#prcName').val(machine.getData()[key]['prcName']);
 		$('input#macName').val(machine.getData()[key]['macName']);
 		$('select#use1').val(machine.getData()[key]['use1']);
 		$('input#macDiv').val(machine.getData()[key]['macDiv']);
@@ -131,9 +133,9 @@
 			 sibar.onclick = function (){ 
 			 
 			 macCode1 = null;
-			 if ($('input#macCode').val() == '' || $('input#macName').val() == '') {
+			 if ($('input#macCode').val() == '' || $('input#macName').val() == '' || $('input#prcCode').val() == '' || $('input#macDiv').val() == '' || $('input#model').val() == '' || $('input#proOper').val() == '' || $('input#buyPrice').val() == '' ) {
 					$.toast({ 
-						  text : "멈춰 !!", 
+						  text : "값을 입력 하세요.", 
 						  showHideTransition : 'slide',
 						  bgColor : 'red',
 						  textColor : 'white',
@@ -148,6 +150,7 @@
 			 
 				 
 			 let list = {macCode : $('input#macCode').val(),
+					 prcCode : $('input#prcCode').val(),
 					 macName : $('input#macName').val(),
 					 use1 : $('select#use1').val(),
 					 macDiv : $('input#macDiv').val(),
@@ -186,7 +189,7 @@
 				macCode1=null;
 				if ($('input#macCode').val() == '' || $('input#macName').val() == '') {
 					$.toast({ 
-						  text : "멈춰 !!", 
+						  text : "값을 입력 하세요. !!", 
 						  showHideTransition : 'slide',
 						  bgColor : 'red',
 						  textColor : 'white',
@@ -311,6 +314,15 @@
 											class="form-control" type="text" id="macCode" name="macCode" /></td>
 									</tr>
 									<tr>
+										<th>공정코드 &nbsp; * <%@ include
+												file="/WEB-INF/jsp/mes/common/modal/ProcessList.jsp"%></th>
+										<td align="right">
+										<input style="text-align: center"
+											class="form-control" type="hidden" id="prcCode" name="prcCode" />
+											<input style="text-align: center"
+											class="form-control" type="text" id="prcName" name="prcName" /></td>
+									</tr>
+									<tr>
 										<th>설비명 *</th>
 										<td align="right"><input style="text-align: center"
 											class="form-control" type="text" id="macName" name="macName" /></td>
@@ -349,7 +361,7 @@
 											class="form-control" type="text" id="use" name="use" /></td>
 									</tr>
 									<tr>
-										<th>구매금액 *(만)</th>
+										<th>구매금액(만)*</th>
 										<td align="right"><input style="text-align: center"
 											class="form-control" type="text" id="buyPrice"
 											name="buyPrice" /></td>

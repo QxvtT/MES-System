@@ -96,10 +96,14 @@ SELECT * FROM (
 					  , i.ITM_VOL as itm_stock
 					  , d.ORD_NOTE  
 					  , d.PRD_CHK
-						from order_d d, order_m m,ITEM_STOCK i, item
-						where m.ORD_NUM=d.ORD_NUM
+						from order_d d
+                             , order_m m
+                             , (select sum(itm_vol) as itm_vol, itm_code from item_stock
+                                group by itm_code) i
+                             , item  
+                             where m.ORD_NUM=d.ORD_NUM
 			            and i.ITM_CODE=d.ITM_CODE
-			            and item.ITM_CODE=d.ITM_CODE  
+			            and item.ITM_CODE=d.ITM_CODE
 			            
 			            <if test="ordDNum != null and ordDNum != ''">
 							<![CDATA[	
