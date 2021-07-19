@@ -61,18 +61,28 @@ $(function(){
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
-	    data: getList(),
+	    data: null,
 	    rowHeaders: ['rowNum'],
 	    columns: [
 	    	{ header: '자재코드', name:'matCode'},
 			{ header: '자재명', name:'matName'},
 			{ header: '자재구분', name:'matDiv'},
-			{ header: '안전재고', name:'matSafeStock'},
+			{ header: '안전재고', name:'matSafeStock',
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+			},
 // 			{ header: '이월량', name:'matSafeStock'},
-			{ header: '입고량', name:'invol'},
- 			{ header: '출고량', name:'outvol'},
-			{ header: '현재고', name:'matVol'},
-			{ header: '미달량', name:'mShort'},
+			{ header: '입고량', name:'invol',
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+			},
+ 			{ header: '출고량', name:'outvol',
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+ 			},
+			{ header: '현재고', name:'matVol',
+ 				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+			},
+			{ header: '미달량', name:'mshort',
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+			},
 // 			{ header: '특기사항', name:''},
 	    ],
 	    summary: {

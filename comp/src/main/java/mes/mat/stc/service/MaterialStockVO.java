@@ -32,10 +32,11 @@ public class MaterialStockVO extends MaterialDefaultVO{
     private java.lang.String sDate;
     private java.lang.String eDate;
     
-    private java.lang.String invol;
-    private java.lang.String outvol;
+    private java.math.BigDecimal invol;
+    private java.math.BigDecimal outvol;
     
-    private java.lang.String mShort;
+    /** 미달량 **/
+    private java.math.BigDecimal mshort;
 
     /** mat_code */
     private java.lang.String matCode;

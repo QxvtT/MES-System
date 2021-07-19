@@ -57,29 +57,33 @@
 	</select>
 	<!-- 자재 LOT 재고 조회 -->
 	
+	
+	<!-- 자재 재고 조회 -->
 	<select id="selectMatStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="mes.mat.stc.service.MaterialStockVO">
 	SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
-				select b.* , nvl(c.MAT_HIS_D_VOL, 0) as out
-				from (select m.mat_code, 
-				      m.mat_name, 
-				      m.mat_div, 
-				      sa.MAT_SAFE_STOCK, 
-				      st.mat_vol, 
-				      (sa.mat_safe_stock - st.mat_vol) as mShort, 
-				      nvl(mhd.mat_his_d_vol, 0) as mat_his_d_vol
-				from material m, material_safe sa, material_stock st, material_history mh, material_history_d mhd
-				where m.mat_code=sa.mat_code 
-				  AND M.MAT_CODE=ST.MAT_CODE 
-				  and m.mat_code=mhd.mat_code 
-				  and mh.mat_his_num=mhd.mat_his_num 
-				  and MH.mat_his_div='입고'
-				  <if test=" matCode3 != null and matCode3 != ''">
-			      <![CDATA[	
-			      		AND M.MAT_CODE > #{matCode3}
-			      ]]>
-	       		</if>
-			  	<if test="matCodeList != null">
+				SELECT B.*, C.OUTVOL, (B.INVOL - C.OUTVOL) AS MAT_VOL, (B.MAT_SAFE_STOCK - (B.INVOL - C.OUTVOL)) AS MSHORT
+				FROM 
+				(SELECT MHD.MAT_CODE
+				        , SUM(MHD.MAT_HIS_D_VOL) AS INVOL
+				        , M.MAT_NAME
+				        , M.MAT_DIV
+				        , SA.MAT_SAFE_STOCK
+				FROM MATERIAL M
+				    , MATERIAL_HISTORY_D MHD
+				    , MATERIAL_HISTORY MH
+				    , MATERIAL_SAFE SA
+				WHERE MHD.MAT_HIS_NUM = MH.MAT_HIS_NUM
+				AND M.MAT_CODE = MHD.MAT_CODE
+				AND SA.MAT_CODE = M.MAT_CODE
+				AND MH.MAT_HIS_DIV = '입고'
+			<if test="sDate != null and sDate !='' and eDate != null and eDate !=''">
+				<![CDATA[
+				AND MH.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd')
+				AND MH.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
+				]]>
+	       	</if>
+	       	<if test="matCodeList != null">
 			     <if test="matCodeList.size != 0">
 				      AND M.MAT_CODE IN 
 			     	<foreach item="item" index="index" collection="matCodeList"
@@ -88,43 +92,49 @@
 					</foreach>
 	     		 </if>	
 		     </if>
-				<if test="sDate != null and sDate !='' and eDate != null and eDate !=''">
-				<![CDATA[
-					AND mh.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
-						mh.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
-				]]>
-				</if>
-				  ) b left outer join
-				  (select mat_code, MAT_HIS_D_VOL from material_history_d mhd, material_history mh
-				  where mh.mat_his_num=mhd.mat_his_num 
-				  and mh.mat_his_div='출고'
-				  <if test=" matCode3 != null and matCode3 != ''">
+		     <if test=" matCode3 != null and matCode3 != ''">
 			      <![CDATA[	
-			      		AND mhd.MAT_CODE > #{matCode3}
+			      		AND MHD.MAT_CODE > #{matCode3}
 			      ]]>
-	       		</if>
-			  	<if test="matCodeList != null">
+	       	</if>
+				GROUP BY MHD.MAT_CODE
+				        , M.MAT_NAME
+				        , M.MAT_DIV
+				        , SA.MAT_SAFE_STOCK
+				        ) B LEFT OUTER JOIN
+				(SELECT MAT_CODE, SUM(MAT_HIS_D_VOL) AS OUTVOL 
+				FROM MATERIAL_HISTORY_D MHD, MATERIAL_HISTORY MH
+				WHERE MHD.MAT_HIS_NUM = MH.MAT_HIS_NUM
+				AND MH.MAT_HIS_DIV = '출고'
+			<if test="sDate != null and sDate !='' and eDate != null and eDate !=''">
+				<![CDATA[
+				AND MH.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd')
+				AND MH.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
+				]]>
+	       	</if>
+	       	<if test="matCodeList != null">
 			     <if test="matCodeList.size != 0">
-				      AND mhd.MAT_CODE IN 
+				      AND MHD.MAT_CODE IN 
 			     	<foreach item="item" index="index" collection="matCodeList"
 					      open="(" separator="," close=")">
 					        #{item}
 					</foreach>
 	     		 </if>	
 		     </if>
-				<if test="sDate != null and sDate !='' and eDate != null and eDate !=''">
-				<![CDATA[
-					AND mh.MAT_HIS_DATE >= TO_DATE(#{sDate} ,'yyyy-MM-dd') and  
-						mh.MAT_HIS_DATE <= TO_DATE(#{eDate} ,'yyyy-MM-dd')
-				]]>
-				</if>
-				) c
-				  on c.mat_code = b.mat_code
+		     <if test=" matCode3 != null and matCode3 != ''">
+			      <![CDATA[	
+			      		AND MHD.MAT_CODE > #{matCode3}
+			      ]]>
+	       	</if>
+				GROUP BY MAT_CODE) C
+				ON B.MAT_CODE = C.MAT_CODE
+				ORDER BY B.MAT_CODE				
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )
 ]]>
-	</select>	
+	</select>
+	<!-- END 자재 재고 조회 -->	
 	
 	<!-- 자재 재고 조회 -->
 	<select id="selectMatStcList1" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
