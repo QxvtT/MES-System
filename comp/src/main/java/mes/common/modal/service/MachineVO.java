@@ -62,6 +62,12 @@ public class MachineVO extends OperationDefaultVO {
 
 	// 사용가능한 설비명 검색
 	private java.lang.String prcResDNum;
+	
+	// 사용가능한 설비명 검색
+	private java.lang.String prcCode;
+	
+	// 사용가능한 설비명 검색
+	private java.lang.String prcName;
 
 	// 스크롤용
 	private java.lang.String macCode1;

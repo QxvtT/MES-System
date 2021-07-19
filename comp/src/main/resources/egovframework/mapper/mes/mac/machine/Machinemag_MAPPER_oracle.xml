@@ -8,11 +8,13 @@
 
 	<insert id="insertMachine">
 		<![CDATA[
-			INSERT INTO MACHINE 
+		
+		begin 		
+		INSERT INTO MACHINE 
 				( MAC_CODE
 				  , MAC_NAME
 				  , MAC_DIV
-				 , USE_1
+				  , USE_1
 				  , MODEL
 				  , PRO_OPER
 				  , WORKER
@@ -31,10 +33,18 @@
 				  , #{worker}
 				  , #{use}
 				  , #{usingEnergy}
-				  , #{buyDate}
+				  , to_date(#{buyDate}, 'yyyy-MM-dd')
 				  , #{buyPrice}
 				  , #{macLoadage}
-				  , #{macStdTemp} )
+				  , #{macStdTemp} );
+				  
+		insert into machine_process VALUES (#{macCode}, #{prcCode}, (select max(prc_mac_num)+1 from machine_process));
+		
+		end;
+		
+		
+			
+			
 		]]>
 	</insert>
 
@@ -63,31 +73,7 @@
 				]]>
 	</delete>
 
-	<select id="selectMachine"
-		resultType="mes.mac.service.MachinemagVO">
-		<![CDATA[
-			SELECT
-				MAC_CODE
-				, MAC_NAME
-				, MAC_DIV
-				, MAC_SIZE
-				, MODEL
-				, PRO_OPER
-				, WORKER
-				, USE
-				, NOM_CAP
-				, USING_ENERGY
-				, SAFETY
-				, MAC_PRO_DATE
-				, BUY_DATE
-				, BUY_PRICE
-				, LINE_NUM
-				, MAC_LOADAGE
-				, MAC_STD_TEMP
-			FROM MACHINE
-						WHERE MAC_CODE=#{macCode}
-				]]>
-	</select>
+
 
 	<select id="selectMachineList"
 		parameterType="mes.mac.service.MachinemagVO"
@@ -95,8 +81,9 @@
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 		SELECT
-		MAC_CODE
-		, MAC_NAME
+		m.MAC_CODE
+		,
+		MAC_NAME
 		, MAC_DIV
 		, MAC_SIZE
 		, Worker
@@ -108,14 +95,16 @@
 		USING_ENERGY
 		, SAFETY
 		, MAC_PRO_DATE
-		, BUY_DATE
+		, to_char(BUY_DATE, 'yyyy-MM-dd') as buy_date
 		, BUY_PRICE
 		, LINE_NUM
 		,
 		MAC_LOADAGE
-		, MAC_STD_TEMP
+		, MAC_STD_TEMP,
+		prc_code
 
-		FROM MACHINE
+		FROM MACHINE m ,machine_process p
+		where m.mac_code = p.mac_code
 		ORDER BY
 		MAC_CODE DESC
 		
