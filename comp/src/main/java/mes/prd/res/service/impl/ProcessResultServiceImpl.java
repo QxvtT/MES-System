@@ -123,6 +123,16 @@ public class ProcessResultServiceImpl extends EgovAbstractServiceImpl implements
     public List<?> produceSelect(ProcessResultVO searchVO) throws Exception {
         return processResultDAO.produceSelect(searchVO);
     }
+    
+    public List<?> ProcessListR(ProcessResultVO searchVO) throws Exception {
+        return processResultDAO.ProcessListR(searchVO);
+    }
+    public List<?> processSelectMovNum(ProcessResultVO searchVO) throws Exception {
+        return processResultDAO.processSelectMovNum(searchVO);
+    }
+    
+     
+    
     public List<?> setProduceSelect(ProcessResultVO searchVO) throws Exception {
     	List list = processResultDAO.setProduceSelect(searchVO);
     	if(list.size() <1) {

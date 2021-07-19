@@ -107,7 +107,8 @@ $(function(){
 		}
 		$('input[id="macCode"]').val(macCode2);
 		$('input[id="macName"]').val(macName);
-		
+		macCode1 = null;
+		machine.resetData(getMachineList());
 		$("#macModal").modal("toggle");
 	});
 	

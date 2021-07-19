@@ -60,6 +60,8 @@ public interface ProcessResultService {
     List processResultSelect(ProcessResultVO searchVO) throws Exception;
     List produceSelect(ProcessResultVO searchVO) throws Exception;
     List setProduceSelect(ProcessResultVO searchVO) throws Exception;
+    List ProcessListR(ProcessResultVO searchVO) throws Exception;
+    List processSelectMovNum (ProcessResultVO searchVO) throws Exception;
     
     
     void resultSuccess(GridDataVO gridDataVO) throws Exception;
@@ -78,3 +80,4 @@ public interface ProcessResultService {
     int selectProcessResultListTotCnt(ProcessResultDefaultVO searchVO);
     
 }
+

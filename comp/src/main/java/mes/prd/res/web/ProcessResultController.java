@@ -86,6 +86,13 @@ public class ProcessResultController {
         List<?> setProduceSelect = processResultService.setProduceSelect(processResultVO);
         return setProduceSelect;
     }
+    @RequestMapping(value="ProcessSelectMovNum", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> v(ProcessResultVO processResultVO)
+            throws Exception {
+        List<?> processSelectMovNum = processResultService.processSelectMovNum (processResultVO);
+        return processSelectMovNum ;
+    }
     
     
     
@@ -113,7 +120,18 @@ public class ProcessResultController {
   public void ItemHistoryUpdate(@RequestBody GridDataVO gridData) throws Exception {
     	
     	processResultService.resultSuccess(gridData);
-  } 
+  }
+    
+    @RequestMapping(value="ProcessListR", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> ProcessListR(ProcessResultVO processResultVO)
+            throws Exception {
+        List<?> processListR = processResultService.ProcessListR(processResultVO);
+        return processListR;
+    }
+    
+    
+    
     
     
     
@@ -121,7 +139,13 @@ public class ProcessResultController {
     public String selectProcessResultList() throws Exception {
 
         return "prd/res/ProcessResultList.page";
+    }
+    @RequestMapping(value="ProcessListR.do")
+    public String ProcessListR() throws Exception {
+
+        return "prd/res/ProcessListR.page";
     } 
+   
     
     @RequestMapping("addProcessResultView.do")
     public String addProcessResultView(

@@ -191,6 +191,10 @@
 						class="waves-effect waves-dark"> <span class="pcoded-micon"><i
 								class="ti-angle-right"></i></span> <span class="pcoded-mtext">공정실적 관리</span> <span class="pcoded-mcaret"></span>
 					</a></li>
+					<li class=" "><a href="ProcessListR.do"
+						class="waves-effect waves-dark"> <span class="pcoded-micon"><i
+								class="ti-angle-right"></i></span> <span class="pcoded-mtext">공정실적 조회</span> <span class="pcoded-mcaret"></span>
+					</a></li>
 				</ul></li>
 		</ul>
 		<%--<div class="pcoded-navigation-label">Forms</div>

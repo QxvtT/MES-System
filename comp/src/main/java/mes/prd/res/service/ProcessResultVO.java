@@ -22,6 +22,10 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     /** 이동번호 */
     private java.lang.String movNum;
     
+    private java.lang.String movNum1;
+    
+    
+    
     /** 지시번호 */
     private java.lang.String prdComNum;
     
@@ -54,6 +58,8 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     
     /** 작업시작날짜 produce_command*/
     private java.lang.String prdComDDate;
+    private java.lang.String aDate;
+    private java.lang.String bDate;
     private java.lang.String ordDNum;
     
     
@@ -126,6 +132,9 @@ public class ProcessResultVO extends ProcessResultDefaultVO{
     
     /** 작업지시물량 */
     private java.math.BigDecimal matVol;
+    
+    private java.math.BigDecimal prdComVol;
+    private java.lang.String prcComY;
     
     
 }

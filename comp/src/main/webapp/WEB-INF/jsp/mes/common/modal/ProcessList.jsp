@@ -103,15 +103,15 @@ $(function(){
 			else{
 				prcCode2 = prcCode2 + process.getCheckedRows()[i]['prcCode']+",";
 				prcName = prcName + process.getCheckedRows()[i]['prcName']+",";
-				
-				
 			}	
 		}
 		
 		$('input[id="prcCode"]').val(prcCode2);
 		$('input[id="prcName"]').val(prcName);
-		
+		prcCode1 = null;
+		process.resetData(getProcessList());
 		$("#serchPrcModal").modal("toggle");
+		
 	});
 	
 	$('#btnP').click(function(){

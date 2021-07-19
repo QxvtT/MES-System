@@ -106,7 +106,7 @@ $(function(){
 			dataType: "json",
 			success : function(result){
 						if(result.length > 0) {
-							itmHisDNum1 = result[result.length -1].itmHisDNum1;
+							itmHisDNum1 = result[result.length -1].itmHisDNum;
 							}
 						console.log(result);
 						if(result.length !=0){
@@ -146,6 +146,7 @@ $(function(){
 			 { header: '출고일자', name:'itmHisRdy'}
 			,{ header: '전표번호', name:'itmHisNum'}
 			,{ header: '업체명', name:'operName'}
+			,{ header: '제품명', name:'itmName' }
 			,{ header: '비고', name:'itmNote' }
 	
 	    ]
@@ -165,7 +166,7 @@ $(function(){
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					itmHisDNum2 = result[result.length -1].itmHisDNum2;
+					itmHisDNum2 = result[result.length -1].itmHisDNum;
 				}
 				console.log(result);
 				data = result;
@@ -215,6 +216,11 @@ $(function(){
 	}
 	
 	save.onclick = function() {
+		console.log(grid.getData());
+		
+		
+		
+		
 		if($("#itmHisRdy").val()==""){
 			
 			$.toast({ 
@@ -230,6 +236,8 @@ $(function(){
 				});
 			return null;
 		}
+		
+		
 		
 		
 		 
@@ -295,6 +303,7 @@ $(function(){
 // 			}
 // 		}
 // 		if(!check) {
+	itmCode1 = null;
 			key = grid.getFocusedCell()['rowKey'];
 			if(grid.getFocusedCell()['columnName'] == "itmCode"){
 				grid3.resetData(setItemCode());
@@ -365,7 +374,7 @@ $(function(){
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					itmCode1 = result[result.length -1].itmCode1;
+					itmCode1 = result[result.length -1].itmCode;
 				}
 				console.log(result);
 				data = result;
@@ -406,6 +415,7 @@ $(function(){
 	}
 
 	$('#ordNum').on('dblclick', () => { 
+		ordNum1 = null;
 		grid5.resetData(setOrdNum());
 		$('#selectOrdNum').modal('toggle');
 		$('#selectOrdNum').on('shown.bs.modal', function(){
@@ -466,7 +476,7 @@ $(function(){
 				dataType: "json",
 				success : function(result){
 					if(result.length > 0) {
-						ordNum1 = result[result.length -1].ordNum1;
+						ordNum1 = result[result.length -1].ordNum;
 					}
 					console.log(result);
 					data = result;
@@ -550,25 +560,15 @@ $(function(){
 	</div>
 	<!-- Page-header end -->
 	
-			<form id="frm" name="frm">
-			
-				<div id="table">
-					<button type="button" class="btn btn-info btn-sm" id="searchHisBtn" data-toggle="modal" data-target="#myModal">검색</button>&nbsp;
-					<button type="button" class="btn btn-info btn-sm" id="save">저장</button>
-					<button type="reset" class="btn btn-info btn-sm" id= "reset">새자료</button>
-					<table width="100%" border="1" cellpadding="0" cellspacing="0">
-						<colgroup>
-							<col width="150" />
-							<col width="" />
-						</colgroup>
+			<form id="frm" name="frm" >
+		
+				<div id="table1">
 
-						<c:if test="${registerFlag == '수정'}">
-							<tr>
-								<th>ITM_HIS_NUM *</th>
-								<td><input type ="text" name ="itmHisNum" id = "itmHisNum"/></td>
-							</tr>
-							
-						</c:if>
+					<table >
+						<tr>
+							<th>ITM_HIS_NUM *</th>
+							<td><input type ="text" name ="itmHisNum" id = "itmHisNum"/></td>
+						</tr>
 						<tr>
 							<th>출고일자*</th>
 							<td><input type="date" name="itmHisRdy" id="itmHisRdy"/>
@@ -596,7 +596,13 @@ $(function(){
 						
 						
 					</table>
-				</div>
+					<div align="left">
+						<button type="button" class="btn btn-info btn-sm" id="searchHisBtn" data-toggle="modal" data-target="#myModal">검색</button>&nbsp;
+					<button type="button" class="btn btn-info btn-sm" id="save">저장</button>
+					<button type="reset" class="btn btn-info btn-sm" id= "reset">새자료</button>
+					</div>
+			
+		</div>
 			</form>
 
 				<div class="pcoded-inner-content">
@@ -610,8 +616,8 @@ $(function(){
 											<ul>
 												<li>List</li>
 												<div align="right">
-													<button type="button" id="insert">추가</button>
-													<button type="button" id="deleteItm">삭제</button>
+													<button  class="btn btn-info btn-sm" type="button" id="insert">추가</button>
+													<button  class="btn btn-info btn-sm" type="button" id="deleteItm">삭제</button>
 												</div>
 											</ul>
 										</div>

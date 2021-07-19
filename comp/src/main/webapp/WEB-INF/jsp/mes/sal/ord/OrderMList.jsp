@@ -41,7 +41,7 @@ $(function(){
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
-	    data: getList(),
+	    data: null,
 	    rowHeaders: ['rowNum'],
 	    columns: [
 	    	{ header: '주문번호', name:'ordNum'},
@@ -156,8 +156,8 @@ $(function(){
 		<%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %><br/>
 		제품명<input type ="text" id="itmName" name = "itmName" ></input><br/>
 		<br/>
-		<button type="button" id ="button" name="button">조회</button>
-	<button type="reset" >리셋</button>
+		<button  class="btn btn-info btn-sm" type="button" id ="button" name="button">조회</button>
+	<button class="btn btn-info btn-sm" type="reset" >리셋</button>
 	</form>
 	<form:form commandName="searchVO" name="listForm" id="listForm" method="post">
 		<input type="hidden" name="ordDNum" />

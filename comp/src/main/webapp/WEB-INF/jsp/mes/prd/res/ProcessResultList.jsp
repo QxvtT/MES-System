@@ -82,7 +82,7 @@ $(function(){
 			dataType: "json",
 			success : function(result){
 				if(result.length > 0) {
-					prcResDNum1 = result[result.length -1].prcResDNum1;
+					prcResDNum1 = result[result.length -1].prcResDNum;
 				}
 				console.log(result);
 				data = result;
@@ -116,6 +116,7 @@ $(function(){
 	      grid.refreshLayout();
 	   });
 	search.onclick = function() {
+		prcResDNum1 = null;
 		if($('#prcCode').val() == '') {
 			$.toast({ 
 				  text : "공정코드입력해주세요.", 
@@ -236,7 +237,7 @@ function getProcessResultSelect(key) {
 			{ header: '입고량', name:'prcComDVol'},
 			{ header: '작업량', name:'prcResVol',editor:"text"},
 			{ header: '불량량', name:'prcErrVol',editor:"text"},
-			{ header: '비고', name:'prcResltDNote'}
+			{ header: '비고', name:'prcResltDNote',editor:"text"}
 	    ]
 	});
 	grid3.on('dblclick', () => { 
@@ -269,7 +270,7 @@ function getProcessResultSelect(key) {
 				data = result;
 				$( 'input#prdComDDate' ).val(result[0]['prdComDDate']);
 				$( 'input#prdComNum' ).val(result[0]['prdComNum']);
-				$( 'input#prcName' ).val(result[0]['prcName']);
+				$( 'input#prcNameM' ).val(result[0]['prcName']);
 				$( 'input#prcWorkNum' ).val(result[0]['prcWorkNum']);
 				$( 'input#empName' ).val(result[0]['empName']);
 				$( 'input#empId' ).val(result[0]['empId']);
@@ -325,10 +326,26 @@ function getProcessResultSelect(key) {
 				});
 			return null;
 		}
+		if($('input#prcStrTime').val() == "") {
+			//토스트메시지 
+			$.toast({ 
+				  text : "시작되지 않은 작업", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
 		let gridData = grid4.getModifiedRows({});
 		gridData["processResultVO"] ={
 										macCode : $('input#macCode').val(),
 										empId : $('input#empId').val()
+										
 										}
 		console.log(gridData);
 			$.ajax({
@@ -538,7 +555,7 @@ function getProcessResultSelect(key) {
 				dataType: "json",
 				success : function(result){
 					if(result.length > 0) {
-						macCode1 = result[result.length -1].macCode1;
+						macCode1 = result[result.length -1].macCode;
 					}
 					console.log(result);
 					data = result;
@@ -611,6 +628,7 @@ function getProcessResultSelect(key) {
 					
 					}
 				});
+			grid.resetData(getProcessResulList());
 			grid3.resetData(getProduceSelect(prdComDNum,prcCode));
 			grid4.resetData(setProduceSelect(prcResDNum));
 			
@@ -654,7 +672,7 @@ function getProcessResultSelect(key) {
 								<!-- 타이틀 -->
 								<div id="title" class="card-header">
 									<ul>
-										공정코드<input type="text" id="prcCode" name ="prcCode" readonly="readonly"/>
+										공정코드<input type="text" id="prcCode" name ="prcCode" />
 										<%@ include file="/WEB-INF/jsp/mes/common/modal/ProcessList.jsp" %>
 									</ul>
 									<ul>
@@ -662,7 +680,7 @@ function getProcessResultSelect(key) {
 									</ul>
 									<ul>
 										<div align="right">
-											<button type ="button" id ="search" name = "search">검색</button>
+											<button type ="button" class="btn btn-info btn-sm" id ="search" name = "search">검색</button>
 										</div>
 									</ul>
 								</div>
@@ -762,7 +780,7 @@ function getProcessResultSelect(key) {
 									<th>작업일자</th>
 									<td><input id = "prdComDDate" namd = "prdComDDate"/></td>
 									<th>공정명</th>
-									<td><input id = "prcName" namd = "prcName" readonly="readonly"/></td>
+									<td><input id = "prcNameM" namd = "prcNameM" readonly="readonly"/></td>
 									<th>작업자</th>
 									<td><input id = "empName" namd = "empName" /><%@ include file="/WEB-INF/jsp/mes/common/modal/EmployeesList.jsp" %></td>									
 								   <input type="hidden" id="empId" name = "empId"/>
@@ -772,8 +790,8 @@ function getProcessResultSelect(key) {
 								<tr >
 									<th>지시번호</th>
 									<td><input id = "prdComNum" namd = "prdComNum" readonly="readonly"/></td>
-									<th>작업번호</th>
-									<td><input id = "prcWorkNum" namd = "prcWorkNum" readonly="readonly"/></td>
+									<td></td>
+									<td></td>
 									<th>설비</th>
 									<td><input id = "macName" namd = "macName" />
 									<button type="button" class="btn btn-info btn-sm" id="searchMacBtn"
@@ -799,15 +817,15 @@ function getProcessResultSelect(key) {
 						</div>
 					<br />
 					<div align="right">
-					<button class="btn" id="save">저장</a>
-					<button class="btn" id="dataReset">작업초기화</a>
+					<button class="btn btn-info btn-sm" id="save" >저장</a>
+					<button class="btn btn-info btn-sm" id="dataReset">작업초기화</a>
 					</div>
 						
 						<div id="grid4"></div>
 				
 				</div>
 				<div class="modal-footer">
-					<button class="btn" type="button" data-dismiss="modal">닫기</button>
+					<button class="btn btn-info btn-sm" type="button" data-dismiss="modal">닫기</button>
 				</div>
 			</div>
 		</div>

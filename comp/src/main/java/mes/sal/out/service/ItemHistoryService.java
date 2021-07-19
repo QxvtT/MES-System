@@ -76,7 +76,6 @@ public interface ItemHistoryService {
 	 */
     int selectItemHistoryListTotCnt(ItemHistoryDefaultVO searchVO);
     String getCount(ItemHistoryVO searchVO);
-    int setOrdCheck(ItemHistoryVO searchVO) throws Exception;
     
 }
 
