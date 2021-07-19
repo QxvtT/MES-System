@@ -47,7 +47,7 @@ let prcEndTime = null;
 let prcStrTime = null;
 let macCode1 = null;
 
-
+let prcResNo = 0;
 let prcBefState = null;
 
 $(function(){
@@ -287,42 +287,14 @@ function getProcessResultSelect(key) {
 				prcStrTime =result[0]['prcStrTime'];
 				prcEndTime =result[0]['prcEndTime'];
 				prcBefState =result[0]['prcBefState'];
+				prcResNo = result[0]['prcResNo'];
 				
 			} // end success
 		}); // end ajax 
 		return data;
 	}
 	save.onclick= function() {
-		if($('input#empId').val() == '') {
-			//토스트메시지 
-			$.toast({ 
-				  text : "작업자를 입력해주세요.", 
-				  showHideTransition : 'slide',
-				  bgColor : 'red',
-				  textColor : 'white',
-				  allowToastClose : false,
-				  hideAfter : 2000,
-				  stack : 1,
-				  textAlign : 'center',
-				  position : 'top-center'
-				});
-			return null;
-		}
-		if($('input#macCode').val() == '') {
-			//토스트메시지 
-			$.toast({ 
-				  text : "설비를 입력해주세요.", 
-				  showHideTransition : 'slide',
-				  bgColor : 'red',
-				  textColor : 'white',
-				  allowToastClose : false,
-				  hideAfter : 2000,
-				  stack : 1,
-				  textAlign : 'center',
-				  position : 'top-center'
-				});
-			return null;
-		}
+		
 		if($('input#empId').val() != empId && empId !=null) {
 			//토스트메시지 
 			$.toast({ 
@@ -392,7 +364,7 @@ function getProcessResultSelect(key) {
 				});
 			return null;
 		}
-		if(prcBefState != "완료") {
+		if(prcBefState != "완료" && prcResNo > 1) {
 			//토스트메시지 
 			$.toast({ 
 				  text : "이전공정이 완료되지 않았습니다", 
@@ -453,6 +425,36 @@ function getProcessResultSelect(key) {
 	}
 		
 	prcStr.onclick = function() {
+		if($('input#empId').val() == '') {
+			//토스트메시지 
+			$.toast({ 
+				  text : "작업자를 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		if($('input#macCode').val() == '') {
+			//토스트메시지 
+			$.toast({ 
+				  text : "설비를 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
 		if(prcStrTime != null) {
 			//토스트메시지 
 			$.toast({ 
@@ -658,8 +660,11 @@ function getProcessResultSelect(key) {
 									<ul>
 										공정이름<input type="text" id="prcName" name ="prcName" readonly="readonly"/>
 									</ul>
-									
-										<button type ="button" id ="search" name = "search">검색</button>
+									<ul>
+										<div align="right">
+											<button type ="button" id ="search" name = "search">검색</button>
+										</div>
+									</ul>
 								</div>
 
 								<!-- // 타이틀 -->

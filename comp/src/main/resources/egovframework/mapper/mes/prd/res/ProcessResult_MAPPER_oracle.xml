@@ -33,14 +33,10 @@
 			v_mov_num process_result.mov_num%type;
 			v_mov_num_v process_result.mov_num%type;
 			v_prc_state process_result_d.prc_state%type;
-			v_count number :=0;
-            v_total_res_vol process_result_d.prc_res_vol%type;
-            v_prd_com_vol produce_command_d.prd_com_vol%type;
-            v_remake produce_command_d.prd_com_div%type;
-            v_remake_vol produce_command_d.prd_com_div%type;
+            v_res_vol process_result_d.prc_res_vol%type;
             v_prd_com_d_num produce_command_d.prd_com_d_num%type;
-            v_count_remake number :=0;
-            v_total_re_res_vol number;
+            v_total_res_vol process_result_d.prc_res_vol%type :=0;
+            v_count number :=0;
 			begin
 			
 				update process_result_d
@@ -63,9 +59,8 @@
 			    select count(*) 
 			    into v_num
 			    from process_result
-			    where prd_com_d_num =(
-			                        select prd_com_d_num from process_result
-			                        where mov_num = v_mov_num_v); 
+			    where prd_com_d_num = v_prd_com_d_num; 
+                
 			    for i in 1..v_num loop
 	        
 			        select mov_num
@@ -77,7 +72,7 @@
 			        where a.rnum =i;
 	        
 			        select prc_state,prc_res_vol
-			        into v_prc_state,v_total_res_vol
+			        into v_prc_state,v_res_vol
 			        from process_result_d
 			        where prc_res_no =(
 			                            select max(prc_res_no) 
@@ -85,74 +80,32 @@
 			                            where mov_num = v_mov_num) 
 			        and mov_num = v_mov_num;
 	        
+	        
 				    if v_prc_state = '완료' then
 				    
-                        update process_result
-                        set prc_bck_vol = v_total_res_vol
-                        where mov_num =v_mov_num;
-
+                   		v_total_res_vol := v_total_res_vol + v_res_vol;
+                   
+                   		v_count := v_count+1;
+                   		
 				    end if;
 				    
-	    		end loop;	
-	    		
-	    		 select sum(prc_bck_vol)
-                 into v_total_res_vol
-			     from process_result
-			     where prd_com_d_num = v_prd_com_d_num
-			     group by prd_com_d_num;
-			     
-			     select prd_com_vol, prd_com_div
-			     into v_prd_com_vol, v_remake
-			     from produce_command_d
-			     where prd_com_d_num = v_prd_com_d_num;
-			    
-			    if v_remake ='정상' then
-			    
-	                if v_prd_com_vol = v_total_res_vol then
-	                
-	                	update produce_command_d
-	                	set prc_com_y = 'Y'
-	                	where prd_com_d_num = v_prd_com_d_num;
-				    end if;  
-				   
-				else
-				
-					select count(*)
-					into v_count_remake
-					from produce_command_d
-					where prd_remake = v_prd_com_d_num;
-					
-					
-			         select sum(prc_bck_vol) 
-			         into v_total_re_res_vol
-			         from process_result
-			         where prd_com_d_num in (select prd_com_d_num
-			                                from produce_command_d
-			                                 where prd_remake = v_prd_com_d_num);
-					
-					 if v_prd_com_vol = v_total_re_res_vol then
-					 
-
-			         	update produce_command_d
-	                	set prc_com_y = 'Y'
-	                	where prd_com_d_num = v_prd_com_d_num;
-				                               
-				                               
-				        update produce_command_d
-	                	set prc_com_y = 'Y'
-	                	where prd_remake = v_prd_com_d_num;
-			         
-			         
-			         
-			         end if;
-				   			
-				
-
+	    		end loop;
+	    			
+	    		update process_result 
+                set prc_bck_vol = v_total_res_vol
+                where mov_num =v_mov_num;
+                   
+                if v_num = v_count then
+                	update produce_command_d
+                	set prc_com_y = 'Y'
+                	where prd_com_d_num = (select prd_com_d_num
+                	                        from process_result 
+                	                        where mov_num = v_mov_num);
+                	
+                     
                 end if;
-                
-                
-	    
-			
+                        
+	    		 
     
 		end;
         
@@ -172,6 +125,15 @@
 
 	</update>
 	<update id ="dataReset">
+	declare
+	v_res_no = process_result_d.prc_res_no%type;
+	v_mov_num = process_result_d.mov_num%type;
+	begin
+		select prc_res_no, mov_num
+		into v_res_no, v_mov_num
+		from process_result_d
+		where prc_res_d_num = #{prcResDNum}; 
+	
 		update process_result_d
 		set prc_str_time = null,
 		    mac_code = null,
@@ -179,10 +141,13 @@
 		    prc_res_vol = 0,
 		    prc_err_vol = 0,
 		    prc_result_d_note = null
-		    
-		    
-		    
 		where prc_res_d_num = #{prcResDNum}
+		
+		update process_result_d
+		set prc_com_d_vol = 0
+		where prc_res_no = v_res_no+1
+		and mov_num = v_mov_num;
+	end;	
 
 	</update>
 
