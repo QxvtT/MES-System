@@ -1,5 +1,7 @@
 package mes.prd.mon.web;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -25,8 +27,12 @@ public class MonitorController {
     	return "prd/mon/Monitor.page";
     }
     
-    @RequestMapping(value = "/MonitorDisplay.do")
-    public String selectMonitorList(MonitorVO vo, ModelMap model) throws Exception{
-    	return "/mes/prd/mon/MonitorDisplay";
-    }
+//    @RequestMapping(value = "/MonitorDisplay.do")
+//    public String selectMonitorList(MonitorVO vo, ModelMap model) throws Exception{
+//    	List<?> list = monitorService.selectMonitorList(vo);
+//    	model.addAttribute("list", list);
+//    	return "/mes/prd/mon/MonitorDisplay";
+//    }
+    
+    
 }
