@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="mes.prd.mon.service.impl.MonitorMapper">
+	
+	<!-- 생산모니터링 -->
+	<select id="selectMonitor"
+		parameterType="mes.prd.mon.service.MonitorVO"
+		resultType="mes.prd.mon.service.MonitorVO">
+		SELECT
+		     (SELECT MAC_NAME FROM MACHINE WHERE PRD.MAC_CODE = MAC_CODE) MAC_NAME
+		    ,(SELECT PRC_NAME FROM PROCESS WHERE PRD.PRC_CODE = PRC_CODE) PRC_NAME
+		    ,(SELECT ITM_NAME FROM ITEM WHERE PR.ITM_CODE = ITM_CODE) ITM_NAME
+		    , PRD.PRC_COM_D_VOL
+		    , PRD.PRC_RES_VOL
+		    , PRD.PRC_ERR_VOL
+		FROM 
+		PROCESS_RESULT_D PRD, PROCESS_RESULT PR
+		WHERE PRD.MOV_NUM = PR.MOV_NUM
+		AND PRC_STATE = '진행'
+		AND PRC_STR_TIME ^= NULL
+		AND PRC_END_TIME = NULL
+	</select>
+</mapper>

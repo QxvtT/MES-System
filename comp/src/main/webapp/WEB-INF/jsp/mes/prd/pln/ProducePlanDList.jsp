@@ -422,7 +422,10 @@ $(function(){
 		// 조회된 리스트에서 체크된 생산계획을 디테일테이블에 뿌려줌
 		$('#loadBtn').click(function() {
 			prdNum = grid2.getValue(rows, 'prdNum');
-			grid.resetData(getList());
+			if(prdNum != null){
+				$('#searchModal').modal("hide");
+				grid.resetData(getList());
+			}
 		})
 	});
 	
@@ -629,9 +632,9 @@ $(function(){
 
 </script>
 <style>
-	.modal-content {
-		padding: 5px;
-	}
+.modal-content {
+	padding: 5px;
+}
 
 </style>
 </head>
@@ -658,13 +661,12 @@ $(function(){
 		</div>
 	</div>
 
-	
+
 
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
 		<br />
 		<div class="main-body">
-			<div class="page-wrapper">
 				<div class="text-right">
 					<button type="button" class="btn btn-primary" id="searchBtn">조회</button>
 					<button type="button" class="btn btn-primary" id="resetBtn">새자료</button>
@@ -674,61 +676,68 @@ $(function(){
 				<br />
 				<form action="" id="master" name="master">
 					<div class="row">
-						<div class="col">
+						<div class="col-md-6">
 							<table class="table" style="background-color: white;">
 								<tr>
 									<th>계획일자*</th>
 									<td>
 										<div
 											class="tui-datepicker-input tui-datetime-input tui-has-focus">
-											<input type="text" id="prdDate" name="prdDate" 
-												aria-label="Date-Time"/> <span class="tui-ico-date"></span>
+											<input class="form-control" type="text" id="prdDate" name="prdDate"
+												aria-label="Date-Time" /> <span class="tui-ico-date"></span>
 										</div>
 										<div id="wrapper" style="margin-top: -1px;"></div>
 									</td>
 								</tr>
 								<tr>
 									<th>생산계획명*</th>
-									<td><input type="text" id="prdName" /></td>
+									<td><input class="form-control" type="text" id="prdName" /></td>
 								</tr>
 								<tr>
 									<th>특기사항</th>
-									<td><input type="text" id="prdNote" /></td>
+									<td><input class="form-control" type="text" id="prdNote" /></td>
 								</tr>
 							</table>
 						</div>
-						<div class="col border"
-							style="background-color: white; padding: 10px;">
-							<h5>미생산 계획 검색</h5>
-							<div>주문 접수 일자</div>
-							<div class="row">
-								<div
-									class="tui-datepicker-input tui-datetime-input tui-has-focus">
-									<input id="unpStartDate" name="unpStartDate" type="text"
-										aria-label="Date" /> <span class="tui-ico-date"></span>
-									<div id="unpStartDate-container" style="margin-left: -1px;"></div>
-								</div>
-								<span>~</span>
-								<div
-									class="tui-datepicker-input tui-datetime-input tui-has-focus">
-									<input id="unpEndDate" name="unpEndDate" type="text"
-										aria-label="Date" /> <span class="tui-ico-date"></span>
-									<div id="unpEndDate-container" style="margin-left: -1px;"></div>
-								</div>
-								<div class="col">
-									<button type="button" id="unPrdSearchBtn" class="btn btn-primary btn-sm">미생산 계획
-										조회</button>
-								</div>
-							</div>
+						<div class="col-md-6">
+							<table class="table" style="background-color: white;">
+								<tr>
+									<td>
+										<h5>미생산 계획 검색</h5>
+										<div>주문 접수 일자</div>
+									</td>
+								</tr>
+								<tr>
+									<td><div
+											class="tui-datepicker-input tui-datetime-input tui-has-focus">
+											<input class="form-control" id="unpStartDate"
+												name="unpStartDate" type="text" aria-label="Date" /> <span
+												class="tui-ico-date"></span>
+											<div id="unpStartDate-container" style="margin-left: -1px;"></div>
+										</div></td>
+										<td><span>~</span></td>
+									<td><div
+											class="tui-datepicker-input tui-datetime-input tui-has-focus">
+											<input class="form-control" id="unpEndDate" name="unpEndDate"
+												type="text" aria-label="Date" /> <span class="tui-ico-date"></span>
+											<div id="unpEndDate-container" style="margin-left: -1px;"></div>
+										</div></td>
+									<td>
+										<button type="button" id="unPrdSearchBtn"
+											class="btn btn-primary btn-sm">불러오기</button>
+									</td>
+								</tr>
+							</table>
 						</div>
 					</div>
 				</form>
 			</div>
-			<div class="page-wrapper">
-			<div class="text-right">
+				<div class="text-right">
 					<button type="button" class="btn btn-primary btn-sm" id="addRowBtn">추가</button>
-					<button type="button" class="btn btn-primary btn-sm" id="deleteRowBtn">삭제</button>
-				</div><br/>
+					<button type="button" class="btn btn-primary btn-sm"
+						id="deleteRowBtn">삭제</button>
+				</div>
+				<br />
 				<div class="row">
 					<div class="col-xl-12">
 						<div class="card">
@@ -737,8 +746,6 @@ $(function(){
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
 
 	<!-- 조회 Modal-->
 	<div class="modal fade" id="searchModal" tabindex="-1" role="dialog"
@@ -755,33 +762,34 @@ $(function(){
 				<div class="modal-body">
 					<form id="prdSearch" name="prdSearch" method="post"
 						action="/prd/pln/ProducePlanList" onsubmit="return false">
-						<div class="form-group row">
-							<div class="col-md-3">계획일자</div>
-							<div class="col">
-								<div
+						<table>
+						<tr><td><div class="col-md-3">계획일자</div></td></tr>
+							<tr>
+								<td><div
 									class="tui-datepicker-input tui-datetime-input tui-has-focus">
-									<input id="startDate" name="startDate" type="text"
+									<input class="form-control" id="startDate" name="startDate" type="text"
 										aria-label="Date" /> <span class="tui-ico-date"></span>
 									<div id="startDate-container" style="margin-left: -1px;"></div>
-								</div>
-								<span>~</span>
-								<div
+								</div></td>
+								<td><span>~</span></td>
+								<td><div
 									class="tui-datepicker-input tui-datetime-input tui-has-focus">
-									<input id="endDate" name="endDate" type="text"
+									<input class="form-control" id="endDate" name="endDate" type="text"
 										aria-label="Date" /> <span class="tui-ico-date"></span>
 									<div id="endDate-container" style="margin-left: -1px;"></div>
-								</div>
-							</div>
-							<div class="col-md-3">
+								</div></td>
+								<td><div class="col-md-3">
 								<button type="button" class="btn btn-primary btn-sm"
 									id="prdSearchBtn">검색</button>
-							</div>
-						</div>
+							</div></td>
+							</tr>
+						</table>
 					</form>
+					<br />
 					<div id="grid2"></div>
 				</div>
 				<div class="modal-footer">
-					<button class="btn" id="loadBtn" type="button" data-dismiss="modal">불러오기</button>
+					<button class="btn" id="loadBtn" type="button">불러오기</button>
 				</div>
 			</div>
 		</div>
@@ -802,7 +810,8 @@ $(function(){
 					<div id="grid3"></div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" id="itmCheckSearchBtn">확인</button>
+					<button type="button" class="btn btn-primary"
+						id="itmCheckSearchBtn">확인</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
 				</div>
 			</div>
