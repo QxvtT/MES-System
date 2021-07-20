@@ -25,8 +25,8 @@
 
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
-	let macName;
-	let macCode;
+	let macName = null;
+	let macCode= null;
 	let macCode1= null;
 	let data;
 	
@@ -70,7 +70,6 @@
 				url : "${pageContext.request.contextPath}/MachineList",
 				type : "get",
 				data : {
-					
 					macCode1 : macCode1
 				},
 				dataType : "json",
@@ -107,7 +106,7 @@
 		$('input#macLoadage').val(machine.getData()[key]['macLoadage']);
 		$('input#macStdTemp').val(machine.getData()[key]['macStdTemp']);
 		
-		
+		console.log(machine.getData()[key]['prcCode']);
 		
 		
 		 }); 
@@ -148,59 +147,43 @@
 					return null; 
 			 }
 			 
-				 
-			 let list = {macCode : $('input#macCode').val(),
-					 prcCode : $('input#prcCode').val(),
-					 macName : $('input#macName').val(),
-					 worker : $('input#empName').val(),
-					 use1 : $('select#use1').val(),
-					 macDiv : $('input#macDiv').val(),
-					 model : $('input#model').val(),
-					 proOper : $('input#proOper').val(),
-					 empName : $('input#empName').val(),
-					 use : $('input#use').val(),
-					 usingEnergy : $('input#usingEnergy').val(),
-					 buyDate : $('input#buyDate1').val(),
-					 buyPrice : $('input#buyPrice').val(),
-					 macLoadage : $('input#macLoadage').val(),
-					 macStdTemp : $('input#macStdTemp').val(),
-				
-					 
-					 
-			 };
+			 var form = new FormData(document.machineInfo);
+			 if($("#file1")[0].files[0] != undefined){
+				 form.append("file1", $("#file1")[0].files[0]);
+			 } else {
+				 form.append("file1", null);
+			 }
+			 console.log($("#file1")[0].files[0]);
+			 console.log($('#prcCode').val());
+			 for (var key of form.keys()) {
+
+				  console.log(key);
+
+				}
+
+			for (var value of form.values()) {
+
+				  console.log(value);
+
+			}
+	         jQuery.ajax({
+	             url : "${pageContext.request.contextPath}/mac/machine/machineInsert"
+	           , type : "POST"
+	           , enctype: 'multipart/form-data'
+	           , processData : false
+	           , contentType : false
+	           , data : form
+	           , success:function(success) {
+	               alert("성공하였습니다.");
+	               console.log(success);
+	           }
+	           ,error: function (jqXHR) 
+	           { 
+	               alert("이미 존재하는 설비코드 입니다."); 
+	           }
+	     });
 			 
-			 var form = new FormData();
-		        form.append( "file1", $("#file1")[0].files[0] );
-		        
-		         jQuery.ajax({
-		             url : "${pageContext.request.contextPath}/mac/machine/machineInsert"
-		           , type : "POST"
-		           , processData : false
-		           , contentType : false
-		           , data : form
-		           , success:function(success) {
-		               alert("성공하였습니다.");
-		               console.log(success);
-		           }
-		           ,error: function (jqXHR) 
-		           { 
-		               alert(jqXHR.responseText); 
-		           }
-		       });
-			 
-			 console.log(list);
-			 
-			 /* $.ajax({
-					async: false, 
-					url : "machineInsert",
-					type : "post",
-					data : JSON.stringify(list),
-					dataType: "json",
-					contentType:"application/json",
-					success : function(){
-						
-						}
-					}); */
+			
 			 //machine.resetData(getMachineMngList());
 			 
 		 }
@@ -230,13 +213,15 @@
 				 			usingEnergy : 	 $('input#usingEnergy').val(),
 				 			macLoadage :  $('input#macLoadage').val(),
 				 			macStdTemp :  $('input#macStdTemp').val()} ;
+				 list = JSON.stringify(list);
 				 $.ajax({
 						async: false, 
 						url : "machineUdate",
 						type : "post",
-						data : JSON.stringify(list),
+						data : list,
 						dataType: "json",
 						contentType:"application/json",
+						
 						success : function(){
 							
 							}
@@ -358,18 +343,14 @@
 								<div class="row col-xl-12">
 									<div class="d-inline-block col-xl-6">
 										<label for="file1"></label> <input type="file" id="file1"
-											name="file1">
-									</div>
-									<div class="d-inline-block text-right col-xl-6">
-										<button class="btn" id="btn_submit"
-											onclick="javascript:fn_submit()" style="">전송</button>
+											name="file1"/>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="col-xl-6">
-						<form>
+						<form id="machineInfo" name="machineInfo">
 							<div class="card">
 								<!-- 타이틀 -->
 								<div id="title" class="card-header">
@@ -393,8 +374,8 @@
 									<tr>
 										<th>공정코드 &nbsp; * <%@ include
 												file="/WEB-INF/jsp/mes/common/modal/ProcessList.jsp"%></th>
-										<td align="right"><input style="text-align: center"
-											class="form-control" type="hidden" id="prcCode"
+										<td align="right">공정코드<input style="text-align: center"
+											class="form-control" type="text" id="prcCode"
 											name="prcCode" /> <input style="text-align: center"
 											class="form-control" type="text" id="prcName" name="prcName" /></td>
 									</tr>
@@ -429,7 +410,7 @@
 										<th>사용 작업자 &nbsp;<%@ include
 												file="/WEB-INF/jsp/mes/common/modal/EmployeesList.jsp"%></th>
 										<td align="right"><input style="text-align: center"
-											class="form-control" type="text" id="empName" name="empName"></td>
+											class="form-control" type="text" id="empName" name="empName"/></td>
 									</tr>
 									<tr>
 										<th>용도</th>
@@ -514,29 +495,5 @@
     }
 </script>
 
-	<script>
-//파일 업로드
-function fn_submit(){
-        
-        var form = new FormData();
-        form.append( "file1", $("#file1")[0].files[0] );
-        
-         jQuery.ajax({
-             url : "${pageContext.request.contextPath}/result"
-           , type : "POST"
-           , processData : false
-           , contentType : false
-           , data : form
-           , success:function(success) {
-               alert("성공하였습니다.");
-               console.log(success);
-           }
-           ,error: function (jqXHR) 
-           { 
-               alert(jqXHR.responseText); 
-           }
-       });
-}
-</script>
 </body>
 </html>

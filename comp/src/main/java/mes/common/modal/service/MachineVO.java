@@ -72,4 +72,9 @@ public class MachineVO extends OperationDefaultVO {
 	// 스크롤용
 	private java.lang.String macCode1;
 
+	public void setImagePath(String saveFileName) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

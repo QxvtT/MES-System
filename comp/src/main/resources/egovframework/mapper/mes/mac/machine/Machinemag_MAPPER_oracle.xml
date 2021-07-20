@@ -6,9 +6,7 @@
 
 
 
-	<insert id="insertMachine">
-		<![CDATA[
-		
+	<insert id="insertMachine" parameterType="mes.mac.service.MachinemagVO" >
 		begin 		
 		INSERT INTO MACHINE 
 				( MAC_CODE
@@ -25,7 +23,8 @@
 				  , MAC_LOADAGE
 				  , MAC_STD_TEMP
 				  , image_path )
-			VALUES ( #{macCode}
+			VALUES ( 
+					#{macCode}
 				  , #{macName}
 				  , #{macDiv}
 				  , #{use1}
@@ -34,20 +33,15 @@
 				  , #{worker}
 				  , #{use}
 				  , #{usingEnergy}
-				  , to_date(#{buyDate}, 'yyyy-MM-dd')
+				  , to_date(#{buyDate1}, 'yyyy-MM-dd')
 				  , #{buyPrice}
 				  , #{macLoadage}
 				  , #{macStdTemp}
-				  , #{imagePath});
-				  
+				  , #{imagePath}
+				  );
 		insert into machine_process VALUES (#{macCode}, #{prcCode}, (select max(prc_mac_num)+1 from machine_process));
-		
 		end;
-		
-		
-			
-			
-		]]>
+
 	</insert>
 
 	<update id="updateMachine">
@@ -83,9 +77,8 @@
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 		SELECT
-		m.MAC_CODE
-		,
-		MAC_NAME
+		  m.MAC_CODE
+		, MAC_NAME
 		, MAC_DIV
 		, MAC_SIZE
 		, Worker
@@ -93,18 +86,16 @@
 		, PRO_OPER
 		, USE
 		, NOM_CAP
-		,
-		USING_ENERGY
+		, USING_ENERGY
 		, SAFETY
 		, MAC_PRO_DATE
 		, to_char(BUY_DATE, 'yyyy-MM-dd') as buy_date
 		, BUY_PRICE
 		, LINE_NUM
-		,
-		MAC_LOADAGE
-		, MAC_STD_TEMP,
-		prc_code
-
+		, MAC_LOADAGE
+		, MAC_STD_TEMP
+		, prc_code
+		, (select prc_name from process where p.prc_code = prc_code) prc_name
 		FROM MACHINE m ,machine_process p
 		where m.mac_code = p.mac_code
 		ORDER BY
