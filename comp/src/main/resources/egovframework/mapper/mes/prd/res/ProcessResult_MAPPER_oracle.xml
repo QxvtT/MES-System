@@ -121,6 +121,8 @@
 	<update id ="updatePrcStr">
 		update process_result_d
 		set prc_str_time = to_date(#{prcStrTime},'yyyy-MM-dd:HH24:mi:ss')
+		, emp_id = #{empId}
+		, mac_code= #{macCode}
 		where prc_res_d_num = #{prcResDNum}
 
 	</update>
@@ -400,11 +402,7 @@ SELECT * FROM (
 			from process_result_d
 			where mov_num = #{movNum};
 				
-			update process_result_d 
-			set emp_id = #{empId},
-				mac_code = #{macCode},
-				prc_work_num = #{prcWorkNum}
-			where prc_res_d_num = #{prcResDNum};
+		
 			
 			update machine
 			set worker = (select emp_name from employees where emp_id = #{empId})

@@ -42,6 +42,7 @@ $(function(){
 	    bodyHeight: 200,
 	    data: null,
 	    rowHeaders: ['rowNum'],
+	    bodyHeight:450,
 	    columns: [
 	    	{ header: '출고일자', name:'itmHisRdy'},
 	    	{ header: '업체명', name:'operName'},
@@ -101,6 +102,46 @@ $(function(){
 		let list=[];
 		grid.resetData(list);
 	}
+	
+	
+	$('#printItmHistoryBtn').click(function() {	
+		$("#grid").print({
+        	globalStyles: true,
+        	mediaPrint: false,
+        	stylesheet: null,
+        	noPrintSelector: ".no-print",
+        	iframe: true,
+        	append: null,
+        	prepend: null,
+        	manuallyCopyFormValues: true,
+        	deferred: $.Deferred(),
+        	timeout: 750,
+        	title: null,
+        	doctype: '<!doctype html>'
+		});
+	})
+	function info_print() {
+	var initBody = document.body.innerHTML;
+	window.onbeforeprint = function () {
+		document.body.innerHTML = document.getElementById("grid").innerHTML;
+	}
+	window.onafterprint = function () {
+		document.body.innerHTML = initBody;
+	}
+	window.print();
+}
+	
+	$('#excelItemHistoryBtn').click(function() {
+	ReportToExcelConverter();
+})
+function ReportToExcelConverter() { 
+	$("#grid").table2excel({ 
+		exclude: ".noExl", 
+		name: "Excel Document Name", 
+		filename: "ItemHistory" +'.xls', //확장자를 여기서 붙여줘야한다. fileext: ".xls", exclude_img: true, exclude_links: true, exclude_inputs: true 
+		}); 
+	};
+	
 })
 </script>
 </head>
@@ -131,12 +172,12 @@ $(function(){
 		날짜<input type="date" id="bDate" name = "bDate"/> ~ <input type="date" id="aDate" name = "aDate"/> <br>
 		업체코드 <input type="text" id="operCode" name = "operCode"/>
 		<%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>
-		<br/>
+		&nbsp;
 		업체명<input type ="text" id="operName" name = "operName" readonly="readonly"/>
 		<br/>
 		제품코드 <input type="text" id="itmCode" name = "itmCode"/>
 		<%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>
-		<br/>
+		&nbsp;
 		제품명<input type="text" id="itmName" name = "itmName"/>
 		<br/>
 		<button type="button" class="btn btn-info btn-sm" id="getItemHistory">검색</button>
@@ -154,6 +195,13 @@ $(function(){
 									<ul>
 										<li>List</li>
 									</ul>
+									<div align="right">
+										<ul>
+											<button class="btn btn-info btn-sm" type="button" id ="printItmHistoryBtn" name = "printItmHistoryBtn" >인쇄</button>
+											&nbsp;
+											<button class="btn btn-info btn-sm" type="button" id ="excelItemHistoryBtn" name = "excelItemHistoryBtn" >Excel</button>
+										</ul>
+									</div>
 								</div>
 								<div id="grid"></div>
 							</div>

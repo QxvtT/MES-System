@@ -28,6 +28,7 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     
     /** 전표번호*/
     private java.lang.String itmHisNum;
+    private java.lang.String itmHisNum1;
     /** 주문번호 */
     private java.lang.String ordNum;
     
@@ -51,6 +52,7 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
     private java.math.BigDecimal itmHisDNum;
     private java.math.BigDecimal itmHisDNum1;
     private java.math.BigDecimal itmHisDNum2;
+    
     private java.math.BigDecimal count;
     
     /** 제품코드-제품명 */
@@ -124,4 +126,5 @@ public class ItemHistoryVO extends ItemHistoryDefaultVO{
    
     
 }
+
 
