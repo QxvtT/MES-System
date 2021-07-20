@@ -81,7 +81,10 @@ $(function(){
  				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 			},
 			{ header: '미달량', name:'mshort',
-				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");},
+				validation: {
+			        max: 0.1
+			      }
 			},
 // 			{ header: '특기사항', name:''},
 	    ],
