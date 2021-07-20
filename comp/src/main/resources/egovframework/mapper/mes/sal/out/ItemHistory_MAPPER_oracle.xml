@@ -275,7 +275,7 @@
 							, od.ord_vol 
 							, od.ord_out_vol
 							, id.itm_vol
-							, (od.ord_vol- vol.volume) as itm_nout_vol 
+							, (od.ord_vol- ord_out_vol) as itm_nout_vol 
 							, its.itm_stock
 							, id.lot_num
 							, id.itm_price
@@ -289,21 +289,15 @@
 				      item,
 					  (select sum(itm_vol) as itm_stock, itm_code
                 		from item_stock
-                		group by itm_code) its,
-					  					(select sum(id.itm_vol) as volume, id.itm_code
-										     from item_history_d id, item_history i, order_d od
-											 where id.itm_his_num = i.itm_his_num
-                                             and od.ord_num = i.ord_num
-											 and od.ord_num = (select ord_num from item_history
-                                                                where itm_his_num = #{itmHisNum})
-										     group by id.itm_code) vol
-					
+                		group by itm_code) its
+					  					
 				where i.itm_his_num = id.itm_his_num and
 				i.ord_num = o.ord_num and
+				id.itm_code = item.itm_code and
 				i.ord_num = od.ord_num and
 				item.itm_code = its.itm_code and
-				item.itm_code = od.itm_code and
-				vol.itm_code = od.itm_code
+				item.itm_code = od.itm_code 
+
 				<if test="ordNum !=null and ordNum !=''">
 				and o.ord_num = #{ordNum}
 				</if>
@@ -326,7 +320,7 @@
 				
 				
 				ORDER BY
-				id.itm_his_d_num 
+				id.itm_his_d_num desc
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )
@@ -344,16 +338,17 @@
 					,o.oper_name
 					,item.itm_name
 					,i.itm_note
-					
-				from item_history i, order_m o, order_d d, item
+				from item_history i, order_m o, order_d d, item, item_history_d ihd
 				where
 						i.ord_num = o.ord_num and
 						o.ord_num = d.ord_num and
 						d.itm_code = item.itm_code and
-						d.ord_status = '진행'
-			<if test="itmHisDNum2 != null">
+						d.ord_status = '진행' and
+						i.itm_his_num = ihd.itm_his_num and
+                        ihd.itm_code = item.itm_code
+			<if test="itmHisNum1 != null and itmHisNum1 != ''">
 				<![CDATA[	
-					and i.itm_his_d_num < #{itmHisDNum2}
+					and i.itm_his_num < #{itmHisNum1}
 				]]>
 			</if>
 		<if
@@ -364,7 +359,7 @@
 	            			]]>
 		</if>
 		ORDER BY
-		i.itm_his_rdy desc
+		i.itm_his_num desc
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
 )

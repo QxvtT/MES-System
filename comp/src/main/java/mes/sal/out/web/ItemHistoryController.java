@@ -63,7 +63,7 @@ public class ItemHistoryController {
     
     
     
-    @RequestMapping(value="/ItemHistoryList", method=RequestMethod.GET)
+    @RequestMapping(value="/sal/out/ItemHistoryList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajax(ItemHistoryVO searchVO ) throws Exception {
     	if(searchVO.getOperCode() != null && searchVO.getOperCode() != "") {
@@ -78,7 +78,7 @@ public class ItemHistoryController {
         List<?> ItemHistoryList = itemHistoryService.selectItemHistoryList(searchVO);
         return ItemHistoryList;
     }
-    @RequestMapping(value="/ItemHistoryList.do")
+    @RequestMapping(value="/sal/out/ItemHistoryList.do")
     public String selectItemHistoryList(@ModelAttribute("searchVO") ItemHistoryDefaultVO searchVO, 
     		ModelMap model)
             throws Exception {
@@ -86,14 +86,14 @@ public class ItemHistoryController {
         return "sal/out/ItemHistoryList.page";
     }
     
-    @RequestMapping(value="/ItemHisNumList", method=RequestMethod.GET)
+    @RequestMapping(value="/sal/out/ItemHisNumList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ItemHisNumList(ItemHistoryVO searchVO ) throws Exception {
     	
         List<?> ItemHisNumList = itemHistoryService.itemHisNumList(searchVO);
         return ItemHisNumList;
     }
-    @RequestMapping(value="/ItemHistoryRegist")
+    @RequestMapping(value="/sal/out/ItemHistoryRegist")
     @ResponseBody
     public List<?> ItemHistoryRegist(ItemHistoryVO searchVO ) throws Exception {
     	
@@ -101,7 +101,7 @@ public class ItemHistoryController {
         return ItemHistoryRegist;
     }
     
-    @RequestMapping(value="/ItemHistoryUpdate")
+    @RequestMapping(value="/sal/out/ItemHistoryUpdate")
     @ResponseBody
   public void ItemHistoryUpdate(@RequestBody ItmOutGridDataVO gridData) throws Exception {
     	
@@ -109,7 +109,7 @@ public class ItemHistoryController {
   } 
     
     //제품코드검색
-    @RequestMapping(value="/setItemCode", method=RequestMethod.GET)
+    @RequestMapping(value="/sal/out/setItemCode", method=RequestMethod.GET)
     @ResponseBody
     public List<?> setItemCode(ItemHistoryVO searchVO ) throws Exception {
     	List<?> orderMList = itemHistoryService.setItemCode(searchVO);
@@ -117,7 +117,7 @@ public class ItemHistoryController {
        
     }
     
-    @RequestMapping(value="/setLotNum", method=RequestMethod.GET)
+    @RequestMapping(value="/sal/out/setLotNum", method=RequestMethod.GET)
     @ResponseBody
     public List<?> setLotNum(ItemHistoryVO searchVO ) throws Exception {
         List<?> orderMList = itemHistoryService.setLotNum(searchVO);
@@ -125,7 +125,7 @@ public class ItemHistoryController {
        
     }
     
-    @RequestMapping(value="/setOrdNum", method=RequestMethod.GET)
+    @RequestMapping(value="/sal/out/setOrdNum", method=RequestMethod.GET)
     @ResponseBody
     public List<?> setOrdNum(ItemHistoryVO searchVO ) throws Exception {
         List<?> orderMList = itemHistoryService.setOrdNum(searchVO);
@@ -133,7 +133,7 @@ public class ItemHistoryController {
        
     }
     
-    @RequestMapping(value="/getItmHisNum", method=RequestMethod.GET)
+    @RequestMapping(value="/sal/out/getItmHisNum", method=RequestMethod.GET)
     @ResponseBody
     public List<?> getItmHisNum(ItemHistoryVO searchVO ) throws Exception {
         List<?> orderMList = itemHistoryService.getItmHisNum(searchVO);
@@ -163,7 +163,7 @@ public class ItemHistoryController {
     
     
     
-    @RequestMapping("/addItemHistoryView.do")
+    @RequestMapping("/sal/out/addItemHistoryView.do")
     public String addItemHistoryView(
             @ModelAttribute("searchVO") ItemHistoryDefaultVO searchVO, Model model)
             throws Exception {
@@ -174,7 +174,7 @@ public class ItemHistoryController {
     
 
     
-    @RequestMapping("/updateItemHistoryView.do")
+    @RequestMapping("/sal/out/updateItemHistoryView.do")
     public String updateItemHistoryView(
             @RequestParam("itmHisNum") java.lang.String itmHisNum ,
             @ModelAttribute("searchVO") ItemHistoryDefaultVO searchVO, Model model)
@@ -186,7 +186,7 @@ public class ItemHistoryController {
         return "sal/out/ItemHistoryRegister.page";
     }
 
-    @RequestMapping("/selectItemHistory.do")
+    @RequestMapping("/sal/ord/selectItemHistory.do")
     public @ModelAttribute("itemHistoryVO")
     ItemHistoryVO selectItemHistory(
             ItemHistoryVO itemHistoryVO,
@@ -194,24 +194,24 @@ public class ItemHistoryController {
         return itemHistoryService.selectItemHistory(itemHistoryVO);
     }
 
-    @RequestMapping("/updateItemHistory.do")
+    @RequestMapping("/sal/ord/updateItemHistory.do")
     public String updateItemHistory(
             ItemHistoryVO itemHistoryVO,
             @ModelAttribute("searchVO") ItemHistoryDefaultVO searchVO, SessionStatus status)
             throws Exception {
         itemHistoryService.updateItemHistory(itemHistoryVO);
         status.setComplete();
-        return "forward:/ItemHistoryList.do";
+        return "forward:/sal/ord/ItemHistoryList.do";
     }
     
-    @RequestMapping("/deleteItemHistory.do")
+    @RequestMapping("/sal/ord/deleteItemHistory.do")
     public String deleteItemHistory(
             ItemHistoryVO itemHistoryVO,
             @ModelAttribute("searchVO") ItemHistoryDefaultVO searchVO, SessionStatus status)
             throws Exception {
         itemHistoryService.deleteItemHistory(itemHistoryVO);
         status.setComplete();
-        return "forward:/ItemHistoryList.do";
+        return "forward:/sal/ord/ItemHistoryList.do";
     }
 
 }

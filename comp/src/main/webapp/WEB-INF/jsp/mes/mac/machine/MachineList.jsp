@@ -152,6 +152,7 @@
 			 let list = {macCode : $('input#macCode').val(),
 					 prcCode : $('input#prcCode').val(),
 					 macName : $('input#macName').val(),
+					 worker : $('input#empName').val(),
 					 use1 : $('select#use1').val(),
 					 macDiv : $('input#macDiv').val(),
 					 model : $('input#model').val(),
@@ -159,7 +160,7 @@
 					 empName : $('input#empName').val(),
 					 use : $('input#use').val(),
 					 usingEnergy : $('input#usingEnergy').val(),
-					 buyDate1 : $('input#buyDate1').val(),
+					 buyDate : $('input#buyDate1').val(),
 					 buyPrice : $('input#buyPrice').val(),
 					 macLoadage : $('input#macLoadage').val(),
 					 macStdTemp : $('input#macStdTemp').val()

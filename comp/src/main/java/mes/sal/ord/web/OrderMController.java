@@ -53,7 +53,7 @@ public class OrderMController {
 	 * @exception Exception
 	 */
     //주문조회 페이지 리스트
-    @RequestMapping(value="/OrderMList", method=RequestMethod.GET)
+    @RequestMapping(value="/sal/ord/OrderMList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajax(OrderMVO searchVO ) throws Exception {
     	if(searchVO.getOperCode() != null && searchVO.getOperCode() != "") {
@@ -69,7 +69,7 @@ public class OrderMController {
         return orderMList;
     }
     //주문조회 페이지     
-    @RequestMapping(value="/OrderMList.do")
+    @RequestMapping(value="/sal/ord/OrderMList.do")
     public String OrderMList(@ModelAttribute("searchVO") OrderMDefaultVO searchVO, 
     		ModelMap model)
             throws Exception {
@@ -77,7 +77,7 @@ public class OrderMController {
 	}
     
   //주분번호 페이지 리스트
-    @RequestMapping(value="/OrderNumList", method=RequestMethod.GET)
+    @RequestMapping(value="/sal/ord/OrderNumList", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajaxmodal(OrderMVO searchVO ) throws Exception {
     	
@@ -85,7 +85,7 @@ public class OrderMController {
         return orderMList;
     }
     //주문번호      
-    @RequestMapping(value="/OrderNumList.do")
+    @RequestMapping(value="/sal/ord/OrderNumList.do")
     public String OrderNumList(@ModelAttribute("searchVO") OrderMDefaultVO searchVO, 
     		ModelMap model)
             throws Exception {
@@ -95,7 +95,7 @@ public class OrderMController {
     
   
     
-    @RequestMapping("/addOrderMView.do")
+    @RequestMapping("/sal/ord/addOrderMView.do")
     public String addOrderMView(
             @ModelAttribute("searchVO") OrderMDefaultVO searchVO, Model model)
             throws Exception {
@@ -103,17 +103,17 @@ public class OrderMController {
         return "sal/ord/OrderMRegister.page";
     }
     
-    @RequestMapping("/addOrderM.do")
+    @RequestMapping("/sal/ord/addOrderM.do")
     public String addOrderM(
             OrderMVO orderMVO,
             @ModelAttribute("searchVO") OrderMDefaultVO searchVO, SessionStatus status)
             throws Exception {
         orderMService.insertOrderM(orderMVO);
         status.setComplete();
-        return "redirect:/OrderMList.do";
+        return "redirect:/sal/ord/OrderMList.do";
     }
     
-    @RequestMapping("/updateOrderMView.do")
+    @RequestMapping("/sal/ord/updateOrderMView.do")
     public String updateOrderMView(
             @RequestParam("ordNum") java.lang.String ordNum ,
             @ModelAttribute("searchVO") OrderMDefaultVO searchVO, Model model)
@@ -125,7 +125,7 @@ public class OrderMController {
         return "sal/ord/OrderMRegister.page";
     }
 
-    @RequestMapping("/selectOrderM.do")
+    @RequestMapping("/sal/ord/selectOrderM.do")
     public @ModelAttribute("orderMVO")
     OrderMVO selectOrderM(
             OrderMVO orderMVO,
@@ -133,24 +133,24 @@ public class OrderMController {
         return orderMService.selectOrderM(orderMVO);
     }
 
-    @RequestMapping("/updateOrderM.do")
+    @RequestMapping("/sal/ord/updateOrderM.do")
     public String updateOrderM(
             OrderMVO orderMVO,
             @ModelAttribute("searchVO") OrderMDefaultVO searchVO, SessionStatus status)
             throws Exception {
         orderMService.updateOrderM(orderMVO);
         status.setComplete();
-        return "forward:/OrderMList.do";
+        return "forward:/sal/ord/OrderMList.do";
     }
     
-    @RequestMapping("/deleteOrderM.do")
+    @RequestMapping("/sal/ord/deleteOrderM.do")
     public String deleteOrderM(
             OrderMVO orderMVO,
             @ModelAttribute("searchVO") OrderMDefaultVO searchVO, SessionStatus status)
             throws Exception {
         orderMService.deleteOrderM(orderMVO);
         status.setComplete();
-        return "forward:/OrderMList.do";
+        return "forward:/sal/ord/OrderMList.do";
     }
 
 }

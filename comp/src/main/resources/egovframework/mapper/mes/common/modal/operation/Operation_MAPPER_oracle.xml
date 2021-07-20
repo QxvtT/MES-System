@@ -158,11 +158,8 @@
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 
-		select m.*, to_char(m.buy_date,'yyyy-MM-dd') as buy_date_1, p.prc_name,
-		a.prc_code
-		from MACHINE m ,process p, machine_process a
-		where p.prc_code = a.prc_code and
-		m.mac_code = a.mac_code
+		select m.*, to_char(m.buy_date,'yyyy-MM-dd') as buy_date_1
+		from machine m
 		<where>
 
 			<if test="macCode1 != null and macCode1 != ''">
@@ -187,10 +184,10 @@
 	<select id="selectEmployeesList"
 		parameterType="mes.common.modal.service.EmployeesVO"
 		resultType="mes.common.modal.service.EmployeesVO">
-
+		
 		SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
-
+		
 
 		select emp_id, emp_name, department, position
 		from employees
@@ -218,29 +215,32 @@
 
 
 
-	<select id="usableMachine"
+    <select id="usableMachine"
 		parameterType="mes.common.modal.service.MachineVO"
 		resultType="mes.common.modal.service.MachineVO">
 		SELECT * FROM (
-		SELECT A.*, ROWNUM RNUM FROM (
+			SELECT A.*, ROWNUM RNUM FROM (
 
-		select m.mac_code
-		, m.mac_name
-		from process_result_d prd
-		, machine_process mp
-		, machine m
-		where prd.prc_code = mp.prc_code
-		and prd.mac_code is null
-		and m.mac_code=mp.mac_code
-		and mp.mac_code not in(select mac_code from process_result_d where
-		prc_state = '진행' and prc_com_d_vol >0 and mac_code is not null)
-		and prc_res_d_num = #{prcResDNum}
-
-		order by mac_code
+				select  m.mac_code
+				      , m.mac_name
+				from process_result_d prd
+				     , machine_process mp
+				     , machine m
+				where prd.prc_code = mp.prc_code 
+				and prd.mac_code is null
+				and m.mac_code=mp.mac_code
+				and mp.mac_code not in(select mac_code from process_result_d where prc_str_time is not null and prc_end_time is null and mac_code is not null)
+				and prc_res_d_num = #{prcResDNum}
+				<if test="macCode1 != null and macCode1 != ''">
+							<![CDATA[	
+								and m.mac_code <  #{macCode1}
+							]]>
+			</if>
+				order by m.mac_code desc
 					<![CDATA[					
 				) A WHERE ROWNUM <= 10 )
 					]]>
 	</select>
-
-
+    
+    
 </mapper>

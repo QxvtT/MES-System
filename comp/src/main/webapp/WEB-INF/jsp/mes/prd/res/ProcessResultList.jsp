@@ -237,7 +237,7 @@ function getProcessResultSelect(key) {
 			{ header: '입고량', name:'prcComDVol'},
 			{ header: '작업량', name:'prcResVol',editor:"text"},
 			{ header: '불량량', name:'prcErrVol',editor:"text"},
-			{ header: '비고', name:'prcResltDNote',editor:"text"}
+			{ header: '비고', name:'prcResultDNote',editor:"text"}
 	    ]
 	});
 	grid3.on('dblclick', () => { 
@@ -330,6 +330,21 @@ function getProcessResultSelect(key) {
 			//토스트메시지 
 			$.toast({ 
 				  text : "시작되지 않은 작업", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		if(grid4.getData()[0]['prcComDVol'] < grid4.getData()[0]['prcResVol']+grid4.getData()[0]['prcErrVol'] ) {
+			//토스트메시지 
+			$.toast({ 
+				  text : "작업량확인하세요", 
 				  showHideTransition : 'slide',
 				  bgColor : 'red',
 				  textColor : 'white',
@@ -492,8 +507,12 @@ function getProcessResultSelect(key) {
 		let time = formatTime(dateTime);
 		let date = formatDate(dateDate);
 		 $("input#prcStrTime").val(time);
+		 let strMacCode = $('input#macCode').val();
+		 let strEmpId = $('input#empId').val();
 		let list = {prcStrTime : date
-					,prcResDNum : prcResDNum} ;
+					,prcResDNum : prcResDNum
+					, macCode : strMacCode
+					, empId : strEmpId} ;
 			
 		$.ajax({
 			async: false, 
