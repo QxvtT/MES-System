@@ -40,12 +40,18 @@ let matOrdNum = null;
 let matHisDateS = null;
 let matHisDateE = null;
 let matCode = null;
+let matCode3 = null;
+let matName = null;
 let operCode = null;
 let matOrdOper = null;
 let operCodes = null;
 let matHisDate = null;
 let sDate = null;
 let eDate = null;
+let matComNum = null;
+let matOrdNum1 = null;
+let nsDate = null;
+let neDate = null;
 
 $(function(){
 	
@@ -78,6 +84,24 @@ $(function(){
             date: nDate,
             input: '#nEndpicker-input',
             container: '#nEndpicker-container'
+        },
+        language: 'ko',
+        type: 'date',
+        format: 'yyyy-MM-dd'
+  
+    });
+    
+    let nmDate = new Date();
+    let nmpicker = tui.DatePicker.createRangePicker({
+        startpicker: {
+            date: nmDate,
+            input: '#nordStartpicker-input',
+            container: '#nordStartpicker-container'
+        },
+        endpicker: {
+            date: nmDate,
+            input: '#nordEndpicker-input',
+            container: '#nordEndpicker-container'
         },
         language: 'ko',
         type: 'date',
@@ -127,7 +151,8 @@ $(function(){
 	    	},
 			{ 
 	    		header: '발주번호', 
-	    		name:'matComNum'
+	    		name:'matComNum',
+	    		editor: "text"
 	    	},
 			{ 
 	    		header: '입고량', 
@@ -173,9 +198,9 @@ $(function(){
 	    		hidden: true
 	    	},
 	    	{ 
-	    		header: '발주일련', 
-	    		name:'matOrdNum',
-// 	    		hidden: true
+	    		header: '미입고량', 
+	    		name:'matNordVol',
+	    		hidden: false
 	    	}
 	    ],
 	    summary: {
@@ -191,57 +216,6 @@ $(function(){
 	        }
 	    }
 	}); // end const grid
-	
-	function getList() {
-		let data;
-		$.ajax({
-			async: false,
-			url : "MatInMng",
-			type : "get",
-			data : {
-				matHisNum: matHisNum,
-				matHisDNum1: matHisDNum1
-			},
-			dataType: "json",
-			success : function(result){
-				if(result.length > 0) {
-					matHisDNum1 = result[result.length -1].matHisDNum;
-				}
-				console.log(result);
-				data = result;
-			} // end success
-		}); // end ajax 
-		return data;
-	}
-	
-	
-	// 자재 미입고 자료 조회
-	function getNordList() {
-		let data;
-		$.ajax({
-			async: false,
-			url : "NordList",
-			type : "get",
-			data : {
-				matHisNum: matHisNum,
-				matOrdNum: matOrdNum,
-				matHisDNum1: matHisDNum1,
-				matComDateS: matComDateS,
-				matComDateE: matComDateE,
-				operName: operName
-			},
-			dataType: "json",
-			success : function(result){
-				if(result.length > 0) {
-					matHisDNum1 = result[result.length -1].matHisDNum;
-				}
-				console.log(result);
-				data = result;
-			} // end success
-		}); // end ajax 
-		return data;
-	}
-	// END 자재 미입고 자료 조회
 	
 	grid.on('scrollEnd', () => {
 	    grid.appendRows(getList());
@@ -280,7 +254,114 @@ $(function(){
 	    	}
 	    ]
 	}); // end const grid2
-
+	
+	const grid3 = new tui.Grid({
+	    el: document.getElementById('grid3'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    data: getNordListModal(),
+	    rowHeaders: [
+	    	{type:'rowNum'}
+	    ],
+	    columns: [
+	    	{ 
+	    		header: '발주일자', 
+	    		name:'matOrdDate'
+	    	},
+	    	{ 
+	    		header: '발주번호', 
+	    		name:'matComNum'
+	    	},
+			{ 
+	    		header: '발주일련', 
+	    		name:'matOrdNum',
+	    		hidden: true
+	    	},
+			{ 
+	    		header: '업체명', 
+	    		name:'matOrdOper'
+	    	},
+			{ 
+	    		header: '자재코드', 
+	    		name:'matCode'
+	    	},
+	    	{ 
+	    		header: '미입고 수량', 
+	    		name:'matNordVol'
+	    	}
+	    ]
+	}); // end const grid3
+	
+	// 자재 코드 리스트 그리드
+	const grid4 = new tui.Grid({
+	    el: document.getElementById('grid4'),
+	    scrollX: false,
+	    scrollY: true,
+	    bodyHeight: 200,
+	    rowWidth: 100,
+	    data: getMaterialList(),
+	    rowHeaders: ['rowNum','checkbox'],
+	    columns: [
+	    	{ header: '자재코드', name:'matCode'},
+			{ header: '자재명', name:'matName'},
+			{ header: '규격', name:'matSize'},
+			{ header: '업체명', name:'matName'}
+	    ]
+	}); // end const grid4
+	
+	// 자재 입고 관리 조회
+	function getList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "MatInMng",
+			type : "get",
+			data : {
+				matHisNum: matHisNum,
+				matHisDNum1: matHisDNum1
+			},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					matHisDNum1 = result[result.length -1].matHisDNum;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	
+	// 자재 미입고 자료 조회
+	function getNordList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "NordList",
+			type : "get",
+			data : {
+				matHisNum: matHisNum,
+				matOrdNum: matOrdNum,
+				matHisDNum1: matHisDNum1,
+				matComDateS: matComDateS,
+				matComDateE: matComDateE,
+				operName: operName
+			},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					matHisDNum1 = result[result.length -1].matHisDNum;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
+	// END 자재 미입고 자료 조회
+	
+	// 일 입고 자료 리스트 조회
 	function getMatInDayList() {
 		let data;
 		$.ajax({
@@ -303,6 +384,53 @@ $(function(){
 		}); // end ajax 
 		return data;
 	} 
+	
+	// 미입고 발주 번호 리스트 모달
+	function getNordListModal() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "NordListModal",
+			type : "get",
+			data : {
+				matOrdNum1: matOrdNum1,
+				matComNum: matComNum,
+				nsDate: nsDate,
+				neDate: neDate
+				},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					matOrdNum1 = result[result.length -1].matHisNum;
+				}
+				console.log(result);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	} 
+	
+	// 자재 코드 리스트 모달
+	function getMaterialList() {
+		let data;
+		$.ajax({
+			async: false,
+			url : "SelectMaterialList",
+			type : "get",
+			data : {
+					matCode3: matCode3
+					},
+			dataType: "json",
+			success : function(result){
+				if(result.length > 0) {
+					matCode3 = result[result.length -1].matCode;
+				}
+				console.log(matCodeM);
+				data = result;
+			} // end success
+		}); // end ajax 
+		return data;
+	}
 	
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
@@ -346,9 +474,10 @@ $(function(){
 		
 		if($('#operCode').val()==""){
 			alert('입고 업체를 넣어주세요.');
+		} else if ($('#matHisDVol').val() > $('#matNordVol').val()){
+			alert('미입고량보다 많이 입고 할 수 없습니다.');
 		} else {
-		
-		$.ajax({
+		/* $.ajax({
 			async: false,
 			url: "matHisMngUpdate",
 			type : "post",
@@ -361,7 +490,8 @@ $(function(){
 			}
 		});
 		console.log(matHisNum);
-		matHisDNum1 = null;
+		matHisDNum1 = null; */
+			alert('성공');
 		}
 		
 	}
@@ -425,6 +555,17 @@ $(function(){
 		grid2.resetData(getMatInDayList());
 	}
 	
+	nordSearch.onclick = function(){
+		matOrdNum1 = null;
+		
+		nsDate = $(".modal-body").find('input[name="nsDate"]').val();
+		console.log(nsDate)
+		neDate = $(".modal-body").find('input[name="neDate"]').val();
+		console.log(neDate)
+		
+		grid3.resetData(getNordListModal());
+	}
+	
 	// 그리드 행 추가
 	addRowBtn.onclick = function(){
 		grid.appendRow();
@@ -466,6 +607,148 @@ $(function(){
 		}
 	}
 	
+	// 특정 cell만 선택하기 위해 조건문에서 사용되는 함수
+	function getKeyByValue(object, value) {
+		return Object.keys(object).find(key => object[key] === value);
+	}
+	
+	// 선택한 발주번호 값만 받아오기
+	function selectComNumm(matComNum) {
+		let data;
+		$.ajax({
+			async: false,
+			cache: false,
+			url : "SelectComNumm",
+			type : "get",
+			data : {
+				matComNum : matComNum
+				},
+			dataType: "json",
+			success : function(result){
+				grid.setValue(rowKey, 'matComNum', result.matComNum);
+				data = result;
+			} // end success
+		}); // end ajax
+		return data;
+	}
+	
+	// 선택한 자재코드 값만 받아오기
+	function selectMatCodee(matCode) {
+		
+		let data;
+		$.ajax({
+			async: false,
+			cache: false,
+			url : "SelectMatCodee",
+			type : "get",
+			data : {
+				matCode : matCode
+				},
+			dataType: "json",
+			success : function(result){
+				grid.setValue(rowKey, 'matCode', result.matCode);
+				grid.setValue(rowKey, 'matName', result.matName);
+				grid.setValue(rowKey, 'matSize', result.matSize);
+				grid.setValue(rowKey, 'matUnit', result.matUnit);
+				data = result;
+			} // end success
+		}); // end ajax
+		console.log(matCode)
+		return data;
+	}
+	
+	// 발주번호 입력란 클릭 시 미입고 발주 번호 모달창 생성
+	grid.on('click', (e) => {
+		var selectComNum = grid.getFocusedCell();
+		if(getKeyByValue(selectComNum, "matComNum") != null){
+			$('#nordModal').modal('toggle');
+			$('#nordModal').on('shown.bs.modal', function(){
+				rowKey = e['rowKey'];
+				grid3.refreshLayout();
+			});
+		}
+	});
+	
+	// 자재코드 입력란 클릭 시 자재코드 리스트 모달창 생성
+	grid.on('click', (e) => {
+		var selectMatCode = grid.getFocusedCell();
+		if(getKeyByValue(selectMatCode, "matCode") != null){
+			$('#matModal').modal('toggle');
+			$('#matModal').on('shown.bs.modal', function(){
+				rowKey = e['rowKey'];
+				grid4.refreshLayout();
+			});
+		}
+	});
+	
+	// 미입고 발주 리스트 모달창 발주번호 클릭 시 디테일 테이블 로우 데이터 값 수정
+	grid3.on('click', (e) => {
+		var selectComNum = grid.getFocusedCell();
+		if(getKeyByValue(selectComNum, "matComNum") != null){
+			$('#nordModal').modal("hide");
+			let selectComNum = grid3.getFocusedCell();
+			matComNum = selectComNum.value;
+			grid.blur();
+			selectComNumm(matComNum);
+		}
+	});
+	
+	// 자재 코드 리스트 모달창 자재코드 클릭 시 디테일 테이블 로우 데이터 값 수정
+	grid4.on('click', (e) => {
+		var selectMatCodes = grid.getFocusedCell();
+		if(getKeyByValue(selectMatCodes, "matCode") != null){
+			$('#matModal').modal("hide");
+			selectRow = grid4.getRow(e.rowKey);
+			let selectMatCode = grid4.getFocusedCell();
+			matCode = selectMatCode.value;
+			grid.blur();
+			selectMatCodee(matCode);
+		}
+	});
+	
+	// 엑셀
+	function ReportToExcelConverter() { 
+		$("#grid").table2excel({ 
+			exclude: ".noExl", 
+			name: "Excel Document Name", 
+			filename: "report" +'.xls', //확장자를 여기서 붙여줘야한다. fileext: ".xls", exclude_img: true, exclude_links: true, exclude_inputs: true 
+			}); 
+		};
+
+	
+	$('#excelBtn').click(function() {
+		ReportToExcelConverter();
+	})
+	
+	// 프린트
+	function info_print() {
+		var initBody = document.body.innerHTML;
+		window.onbeforeprint = function () {
+			document.body.innerHTML = document.getElementById("grid").innerHTML;
+		}
+		window.onafterprint = function () {
+			document.body.innerHTML = initBody;
+		}
+		window.print();
+	}
+	
+	$('#printBtn').click(function() {	
+		$("#grid").print({
+        	globalStyles: true,
+        	mediaPrint: false,
+        	stylesheet: null,
+        	noPrintSelector: ".no-print",
+        	iframe: true,
+        	append: null,
+        	prepend: null,
+        	manuallyCopyFormValues: true,
+        	deferred: $.Deferred(),
+        	timeout: 750,
+        	title: null,
+        	doctype: '<!doctype html>'
+		});
+	})
+	
 })
 
 
@@ -486,15 +769,24 @@ $(function(){
 								<br />
 							</div>
 							<!-- // 타이틀 -->
-							<div class="text-right">
-								<button id="matInDayBtn" type="button"
-									class="btn btn-info btn-sm">조회</button>
-								<input id="resetBtn" class="btn btn-info btn-sm" type="reset"
-									value="리셋"></input>
-								<button type="button" id="matInSaveBtn" name="matInSaveBtn"
-									class="btn btn-info btn-sm">저장</button>
-								<button type="button" id="matInDeleteBtn" name="matInDeleteBtn"
-									class="btn btn-info btn-sm">삭제</button>
+							<div>
+								<div class="text-left">
+									<button type="button" class="btn btn-primary btn-sm"
+										id="excelBtn">Excel</button>
+									<button type="button" class="btn btn-primary btn-sm"
+										id="printBtn">인쇄</button>
+								</div>
+								<div class="text-right">
+									<button id="matInDayBtn" type="button"
+										class="btn btn-info btn-sm">조회</button>
+									<input id="resetBtn" class="btn btn-info btn-sm" type="reset"
+										value="리셋"></input>
+									<button type="button" id="matInSaveBtn" name="matInSaveBtn"
+										class="btn btn-info btn-sm">저장</button>
+									<button type="button" id="matInDeleteBtn" name="matInDeleteBtn"
+										class="btn btn-info btn-sm">삭제</button>
+								</div>
+
 							</div>
 							<div class="row">
 								<div class="col-md-6">
@@ -598,6 +890,78 @@ $(function(){
 		</div>
 	</form:form>
 
+	<!-- 자재 코드 리스트 -->
+	<div class="modal fade" id="matModal" tabindex="-1" role="dialog"
+		aria-labelledby="matModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="matModalLabel" align="center">자재검색</h3>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div style="padding: 10px 10px 10px 10px">
+					<h4>자재코드</h4>
+					<input type="text" id="matCodeM" name="matCode"></input><br><br>
+							<button type="button" id="buttonMat" class="btn" name="button">조회</button>
+							&nbsp;
+							<button type="reset" class="btn">리셋</button>
+				</div>
+				<div class="form-group row"></div>
+				<div id="grid4"></div>
+				<div class="modal-footer">
+					<button class="btn" type="reset" data-dismiss="modal">취소</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 미입고 발주 리스트 모달 -->
+	<div class="modal fade" id="nordModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="nordModalLabel">미입고 발주 조회</h3>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<div>
+						<div class="d-inline-block align-middle">발주 일자 *</div>
+						<div
+							class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+							<input type="text" id="nordStartpicker-input"
+								class=" form-control w-25" aria-label="Date-Time" name="nsDate" />
+							<span class="tui-ico-date"></span>
+							<div id="nordStartpicker-container" style="margin-left: -1px;"></div>
+						</div>
+						<div id="date2" style="margin-top: -1px;"></div>
+						<div
+							class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+							<input type="text" id="nordEndpicker-input"
+								class=" form-control w-25" aria-label="Date-Time" name="neDate" />
+							<span class="tui-ico-date"></span>
+							<div id="nordEndpicker-container" style="margin-left: -1px;"></div>
+						</div>
+						<div id="date3" style="margin-top: -1px;"></div>
+						<div>
+							<input type="button" id="nordSearch" name="nordSearch" value="검색"></input>
+						</div>
+					</div>
+					<div id='grid3'></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- 일 입고 자료 리스트 -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -643,5 +1007,6 @@ $(function(){
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>

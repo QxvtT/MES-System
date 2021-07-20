@@ -64,12 +64,18 @@ $(function(){
 	    		//editor: {type: 'datePicker', options: {language: 'ko'}}
 	    	},
 	    	{ header: '자재코드', name:'matCode'},
-			{ header: '자재명', name:'matName'},
+			{ header: '자재명', name:'matName',
+	    		sortable: true,
+	    	    sortingType: 'asc'},
 			{ header: '규격', name:'matSize'},
-			{ header: '업체명', name:'matOrdOper'},
+			{ header: '업체명', name:'matOrdOper',
+				sortable: true,
+			    sortingType: 'asc'},
 			{ header: '발주번호', name:'matComNum'},
 			{ header: '입고량', name:'matHisDVol',
-				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");},
+				sortable: true,
+			    sortingType: 'asc'
 			},
 			{ header: '단가', name:'matHisPrice',
 				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
@@ -97,7 +103,10 @@ $(function(){
 	            }
 	          }
 	        }
-	    }
+	    },
+      columnOptions: {
+          resizable: true
+        }
 	}); // end const grid
 	
 	grid.on('scrollEnd', () => {

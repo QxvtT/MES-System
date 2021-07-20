@@ -29,6 +29,7 @@ import mes.mat.in.service.MaterialHistoryService;
 import mes.mat.in.service.MaterialHistoryVO;
 import mes.mat.stc.service.MaterialDefaultVO;
 import mes.mat.stc.service.MaterialStockVO;
+import mes.prd.pln.service.ProducePlanDVO;
 
 /**
  * @Class Name : MaterialHistoryController.java
@@ -103,7 +104,43 @@ public class MaterialHistoryController {
     	System.out.println(nordList);
     	return nordList;
     }
-    // end 일 입고 자료 리스트 조회
+    // end 미입고 자료 리스트 조회
+    
+    // 미입고 발주 LIST 모달
+    @RequestMapping(value="/mat/in/NordListModal", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> ajaxNordListModal(@ModelAttribute("NordVO") MaterialHistoryVO NordVO) throws Exception{
+    	List<?> nordListModal = materialHistoryService.nordListModal(NordVO);
+    	System.out.println(nordListModal);
+    	return nordListModal;
+    }
+    // end 미입고 발주 LIST 모달
+    
+    // 자재 코드 리스트 모달
+    @RequestMapping(value="/mat/in/SelectMaterialList", method = RequestMethod.GET)
+    @ResponseBody
+    public List<?> ajaxSelectMaterialList(@ModelAttribute("matVO") MaterialHistoryVO matVO) throws Exception{
+    	List<?> matListModal = materialHistoryService.selectMaterialList(matVO);
+    	System.out.println(matListModal);
+    	return matListModal;
+    }
+    // end 자재 코드 리스트 모달
+    
+    // 발주번호 선택
+ 	@RequestMapping(value = "/mat/in/SelectComNumm")
+ 	@ResponseBody
+ 	public MaterialHistoryVO SelectComNumm(@ModelAttribute("NordVO") MaterialHistoryVO NordVO) throws Exception {
+ 		return materialHistoryService.selectComNumm(NordVO);
+ 	}
+ 	// END 발주 번호 선택
+ 	
+ 	// 자재 코드 선택
+  	@RequestMapping(value = "/mat/in/SelectMatCodee")
+  	@ResponseBody
+  	public MaterialHistoryVO selectmatCodee(@ModelAttribute("matVO") MaterialHistoryVO matVO) throws Exception {
+  		return materialHistoryService.selectMatCodee(matVO);
+  	}
+  	// END 자재 코드 선택
 
     // 자재 입고 관리 CRUD
     @RequestMapping(value="/mat/in/matHisMngUpdate")

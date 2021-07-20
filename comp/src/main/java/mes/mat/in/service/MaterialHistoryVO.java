@@ -23,6 +23,10 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     
     /** matInDayList, matOutDayList 스크롤용 **/
     private java.lang.String matHisNum1;
+    private java.lang.String matOrdNum1;
+    
+    /** 자재 코드 리스트 스크롤용 **/
+    private java.lang.String matCode3;
     
     /** main grid 스크롤용 */
     private java.math.BigDecimal matHisDNum1;
@@ -31,6 +35,9 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     /** 작업일자 검색 **/
     private java.lang.String matHisDateS;
     private java.lang.String matHisDateE;
+    
+    private java.lang.String nsDate;
+    private java.lang.String neDate;
     
     /* 발주 일자 검색 */
     private java.lang.String matComDateS;
@@ -173,7 +180,7 @@ public class MaterialHistoryVO extends MaterialDefaultVO{
     private java.math.BigDecimal matOrdNum;
     
     /** MAT_ORD_DATE */
-    private java.sql.Date matOrdDate;
+    private java.lang.String matOrdDate;
     
     /** MAT_ORD_OPER */
     private java.lang.String matOrdOper;

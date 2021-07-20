@@ -46,7 +46,11 @@ public interface MaterialHistoryMapper {
     
     public List<?> nordList(MaterialHistoryVO searchVO) throws Exception; // 미입고 자료 리스트 조회
     
+    public List<?> nordListModal(MaterialHistoryVO searchVO) throws Exception; // 미입고 발주 리스트 모달 조회
+    
     public List<?> matOutDayList(MaterialHistoryVO searchVO) throws Exception; // 일 출고 자료 리스트 조회
+    
+    public List<?> selectMaterialList(MaterialHistoryVO searchVO) throws Exception; // 미입고 발주 리스트 모달 조회
     
     public void insertMatInMng(MaterialHistoryVO vo) throws Exception;
     public void insertMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 등록
@@ -60,6 +64,10 @@ public interface MaterialHistoryMapper {
     public void deleteMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 행 삭제
     
     public int getMatInMngCount(MaterialHistoryVO searchVO) throws Exception; // 입고 번호 count
+    
+    public MaterialHistoryVO selectComNumm(MaterialHistoryVO searchVO) throws Exception; // 미입고 발주 리스트 발주 번호 선택
+    
+    public MaterialHistoryVO selectMatCodee(MaterialHistoryVO searchVO) throws Exception; // 자재 코드 선택
     
     public int selectMaterialHistoryListTotCnt(MaterialHistoryDefaultVO searchVO);
 	

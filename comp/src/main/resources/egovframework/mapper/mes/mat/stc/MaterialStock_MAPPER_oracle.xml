@@ -136,36 +136,4 @@
 	</select>
 	<!-- END 자재 재고 조회 -->	
 	
-	<!-- 자재 재고 조회 -->
-	<select id="selectMatStcList1" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="egovMap">
-		SELECT * FROM (
-		SELECT A.*, ROWNUM RNUM FROM (
-			SELECT M.MAT_CODE, 
-			       M.MAT_NAME, 
-			       M.MAT_SIZE, 
-			       M.MAT_UNIT, 
-			       MHD.LOT_NUM, 
-			       MHD.MAT_HIS_D_VOL,
-			       ST.MAT_VOL
-		FROM MATERIAL M, MATERIAL_STOCK ST, MATERIAL_HISTORY_D MHD
-		WHERE M.MAT_CODE=MHD.MAT_CODE 
-			  AND M.MAT_CODE=ST.MAT_CODE
-			<if test="searchKeyword != null and searchKeyword != ''">
-					<if test="searchCondition == 0">AND
-						M.MAT_NAME = #{searchKeyword}
-					</if>
-					<if test="searchCondition == 1">AND
-						M.MAT_CODE LIKE '%' || #{searchKeyword} || '%'
-					</if>
-				</if>   
-					ORDER BY 
-						M.MAT_CODE DESC
-		
-		<![CDATA[					
-	) A WHERE ROWNUM <= 10
-)
-]]>
-	</select>
-	<!-- 자재 재고 조회 -->
-	
 </mapper>

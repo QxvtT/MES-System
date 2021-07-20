@@ -2,6 +2,8 @@ package mes.mat.in.service;
 
 import java.util.List;
 
+import mes.prd.pln.service.ProducePlanDVO;
+
 /**
  * @Class Name : MaterialHistoryService.java
  * @Description : MaterialHistory Business class
@@ -27,6 +29,11 @@ public interface MaterialHistoryService {
     List matOutDayList(MaterialHistoryVO searchVO) throws Exception; // 일 출고 자료 리스트
     
     List nordList(MaterialHistoryVO searchVO) throws Exception; // 미입고 자료 리스트 조회
+    List nordListModal(MaterialHistoryVO searchVO) throws Exception; // 미입고 발주 리스트 모달 조회
+    MaterialHistoryVO selectComNumm(MaterialHistoryVO nordVO) throws Exception; // 발주 번호 선택
+    
+    List selectMaterialList(MaterialHistoryVO searchVO) throws Exception; // 자재 코드 리스트 조회
+    MaterialHistoryVO selectMatCodee(MaterialHistoryVO nordVO) throws Exception; // 자재 코드 선택
     
     String matHisMngUpdate(GridDataVO gridData) throws Exception;	// 자재 입고 관리 crud
     String insertMatInMngD(MaterialHistoryVO vo) throws Exception; // 자재 입고 관리 등록

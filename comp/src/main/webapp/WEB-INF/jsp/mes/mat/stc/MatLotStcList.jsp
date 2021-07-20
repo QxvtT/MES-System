@@ -222,7 +222,9 @@ $(function(){
 												</td>
 												<td>
 													<select>
-													
+														<option>전체</option>
+														<option>일반자재</option>
+														<option>가공자재</option>
 													</select>
 												</td>
 											</tr>
