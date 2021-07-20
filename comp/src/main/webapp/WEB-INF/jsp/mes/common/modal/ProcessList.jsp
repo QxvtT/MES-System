@@ -27,8 +27,8 @@
 
 let prcCodeM = null;
 let prcCode1 = null;
-let prcCode2;
-let prcName;
+let prcCode2 = null;
+let prcName = null;
 
 $(function(){
 	const process = new tui.Grid({
@@ -91,27 +91,31 @@ $(function(){
 		process.resetData(getProcessList());
 		
 	}
-	$('#choiceP').click(function(){
-		test = null;
-		prcCode2 = '';
-		prcName = '';
-		for(let i = 0; i<process.getCheckedRows().length; i++){
-			if(i == process.getCheckedRows().length-1){
-				prcCode2 = prcCode2 + process.getCheckedRows()[i]['prcCode']
-				prcName = prcName + process.getCheckedRows()[i]['prcName']
+	
+	process.on('check', (e) => {
+		let rows = process.getCheckedRowKeys();
+		if(rows.length > 1) {
+			for(let i in rows){
+				if(e.rowKey != rows[i]){
+					process.uncheck(rows[i]);
+				}
 			}
-			else{
-				prcCode2 = prcCode2 + process.getCheckedRows()[i]['prcCode']+",";
-				prcName = prcName + process.getCheckedRows()[i]['prcName']+",";
-			}	
+			rows = process.getCheckedRowKeys();
 		}
-		
-		$('input[id="prcCode"]').val(prcCode2);
-		$('input[id="prcName"]').val(prcName);
-		prcCode1 = null;
-		process.resetData(getProcessList());
-		$("#serchPrcModal").modal("toggle");
-		
+		// 조회된 리스트에서 체크된 생산계획을 디테일테이블에 뿌려줌
+		$('#choiceP').click(function() {
+			prcCode2 = process.getValue(rows, 'prcCode');
+			prcName = process.getValue(rows, 'prcName');
+			if(prcCode2 != null && prcName != null){
+				$('#serchPrcModal').modal("hide");
+				$('input[id="prcCode"]').val(prcCode2);
+				$('input[id="prcName"]').val(prcName);
+				console.log(prcCode2);
+				console.log(prcName);
+				prcCode1 = null;
+				process.resetData(getProcessList());
+			}
+		})
 	});
 	
 	$('#btnP').click(function(){

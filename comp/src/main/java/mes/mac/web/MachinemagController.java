@@ -1,15 +1,9 @@
 package mes.mac.web;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,13 +16,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import egovframework.com.cmm.EgovWebUtil;
-import egovframework.com.cmm.util.EgovResourceCloseHelper;
 import egovframework.rte.fdl.property.EgovPropertyService;
+import mes.common.modal.service.MachineVO;
 import mes.mac.service.MachinemagDefaultVO;
 import mes.mac.service.MachinemagService;
 import mes.mac.service.MachinemagVO;
-import mes.prd.res.service.ProcessResultVO;
 
 /**
  * @Class Name : MachineController.java
@@ -48,7 +40,7 @@ import mes.prd.res.service.ProcessResultVO;
 public class MachinemagController {
 
 	private String path = "C:/Users/admin/git/MES-System/comp/src/main/webapp/images/machinemng";
-	
+
 	@Resource(name = "machineService")
 	private MachinemagService machineService;
 
@@ -73,10 +65,9 @@ public class MachinemagController {
 		return machineList;
 	}
 
-	
 	@RequestMapping("/mac/machine/MacMng.do")
 	public String MacMng(MachinemagVO searchVO) throws Exception {
-		
+
 		return "mac/machine/MachineList.page";
 	}
 
@@ -104,8 +95,6 @@ public class MachinemagController {
 		model.addAttribute(selectMachine(machineVO, searchVO));
 		return "/machine/MachineRegister";
 	}
-	
-	
 
 	@RequestMapping("/machine/selectMachine.do")
 	public @ModelAttribute("machineVO") MachinemagVO selectMachine(MachinemagVO machineVO,
@@ -118,50 +107,45 @@ public class MachinemagController {
 	public void maachineUdate(@RequestBody MachinemagVO MachinemagVO) throws Exception {
 		machineService.updatemachine(MachinemagVO);
 	}
-	
+
 	@RequestMapping(value = "/mac/machine/machineInsert")
 	@ResponseBody
-	public String machineInsert(@RequestParam("file1") MultipartFile multi, HttpServletRequest request,
-			HttpServletResponse response, Model model) throws Exception {
-		String url = null;
+	public void machineInsert(@RequestParam(name = "file1", required = false) MultipartFile multi, MachinemagVO machinemagVO, Model model) throws Exception {
 		String saveFileName = null;
-		
-		try {
+		System.out.println("prcCode = " + machinemagVO.getPrcCode());
+		System.out.println("VO 값 : " + machinemagVO);
+		String prcCode = machinemagVO.getPrcCode().substring(1);
+		machinemagVO.setPrcCode(prcCode);
+		System.out.println("prcCode 수정 VO 값 : " + machinemagVO);
+		if (multi != null && multi.getSize() > 0) {
+			try {
+				String uploadpath = path;
+				String originFilename = multi.getOriginalFilename();
+				long size = multi.getSize();
+				saveFileName = originFilename;
 
-			// String uploadpath = request.getServletContext().getRealPath(path);
-			String uploadpath = path;
-			String originFilename = multi.getOriginalFilename();
-			long size = multi.getSize();
-			saveFileName = originFilename;
-			
-			System.out.println("uploadpath : " + uploadpath);
+				System.out.println("uploadpath : " + uploadpath);
 
-			System.out.println("originFilename : " + originFilename);
-			System.out.println("size : " + size);
-			System.out.println("saveFileName : " + saveFileName);
+				System.out.println("originFilename : " + originFilename);
+				System.out.println("size : " + size);
+				System.out.println("saveFileName : " + saveFileName);
 
-			if (!multi.isEmpty()) {
-				File file = new File(uploadpath, saveFileName);
-				multi.transferTo(file);
-
-				model.addAttribute("filename", multi.getOriginalFilename());
-				model.addAttribute("uploadPath", file.getAbsolutePath());
+				if (!multi.isEmpty()) {
+					File file = new File(uploadpath, saveFileName);
+					multi.transferTo(file);
+				}
+			} catch (Exception e) {
+				System.out.println(e);
 			}
-		} catch (Exception e) {
-			System.out.println(e);
 		}
-		//MachinemagVO.setImagePath(saveFileName);
-		System.out.println(saveFileName);
-		//machineService.insertMachine(MachinemagVO);
-		return saveFileName;
+		machinemagVO.setImagePath(saveFileName);
+		machineService.insertMachine(machinemagVO);
 	}
-	
+
 	@RequestMapping(value = "/mac/machine/machineDelete")
 	@ResponseBody
 	public void machineDelete(@RequestBody MachinemagVO MachinemagVO) throws Exception {
 		machineService.deleteMachine(MachinemagVO);
 	}
-
-
 
 }
