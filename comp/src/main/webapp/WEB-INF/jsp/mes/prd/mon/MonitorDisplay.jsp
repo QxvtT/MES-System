@@ -49,6 +49,7 @@ ul {
 </style>
 </head>
 <body>
+	<div>${list }</div>
 	<div class="table">
 		<table class="table-bordered" style="width: 100%; text-align: center;">
 			<tr>
@@ -75,7 +76,7 @@ ul {
 				<th>실적율</th>
 			</tr>
 			<tr>
-				<th>A</th>
+				<th>분할설비</th>
 				
 				<c:choose>
 					<c:when test="${empty prcResult }">

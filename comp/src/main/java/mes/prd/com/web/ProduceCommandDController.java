@@ -131,15 +131,15 @@ public class ProduceCommandDController {
 	}
 	
 	/** 공정이동표 페이지 */
-    @RequestMapping(value="/ProcessMove.do")
+    @RequestMapping(value="/prd/com/ProcessMove.do")
     public String processMove(ProduceCommandDVO searchVO, 
     		ModelMap model)
     				throws Exception {
-    	return "prd/com/ProcessMove.page";
+    	return "prd/com/ProcsMoveTbl.page";
     }
     
     /** 공정이동표 자재 조회 */
-   	@RequestMapping(value ="/ProcessMatList", method=RequestMethod.GET)
+   	@RequestMapping(value ="/prd/com/ProcessMatList", method=RequestMethod.GET)
    	@ResponseBody
    	public List<?> ajaxSelectProcessMatList(ProduceCommandDVO searchVO) throws Exception {
    		System.out.println("이름 : ");
@@ -148,15 +148,15 @@ public class ProduceCommandDController {
    	}
        
    /** 공정이동표 인쇄 페이지 */
-   @RequestMapping(value="/ProcessMovePrt.do")
+   @RequestMapping(value="/prd/com/ProcessMovePrt.do")
    public String processMovePrt(ProduceCommandDVO searchVO, 
    		ModelMap model)
    				throws Exception {
-   	return "mes/prd/com/ProcessMovePrt";
+   	return "mes/prd/com/ProcsMoveTblPrt";
    }
    
     /** 공정이동표 flow ajax 전송 */
-   	@RequestMapping(value ="/ProcessMoveFlowPrt")
+   	@RequestMapping(value ="/prd/com/ProcessMoveFlowPrt")
    	@ResponseBody
    	public String ajaxProcessMoveFlowPrt(@RequestBody List<ProduceCommandDVO> list, Model model) throws Exception {
    		System.out.println(list);
@@ -196,15 +196,15 @@ public class ProduceCommandDController {
 	}
     
 	/** 생산지시조회 페이지 **/
-    @RequestMapping("/ProduceCommandDView.do")
+    @RequestMapping("/prd/com/PrdComList.do")
     public String addProduceCommandDView(ProduceCommandDVO searchVO, 
     		ModelMap model)
             throws Exception {
-        return "prd/com/ProduceCommandDRegister.page";
+        return "prd/com/PrdComList.page";
     }
     
  // 생산계획조회  리스트 ajax 처리
- 	@RequestMapping(value = "/ProduceCommandSearch", method = RequestMethod.GET)
+ 	@RequestMapping(value = "/prd/com/ProduceCommandSearch", method = RequestMethod.GET)
  	@ResponseBody
  	public List<?> ajaxComList(ProduceCommandDVO searchVO, 
     		ModelMap model) throws Exception {

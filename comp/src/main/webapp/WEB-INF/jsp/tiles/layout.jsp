@@ -76,7 +76,7 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jQuery.print.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.table2excel.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/FileSaver.min.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/tableexport.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/tableexport.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/xlsx.core.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/saveexcel.js"></script>
 </head>

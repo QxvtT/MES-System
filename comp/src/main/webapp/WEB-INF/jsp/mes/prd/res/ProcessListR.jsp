@@ -95,12 +95,13 @@ $(function(){
 		aDate = $("input#aDate").val(); 
 		bDate = $("input#bDate").val();
 		prcComY = $("input[name='prcComY']:checked").val();
-		grid.resetData(getProcessResulList());		
+		grid.resetData(getProcessResulList());
+		let list=[];
+		grid2.resetData(list);
 	}
 		
 	grid.on('dblclick', () => { 
 		let key = grid.getFocusedCell()['rowKey'];
-		
 		movNum = grid.getColumnValues('movNum')[key];
 		grid2.resetData(getMovNum());
 		
@@ -149,6 +150,52 @@ $(function(){
 	grid2.on('scrollEnd', () => {
 	    grid.appendRows(getProcessResulList());
 	  });
+	
+	$('#printResultBtn').click(function() {	
+		$("#grid").print({
+        	globalStyles: true,
+        	mediaPrint: false,
+        	stylesheet: null,
+        	noPrintSelector: ".no-print",
+        	iframe: true,
+        	append: null,
+        	prepend: null,
+        	manuallyCopyFormValues: true,
+        	deferred: $.Deferred(),
+        	timeout: 750,
+        	title: null,
+        	doctype: '<!doctype html>'
+		});
+	})
+	function info_print() {
+	var initBody = document.body.innerHTML;
+	window.onbeforeprint = function () {
+		document.body.innerHTML = document.getElementById("grid").innerHTML;
+	}
+	window.onafterprint = function () {
+		document.body.innerHTML = initBody;
+	}
+	window.print();
+}
+	
+	$('#excelResultBtn').click(function() {
+	ReportToExcelConverter();
+})
+function ReportToExcelConverter() { 
+	$("#grid").table2excel({ 
+		exclude: ".noExl", 
+		name: "Excel Document Name", 
+		filename: "OrderList" +'.xls', //확장자를 여기서 붙여줘야한다. fileext: ".xls", exclude_img: true, exclude_links: true, exclude_inputs: true 
+		}); 
+	};
+	reset.onclick = function() {
+		let list = []
+		grid.resetData(list);
+		grid2.resetData(list);
+	}
+	
+	
+	
 })
 	
 </script>
@@ -182,25 +229,27 @@ $(function(){
 						
 							<div class="card">
 								<!-- 타이틀 -->
-								<div id="title" class="card-header">
-									
-									<ul>
-										지시일자<input type ="date" id="bDate" name = "bDate" />~<input type ="date" id="aDate" name = "aDate" />
-									</ul>
-									<div>
+								<form>
+									<div id="title" class="card-header">
+										
 										<ul>
-											진행<input type = "radio" id = "prcComY" name = "prcComY" value = "N"/>
-											완료<input type = "radio" id = "prcComY" name = "prcComY" value = "Y"/>
-											전체<input type = "radio" id = "prcComY" name = "prcComY" value = "" checked="checked"/>
+											지시일자<input type ="date" id="bDate" name = "bDate" />~<input type ="date" id="aDate" name = "aDate" />
+										</ul>
+										<div>
+											<ul>
+												진행<input type = "radio" id = "prcComY" name = "prcComY" value = "N"/>
+												완료<input type = "radio" id = "prcComY" name = "prcComY" value = "Y"/>
+												전체<input type = "radio" id = "prcComY" name = "prcComY" value = "" checked="checked"/>
+											</ul>
+										</div>
+										<ul>
+											<div align="right">
+												<button class="btn btn-info btn-sm" type ="button" id ="search" name = "search">검색</button>
+												<button class="btn btn-info btn-sm" type ="reset" id ="reset" name = "reset">새자료</button>
+											</div>
 										</ul>
 									</div>
-									<ul>
-										<div align="right">
-											<button class="btn btn-info btn-sm" type ="button" id ="search" name = "search">검색</button>
-										</div>
-									</ul>
-								</div>
-
+								</form>
 								<!-- // 타이틀 -->
 								<!-- List -->
 								<div id="grid"></div>
@@ -220,7 +269,13 @@ $(function(){
 							<div class="card">
 								<!-- 타이틀 -->
 								<div id="title" class="card-header">
-									
+									<div align="right">
+										<ul>
+											<button class="btn btn-info btn-sm" type="button" id ="printOrderBtn" name = "printOrderBtn" >인쇄</button>
+											&nbsp;
+											<button class="btn btn-info btn-sm" type="button" id ="excelOrderBtn" name = "excelOrderBtn" >Excel</button>
+										</ul>
+									</div>
 									
 								</div>
 

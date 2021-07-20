@@ -43,6 +43,7 @@ $(function(){
 	    bodyHeight: 200,
 	    data: null,
 	    rowHeaders: ['rowNum'],
+	    bodyHeight:450,
 	    columns: [
 	    	{ header: '주문번호', name:'ordNum'},
 			{ header: '주문일자', name:'ordRequestDate'},
@@ -104,8 +105,43 @@ $(function(){
 		console.log(ordDNum);
 		
 	}
+		$('#printOrderBtn').click(function() {	
+			$("#grid").print({
+	        	globalStyles: true,
+	        	mediaPrint: false,
+	        	stylesheet: null,
+	        	noPrintSelector: ".no-print",
+	        	iframe: true,
+	        	append: null,
+	        	prepend: null,
+	        	manuallyCopyFormValues: true,
+	        	deferred: $.Deferred(),
+	        	timeout: 750,
+	        	title: null,
+	        	doctype: '<!doctype html>'
+			});
+		})
+		function info_print() {
+		var initBody = document.body.innerHTML;
+		window.onbeforeprint = function () {
+			document.body.innerHTML = document.getElementById("grid").innerHTML;
+		}
+		window.onafterprint = function () {
+			document.body.innerHTML = initBody;
+		}
+		window.print();
+	}
 		
-		
+		$('#excelOrderBtn').click(function() {
+		ReportToExcelConverter();
+	})
+	function ReportToExcelConverter() { 
+		$("#grid").table2excel({ 
+			exclude: ".noExl", 
+			name: "Excel Document Name", 
+			filename: "OrderList" +'.xls', //확장자를 여기서 붙여줘야한다. fileext: ".xls", exclude_img: true, exclude_links: true, exclude_inputs: true 
+			}); 
+		};
 		
 		$('#mobile-collapse').click(function() {
 		      grid.refreshLayout();
@@ -130,7 +166,7 @@ $(function(){
 						<li class="breadcrumb-item"><a href="index.jsp"> <i
 								class="fa fa-home"></i>
 						</a></li>
-						<li class="breadcrumb-item"><a href="#!">주문관리</a></li>
+						<li class="breadcrumb-item"><a href="#!">주문조회</a></li>
 					</ul>
 				</div>
 			</div>
@@ -150,14 +186,15 @@ $(function(){
 		</div>
 		날짜<input type ="date" id="bDate" name = "bDate" />~<input type ="date" id="aDate" name = "aDate" />
 		<br>업체코드<input type ="text" id="operCode" name = "operCode" />
-		<%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %><br/>
+		<%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>&nbsp;
 		업체이름<input type ="text" id="operName" name = "operName" readonly="readonly"/><br/>
 		제품코드<input type ="text" id="itmCode" name = "itmCode" ></input>
-		<%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %><br/>
+		<%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>&nbsp;
 		제품명<input type ="text" id="itmName" name = "itmName" ></input><br/>
 		<br/>
 		<button  class="btn btn-info btn-sm" type="button" id ="button" name="button">조회</button>
 	<button class="btn btn-info btn-sm" type="reset" >리셋</button>
+	
 	</form>
 	<form:form commandName="searchVO" name="listForm" id="listForm" method="post">
 		<input type="hidden" name="ordDNum" />
@@ -170,8 +207,15 @@ $(function(){
 								<!-- 타이틀 -->
 								<div id="title" class="card-header">
 									<ul>
-										<li>List</li>
+										<li>주문목록</li>
 									</ul>
+									<div align="right">
+										<ul>
+											<button class="btn btn-info btn-sm" type="button" id ="printOrderBtn" name = "printOrderBtn" >인쇄</button>
+											&nbsp;
+											<button class="btn btn-info btn-sm" type="button" id ="excelOrderBtn" name = "excelOrderBtn" >Excel</button>
+										</ul>
+									</div>
 								</div>
 								
 								<!-- // 타이틀 -->

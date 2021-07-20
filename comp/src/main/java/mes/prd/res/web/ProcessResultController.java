@@ -56,7 +56,7 @@ public class ProcessResultController {
 	 * @exception Exception
 	 */
     
-    @RequestMapping(value="ProcessResultList", method = RequestMethod.GET)
+    @RequestMapping(value="/prd/res/ProcessResultList", method = RequestMethod.GET)
     @ResponseBody
     public List<?> selectProcessResultList(ProcessResultVO processResultVO)
             throws Exception {
@@ -64,7 +64,7 @@ public class ProcessResultController {
         return processResultList;
     }
     
-    @RequestMapping(value="ProcessResultSelect", method = RequestMethod.GET)
+    @RequestMapping(value="/prd/res/ProcessResultSelect", method = RequestMethod.GET)
     @ResponseBody
     public List<?> processResultSelect(ProcessResultVO processResultVO)
             throws Exception {
@@ -72,21 +72,21 @@ public class ProcessResultController {
         return processResultSelect;
     }
     
-    @RequestMapping(value="ProduceSelect", method = RequestMethod.GET)
+    @RequestMapping(value="/prd/res/ProduceSelect", method = RequestMethod.GET)
     @ResponseBody
     public List<?> produceSelect(ProcessResultVO processResultVO)
             throws Exception {
         List<?> produceSelect = processResultService.produceSelect(processResultVO);
         return produceSelect;
     }
-    @RequestMapping(value="SetProduceSelect", method = RequestMethod.GET)
+    @RequestMapping(value="/prd/res/SetProduceSelect", method = RequestMethod.GET)
     @ResponseBody
     public List<?> setProduceSelect(ProcessResultVO processResultVO)
             throws Exception {
         List<?> setProduceSelect = processResultService.setProduceSelect(processResultVO);
         return setProduceSelect;
     }
-    @RequestMapping(value="ProcessSelectMovNum", method = RequestMethod.GET)
+    @RequestMapping(value="/prd/res/ProcessSelectMovNum", method = RequestMethod.GET)
     @ResponseBody
     public List<?> v(ProcessResultVO processResultVO)
             throws Exception {
@@ -96,18 +96,18 @@ public class ProcessResultController {
     
     
     
-    @RequestMapping(value="updatePrcEnd")
+    @RequestMapping(value="/prd/res/updatePrcEnd")
     @ResponseBody
   public void updatePrcEnd(@RequestBody ProcessResultVO processResultVO) throws Exception {
     	processResultService.updatePrcEnd(processResultVO);
   } 
-    @RequestMapping(value="updatePrcStr")
+    @RequestMapping(value="/prd/res/updatePrcStr")
     @ResponseBody
   public void updatePrcStr(@RequestBody ProcessResultVO processResultVO) throws Exception {
     	processResultService.updatePrcStr(processResultVO);
   }
     
-    @RequestMapping(value="dataReset")
+    @RequestMapping(value="/prd/res/dataReset")
     @ResponseBody
   public void dataReset(@RequestBody ProcessResultVO processResultVO) throws Exception {
     	processResultService.dataReset(processResultVO);
@@ -115,14 +115,14 @@ public class ProcessResultController {
     
     
     
-    @RequestMapping(value="resultSuccess")
+    @RequestMapping(value="/prd/res/resultSuccess")
     @ResponseBody
   public void ItemHistoryUpdate(@RequestBody GridDataVO gridData) throws Exception {
     	
     	processResultService.resultSuccess(gridData);
   }
     
-    @RequestMapping(value="ProcessListR", method = RequestMethod.GET)
+    @RequestMapping(value="/prd/res/ProcessListR", method = RequestMethod.GET)
     @ResponseBody
     public List<?> ProcessListR(ProcessResultVO processResultVO)
             throws Exception {
@@ -135,19 +135,19 @@ public class ProcessResultController {
     
     
     
-    @RequestMapping(value="ProcessResultList.do")
+    @RequestMapping(value="/prd/res/ProcessResultList.do")
     public String selectProcessResultList() throws Exception {
 
         return "prd/res/ProcessResultList.page";
     }
-    @RequestMapping(value="ProcessListR.do")
+    @RequestMapping(value="/prd/res/ProcessListR.do")
     public String ProcessListR() throws Exception {
 
         return "prd/res/ProcessListR.page";
     } 
    
     
-    @RequestMapping("addProcessResultView.do")
+    @RequestMapping("/prd/res/addProcessResultView.do")
     public String addProcessResultView(
             @ModelAttribute("searchVO") ProcessResultDefaultVO searchVO, Model model)
             throws Exception {
@@ -155,7 +155,7 @@ public class ProcessResultController {
         return "/prd/resProcessResultRegister.page";
     }
     
-    @RequestMapping("addProcessResult.do")
+    @RequestMapping("/prd/res/addProcessResult.do")
     public String addProcessResult(
             ProcessResultVO processResultVO,
             @ModelAttribute("searchVO") ProcessResultDefaultVO searchVO, SessionStatus status)
@@ -165,7 +165,7 @@ public class ProcessResultController {
         return "forward:ProcessResultList.do";
     }
     
-    @RequestMapping("updateProcessResultView.do")
+    @RequestMapping("/prd/res/updateProcessResultView.do")
     public String updateProcessResultView(
             @RequestParam("movNum") java.lang.String movNum ,
             @ModelAttribute("searchVO") ProcessResultDefaultVO searchVO, Model model)
@@ -174,10 +174,10 @@ public class ProcessResultController {
         processResultVO.setMovNum(movNum);
         // 변수명은 CoC 에 따라 processResultVO
         model.addAttribute(selectProcessResult(processResultVO, searchVO));
-        return "prd/resProcessResultRegister.page";
+        return "/prd/res/ProcessResultRegister.page";
     }
 
-    @RequestMapping("selectProcessResult.do")
+    @RequestMapping("/prd/res/selectProcessResult.do")
     public @ModelAttribute("processResultVO")
     ProcessResultVO selectProcessResult(
             ProcessResultVO processResultVO,
@@ -185,24 +185,24 @@ public class ProcessResultController {
         return processResultService.selectProcessResult(processResultVO);
     }
 
-    @RequestMapping("updateProcessResult.do")
+    @RequestMapping("/prd/res/updateProcessResult.do")
     public String updateProcessResult(
             ProcessResultVO processResultVO,
             @ModelAttribute("searchVO") ProcessResultDefaultVO searchVO, SessionStatus status)
             throws Exception {
         processResultService.updateProcessResult(processResultVO);
         status.setComplete();
-        return "forward:ProcessResultList.do";
+        return "forward:/prd/res/ProcessResultList.do";
     }
     
-    @RequestMapping("deleteProcessResult.do")
+    @RequestMapping("/prd/res/deleteProcessResult.do")
     public String deleteProcessResult(
             ProcessResultVO processResultVO,
             @ModelAttribute("searchVO") ProcessResultDefaultVO searchVO, SessionStatus status)
             throws Exception {
         processResultService.deleteProcessResult(processResultVO);
         status.setComplete();
-        return "forward:ProcessResultList.do";
+        return "forward:/prd/res/ProcessResultList.do";
     }
 
 }
