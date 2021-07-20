@@ -84,7 +84,7 @@ public class EgovRoleManageController {
     @RequestMapping("/sec/rmt/EgovRoleListView.do")
     public String selectRoleListView()
             throws Exception {
-        return "egovframework/com/sec/rmt/EgovRoleManage";
+        return "egovframework/com/sec/rmt/EgovRoleManage.page";
     }
 
 	/**
@@ -116,7 +116,7 @@ public class EgovRoleManageController {
         model.addAttribute("paginationInfo", paginationInfo);
         model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
 
-        return "egovframework/com/sec/rmt/EgovRoleManage";
+        return "egovframework/com/sec/rmt/EgovRoleManage.page";
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class EgovRoleManageController {
         model.addAttribute("authorManageList", authorManageVO.getAuthorManageList());
         model.addAttribute("cmmCodeDetailList", getCmmCodeDetailList(new ComDefaultCodeVO(),"COM029"));
 
-        return "egovframework/com/sec/rmt/EgovRoleUpdate";
+        return "egovframework/com/sec/rmt/EgovRoleUpdate.page";
 	}
 
     /**
@@ -159,7 +159,7 @@ public class EgovRoleManageController {
         model.addAttribute("authorManageList", authorManageVO.getAuthorManageList());
         model.addAttribute("cmmCodeDetailList", getCmmCodeDetailList(new ComDefaultCodeVO(),"COM029"));
 
-        return "egovframework/com/sec/rmt/EgovRoleInsert";
+        return "egovframework/com/sec/rmt/EgovRoleInsert.page";
     }
 
     /**
@@ -190,7 +190,7 @@ public class EgovRoleManageController {
     	beanValidator.validate(roleManage, bindingResult); //validation 수행
 
     	if (bindingResult.hasErrors()) {
-			return "egovframework/com/sec/rmt/EgovRoleInsert";
+			return "egovframework/com/sec/rmt/EgovRoleInsert.page";
 		} else {
     	    String roleTyp = roleManage.getRoleTyp();
 	    	if("method".equals(roleTyp))//KISA 보안약점 조치 (2018-10-29, 윤창원)
@@ -225,7 +225,7 @@ public class EgovRoleManageController {
 
     	beanValidator.validate(roleManage, bindingResult); //validation 수행
     	if (bindingResult.hasErrors()) {
-			return "egovframework/com/sec/rmt/EgovRoleUpdate";
+			return "egovframework/com/sec/rmt/EgovRoleUpdate.page";
 		} else {
     	egovRoleManageService.updateRole(roleManage);
     	model.addAttribute("message", egovMessageSource.getMessage("success.common.update"));

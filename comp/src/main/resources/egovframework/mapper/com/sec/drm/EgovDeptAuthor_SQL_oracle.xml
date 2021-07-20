@@ -37,11 +37,11 @@
                      END) AS REG_YN
               FROM (SELECT A.ORGNZT_ID DEPT_CODE, 
                            A.ORGNZT_NM DEPT_NM,
-                           B.EMPLYR_ID USER_ID,
-                           B.USER_NM USER_NM,
+                           B.EMP_ID USER_ID,
+                           B.EMP_NAME USER_NM,
                            B.ESNTL_ID
                       FROM COMTNORGNZTINFO A,
-                           COMTNEMPLYRINFO B
+                           EMPLOYEES B
                      WHERE A.ORGNZT_ID = B.ORGNZT_ID
                        AND A.ORGNZT_ID = #{deptCode}) A LEFT OUTER JOIN COMTNEMPLYRSCRTYESTBS B
                 ON A.ESNTL_ID = B.SCRTY_DTRMN_TRGET_ID 
@@ -84,11 +84,11 @@
             SELECT COUNT(*) AS totcnt
               FROM (SELECT A.ORGNZT_ID DEPT_CODE, 
                            A.ORGNZT_NM DEPT_NM,
-                           B.EMPLYR_ID USER_ID,
-                           B.USER_NM USER_NM,
+                           B.EMP_ID USER_ID,
+                           B.EMP_NAME USER_NM,
                            B.ESNTL_ID
                       FROM COMTNORGNZTINFO A,
-                           COMTNEMPLYRINFO B
+                           EMPLOYEES B
                      WHERE A.ORGNZT_ID = B.ORGNZT_ID
                        AND A.ORGNZT_ID = #{deptCode}) A LEFT OUTER JOIN COMTNEMPLYRSCRTYESTBS B
                 ON A.ESNTL_ID = B.SCRTY_DTRMN_TRGET_ID 

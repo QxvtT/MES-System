@@ -70,15 +70,15 @@
 		<!-- 업무사용자 -->
 		<if test="userSe != null and userSe == 'USR'">
 			
-			SELECT emplyr_id AS id
-			     , user_nm AS name
+			SELECT emp_id AS id
+			     , emp_name AS name
 			     , password AS password
-			     , ihidnum AS ihidNum
-			     , email_adres AS email
+			     , ihidNum AS ihidNum
+			     , email AS email
 			     , 'USR' AS userSe
-			     , orgnzt_id AS orgnztId
+			     , orgnzt_Id AS orgnztId
 			     , esntl_id AS uniqId
-			  FROM COMTNEMPLYRINFO
+			  FROM EMPLOYEES
 			 WHERE ESNTL_ID = #{uniqId}
 			   AND emplyr_sttus_code = 'P'
 			
@@ -125,16 +125,16 @@
 		<!-- 업무사용자 -->
 		<if test="userSe != null and userSe == 'USR'">
 			
-			SELECT emplyr_id AS id
-			     , user_nm AS name
+			SELECT emp_id AS id
+			     , emp_name AS name
 			     , password AS password
-			     , ihidnum AS ihidNum
-			     , email_adres AS email
+			     , ihidNum AS ihidNum
+			     , email AS email
 			     , 'USR' AS userSe
-			     , orgnzt_id AS orgnztId
+			     , orgnzt_Id AS orgnztId
 			     , esntl_id AS uniqId
-			  FROM COMTNEMPLYRINFO
-			 WHERE emplyr_id = #{id}
+			  FROM EMPLOYEES
+			 WHERE emp_id = #{id}
 			   AND password = #{password}
 			   AND emplyr_sttus_code = 'P'
 			
@@ -144,15 +144,15 @@
 	<!-- 인증서 로그인 -->
 	<select id="actionCrtfctLogin" resultMap="login">
 		
-		SELECT emplyr_id AS id
-		     , user_nm AS name
-		     , password AS password
-		     , ihidnum AS ihidNum
-		     , email_adres AS email
-		     , 'USR' AS userSe
-		     , orgnzt_id AS orgnztId
-		     , esntl_id AS uniqId
-		  FROM COMTNEMPLYRINFO
+		SELECT emp_id AS id
+			     , emp_name AS name
+			     , password AS password
+			     , ihidNum AS ihidNum
+			     , email AS email
+			     , 'USR' AS userSe
+			     , orgnzt_Id AS orgnztId
+			     , esntl_id AS uniqId
+			  FROM EMPLOYEES
 		 WHERE CRTFC_DN_VALUE = #{dn}
 		
 	</select>
@@ -182,10 +182,10 @@
 		<!-- 업무사용자 -->
 		<if test="userSe != null and userSe == 'USR'">
 			
-			SELECT emplyr_id AS id
-			  FROM COMTNEMPLYRINFO
-			 WHERE user_nm = #{name}
-			   AND email_adres = #{email}
+			SELECT emp_id AS id
+			  FROM EMPLOYEES
+			 WHERE emp_name = #{name}
+			   AND email = #{email}
 			   AND emplyr_sttus_code = 'P'
 			
 		</if>
@@ -223,10 +223,10 @@
 		<if test="userSe != null and userSe == 'USR'">
 			
 			SELECT password AS password
-			  FROM COMTNEMPLYRINFO
-			 WHERE emplyr_id = #{id}
-			   AND user_nm = #{name}
-			   AND email_adres = #{email}
+			  FROM EMPLOYEES
+			 WHERE emp_id = #{id}
+			   AND emp_name = #{name}
+			   AND email = #{email}
 			   AND password_hint = #{passwordHint}
 			   AND password_cnsr = #{passwordCnsr}
 			   AND emplyr_sttus_code = 'P'
@@ -257,10 +257,10 @@
 		<!-- 업무사용자 -->
 		<if test="userSe != null and userSe == 'USR'">
 			
-			UPDATE COMTNEMPLYRINFO
+			UPDATE EMPLOYEES
 			   SET password = #{password}
 			     , CHG_PWD_LAST_PNTTM = sysdate
-			 WHERE emplyr_id = #{id}
+			 WHERE emp_id = #{id}
 			
 		</if>
 	</update>
@@ -296,14 +296,14 @@
 	<!-- 업무사용자 -->
 	<if test="userSe != null and userSe == 'USR'">
 	<![CDATA[
-	SELECT  EMPLYR_ID AS USER_ID
+	SELECT  EMP_ID AS USER_ID
          ,  PASSWORD AS USER_PW
-	     ,  USER_NM AS USER_NM
+	     ,  EMP_NAME AS USER_NM
 	     ,  ESNTL_ID AS UNIQ_ID
 	     ,  NVL(LOCK_AT,'N') LOCK_AT
 	     ,  NVL(LOCK_CNT,0) AS LOCK_CNT
-      FROM  COMTNEMPLYRINFO
-	 WHERE  EMPLYR_ID = #{id} 
+      FROM  EMPLOYEES
+	 WHERE  EMP_ID = #{id} 
 	]]>
 	</if>
 	</select>
@@ -379,30 +379,30 @@
 		<!-- LOCK 해제 -->
 		<if test="@egovframework.com.cmm.util.EgovMybaitsUtil@isEquals(updateAt,'E')">
 			<![CDATA[
-			UPDATE  COMTNEMPLYRINFO
+			UPDATE  EMPLOYEES
 			   SET  LOCK_AT = NULL
 			     ,  LOCK_CNT  = NULL
 			     ,  LOCK_LAST_PNTTM = NULL     
-			   WHERE EMPLYR_ID = #{id}
+			   WHERE EMP_ID = #{id}
 			]]>
 		</if>
 		<!-- LOCK 설정 -->
 		<if test="@egovframework.com.cmm.util.EgovMybaitsUtil@isEquals(updateAt,'L')">
 			<![CDATA[
-			UPDATE  COMTNEMPLYRINFO
+			UPDATE  EMPLOYEES
 			   SET  LOCK_AT = 'Y'
 			     ,  LOCK_CNT  = LOCK_CNT+1
 			     ,  LOCK_LAST_PNTTM = sysdate
-			   WHERE EMPLYR_ID = #{id}
+			   WHERE EMP_ID = #{id}
 			]]>
 		</if>
 		<!-- LOCK 카운트 설정 -->
 		<if test="@egovframework.com.cmm.util.EgovMybaitsUtil@isEquals(updateAt,'C')">
 			<![CDATA[
-			UPDATE  COMTNEMPLYRINFO
+			UPDATE  EMPLOYEES
 			   SET  LOCK_CNT  = NVL(LOCK_CNT,0)+1
 			     ,  LOCK_LAST_PNTTM = sysdate     
-			   WHERE EMPLYR_ID = #{id}
+			   WHERE EMP_ID = #{id}
 			]]>
 		</if>
 	</update>
@@ -429,8 +429,8 @@
 		<if test="userSe != null and userSe == 'USR'">
 			
 			SELECT NVL(TO_DATE(sysdate) - TO_DATE(CHG_PWD_LAST_PNTTM),0)
-			  FROM COMTNEMPLYRINFO
-			 WHERE emplyr_id = #{id}
+			  FROM EMPLOYEES
+			 WHERE emp_id = #{id}
 			
 		</if>
 	</select>

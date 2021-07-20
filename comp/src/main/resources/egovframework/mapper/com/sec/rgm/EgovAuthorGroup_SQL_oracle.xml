@@ -41,8 +41,8 @@
                     SELECT ENTRPRS_MBER_ID USER_ID, CMPNY_NM USER_NM, GROUP_ID, 'USR02' MBER_TY_CODE, ESNTL_ID 
                       FROM COMTNENTRPRSMBER
                      UNION ALL
-                    SELECT EMPLYR_ID USER_ID, USER_NM USER_NM, GROUP_ID, 'USR03' MBER_TY_CODE, ESNTL_ID 
-                      FROM COMTNEMPLYRINFO ) A LEFT OUTER JOIN COMTNEMPLYRSCRTYESTBS B
+                    SELECT EMP_ID USER_ID, EMP_NAME USER_NM, GROUP_ID, 'USR03' MBER_TY_CODE, ESNTL_ID 
+                      FROM EMPLOYEES ) A LEFT OUTER JOIN COMTNEMPLYRSCRTYESTBS B
                 ON A.ESNTL_ID = B.SCRTY_DTRMN_TRGET_ID
              WHERE 1 = 1    
                
@@ -103,8 +103,8 @@
                     SELECT ENTRPRS_MBER_ID USER_ID, CMPNY_NM USER_NM, GROUP_ID, 'USR02' MBER_TY_CODE 
                       FROM COMTNENTRPRSMBER
                      UNION ALL
-                    SELECT EMPLYR_ID USER_ID, USER_NM USER_NM, GROUP_ID, 'USR03' MBER_TY_CODE 
-                      FROM COMTNEMPLYRINFO ) A LEFT OUTER JOIN COMTNEMPLYRSCRTYESTBS B
+                    SELECT EMP_ID USER_ID, EMP_NAME USER_NM, GROUP_ID, 'USR03' MBER_TY_CODE 
+                      FROM EMPLOYEES ) A LEFT OUTER JOIN COMTNEMPLYRSCRTYESTBS B
                 ON A.USER_ID = B.SCRTY_DTRMN_TRGET_ID
              WHERE 1 = 1   
             <if test="searchKeyword != null and searchKeyword != ''">

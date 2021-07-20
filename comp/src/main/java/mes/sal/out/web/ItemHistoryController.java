@@ -174,7 +174,7 @@ public class ItemHistoryController {
     
 
     
-    @RequestMapping("/sal/out/updateItemHistoryView.do")
+    @RequestMapping("/sal/out/ItemHistoryRegister.do")
     public String updateItemHistoryView(
             @RequestParam("itmHisNum") java.lang.String itmHisNum ,
             @ModelAttribute("searchVO") ItemHistoryDefaultVO searchVO, Model model)

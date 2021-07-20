@@ -67,7 +67,7 @@ public class EgovAuthorManageController {
     @RequestMapping("/sec/ram/EgovAuthorListView.do")
     public String selectAuthorListView()
             throws Exception {
-        return "egovframework/com/sec/ram/EgovAuthorManage";
+        return "egovframework/com/sec/ram/EgovAuthorManage.page";
     }    
     
     /**
@@ -104,7 +104,7 @@ public class EgovAuthorManageController {
         model.addAttribute("paginationInfo", paginationInfo);
         model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
 
-        return "egovframework/com/sec/ram/EgovAuthorManage";
+        return "egovframework/com/sec/ram/EgovAuthorManage.page";
     } 
     
     /**
@@ -123,7 +123,7 @@ public class EgovAuthorManageController {
 
     	model.addAttribute("authorManage", egovAuthorManageService.selectAuthor(authorManageVO));
     	model.addAttribute("message", egovMessageSource.getMessage("success.common.select"));
-    	return "egovframework/com/sec/ram/EgovAuthorUpdate";
+    	return "egovframework/com/sec/ram/EgovAuthorUpdate.page";
     }     
 
     /**
@@ -134,7 +134,7 @@ public class EgovAuthorManageController {
     @RequestMapping("/sec/ram/EgovAuthorInsertView.do")
     public String insertAuthorView(@ModelAttribute("authorManage") AuthorManage authorManage)
             throws Exception {
-        return "egovframework/com/sec/ram/EgovAuthorInsert";
+        return "egovframework/com/sec/ram/EgovAuthorInsert.page";
     }
     
     /**

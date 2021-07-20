@@ -100,7 +100,7 @@ public class EgovLoginController {
 		//권한체크시 에러 페이지 이동
 		String auth_error =  request.getParameter("auth_error") == null ? "" : (String)request.getParameter("auth_error");
 		if(auth_error != null && auth_error.equals("1")){
-			return "egovframework/com/cmm/error/accessDenied";
+			return "egovframework/com/cmm/error/accessDenied.page";
 		}
 
 		/*

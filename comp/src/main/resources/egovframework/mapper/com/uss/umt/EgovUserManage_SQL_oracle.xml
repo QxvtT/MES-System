@@ -8,27 +8,27 @@ SELECT * FROM ( SELECT rownum rn, TB.* FROM (
     SELECT
         ESNTL_ID               as "uniqId",
         'USR03'               as "userTy",
-        EMPLYR_ID             as "userId",
-        USER_NM             as "userNm",
-        EMAIL_ADRES           as "emailAdres",
+        EMP_ID             as "userId",
+        USER_NAME             as "userNm",
+        EMAIL           as "emailAdres",
         AREA_NO               as "areaNo",
         HOUSE_MIDDLE_TELNO      as "middleTelno",
         HOUSE_END_TELNO         as "endTelno",
-        MBTLNUM           as "moblphonNo",
+        PHONE           as "moblphonNo",
         GROUP_ID              as "groupId",
         EMPLYR_STTUS_CODE     as "sttus",
-        SBSCRB_DE             as "sbscrbDe"
-    FROM    COMTNEMPLYRINFO
+        ' '             as "sbscrbDe"
+    FROM    EMPLOYEES
         WHERE 1=1
         <if test='sbscrbSttus != null and sbscrbSttus neq "0" and sbscrbSttus neq ""'>
             EMPLYR_STTUS_CODE LIKE  #{sbscrbSttus}
         </if>
         <if test="@egovframework.com.cmm.util.EgovMybaitsUtil@isNotEmpty(searchKeyword)">
         <if test="searchCondition == 0">AND
-            EMPLYR_ID LIKE #{searchKeyword}
+            EMP_ID LIKE #{searchKeyword}
         </if>
         <if test="searchCondition == 1">AND
-            USER_NM LIKE '%' ||#{searchKeyword}|| '%'
+            EMP_NAME LIKE '%' ||#{searchKeyword}|| '%'
         </if>
         </if>
         <![CDATA[
@@ -39,50 +39,42 @@ SELECT * FROM ( SELECT rownum rn, TB.* FROM (
     
     <select id="selectUserListTotCnt_S" resultType="int">
             SELECT COUNT(1) totcnt
-            FROM    COMTNEMPLYRINFO
+            FROM    EMPLOYEES
             WHERE 1=1
             <if test='sbscrbSttus != null and sbscrbSttus neq "0" and sbscrbSttus neq ""'>
                 AND EMPLYR_STTUS_CODE LIKE  #{sbscrbSttus}
             </if>
             <if test="@egovframework.com.cmm.util.EgovMybaitsUtil@isNotEmpty(searchKeyword)">
             <if test="searchCondition == 0">AND
-                 EMPLYR_ID LIKE #{searchKeyword}
+                 EMP_ID LIKE #{searchKeyword}
             </if>
             <if test="searchCondition == 1">AND
-                 USER_NM LIKE '%' ||#{searchKeyword}|| '%'
+                 EMP_NAME LIKE '%' ||#{searchKeyword}|| '%'
             </if>
             </if>
     </select>
     
     <insert id="insertUser_S">
         
-            INSERT INTO COMTNEMPLYRINFO 
+            INSERT INTO EMPLOYEES 
                 (   ESNTL_ID             ,
-                    EMPLYR_ID           ,
-                    USER_NM           ,
+                    EMP_ID           ,
+                    EMP_NAME           ,
                     PASSWORD            ,
                     PASSWORD_HINT       ,
                     PASSWORD_CNSR       ,
-                    EMPL_NO             ,
-                    IHIDNUM             ,
-                    SEXDSTN_CODE        ,
-                    BRTHDY                ,
+                    EMP_NO             ,
+                    BIRTH                ,
                     AREA_NO             ,
                     HOUSE_MIDDLE_TELNO    ,
                     HOUSE_END_TELNO       ,
-                    FXNUM               ,
-                    HOUSE_ADRES           ,
-                    DETAIL_ADRES        ,
-                    ZIP                 ,
-                    OFFM_TELNO          ,
-                    MBTLNUM         ,
-                    EMAIL_ADRES         ,
-                    OFCPS_NM            ,
+                    ADR           ,
+                    ADR_D        ,
+                    POST                 ,
+                    PHONE         ,
+                    EMAIL         ,
                     GROUP_ID            ,
-                    ORGNZT_ID           ,
-                    PSTINST_CODE          ,
                     EMPLYR_STTUS_CODE   ,
-                    SBSCRB_DE           ,
                     CRTFC_DN_VALUE      ,
                     CHG_PWD_LAST_PNTTM        )
             VALUES (
@@ -93,25 +85,17 @@ SELECT * FROM ( SELECT rownum rn, TB.* FROM (
                     #{passwordHint}      ,
                     #{passwordCnsr}      ,                   
                     #{emplNo}            ,
-                    #{ihidnum}           ,
-                    #{sexdstnCode}       ,
                     #{brth}              ,
                     #{areaNo}            ,
                     #{homemiddleTelno}   ,
                     #{homeendTelno}      ,
-                    #{fxnum}             ,
                     #{homeadres}         ,
                     #{detailAdres}       ,
                     #{zip}               ,
-                    #{offmTelno}         ,
                     #{moblphonNo}        ,
                     #{emailAdres}        ,
-                    #{ofcpsNm}           ,
                     #{groupId}           ,
-                    #{orgnztId}          ,
-                    #{insttCode}         ,
                     #{emplyrSttusCode}   ,
-                    sysdate              ,
                     #{subDn}             ,
                     sysdate              )
         
@@ -119,7 +103,7 @@ SELECT * FROM ( SELECT rownum rn, TB.* FROM (
     
     <delete id="deleteUser_S">
         
-            DELETE FROM COMTNEMPLYRINFO 
+            DELETE FROM EMPLOYEES 
             WHERE ESNTL_ID=#{delId}
         
     </delete>
@@ -129,63 +113,48 @@ SELECT * FROM ( SELECT rownum rn, TB.* FROM (
             SELECT
                 ESNTL_ID           uniqId            ,
                 'USR03'           userTy,
-            EMPLYR_ID         emplyrId          ,
-            USER_NM         emplyrNm          ,
+            EMP_ID         emplyrId          ,
+            EMP_NAME         emplyrNm          ,
             PASSWORD          password          ,
             PASSWORD_HINT     passwordHint      ,
             PASSWORD_CNSR     passwordCnsr      ,
-            EMPL_NO           emplNo            ,
-            IHIDNUM           ihidnum           ,
-            SEXDSTN_CODE      sexdstnCode       ,
-            BRTHDY              brth              ,
+            EMP_NO           emplNo            ,
+            BIRTH              brth              ,
             AREA_NO           areaNo            ,
             HOUSE_MIDDLE_TELNO  homemiddleTelno   ,
             HOUSE_END_TELNO     homeendTelno      ,
-            FXNUM             fxnum             ,
-            HOUSE_ADRES         homeadres         ,
-            DETAIL_ADRES      detailAdres       ,
-            ZIP               zip               ,
-            OFFM_TELNO        offmTelno         ,
-            MBTLNUM       moblphonNo        ,
-            EMAIL_ADRES       emailAdres        ,
-            OFCPS_NM          ofcpsNm           ,
+            ADR         homeadres         ,
+            ADR_D      detailAdres       ,
+            POST               zip               ,
+            PHONE       moblphonNo        ,
+            EMAIL       emailAdres        ,
             GROUP_ID          groupId           ,
-            ORGNZT_ID         orgnztId          ,
-            PSTINST_CODE        insttCode         ,
             EMPLYR_STTUS_CODE emplyrSttusCode   , 
-            SBSCRB_DE         sbscrbDe          ,
             CRTFC_DN_VALUE            subDn,
             LOCK_AT        				 lockAt
-        FROM COMTNEMPLYRINFO
+        FROM EMPLOYEES
             WHERE ESNTL_ID=#{uniqId}
         
     </select>
     
     <update id="updateUser_S">
         
-            UPDATE COMTNEMPLYRINFO 
-            SET EMPLYR_ID           = #{emplyrId}        , 
-                USER_NM           = #{emplyrNm}        ,
+            UPDATE EMPLOYEES 
+            SET EMP_ID           = #{emplyrId}        , 
+                EMP_NAME           = #{emplyrNm}        ,
                 PASSWORD_HINT       = #{passwordHint}    ,
                 PASSWORD_CNSR       = #{passwordCnsr}    ,
-                EMPL_NO             = #{emplNo}          ,
-                IHIDNUM             = #{ihidnum}         ,
-                SEXDSTN_CODE        = #{sexdstnCode}     ,
-                BRTHDY                = #{brth}            ,
+                EMP_NO             = #{emplNo}          ,
+                BIRTH                = #{brth}            ,
                 AREA_NO             = #{areaNo}          ,
                 HOUSE_MIDDLE_TELNO    = #{homemiddleTelno} ,
                 HOUSE_END_TELNO       = #{homeendTelno}    ,
-                FXNUM               = #{fxnum}           ,
-                HOUSE_ADRES           = #{homeadres}       ,
-                DETAIL_ADRES        = #{detailAdres}     ,
-                ZIP                 = #{zip}             ,
-                OFFM_TELNO          = #{offmTelno}       ,
-                MBTLNUM         = #{moblphonNo}      ,
-                EMAIL_ADRES         = #{emailAdres}      ,
-                OFCPS_NM            = #{ofcpsNm}         ,
+                ADR           = #{homeadres}       ,
+                ADR_D        = #{detailAdres}     ,
+                POST                 = #{zip}             ,
+                PHONE         = #{moblphonNo}      ,
+                EMAIL         = #{emailAdres}      ,
                 GROUP_ID            = #{groupId}         ,
-                ORGNZT_ID           = #{orgnztId}        ,
-                PSTINST_CODE          = #{insttCode}       ,
                 EMPLYR_STTUS_CODE   = #{emplyrSttusCode} ,
                 CRTFC_DN_VALUE              = #{subDn}
             WHERE ESNTL_ID = #{uniqId}
@@ -216,27 +185,22 @@ SELECT * FROM ( SELECT rownum rn, TB.* FROM (
                     ESNTL_ID             ,
                     CHANGE_DE           )
             SELECT 
-                    EMPLYR_ID           ,
-                    EMPL_NO             ,
-                    SEXDSTN_CODE        ,
-                    BRTHDY                ,
+                    EMP_ID           ,
+                    EMP_NO             ,
+                    BIRTH                ,
                     AREA_NO             ,
                     HOUSE_MIDDLE_TELNO    ,
                     HOUSE_END_TELNO       ,
-                    FXNUM               ,
-                    HOUSE_ADRES           ,
-                    DETAIL_ADRES        ,
-                    ZIP                 ,
-                    OFFM_TELNO          ,
-                    MBTLNUM         ,
-                    EMAIL_ADRES         ,
+                    ADR          ,
+                    ADR_D        ,
+                    POST                 ,
+                    PHONE         ,
+                    EMAIL         ,
                     GROUP_ID            ,
-                    ORGNZT_ID           ,
-                    PSTINST_CODE          ,
                     EMPLYR_STTUS_CODE   ,
-                    ESNTL_ID             ,
+                    ESNTL_ID             
                     SYSDATE
-            FROM COMTNEMPLYRINFO
+            FROM EMPLOYEES
             WHERE ESNTL_ID = #{uniqId}
         
     </insert>
@@ -246,8 +210,8 @@ SELECT * FROM ( SELECT rownum rn, TB.* FROM (
             SELECT COUNT(1) usedCnt
                 FROM(
                 SELECT
-                    EMPLYR_ID             userId
-                FROM    COMTNEMPLYRINFO
+                    EMP_ID             userId
+                FROM    EMPLOYEES
                 UNION ALL
                 SELECT
                     ENTRPRS_MBER_ID        userId
@@ -263,7 +227,7 @@ SELECT * FROM ( SELECT rownum rn, TB.* FROM (
     
     <update id="updatePassword_S">
         
-            UPDATE COMTNEMPLYRINFO 
+            UPDATE EMPLOYEES 
             SET 
                    PASSWORD   =  #{password}
                  , CHG_PWD_LAST_PNTTM = sysdate
@@ -275,13 +239,13 @@ SELECT * FROM ( SELECT rownum rn, TB.* FROM (
         
             SELECT
                     PASSWORD          password 
-            FROM    COMTNEMPLYRINFO
+            FROM    EMPLOYEES
             WHERE   ESNTL_ID=#{uniqId}
         
     </select>
     
     <update id="updateLockIncorrect">
-            UPDATE COMTNEMPLYRINFO 
+            UPDATE EMPLOYEES 
  			   SET  LOCK_AT = NULL 
 			     ,  LOCK_CNT  = NULL 
 			     ,  LOCK_LAST_PNTTM = NULL 

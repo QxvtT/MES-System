@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <nav class="navbar header-navbar pcoded-header">
                 <div class="navbar-wrapper">
                     <div class="navbar-logo">
@@ -36,11 +37,20 @@
                             </li>
                         </ul>
                         <ul class="nav-right">
+                            <c:if test="${empty loginVO}">
+                            <li>
+                                <a href="${pageContext.request.contextPath}/uat/uia/egovLoginUsr.do">
+                                   <span>Login</span>
+                                </a>
+                            </li>
+							</c:if>
                             <li class="header-notification">
+                            <c:if test="${!empty loginVO}">
                                 <a href="#!" class="waves-effect waves-light">
                                     <i class="ti-bell"></i>
                                     <span class="badge bg-c-red"></span>
                                 </a>
+                            </c:if>
                                 <ul class="show-notification">
                                     <li>
                                         <h6>Notifications</h6>
@@ -79,11 +89,13 @@
                                 </ul>
                             </li>
                             <li class="user-profile header-notification">
-                                <a href="#!" class="waves-effect waves-light">
-                                     <%--<img src="${pageContext.request.contextPath}/assets/images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image"> --%>
-                                    <span>John Doe</span>
+                            	<c:if test="${!empty loginVO}">
+	                                <a href="#!" class="waves-effect waves-light">
+	                                     <%--<img src="${pageContext.request.contextPath}/assets/images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image"> --%>
+                                    <span>${loginVO.name}(${loginVO.id})</span>
                                     <i class="ti-angle-down"></i>
-                                </a>
+	                                </a>
+								</c:if>
                                 <ul class="show-notification profile-notification">
                                     <li class="waves-effect waves-light">
                                         <a href="#!">
@@ -106,9 +118,12 @@
                                         </a>
                                     </li>
                                     <li class="waves-effect waves-light">
-                                        <a href="auth-normal-sign-in.html">
+                                    <a href="${pageContext.request.contextPath }/uat/uia/actionLogout.do">
+                                    	<i class="ti-layout-sidebar-left"></i> Logout
+                                    </a>
+                                        <%--<a href="auth-normal-sign-in.html">
                                             <i class="ti-layout-sidebar-left"></i> Logout
-                                        </a>
+                                        </a> --%>
                                     </li>
                                 </ul>
                             </li>

@@ -187,6 +187,9 @@ public class BoardController {
         return "forward:/board/BoardList.do";
     }
     
-    
+    @RequestMapping("/main.do")
+    public String main()  throws Exception {
+        return "common/main/Main.page";
+    }
 
 }
