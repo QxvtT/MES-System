@@ -146,6 +146,11 @@ $(function(){
 		$('#mobile-collapse').click(function() {
 		      grid.refreshLayout();
 		   });
+		
+		reset.onclick=function() {
+			let list =[];
+			grid.resetData(list);
+		}
 })
 
 
@@ -158,7 +163,7 @@ $(function(){
 			<div class="row align-items-center">
 				<div class="col-md-8">
 					<div class="page-header-title">
-						<h5 class="m-b-10">주문관리</h5>
+						<h5 class="m-b-10">주문조회</h5>
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -173,29 +178,67 @@ $(function(){
 		</div>
 	</div>
 	<!-- Page-header end -->
-	
-	<form id="frm" name = "frm">
-		<div>
-		진행<input type = "radio" id="ordStatus" name="ordStatus" value="진행" checked="checked"/>
-		완료<input type = "radio" id="ordStatus" name="ordStatus" value="완료"/>
-		전체<input type = "radio" id="ordStatus" name="ordStatus" value=""/>
-		</div>
-		<div>
-		주문일자<input type = "radio" id="date" name="date" value="request" checked="checked"/>
-		납기일자<input type = "radio" id="date" name="date" value="delivery"/>
-		</div>
-		날짜<input type ="date" id="bDate" name = "bDate" />~<input type ="date" id="aDate" name = "aDate" />
-		<br>업체코드<input type ="text" id="operCode" name = "operCode" />
-		<%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>&nbsp;
-		업체이름<input type ="text" id="operName" name = "operName" readonly="readonly"/><br/>
-		제품코드<input type ="text" id="itmCode" name = "itmCode" ></input>
-		<%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>&nbsp;
-		제품명<input type ="text" id="itmName" name = "itmName" ></input><br/>
-		<br/>
-		<button  class="btn btn-info btn-sm" type="button" id ="button" name="button">조회</button>
-	<button class="btn btn-info btn-sm" type="reset" >리셋</button>
-	
-	</form>
+	<div class="pcoded-inner-content">
+	<div class="main-body">
+	<div class="page-wrapper">
+		<div class="row" >
+			<div class="d-inline-block col-xl-12">
+				<div class="card" >
+					<form id="frm" name = "frm">
+						<div style="margin: 10px">
+							<table>
+								<tr>
+									<td width="130px">진행구분</td>
+									<td width="100px">진행<input type = "radio" id="ordStatus" name="ordStatus" value="진행" checked="checked"/></td>
+									<td width="100px">완료<input type = "radio" id="ordStatus" name="ordStatus" value="완료"/></td>
+									<td width="100px">전체<input type = "radio" id="ordStatus" name="ordStatus" value=""/></td>
+									<td width="100px"></td>
+									<td width="100px">자료구분</td>
+									<td width="100px">주문일자<input type = "radio" id="date" name="date" value="request" checked="checked"/></td>
+									<td width="100px">납기일자<input type = "radio" id="date" name="date" value="delivery"/></td>
+								</tr>
+							</table>
+							<br/>
+							<table>
+								<tr>
+									<td width="130px">날짜</td>
+									<td><input type ="date" id="bDate" name = "bDate" /></td>
+									<td> ~ </td>
+									<td><input type ="date" id="aDate" name = "aDate" /></td>
+								</tr>
+							</table>
+							<br/>
+							<table>
+								<tr>
+									<td width="130px">업체코드</td>
+									<td><input style="margin-top: 20px;" class="form-control" type ="text" id="operCode" name = "operCode" /> &nbsp;</td>
+									<td><%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>&nbsp;</td>
+									<td width="130px">업체이름</td>
+									<td><input class="form-control" type ="text" id="operName" name = "operName" readonly="readonly"/></td>
+								</tr>
+							</table>
+							<table>
+								<tr>
+									<td width="130px">제품코드</td>
+									<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmCode" name = "itmCode" ></input> &nbsp;</td>
+									<td><%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>&nbsp;</td>
+									<td width="130px">제품명</td>
+									<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmName" name = "itmName" readonly="readonly"></input><br/></td>
+								</tr>
+							</table>
+							<br/>
+							<div align="right">
+								<button  class="btn btn-info btn-sm" type="button" id ="button" name="button">조회</button>&nbsp;
+								<button class="btn btn-info btn-sm" type="reset" id="reset">리셋</button>&nbsp;
+								<button class="btn btn-info btn-sm" type="button" id ="printOrderBtn" name = "printOrderBtn" >인쇄</button>&nbsp;
+								<button class="btn btn-info btn-sm" type="button" id ="excelOrderBtn" name = "excelOrderBtn" >Excel</button>&nbsp;
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div></div>
+	</div>
 	<form:form commandName="searchVO" name="listForm" id="listForm" method="post">
 		<input type="hidden" name="ordDNum" />
 		<div class="pcoded-inner-content">
@@ -209,13 +252,7 @@ $(function(){
 									<ul>
 										<li>주문목록</li>
 									</ul>
-									<div align="right">
-										<ul>
-											<button class="btn btn-info btn-sm" type="button" id ="printOrderBtn" name = "printOrderBtn" >인쇄</button>
-											&nbsp;
-											<button class="btn btn-info btn-sm" type="button" id ="excelOrderBtn" name = "excelOrderBtn" >Excel</button>
-										</ul>
-									</div>
+								
 								</div>
 								
 								<!-- // 타이틀 -->

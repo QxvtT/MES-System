@@ -225,23 +225,28 @@ function ReportToExcelConverter() {
 			<div class="main-body">
 				<div class="page-wrapper">
 					<div class="row">
-						<div class="col-xl-12">
+						<div class="d-inline-block col-xl-12">
 						
 							<div class="card">
 								<!-- 타이틀 -->
 								<form>
 									<div id="title" class="card-header">
 										
+										
+										<div>
+											<table>
+												<tr>
+													<td width="130px">진행구분</td>
+													<td width="100px">진행<input type = "radio" id="prcComY" name="prcComY" value="N" checked="checked"/></td>
+													<td width="100px">완료<input type = "radio" id="prcComY" name="prcComY" value="Y"/></td>
+													<td width="100px">전체<input type = "radio" id="prcComY" name="prcComY" value=""/></td>
+													<td width="100px"></td>
+												</tr>
+											</table>
+										</div>
 										<ul>
 											지시일자<input type ="date" id="bDate" name = "bDate" />~<input type ="date" id="aDate" name = "aDate" />
 										</ul>
-										<div>
-											<ul>
-												진행<input type = "radio" id = "prcComY" name = "prcComY" value = "N"/>
-												완료<input type = "radio" id = "prcComY" name = "prcComY" value = "Y"/>
-												전체<input type = "radio" id = "prcComY" name = "prcComY" value = "" checked="checked"/>
-											</ul>
-										</div>
 										<ul>
 											<div align="right">
 												<button class="btn btn-info btn-sm" type ="button" id ="search" name = "search">검색</button>

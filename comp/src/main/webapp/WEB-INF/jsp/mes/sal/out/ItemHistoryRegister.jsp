@@ -546,19 +546,6 @@ $(function(){
 	grid5.on('scrollEnd', () => {
 	    grid5.appendRows(getList());
 	  })
-    sibal.onclick =function() {
-			let sibal = grid.getData()[0]['itmVol'];
-			sibal *=1;
-			console.log(sibal);
-			console.log(grid.getData().length);
-		
-			
-			
-// 			for(int i = 0; i <grid.getData().length; i++){
-				
-// 			}
-		}
-	 
 })
 
 
@@ -587,35 +574,39 @@ $(function(){
 		</div>
 	</div>
 	<!-- Page-header end -->
-	
-			<form id="frm" name="frm" >
-		
-				<div id="table1">
+	<div class="pcoded-inner-content">
+	<div class="main-body">
+	<div class="page-wrapper">
+		<div class="row" >
+			<div class="d-inline-block col-xl-12">
+				<div class="card" >
+					<form id="frm" name = "frm">
+						<div style="margin: 10px">
 
 					<table >
 						<tr>
 							<th>출고일자*</th>
-							<td><input type="date" name="itmHisRdy" id="itmHisRdy"/>
+							<td><input class="form-control" type="date" name="itmHisRdy" id="itmHisRdy"/>
 						</tr>
 						<tr>
 							<th>주문번호*</th>
-							<td><input type="text" name="ordNum" id="ordNum" readonly="readonly"/>
+							<td><input class="form-control" type="text" name="ordNum" id="ordNum" readonly="readonly"/>
 						</tr>
 						<tr>
 							<th>출고번호</th>
-							<td><input type="text" name="itmHisNum" id="itmHisNum" readonly="readonly"/>
+							<td><input class="form-control" type="text" name="itmHisNum" id="itmHisNum" readonly="readonly"/>
 						</tr>
 						<tr>
 							<th>고객사코드*</th>
-							<td><input type="text" name="operCode" id="operCode" />
+							<td><input  class="form-control" type="text" name="operCode" id="operCode" />
 						</tr>
 						<tr>
 							<th>고객사명</th>
-							<td><input type="text" name="operName" id="operName"  readonly="readonly" />
+							<td><input class="form-control" type="text" name="operName" id="operName"  readonly="readonly" />
 						</tr>
 						<tr>
 							<th>특이사항</th>
-							<td><input type="text" name="itmNote" id="itmNote" />
+							<td><input class="form-control" type="text" name="itmNote" id="itmNote" />
 						</tr>
 						
 						
@@ -624,11 +615,11 @@ $(function(){
 						<button type="button" class="btn btn-info btn-sm" id="searchHisBtn" data-toggle="modal" data-target="#myModal">검색</button>&nbsp;
 					
 					<button type="reset" class="btn btn-info btn-sm" id= "reset">새자료</button>
-					<button type="button" class="btn btn-info btn-sm" id= "sibal">sibal</button>
 					</div>
 			
 		</div>
 			</form>
+			</div></div></div></div></div></div>
 
 				<div class="pcoded-inner-content">
 					<div class="main-body">

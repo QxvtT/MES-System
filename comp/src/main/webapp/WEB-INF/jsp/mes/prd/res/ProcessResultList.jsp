@@ -685,17 +685,24 @@ function getProcessResultSelect(key) {
 			<div class="main-body">
 				<div class="page-wrapper">
 					<div class="row">
-						<div class="col-xl-12">
+						<div class="d-inline-block col-xl-12">
 						
 							<div class="card">
 								<!-- 타이틀 -->
 								<div id="title" class="card-header">
-									<ul>
-										공정코드<input type="text" id="prcCode" name ="prcCode" />
-										<%@ include file="/WEB-INF/jsp/mes/common/modal/ProcessList.jsp" %>
+									<table>
+										<tr>
+											<td>공정코드</td>
+											<td><input class="form-control" type="text" id="prcCode" name ="prcCode" /></td>
+											<td><%@ include file="/WEB-INF/jsp/mes/common/modal/ProcessList.jsp" %></td>
+											<td>공정명</td>
+											<td><input  class="form-control" type="text" id="prcName" name ="prcName" readonly="readonly"/></td>
+										</tr>
+									</table>
+										
 									</ul>
 									<ul>
-										공정이름<input type="text" id="prcName" name ="prcName" readonly="readonly"/>
+										
 									</ul>
 									<ul>
 										<div align="right">
