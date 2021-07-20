@@ -179,7 +179,7 @@
 	           }
 	           ,error: function (jqXHR) 
 	           { 
-	               alert(jqXHR.responseText); 
+	               alert("이미 존재하는 설비코드 입니다."); 
 	           }
 	     });
 			 
