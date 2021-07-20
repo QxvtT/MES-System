@@ -61,6 +61,9 @@ public class MachinemagVO extends MachinemagDefaultVO{
     /** MAC_STD_TEMP */
     private java.math.BigDecimal macStdTemp;
     
+    /** PRO_OPER */
+    private java.lang.String imagePath;
+    
    
     
 }

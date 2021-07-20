@@ -23,7 +23,8 @@
 				  , BUY_DATE
 				  , BUY_PRICE
 				  , MAC_LOADAGE
-				  , MAC_STD_TEMP )
+				  , MAC_STD_TEMP
+				  , image_path )
 			VALUES ( #{macCode}
 				  , #{macName}
 				  , #{macDiv}
@@ -36,7 +37,8 @@
 				  , to_date(#{buyDate}, 'yyyy-MM-dd')
 				  , #{buyPrice}
 				  , #{macLoadage}
-				  , #{macStdTemp} );
+				  , #{macStdTemp}
+				  , #{imagePath});
 				  
 		insert into machine_process VALUES (#{macCode}, #{prcCode}, (select max(prc_mac_num)+1 from machine_process));
 		

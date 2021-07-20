@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 import egovframework.com.cmm.EgovWebUtil;
 import egovframework.com.cmm.util.EgovResourceCloseHelper;
@@ -45,6 +47,8 @@ import mes.prd.res.service.ProcessResultVO;
 @SessionAttributes(types = MachinemagVO.class)
 public class MachinemagController {
 
+	private String path = "C:/Users/admin/git/MES-System/comp/src/main/webapp/images/machinemng";
+	
 	@Resource(name = "machineService")
 	private MachinemagService machineService;
 
@@ -69,8 +73,10 @@ public class MachinemagController {
 		return machineList;
 	}
 
+	
 	@RequestMapping("/mac/machine/MacMng.do")
 	public String MacMng(MachinemagVO searchVO) throws Exception {
+		
 		return "mac/machine/MachineList.page";
 	}
 
@@ -115,8 +121,39 @@ public class MachinemagController {
 	
 	@RequestMapping(value = "/mac/machine/machineInsert")
 	@ResponseBody
-	public void machineInsert(@RequestBody MachinemagVO MachinemagVO) throws Exception {
-		machineService.insertMachine(MachinemagVO);
+	public String machineInsert(@RequestParam("file1") MultipartFile multi, HttpServletRequest request,
+			HttpServletResponse response, Model model) throws Exception {
+		String url = null;
+		String saveFileName = null;
+		
+		try {
+
+			// String uploadpath = request.getServletContext().getRealPath(path);
+			String uploadpath = path;
+			String originFilename = multi.getOriginalFilename();
+			long size = multi.getSize();
+			saveFileName = originFilename;
+			
+			System.out.println("uploadpath : " + uploadpath);
+
+			System.out.println("originFilename : " + originFilename);
+			System.out.println("size : " + size);
+			System.out.println("saveFileName : " + saveFileName);
+
+			if (!multi.isEmpty()) {
+				File file = new File(uploadpath, saveFileName);
+				multi.transferTo(file);
+
+				model.addAttribute("filename", multi.getOriginalFilename());
+				model.addAttribute("uploadPath", file.getAbsolutePath());
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		//MachinemagVO.setImagePath(saveFileName);
+		System.out.println(saveFileName);
+		//machineService.insertMachine(MachinemagVO);
+		return saveFileName;
 	}
 	
 	@RequestMapping(value = "/mac/machine/machineDelete")

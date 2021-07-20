@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class UploadForm {
 
-	private String path = "C:\\Users\\admin\\git\\MES-System\\comp\\src\\main\\webapp\\images\\machinemng";
+	private String path = "C:/Users/admin/git/MES-System/comp/src/main/webapp/images/machinemng";
 
 	@RequestMapping("/result")
 	@ResponseBody
@@ -29,14 +29,12 @@ public class UploadForm {
 			// String uploadpath = request.getServletContext().getRealPath(path);
 			String uploadpath = path;
 			String originFilename = multi.getOriginalFilename();
-			String extName = originFilename.substring(originFilename.lastIndexOf("."), originFilename.length());
 			long size = multi.getSize();
-			String saveFileName = genSaveFileName(extName);
+			String saveFileName = originFilename;
 
 			System.out.println("uploadpath : " + uploadpath);
 
 			System.out.println("originFilename : " + originFilename);
-			System.out.println("extensionName : " + extName);
 			System.out.println("size : " + size);
 			System.out.println("saveFileName : " + saveFileName);
 
@@ -55,20 +53,4 @@ public class UploadForm {
 		return "success";
 	}
 
-	// 현재 시간을 기준으로 파일 이름 생성
-	private String genSaveFileName(String extName) {
-		String fileName = "";
-
-		Calendar calendar = Calendar.getInstance();
-		fileName += calendar.get(Calendar.YEAR);
-		fileName += calendar.get(Calendar.MONTH);
-		fileName += calendar.get(Calendar.DATE);
-		fileName += calendar.get(Calendar.HOUR);
-		fileName += calendar.get(Calendar.MINUTE);
-		fileName += calendar.get(Calendar.SECOND);
-		fileName += calendar.get(Calendar.MILLISECOND);
-		fileName += extName;
-
-		return fileName;
-	}
 }

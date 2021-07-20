@@ -163,15 +163,34 @@
 					 buyDate : $('input#buyDate1').val(),
 					 buyPrice : $('input#buyPrice').val(),
 					 macLoadage : $('input#macLoadage').val(),
-					 macStdTemp : $('input#macStdTemp').val()
+					 macStdTemp : $('input#macStdTemp').val(),
 				
 					 
 					 
 			 };
 			 
+			 var form = new FormData();
+		        form.append( "file1", $("#file1")[0].files[0] );
+		        
+		         jQuery.ajax({
+		             url : "${pageContext.request.contextPath}/mac/machine/machineInsert"
+		           , type : "POST"
+		           , processData : false
+		           , contentType : false
+		           , data : form
+		           , success:function(success) {
+		               alert("성공하였습니다.");
+		               console.log(success);
+		           }
+		           ,error: function (jqXHR) 
+		           { 
+		               alert(jqXHR.responseText); 
+		           }
+		       });
+			 
 			 console.log(list);
 			 
-			 $.ajax({
+			 /* $.ajax({
 					async: false, 
 					url : "machineInsert",
 					type : "post",
@@ -181,8 +200,8 @@
 					success : function(){
 						
 						}
-					});
-			 machine.resetData(getMachineMngList());
+					}); */
+			 //machine.resetData(getMachineMngList());
 			 
 		 }
 			//수정
@@ -293,6 +312,63 @@
 			<div class="page-wrapper">
 				<div class="row">
 					<div class="col-xl-6">
+						<div class="card">
+							<!-- 타이틀 -->
+
+							<div id="title" class="card-header">
+								<div class="row col-xl-12">
+									<div class="d-inline-block col-xl-6">
+										<ul>
+											<li><h5>설비 List</h5></li>
+										</ul>
+									</div>
+									<div class="d-inline-block text-right col-xl-6">
+										<button id="sibar"
+											class="btn btn-success waves-effect waves-light">저장</button>
+										<button id="sibar1"
+											class="btn btn-info waves-effect waves-light">수정</button>
+										<button id="mimi"
+											class="btn btn-danger waves-effect waves-light">삭제</button>
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-12">
+								<div id="machine"></div>
+								<div style="height: 10px"></div>
+							</div>
+						</div>
+
+						<!-- 타이틀 -->
+						<div class="card">
+							<div id="title" class="card-header">
+
+								<ul>
+									<li><h5>* 설비 이미지 등록</h5></li>
+
+								</ul>
+								<br />
+								<div class="form-group row">
+									<div class="img_wrap"
+										style="height: 370px; width: 85%; margin: 0 auto">
+										<img id="img" style="height: 100%; width: 100%"
+											src="${pageContext.request.contextPath}/images/noimage.png" />
+									</div>
+
+								</div>
+								<div class="row col-xl-12">
+									<div class="d-inline-block col-xl-6">
+										<label for="file1"></label> <input type="file" id="file1"
+											name="file1">
+									</div>
+									<div class="d-inline-block text-right col-xl-6">
+										<button class="btn" id="btn_submit"
+											onclick="javascript:fn_submit()" style="">전송</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6">
 						<form>
 							<div class="card">
 								<!-- 타이틀 -->
@@ -317,10 +393,9 @@
 									<tr>
 										<th>공정코드 &nbsp; * <%@ include
 												file="/WEB-INF/jsp/mes/common/modal/ProcessList.jsp"%></th>
-										<td align="right">
-										<input style="text-align: center"
-											class="form-control" type="hidden" id="prcCode" name="prcCode" />
-											<input style="text-align: center"
+										<td align="right"><input style="text-align: center"
+											class="form-control" type="hidden" id="prcCode"
+											name="prcCode" /> <input style="text-align: center"
 											class="form-control" type="text" id="prcName" name="prcName" /></td>
 									</tr>
 									<tr>
@@ -403,69 +478,12 @@
 							</div>
 						</form>
 					</div>
-
-					<div class="col-xl-6">
-						<div class="card">
-							<!-- 타이틀 -->
-
-							<div id="title" class="card-header">
-								<div class="row col-xl-12">
-									<div class="d-inline-block col-xl-6">
-										<ul>
-											<li><h5>설비 List</h5></li>
-										</ul>
-									</div>
-									<div class="d-inline-block text-right col-xl-6">
-										<button id="sibar"
-											class="btn btn-success waves-effect waves-light">저장</button>
-										<button id="sibar1"
-											class="btn btn-info waves-effect waves-light">수정</button>
-										<button id="mimi"
-											class="btn btn-danger waves-effect waves-light">삭제</button>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-12">
-								<div id="machine"></div>
-								<div style="height: 10px"></div>
-							</div>
-						</div>
-
-						<!-- 타이틀 -->
-						<div class="card">
-							<div id="title" class="card-header">
-
-								<ul>
-									<li><h5>* 설비 이미지 등록</h5></li>
-
-								</ul>
-								<br />
-								<div class="form-group row">
-									<div class="img_wrap"
-										style="height: 370px; width: 85%; margin: 0 auto">
-										<img id="img" style="height: 100%; width: 100%"
-											src="${pageContext.request.contextPath}/images/noimage.png" />
-									</div>
-
-								</div>
-								<div class="row col-xl-12">
-									<div class="d-inline-block col-xl-6">
-										<label for="file1"></label> <input type="file" id="file1"
-											name="file1">
-									</div>
-									<div class="d-inline-block text-right col-xl-6">
-										<button class="btn" id="btn_submit"
-											onclick="javascript:fn_submit()" style="">전송</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script type="text/javascript">
+	
     //이미지 미리보기
     var sel_file;
  
