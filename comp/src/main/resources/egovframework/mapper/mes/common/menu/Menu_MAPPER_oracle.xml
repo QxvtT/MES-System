@@ -20,7 +20,7 @@
 			      FROM COMTNMENUCREATDTLS A, COMTNMENUINFO B
 			     WHERE A.MENU_NO  = B.MENU_NO 
 			       AND A.AUTHOR_CODE = (SELECT AUTHOR_CODE from COMTNEMPLYRSCRTYESTBS
-			                             WHERE SCRTY_DTRMN_TRGET_ID = 'USRCNFRM_00000000001')
+			                             WHERE SCRTY_DTRMN_TRGET_ID = #{uniqId})
 		           union all
 		           SELECT '',
 		                 B.MENU_NO             AS "menuNo"
@@ -32,7 +32,7 @@
 		                 , ''
 		            FROM COMTNMENUINFO b where menu_no = 0)
 		start with menu_no = 0
-		connect by UPPER_MENU_NO = prior menu_no;
+		connect by UPPER_MENU_NO = prior menu_no
 
 	</select>
     

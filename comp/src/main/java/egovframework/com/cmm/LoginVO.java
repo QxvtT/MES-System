@@ -24,6 +24,25 @@ public class LoginVO implements Serializable{
 	 */
 	private static final long serialVersionUID = -8274004534207618049L;
 	
+	//메뉴관리용
+	/** 메뉴명 */
+	private String menuNm;
+	/** url */
+	private String chkURL;
+	
+	
+	public String getMenuNm() {
+		return menuNm;
+	}
+	public void setMenuNm(String menuNm) {
+		this.menuNm = menuNm;
+	}
+	public String getChkURL() {
+		return chkURL;
+	}
+	public void setChkURL(String chkURL) {
+		this.chkURL = chkURL;
+	}
 	/** 아이디 */
 	private String id;
 	/** 이름 */

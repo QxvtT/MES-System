@@ -1,11 +1,13 @@
 package mes.common.menu.web;
 
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,15 +94,17 @@ public class MenuController {
 	 * @return String
 	 * @exception Exception
 	 */
-	@RequestMapping(value = "/selectMenuList")
+	@RequestMapping(value = "/common/menu/selectMenuList")
 	@ResponseBody
-	public String selectMenuList(HttpServletRequest request, ModelMap model) throws Exception {
+	public List<?> selectMenuList(LoginVO vo) throws Exception {
 		System.out.println("세션값 확인");
-		System.out.println(request.getSession().getAttribute("LoginVO"));
-		System.out.println(request.getSession().getAttributeNames());
-		//menuService.selectMenuList(null);
-		
-		return null;
+		System.out.println(vo.getUniqId());
+
+		List<?> list = menuService.selectMenuList(vo);
+		for(Object v : list) {
+			System.out.println((LoginVO) v);
+		}
+		return list;
 	}
 
 	

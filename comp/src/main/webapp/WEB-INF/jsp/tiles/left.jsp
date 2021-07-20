@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<nav class="pcoded-navbar">
+<jsp:include page="/WEB-INF/jsp/mes/common/menu/menuList.jsp"/>
+<%--<nav class="pcoded-navbar">
 	<div class="sidebar_toggle">
 		<a href="#"><i class="icon-close icons"></i></a>
 	</div>
@@ -62,8 +63,7 @@
 					</a></li>
 				</ul></li>
 		</ul>
-		<jsp:include page="${pageContext.request.contextPath }/common/menu/menuList.jsp"></jsp:include>
-		<%--<ul class="pcoded-item pcoded-left-item">
+		<ul class="pcoded-item pcoded-left-item">
 			<li class="pcoded-hasmenu"><a href="javascript:void(0)"
 				class="waves-effect waves-dark"> <span class="pcoded-micon"><i
 						class="ti-layout-grid2-alt"></i><b>BC</b></span> <span
@@ -197,6 +197,6 @@
 							<span class="pcoded-mcaret"></span>
 					</a></li>
 				</ul></li>
-		</ul> --%>
+		</ul> 
 	</div>
-</nav>
+</nav>--%>
