@@ -91,7 +91,7 @@
 
 			<if test="prcCode1 != null and prcCode1 != ''">
 							<![CDATA[	
-										prc_code >  #{prcCode1}
+								prc_code >  #{prcCode1}
 							]]>
 			</if>
 			<if test="prcCode != null and prcCode != ''">
@@ -127,7 +127,7 @@
 
 		<if test="matCode1 != null and matCode1 != ''">
 							<![CDATA[	
-									m.mat_code >  #{matCode1}
+								and	m.mat_code >  #{matCode1}
 							]]>
 		</if>
 
@@ -163,11 +163,11 @@
 		from MACHINE m ,process p, machine_process a
 		where p.prc_code = a.prc_code and
 		m.mac_code = a.mac_code
-		<where>
+	
 
 			<if test="macCode1 != null and macCode1 != ''">
 							<![CDATA[	
-								m.mac_code >  #{macCode1}
+							and	m.mac_code >  #{macCode1}
 							]]>
 			</if>
 			<if test="macCode != null and macCode != ''">
@@ -177,7 +177,7 @@
 			</if>
 
 
-		</where>
+	
 		order by m.mac_code
 			<![CDATA[					
 		) A WHERE ROWNUM <= 10 )
