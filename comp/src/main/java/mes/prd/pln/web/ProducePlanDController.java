@@ -96,10 +96,10 @@ public class ProducePlanDController {
 
 
 	// 생산계획 관리 페이지
-	@RequestMapping(value = "/prd/pln/ProducePlanDList.do")
+	@RequestMapping(value = "/prd/pln/PrdPlnMng.do")
 	public String selectProducePlanDList(@ModelAttribute("searchVO") ProducePlanDVO searchVO, ModelMap model)
 			throws Exception {
-		return "prd/pln/ProducePlanDList.page";
+		return "prd/pln/PrdPlnMng.page";
 	}
 
 	// 생산계획 디테일 조회 ajax 처리
@@ -111,14 +111,14 @@ public class ProducePlanDController {
 	}
 	
 	// 생산계획 조회 페이지 
-	@RequestMapping("/ProducePlanDView.do")
+	@RequestMapping("/prd/pln/PrdPlanList.do")
 	public String addProducePlanDView(@ModelAttribute("searchVO") ProducePlanDDefaultVO searchVO, Model model)
 			throws Exception {
-		return "prd/pln/ProducePlanDRegister.page";
+		return "prd/pln/PrdPlanList.page";
 	}
 	
 	// 생산계획조회  리스트 ajax 처리
-	@RequestMapping(value = "/ProducePlanList", method = RequestMethod.GET)
+	@RequestMapping(value = "/prd/pln/ProducePlanList", method = RequestMethod.GET)
 	@ResponseBody
 	public List<?> ajaxPlanList(@ModelAttribute("searchVO") ProducePlanDVO searchVO) throws Exception {
 		System.out.println(searchVO);
@@ -151,44 +151,5 @@ public class ProducePlanDController {
 		return list;
 	}
 
-	@RequestMapping("/prd/pln/addProducePlanD.do")
-	public String addProducePlanD(ProducePlanDVO producePlanDVO,
-			@ModelAttribute("searchVO") ProducePlanDDefaultVO searchVO, SessionStatus status) throws Exception {
-		producePlanDService.insertProducePlanD(producePlanDVO);
-		status.setComplete();
-		return "forward:/prd/pln/ProducePlanDList.do";
-	}
-
-	@RequestMapping("/prd/pln/updateProducePlanDView.do")
-	public String updateProducePlanDView(@RequestParam("prdPlanDNum") java.math.BigDecimal prdPlanDNum,
-			@ModelAttribute("searchVO") ProducePlanDDefaultVO searchVO, Model model) throws Exception {
-		ProducePlanDVO producePlanDVO = new ProducePlanDVO();
-		producePlanDVO.setPrdPlanDNum(prdPlanDNum);
-		// 변수명은 CoC 에 따라 producePlanDVO
-		model.addAttribute(selectProducePlanD(producePlanDVO, searchVO));
-		return "prd/pln/ProducePlanDRegister.page";
-	}
-
-	@RequestMapping("/prd/pln/selectProducePlanD.do")
-	public @ModelAttribute("producePlanDVO") ProducePlanDVO selectProducePlanD(ProducePlanDVO producePlanDVO,
-			@ModelAttribute("searchVO") ProducePlanDDefaultVO searchVO) throws Exception {
-		return producePlanDService.selectProducePlanD(producePlanDVO);
-	}
-
-	@RequestMapping("/prd/pln/updateProducePlanD.do")
-	public String updateProducePlanD(ProducePlanDVO producePlanDVO,
-			@ModelAttribute("searchVO") ProducePlanDDefaultVO searchVO, SessionStatus status) throws Exception {
-		producePlanDService.updateProducePlanD(producePlanDVO);
-		status.setComplete();
-		return "forward:/prd/pln/ProducePlanDList.do";
-	}
-
-	@RequestMapping("/prd/pln/deleteProducePlanD.do")
-	public String deleteProducePlanD(ProducePlanDVO producePlanDVO,
-			@ModelAttribute("searchVO") ProducePlanDDefaultVO searchVO, SessionStatus status) throws Exception {
-		producePlanDService.deleteProducePlanD(producePlanDVO);
-		status.setComplete();
-		return "forward:/prd/pln/ProducePlanDList.do";
-	}
 
 }

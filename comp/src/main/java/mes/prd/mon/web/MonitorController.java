@@ -21,13 +21,13 @@ public class MonitorController {
     @Resource(name = "propertiesService")
     protected EgovPropertyService propertiesService;
     
-    @RequestMapping(value="/Monitor.do")
+    @RequestMapping(value="/prd/mon/Monitor.do")
     public String monitor(MonitorVO vo, ModelMap model)
     				throws Exception {
     	return "prd/mon/Monitor.page";
     }
     
-    @RequestMapping(value = "/MonitorDisplay.do")
+    @RequestMapping(value = "/prd/mon/MonitorDisplay.do")
     public String selectMonitorList(MonitorVO vo, ModelMap model) throws Exception{
     	List<?> list = monitorService.selectMonitorList(vo);
     	model.addAttribute("list", list);
