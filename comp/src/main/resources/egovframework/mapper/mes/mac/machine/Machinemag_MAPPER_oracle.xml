@@ -33,7 +33,7 @@
 				  , #{worker}
 				  , #{use}
 				  , #{usingEnergy}
-				  , to_date(#{buyDate1}, 'yyyy-MM-dd')
+				  , to_date(#{buyDate}, 'yyyy-MM-dd')
 				  , #{buyPrice}
 				  , #{macLoadage}
 				  , #{macStdTemp}
@@ -47,14 +47,21 @@
 	<update id="updateMachine">
 		<![CDATA[
 			UPDATE MACHINE
-			SET 
-				USE_1=#{use1}
-				, WORKER=#{worker}
-				, USE=#{use}
-				, USING_ENERGY=#{usingEnergy}
-				, MAC_LOADAGE=#{macLoadage}
-				, MAC_STD_TEMP=#{macStdTemp}
-				WHERE MAC_CODE=#{macCode}
+			SET  
+					MAC_NAME = #{macName}
+				  , MAC_DIV = #{macDiv}
+				  , USE_1 = #{use1}
+				  , MODEL = #{model}
+				  , PRO_OPER = #{proOper}
+				  , WORKER = #{worker}
+				  , USE = #{use}
+				  , USING_ENERGY = #{usingEnergy}
+				  , BUY_DATE = to_date(#{buyDate}, 'yyyy-MM-dd')
+				  , BUY_PRICE = #{buyPrice}
+				  , MAC_LOADAGE = #{macLoadage}
+				  , MAC_STD_TEMP = #{macStdTemp}
+				  , image_path = #{imagePath}
+			WHERE MAC_CODE = #{macCode}
 				]]>
 	</update>
 
@@ -85,6 +92,7 @@
 		, MODEL
 		, PRO_OPER
 		, USE
+		, USE_1
 		, NOM_CAP
 		, USING_ENERGY
 		, SAFETY
@@ -96,13 +104,14 @@
 		, MAC_STD_TEMP
 		, prc_code
 		, (select prc_name from process where p.prc_code = prc_code) prc_name
+		, image_path
 		FROM MACHINE m ,machine_process p
 		where m.mac_code = p.mac_code
 		ORDER BY
 		MAC_CODE DESC
 		
 		<![CDATA[					
-	) A WHERE ROWNUM <= 10
+	) A 
 )
 ]]>
 	</select>

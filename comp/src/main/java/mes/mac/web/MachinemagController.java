@@ -56,7 +56,7 @@ public class MachinemagController {
 	 * @exception Exception
 	 */
 
-	@RequestMapping(value = "/mac/machine/MachineList.do")
+	@RequestMapping(value = "/mac/machine/MachineList")
 	@ResponseBody
 	public List<?> ajaxselectMachineList(MachinemagVO searchVO) throws Exception {
 
@@ -102,10 +102,38 @@ public class MachinemagController {
 		return machineService.selectMachine(machineVO);
 	}
 
-	@RequestMapping(value = "/mac/machine/machineUdate")
+	@RequestMapping(value = "/mac/machine/machineUpdate")
 	@ResponseBody
-	public void maachineUdate(@RequestBody MachinemagVO MachinemagVO) throws Exception {
-		machineService.updatemachine(MachinemagVO);
+	public void maachineUdate(@RequestParam(name = "file1", required = false) MultipartFile multi, MachinemagVO machinemagVO, Model model) throws Exception {
+		String saveFileName = null;
+		System.out.println("prcCode = " + machinemagVO.getPrcCode());
+		System.out.println("VO 값 : " + machinemagVO);
+		String prcCode = machinemagVO.getPrcCode().substring(1);
+		machinemagVO.setPrcCode(prcCode);
+		System.out.println("prcCode 수정 VO 값 : " + machinemagVO);
+		if (multi != null && multi.getSize() > 0) {
+			try {
+				String uploadpath = path;
+				String originFilename = multi.getOriginalFilename();
+				long size = multi.getSize();
+				saveFileName = originFilename;
+
+				System.out.println("uploadpath : " + uploadpath);
+
+				System.out.println("originFilename : " + originFilename);
+				System.out.println("size : " + size);
+				System.out.println("saveFileName : " + saveFileName);
+
+				if (!multi.isEmpty()) {
+					File file = new File(uploadpath, saveFileName);
+					multi.transferTo(file);
+				}
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+		machinemagVO.setImagePath(saveFileName);
+		machineService.updatemachine(machinemagVO);
 	}
 
 	@RequestMapping(value = "/mac/machine/machineInsert")

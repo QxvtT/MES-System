@@ -25,6 +25,9 @@ public class MachinemagVO extends MachinemagDefaultVO{
     /** PRC_CODE */
     private java.lang.String prcCode;
     
+    /** PRC_Name */
+    private java.lang.String prcName;
+    
     /** MAC_NAME */
     private java.lang.String macName;
     
@@ -62,7 +65,7 @@ public class MachinemagVO extends MachinemagDefaultVO{
     /** MAC_STD_TEMP */
     private java.math.BigDecimal macStdTemp;
     
-    /** PRO_OPER */
+    /** IMAGE_PATH */
     private java.lang.String imagePath;
     
    

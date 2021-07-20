@@ -120,7 +120,7 @@ $(function(){
 	
 	$('#btnP').click(function(){
 		
-		$("#serchPrcModal").modal("toggle");
+		$("#serchPrcModal").modal("hide");
 	})
 	
 		process.on('check', (e) => {
@@ -167,7 +167,7 @@ $(function(){
 				<div id="process"></div>
 				<div class="modal-footer">
 					<button class="btn" id="choiceP" name="choiceP" type="button">선택</button>
-					<button class="btn" type="reset" id="btnP">취소</button>
+					<button class="btn" type="button" id="btnP">취소</button>
 				</div>
 			</div>
 		</div>
