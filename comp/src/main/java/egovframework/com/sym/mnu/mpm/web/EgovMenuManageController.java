@@ -109,14 +109,14 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
     	searchVO.setSearchKeyword(req_menuNo);
 
     	MenuManageVO resultVO = menuManageService.selectMenuManage(searchVO);
         model.addAttribute("menuManageVO", resultVO);
 
-        return "egovframework/com/sym/mnu/mpm/EgovMenuDetailSelectUpdt";
+        return "egovframework/com/sym/mnu/mpm/EgovMenuDetailSelectUpdt.page";
     }
 
     /**
@@ -135,7 +135,7 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
     	// 내역 조회
     	/** EgovPropertyService.sample */
@@ -159,7 +159,7 @@ public class EgovMenuManageController {
 		paginationInfo.setTotalRecordCount(totCnt);
         model.addAttribute("paginationInfo", paginationInfo);
 
-      	return "egovframework/com/sym/mnu/mpm/EgovMenuManage";
+      	return "egovframework/com/sym/mnu/mpm/EgovMenuManage.page";
     }
 
     /**
@@ -178,7 +178,7 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
 		String sLocationUrl = null;
     	String resultMsg    = "";
@@ -222,13 +222,13 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
         String sCmd = commandMap.get("cmd") == null ? "" : (String)commandMap.get("cmd");
 		if(sCmd.equals("insert")){
             beanValidator.validate(menuManageVO, bindingResult);
     		if (bindingResult.hasErrors()){
-    			sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuRegist";
+    			sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuRegist.page";
     			return sLocationUrl;
     		}
     		if(menuManageService.selectMenuNoByPk(menuManageVO) == 0){
@@ -236,7 +236,7 @@ public class EgovMenuManageController {
     			searchVO.setSearchKeyword(menuManageVO.getProgrmFileNm());
     			if(progrmManageService.selectProgrmNMTotCnt(searchVO)==0){
     	    		resultMsg = egovMessageSource.getMessage("fail.common.insert");
-    		        sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuRegist";
+    		        sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuRegist.page";
     			}else{
     	        	menuManageService.insertMenuManage(menuManageVO);
             		resultMsg = egovMessageSource.getMessage("success.common.insert");
@@ -244,11 +244,11 @@ public class EgovMenuManageController {
     			}
     		}else{
         		resultMsg = egovMessageSource.getMessage("common.isExist.msg");
-        		sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuRegist";
+        		sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuRegist.page";
     		}
     		model.addAttribute("resultMsg", resultMsg);
 		}else{
-            sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuRegist";
+            sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuRegist.page";
         }
 		return sLocationUrl;
     }
@@ -271,7 +271,7 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
         beanValidator.validate(menuManageVO, bindingResult);
 		if (bindingResult.hasErrors()){
@@ -308,7 +308,7 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
     	if (menuManageService.selectUpperMenuNoByPk(menuManageVO) != 0){
     		resultMsg = egovMessageSource.getMessage("fail.common.delete.upperMenuExist");
@@ -341,13 +341,13 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
     	List<?> list_menulist = menuManageService.selectMenuList();
     	resultMsg = egovMessageSource.getMessage("success.common.select");
         model.addAttribute("list_menulist", list_menulist);
 //        model.addAttribute("resultMsg", resultMsg);
-      	return  "egovframework/com/sym/mnu/mpm/EgovMenuList";
+      	return  "egovframework/com/sym/mnu/mpm/EgovMenuList.page";
     }
 
     /**
@@ -368,12 +368,12 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
 
         beanValidator.validate(menuManageVO, bindingResult);
 		if (bindingResult.hasErrors()){
-			sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuList";
+			sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuList.page";
 			return sLocationUrl;
 		}
 
@@ -414,7 +414,7 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
 
         beanValidator.validate(menuManageVO, bindingResult);
@@ -454,12 +454,12 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
 
         beanValidator.validate(menuManageVO, bindingResult);
 		if (bindingResult.hasErrors()){
-			sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuList";
+			sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuList.page";
 			return sLocationUrl;
 		}
 		menuManageService.deleteMenuManage(menuManageVO);
@@ -484,12 +484,12 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
 
     	List<?> list_menulist = menuManageService.selectMenuList();
         model.addAttribute("list_menulist", list_menulist);
-      	return  "egovframework/com/sym/mnu/mpm/EgovMenuMvmn";
+      	return  "egovframework/com/sym/mnu/mpm/EgovMenuMvmn.page";
     }
 
     /**
@@ -507,12 +507,12 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
 
     	List<?> list_menulist = menuManageService.selectMenuList();
         model.addAttribute("list_menulist", list_menulist);
-      	return  "egovframework/com/sym/mnu/mpm/EgovMenuMvmnNew";
+      	return  "egovframework/com/sym/mnu/mpm/EgovMenuMvmnNew.page";
     }
 
 
@@ -534,12 +534,12 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
     	menuManageService.menuBndeAllDelete();
     	resultMsg = egovMessageSource.getMessage("success.common.delete");
     	model.addAttribute("resultMsg", resultMsg);
-        return "egovframework/com/sym/mnu/mpm/EgovMenuBndeRegist";
+        return "egovframework/com/sym/mnu/mpm/EgovMenuBndeRegist.page";
     }
 
 
@@ -565,7 +565,7 @@ public class EgovMenuManageController {
     	Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
     	if(!isAuthenticated) {
     		model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-        	return "egovframework/com/uat/uia/EgovLoginUsr";
+        	return "egovframework/com/uat/uia/EgovLoginUsr.page";
     	}
         String sCmd = commandMap.get("cmd") == null ? "" : (String)commandMap.get("cmd");
         if(sCmd.equals("bndeInsert")){
@@ -606,7 +606,7 @@ public class EgovMenuManageController {
 						LOGGER.info("xls, xlsx 파일 타입만 등록이 가능합니다.");
 						resultMsg = egovMessageSource.getMessage("fail.common.msg");
 						model.addAttribute("resultMsg", resultMsg);
-						return "egovframework/com/sym/mnu/mpm/EgovMenuBndeRegist";
+						return "egovframework/com/sym/mnu/mpm/EgovMenuBndeRegist.page";
 					}
 					// *********** 끝 ***********
 
@@ -615,10 +615,10 @@ public class EgovMenuManageController {
 				}
 				file = null;
 			}
-			sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuBndeRegist";
+			sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuBndeRegist.page";
 	    	model.addAttribute("resultMsg", resultMsg);
         }else{
-            sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuBndeRegist";
+            sLocationUrl = "egovframework/com/sym/mnu/mpm/EgovMenuBndeRegist.page";
         }
     	return sLocationUrl;
     }

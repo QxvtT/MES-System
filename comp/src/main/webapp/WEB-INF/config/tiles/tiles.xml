@@ -25,6 +25,10 @@
         <put-attribute name="body" value="/WEB-INF/jsp/egovframework/{1}/{2}/{3}/{4}.jsp" />
     </definition>
     
+    <definition name="egovframework/*/*/*/*/*.page" extends="base">
+        <put-attribute name="body" value="/WEB-INF/jsp/egovframework/{1}/{2}/{3}/{4}/{5}.jsp" />
+    </definition>
+    
     <!-- 메뉴 미표시 -->
     <definition name="baseEmpty" template="/WEB-INF/jsp/tiles/templateEmpty.jsp">
     </definition>

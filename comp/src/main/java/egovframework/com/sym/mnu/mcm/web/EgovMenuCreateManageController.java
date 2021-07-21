@@ -81,7 +81,7 @@ public class EgovMenuCreateManageController {
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		if (!isAuthenticated) {
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-			return "egovframework/com/uat/uia/EgovLoginUsr";
+			return "egovframework/com/uat/uia/EgovLoginUsr.page";
 		}
 		// 내역 조회
 		/** EgovPropertyService.sample */
@@ -120,7 +120,7 @@ public class EgovMenuCreateManageController {
 		paginationInfo.setTotalRecordCount(totCnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("resultMsg", resultMsg);
-		return "egovframework/com/sym/mnu/mcm/EgovMenuCreatManage";
+		return "egovframework/com/sym/mnu/mcm/EgovMenuCreatManage.page";
 	}
 
 	/* 메뉴생성 세부조회 */
@@ -138,13 +138,13 @@ public class EgovMenuCreateManageController {
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		if (!isAuthenticated) {
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-			return "egovframework/com/uat/uia/EgovLoginUsr";
+			return "egovframework/com/uat/uia/EgovLoginUsr.page";
 		}
 		List<?> list_menulist = menuCreateManageService.selectMenuCreatList(menuCreatVO);
 		model.addAttribute("list_menulist", list_menulist);
 		model.addAttribute("resultVO", menuCreatVO);
 
-		return "egovframework/com/sym/mnu/mcm/EgovMenuCreat";
+		return "egovframework/com/sym/mnu/mcm/EgovMenuCreat.page";
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class EgovMenuCreateManageController {
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		if (!isAuthenticated) {
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-			return "egovframework/com/uat/uia/EgovLoginUsr";
+			return "egovframework/com/uat/uia/EgovLoginUsr.page";
 		}
 		String[] insertMenuNo = checkedMenuNoForInsert.split(",");
 		if (insertMenuNo == null || (insertMenuNo.length == 0)) {
@@ -193,14 +193,14 @@ public class EgovMenuCreateManageController {
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		if (!isAuthenticated) {
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-			return "egovframework/com/uat/uia/EgovLoginUsr";
+			return "egovframework/com/uat/uia/EgovLoginUsr.page";
 		}
 		List<?> list_menulist = menuCreateManageService.selectMenuCreatSiteMapList(menuSiteMapVO);
 		model.addAttribute("list_menulist", list_menulist);
 		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
 		menuSiteMapVO.setCreatPersonId(user == null ? "" : EgovStringUtil.isNullToString(user.getId()));
 		model.addAttribute("resultVO", menuSiteMapVO);
-		return "egovframework/com/sym/mnu/mcm/EgovMenuCreatSiteMap";
+		return "egovframework/com/sym/mnu/mcm/EgovMenuCreatSiteMap.page";
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class EgovMenuCreateManageController {
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		if (!isAuthenticated) {
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-			return "egovframework/com/uat/uia/EgovLoginUsr";
+			return "egovframework/com/uat/uia/EgovLoginUsr.page";
 		}
 
 		/*menuSiteMapVO.setTmpRootPath(EgovProperties.RELATIVE_PATH_PREFIX
@@ -260,7 +260,7 @@ public class EgovMenuCreateManageController {
 		model.addAttribute("resultVO", menuSiteMapVO);
 		model.addAttribute("resultMsg", resultMsg);
 
-		return "egovframework/com/sym/mnu/mcm/EgovMenuCreatSiteMap";
+		return "egovframework/com/sym/mnu/mcm/EgovMenuCreatSiteMap.page";
 	}
 
 	/* 메뉴사이트맵 생성조회 */
@@ -278,7 +278,7 @@ public class EgovMenuCreateManageController {
 		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 		if (!isAuthenticated) {
 			model.addAttribute("message", egovMessageSource.getMessage("fail.common.login"));
-			return "egovframework/com/uat/uia/EgovLoginUsr";
+			return "egovframework/com/uat/uia/EgovLoginUsr.page";
 		}
 
 		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
@@ -288,7 +288,7 @@ public class EgovMenuCreateManageController {
 		model.addAttribute("list_menulist", list_menulist);
 
 		model.addAttribute("resultVO", menuSiteMapVO);
-		return "egovframework/com/sym/mnu/mcm/EgovSiteMap";
+		return "egovframework/com/sym/mnu/mcm/EgovSiteMap.page";
 	}
 
 }

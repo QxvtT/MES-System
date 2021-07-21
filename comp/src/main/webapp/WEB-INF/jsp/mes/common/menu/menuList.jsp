@@ -20,9 +20,7 @@ $(function() {
 		dataType: "json",
 		success : function(result){
 			let tag = '<div class=""><div class="main-menu-header"><div style="height: 10px"></div><div class="user-details pt-3 pb-3">';
-			tag = tag + '<c:if test="${!empty loginVO}"><span id="more-details">${loginVO.name}(${loginVO.id})<i class="fa fa-caret-down"></i></span></c:if></div></div>';
-			tag = tag + '<div class="main-menu-content"><ul><li class="more-details"><a href="user-profile.html"><i class="ti-user"></i>View Profile</a> <a href="#!">';
-			tag = tag + '<i class="ti-settings"></i>Settings</a> <a href="${pageContext.request.contextPath }/uat/uia/actionLogout.do"><i class="ti-layout-sidebar-left"></i> Logout </a></ul></div></div>';	
+			tag = tag + '<c:if test="${!empty loginVO}"><span id="more-details">${loginVO.name}(${loginVO.id})</span></c:if></div></div></div>';
 			console.log(result);
 			for(let i in result) {
 				if(i == 0) {
