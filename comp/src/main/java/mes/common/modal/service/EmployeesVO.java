@@ -59,6 +59,9 @@ public class EmployeesVO extends OperationDefaultVO {
 	
 	private java.lang.String password;
 	
+	private java.lang.String worker;
+	
+	
 	// 스크롤용
 	
 	private java.lang.String empId1;
