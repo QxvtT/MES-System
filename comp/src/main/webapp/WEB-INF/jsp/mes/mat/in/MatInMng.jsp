@@ -474,12 +474,12 @@ $(function(){
 		
 		if($('#operCode').val()==""){
 			alert('입고 업체를 넣어주세요.');
-		} else if (){
-			alert('미입고량보다 많이 입고 할 수 없습니다.');
-			console.log();
-			console.log();
+// 		} else if (){
+// 			alert('미입고량보다 많이 입고 할 수 없습니다.');
+// 			console.log();
+// 			console.log();
 		} else {
-		/* $.ajax({
+		$.ajax({
 			async: false,
 			url: "matHisMngUpdate",
 			type : "post",
@@ -492,10 +492,10 @@ $(function(){
 			}
 		});
 		console.log(matHisNum);
-		matHisDNum1 = null; */
+		matHisDNum1 = null;
 			alert('성공');
-			console.log();
-			console.log();
+// 			console.log();
+// 			console.log();
 		}
 		
 	}

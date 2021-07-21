@@ -220,13 +220,13 @@ $(function(){
 												<td>
 													<div class="d-inline-block align-middle">자재구분</div>
 												</td>
-												<td>
+												<!-- <td>
 													<select>
 														<option>전체</option>
 														<option>일반자재</option>
 														<option>가공자재</option>
 													</select>
-												</td>
+												</td> -->
 											</tr>
 											<tr>
 												<td><label class="col-form-label text-center">자재코드</label>

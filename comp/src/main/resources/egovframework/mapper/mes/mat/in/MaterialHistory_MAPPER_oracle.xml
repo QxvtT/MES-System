@@ -453,6 +453,12 @@ SELECT * FROM (
 							V_MAT_COM_NUM
 						);
 			insert into material_stock VALUES (V_LOT_NUM, V_MAT_CODE, V_MAT_HIS_D_VOL);
+			IF V_MAT_COM_NUM IS NOT NULL THEN
+			    UPDATE MATERIAL_ORDER
+			    SET MAT_ORD_VOL = (MAT_ORD_VOL + V_MAT_HIS_D_VOL),
+			        MAT_NORD_VOL = (MAT_NORD_VOL - V_MAT_HIS_D_VOL)
+			    WHERE MAT_COM_NUM = V_MAT_COM_NUM;
+			END IF;
 			END;
 	</insert>
 	<!-- END 자재 입고 관리 grid 행 insert -->
