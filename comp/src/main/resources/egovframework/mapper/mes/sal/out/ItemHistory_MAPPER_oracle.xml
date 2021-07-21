@@ -17,7 +17,8 @@
 			oldVol number;
 			changeVol number;
 		begin
-			    select itm_vol into oldVol
+			    select itm_vol 
+			    into oldVol
 			    from item_history_d
 			    where itm_his_d_num = #{itmHisDNum};
 
@@ -41,9 +42,7 @@
 			    set itm_vol = itm_vol - changeVol
 			    where itm_stc_num = #{lotNum} and
 			    itm_code = #{itmCode};
-			    
-			    update order_m
-			    
+			
 			
 			end;
 	</update>

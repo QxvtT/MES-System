@@ -375,6 +375,7 @@ function getProcessResultSelect(key) {
 				
 			}
 			});
+			prcResDNum1=null;
 		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
 		grid.resetData(getProcessResulList());
 			
@@ -647,6 +648,7 @@ function getProcessResultSelect(key) {
 					
 					}
 				});
+			prcResDNum1 = null;
 			grid.resetData(getProcessResulList());
 			grid3.resetData(getProduceSelect(prdComDNum,prcCode));
 			grid4.resetData(setProduceSelect(prcResDNum));
