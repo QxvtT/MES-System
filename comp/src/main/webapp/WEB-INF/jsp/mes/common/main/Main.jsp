@@ -26,6 +26,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>eGovFrame <spring:message code="comCmm.unitContent.1" /></title>
+</head>
 <body>
 	<div class="pcoded-inner-content">
 		<!-- Main-body start -->
@@ -232,5 +233,7 @@
 
 	</div>
 	<div id="styleSelector"></div>
+	<iframe src="prd/mon/MonitorDisplay.do" ></iframe>
+
 </body>
 </html>

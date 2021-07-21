@@ -257,10 +257,10 @@ $(function(){
 		<div class="main-body">
 			<div class="page-wrapper">
 				<div class="text-right">
-					<button type="button" class="btn btn-primary" id="searchBtn">조회</button>
-					<button type="button" class="btn btn-primary" id="resetBtn">새자료</button>
-					<button type="button" class="btn btn-primary" id="excelBtn">Excel</button>
-					<button type="button" class="btn btn-primary" id="printBtn">인쇄</button>
+					<button type="button" class="btn btn-info" id="searchBtn">조회</button>
+					<button type="button" class="btn btn-info" id="resetBtn">새자료</button>
+					<button type="button" class="btn btn-info" id="excelBtn">Excel</button>
+					<button type="button" class="btn btn-info" id="printBtn">인쇄</button>
 				</div>
 			</div>
 			<div class="row">
@@ -302,9 +302,9 @@ $(function(){
 											</td>
 											<td>
 												<div class="row">
-													<input type="text" class="form-control w-25 ml-3"
+													<input type="text" class="form-control w-25"
 														id="operCode" name="operCode" value="${result.operCode }"></input>
-													<input type="text" class="form-control w-25 ml-3"
+													<input type="text" class="form-control w-25 ml-3 mr-3"
 														id="operName" name="operName" value="${result.operName }"
 														readonly></input>
 													<%@include
@@ -317,9 +317,9 @@ $(function(){
 											</td>
 											<td>
 												<div class="row">
-														<input type="text" class="form-control w-25 ml-3"
+														<input type="text" class="form-control w-25"
 															id="itmCode" name="itmCode" value="${result.itmCode }"></input>
-														<input type="text" class="form-control w-25 ml-3"
+														<input type="text" class="form-control w-25 ml-3 mr-3"
 															id="itmName" name="itmName" value="${result.itmName }"
 															readonly></input>
 														<%@include

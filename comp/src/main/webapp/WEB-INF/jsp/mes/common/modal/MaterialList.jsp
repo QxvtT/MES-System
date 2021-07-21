@@ -116,9 +116,10 @@ $(function(){
 </script>
 </head>
 <body>
-	<button type="button" class="btn btn-sm btn-primary waves-effect waves-light ml-3"
-														id="searchMatBtn" data-toggle="modal" data-target="#searchMatModal">검색</button>
-							
+	<button type="button"
+		class="btn btn-sm btn-info waves-effect waves-light ml-3"
+		id="searchMatBtn" data-toggle="modal" data-target="#searchMatModal">검색</button>
+
 	<div class="modal fade" id="searchMatModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -126,21 +127,21 @@ $(function(){
 				<div class="modal-header">
 					<h3 class="modal-title" id="exampleModalLabel" align="center">자재검색</h3>
 					<button class="close" type="button" data-dismiss="modal"
-						aria-label="Close">
-						&times;
-					</button>
+						aria-label="Close">&times;</button>
 				</div>
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>자재코드</h4>
-					<input type="text" id="matCodeM" name="matCode"></input><br><br>
-					<button type="button" id="buttonMat" class="btn" name="button">조회</button> &nbsp;
-						<button type="reset" class="btn">리셋</button>
+					<input type="text" id="matCodeM" name="matCode"></input><br>
+					<br>
+					<button type="button" id="buttonMat" class="btn" name="button">조회</button>
+					&nbsp;
+					<button type="reset" class="btn">리셋</button>
 				</div>
 				<div class="form-group row"></div>
-				<div id="material">
-				</div>
+				<div id="material"></div>
 				<div class="modal-footer">
-				<button class="btn"  id="choiceMat" name="choiceMat" type="button" data-dismiss="modal">선택</button>
+					<button class="btn" id="choiceMat" name="choiceMat" type="button"
+						data-dismiss="modal">선택</button>
 					<button class="btn" type="reset" data-dismiss="modal">취소</button>
 				</div>
 			</div>

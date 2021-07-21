@@ -238,82 +238,70 @@ $(function(){
 		method="post">
 		<input type="hidden" name="matCode" />
 		<div class="pcoded-inner-content">
+			<br />
 			<div class="main-body">
-				<div class="page-wrapper">
-					<div class="row">
-						<div class="col-xl-12">
-							<div class="row">
-								<div class="col-sm-6"></div>
-								<div class="col-sm-6 text-right">
-									<div class="btn-group">
-										<button type="button" id="searchBtn"
-											class="btn waves-effect waves-light btn-info btn-outline-info btn-md">
-											조회</button>
-										<input type="button" value="새자료 " id="resetBtn"
-											name="resetBtn"
-											class="btn waves-effect waves-light btn-info btn-outline-info btn-md"></input>
-										<button type="button" class="btn btn-info btn-md"
-											id="excelBtn">Excel</button>
-										<button type="button" class="btn btn-info btn-md"
-											id="printBtn">인쇄</button>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-12">
-									<div class="table">
-										<table class="table">
-											<tr>
-												<td>
-													<div class="d-inline-block align-middle">해당 일자</div>
-												</td>
-												<td>
-													<div class="row align-items-center text-center col-lg-8">
-														<div
-															class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-															<input type="text" id="StcStartpicker-input"
-																class=" form-control w-25" aria-label="Date-Time"
-																name="sDate" /> <span class="tui-ico-date"></span>
-															<div id="StcStartpicker-container"
-																style="margin-left: -1px;"></div>
-														</div>
-														<div id="date1" style="margin-top: -1px;"></div>
-														<label class="col-form-label text-center"> ~ </label>
-														<div
-															class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-															<input type="text" id="StcEndpicker-input"
-																class=" form-control w-25" aria-label="Date-Time"
-																name="eDate" /> <span class="tui-ico-date"></span>
-															<div id="StcEndpicker-container"
-																style="margin-left: -1px;"></div>
-														</div>
-														<div id="date2" style="margin-top: -1px;"></div>
-													</div>
-												</td>
-											</tr>
-											<tr>
-												<td><label class="col-form-label text-center">자재코드</label>
-												</td>
-												<td>
-													<div class="row align-items-center text-center col-lg-8">
-														<input type="text" class="form-control w-25 ml-3"
-															id="matCode" name="matCode"></input> <input type="text"
-															class="form-control w-25 ml-3" id="matName"
-															name="matName" readonly></input>
-														<%@ include
-															file="/WEB-INF/jsp/mes/common/modal/MaterialList.jsp"%>
-													</div>
-													<div class="col-lg-4"></div>
-												</td>
-											</tr>
-										</table>
-									</div>
-									<div id="grid"></div>
-								</div>
-							</div>
+				<div class="text-right">
+					<button type="button" id="searchBtn"
+						class="btn waves-effect waves-light btn-info  btn-md">조회</button>
+					<input type="button" value="새자료 " id="resetBtn" name="resetBtn"
+						class="btn waves-effect waves-light btn-info  btn-md"></input>
+					<button type="button" class="btn btn-info btn-md" id="excelBtn">Excel</button>
+					<button type="button" class="btn btn-info btn-md" id="printBtn">인쇄</button>
+				</div>
+				<br/>
+				<div class="row">
+					<div class="col-xl-12">
+						<div class="table">
+							<table class="table">
+								<tr>
+									<td>
+										<div class="d-inline-block align-middle">해당 일자</div>
+									</td>
+									<td>
+										<div class="row align-items-center text-center col-lg-8">
+											<div
+												class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+												<input type="text" id="StcStartpicker-input"
+													class=" form-control w-25" aria-label="Date-Time"
+													name="sDate" /> <span class="tui-ico-date"></span>
+												<div id="StcStartpicker-container"
+													style="margin-left: -1px;"></div>
+											</div>
+											<div id="date1" style="margin-top: -1px;"></div>
+											<label class="col-form-label text-center"> ~ </label>
+											<div
+												class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+												<input type="text" id="StcEndpicker-input"
+													class=" form-control w-25" aria-label="Date-Time"
+													name="eDate" /> <span class="tui-ico-date"></span>
+												<div id="StcEndpicker-container" style="margin-left: -1px;"></div>
+											</div>
+											<div id="date2" style="margin-top: -1px;"></div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><label class="col-form-label text-center">자재코드</label>
+									</td>
+									<td>
+										<div class="row align-items-center text-center col-lg-8">
+											<input type="text" class="form-control w-25 ml-3"
+												id="matCode" name="matCode"></input> <input type="text"
+												class="form-control w-25 ml-3" id="matName" name="matName"
+												readonly></input>
+											<%@ include
+												file="/WEB-INF/jsp/mes/common/modal/MaterialList.jsp"%>
+										</div>
+										<div class="col-lg-4"></div>
+									</td>
+								</tr>
+							</table>
 						</div>
+						<div id="grid"></div>
 					</div>
 				</div>
+			</div>
+		</div>
 	</form:form>
 </body>
 </html>

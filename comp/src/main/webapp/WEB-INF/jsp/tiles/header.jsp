@@ -7,7 +7,7 @@
                         <a class="mobile-menu waves-effect waves-light" id="mobile-collapse" href="#!">
                             <i class="ti-menu"></i>
                         </a>
-                        <div class="mobile-search waves-effect waves-light">
+                        <!-- <div class="mobile-search waves-effect waves-light">
                             <div class="header-search">
                                 <div class="main-search morphsearch-search">
                                     <div class="input-group">
@@ -17,7 +17,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <a href="${pageContext.request.contextPath}/main.do">
                             <h4 class="pr-3 pl-3 mr-3 ml-3">mes system</h4>
                             <%--<img class="img-fluid" src="${pageContext.request.contextPath}/assets/images/logo.png" alt="Theme-Logo" /> --%>

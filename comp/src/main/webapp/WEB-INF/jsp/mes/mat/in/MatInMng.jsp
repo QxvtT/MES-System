@@ -803,117 +803,105 @@ $(function(){
 		method="post">
 		<input type="hidden" name="matCode" />
 		<div class="pcoded-inner-content">
+			<br />
 			<div class="main-body">
-				<div class="page-wrapper">
-					<div class="row">
-						<div class="col-xl-12">
-
-							<div>
-								<div class="text-right">
-									<button id="matInDayBtn" type="button"
-										class="btn btn-info btn-md">조회</button>
-									<input id="resetBtn" class="btn btn-info btn-md" type="button"
-										value="새자료"></input>
-									<button type="button" id="matInSaveBtn" name="matInSaveBtn"
-										class="btn btn-info btn-md">저장</button>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="table">
-										<table class="table">
-											<tr>
-												<td>
-													<div class="d-inline-block align-middle">입고 일자 *</div>
-												</td>
-												<td>
-													<div class="row align-items-center text-center col-lg-12">
-														<div
-															class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-															<input type="text" id="MatInpicker-input"
-																class=" form-control w-25" aria-label="Date-Time"
-																name="matHisDate" /> <span class="tui-ico-date"></span>
-															<div id="MatInpicker-container"
-																style="margin-left: -1px;"></div>
-														</div>
-														<div id="date1" style="margin-top: -1px;"></div>
-													</div>
-												</td>
-											</tr>
-											<tr>
-												<td><label class="col-form-label text-center">입고업체
-														*</label></td>
-												<td>
-													<div class="row align-items-center text-center col-lg-12">
-														<input type="text" class="form-control w-25 ml-3"
-															id="operCode" name="operCode"></input> <input type="text"
-															class="form-control w-25 ml-3" id="operName"
-															name="operName" readonly></input>
-														<%@ include
-															file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
-													</div>
-												</td>
-											</tr>
-											<tr>
-												<td><label class="col-form-label text-center">입고번호</label>
-												</td>
-												<td>
-													<div class="row align-items-center text-center col-lg-12">
-														<input type="text" readonly name="matHisNum"
-															id="matHisNum" class=" form-control w-25 ml-3" />
-													</div>
-												</td>
-											</tr>
-										</table>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="card">
-										<div class="card-body">
-											<h5 class="d-inline-block pt-3">미입고 자료</h5>
-											<div class="row mt-3 mb-3 pb-3 pt-3">
-												<div class="d-inline-block align-middle ml-3">일자 *</div>
-												<div
-													class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-													<input type="text" id="nStartpicker-input"
-														class=" form-control w-25" aria-label="Date-Time"
-														name="matComDateS" /> <span class="tui-ico-date"></span>
-													<div id="nStartpicker-container" style="margin-left: -1px;"></div>
-												</div>
-												<div id="date4" style="margin-top: -1px;"></div>
-												<div
-													class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-													<input type="text" id="nEndpicker-input"
-														class=" form-control w-25" aria-label="Date-Time"
-														name="matComDateE" /> <span class="tui-ico-date"></span>
-													<div id="nEndpicker-container" style="margin-left: -1px;"></div>
-												</div>
-												<div id="date5" style="margin-top: -1px;"></div>
-												<input type="button" id="nOrdBtn" name="nOrdBtn"
-													class="btn btn-info btn-sm" value="미입고 자료 조회" />
-
+				<div class="text-right">
+					<button id="matInDayBtn" type="button" class="btn btn-info btn-md">조회</button>
+					<input id="resetBtn" class="btn btn-info btn-md" type="button"
+						value="새자료"></input>
+					<button type="button" id="matInSaveBtn" name="matInSaveBtn"
+						class="btn btn-info btn-md">저장</button>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-6">
+						<div class="table">
+							<table class="table">
+								<tr>
+									<td>
+										<div class="d-inline-block align-middle">입고 일자 *</div>
+									</td>
+									<td>
+										<div class="row align-items-center text-center col-lg-12">
+											<div
+												class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+												<input type="text" id="MatInpicker-input"
+													class=" form-control w-25" aria-label="Date-Time"
+													name="matHisDate" /> <span class="tui-ico-date"></span>
+												<div id="MatInpicker-container" style="margin-left: -1px;"></div>
 											</div>
+											<div id="date1" style="margin-top: -1px;"></div>
 										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-sm-12 text-right">
-									<button type="button" class="btn btn-info btn-sm"
-										id="addRowBtn">추가</button>
-									<button type="button" class="btn btn-info btn-sm"
-										id="deleteRowBtn">삭제</button>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xl-12">
-									<div id="grid" />
-								</div>
-							</div>
-
-
+									</td>
+								</tr>
+								<tr>
+									<td><label class="col-form-label text-center">입고업체
+											*</label></td>
+									<td>
+										<div class="row align-items-center text-center col-lg-12">
+											<input type="text" class="form-control w-25 ml-3"
+												id="operCode" name="operCode"></input> <input type="text"
+												class="form-control w-25 ml-3" id="operName" name="operName"
+												readonly></input>
+											<%@ include
+												file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><label class="col-form-label text-center">입고번호</label></td>
+									<td>
+										<div class="row align-items-center text-center col-lg-12">
+											<input type="text" readonly name="matHisNum" id="matHisNum"
+												class=" form-control w-25 ml-3" />
+										</div>
+									</td>
+								</tr>
+							</table>
 						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-body">
+								<h5 class="d-inline-block pt-3">미입고 자료</h5>
+								<div class="row mt-3 mb-3 pb-3 pt-3">
+									<div class="d-inline-block align-middle ml-3">일자 *</div>
+									<div
+										class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+										<input type="text" id="nStartpicker-input"
+											class=" form-control w-25" aria-label="Date-Time"
+											name="matComDateS" /> <span class="tui-ico-date"></span>
+										<div id="nStartpicker-container" style="margin-left: -1px;"></div>
+									</div>
+									<div id="date4" style="margin-top: -1px;"></div>
+									<div
+										class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+										<input type="text" id="nEndpicker-input"
+											class=" form-control w-25" aria-label="Date-Time"
+											name="matComDateE" /> <span class="tui-ico-date"></span>
+										<div id="nEndpicker-container" style="margin-left: -1px;"></div>
+									</div>
+									<div id="date5" style="margin-top: -1px;"></div>
+									<input type="button" id="nOrdBtn" name="nOrdBtn"
+										class="btn btn-info btn-sm" value="미입고 자료 조회" />
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-12 text-right">
+						<button type="button" class="btn btn-info btn-sm" id="addRowBtn">추가</button>
+						<button type="button" class="btn btn-info btn-sm"
+							id="deleteRowBtn">삭제</button>
+					</div>
+				</div>
+				<br/>
+				<div class="row">
+					<div class="col-xl-12">
+						<div id="grid" />
 					</div>
 				</div>
 			</div>
@@ -934,8 +922,7 @@ $(function(){
 				</div>
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>자재코드</h4>
-					<input type="text" id="matCodeM" name="matCode"></input><br>
-					<br>
+					<input type="text" id="matCodeM" name="matCode"></input><br> <br>
 					<button type="button" id="buttonMat" class="btn" name="button">조회</button>
 					&nbsp;
 					<button type="reset" class="btn">리셋</button>

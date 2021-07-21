@@ -16,6 +16,8 @@ public class MonitorVO {
 	java.lang.String prcCdoe;
 	// 공정명
 	java.lang.String prcName;
+	// 관리단위
+	java.lang.String prcUnit;
 	
 	// 이동번호
 	java.lang.String movNum;
@@ -25,9 +27,9 @@ public class MonitorVO {
 	java.lang.String itmName;
 	
 	// 금일계획 = 입고량
-	java.math.BigDecimal prcComDVol;
+	java.lang.Long prcComDVol;
 	// 현재실적, 현재불량
-	java.math.BigDecimal prcResVol;
-	java.math.BigDecimal prcErrVol;
+	java.lang.Long prcResVol;
+	java.lang.Long prcErrVol;
 	
 }

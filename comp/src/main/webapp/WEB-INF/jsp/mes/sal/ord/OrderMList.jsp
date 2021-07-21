@@ -154,6 +154,29 @@ $(function(){
 			let list =[];
 			grid.resetData(list);
 		}
+		
+	function setDatePicker(){
+		var today = new Date();
+		var preDay = new Date();
+		preDay.setDate(today.getDate() - 7);
+		
+		var picker = tui.DatePicker.createRangePicker({
+	        startpicker: {
+	            date: preDay,
+	            input: '#bDate',
+	            container: '#bDate-container'
+	        },
+	        endpicker: {
+	            date: today,
+	            input: '#aDate',
+	            container: '#aDate-container'
+	        },
+	        language: 'ko',
+	        type: 'date',
+	        format: 'yyyy-MM-dd'
+	    });
+	}
+	setDatePicker();
 })
 
 
@@ -183,21 +206,17 @@ $(function(){
 	</div>
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
-		<div align="right">
-			<button class="btn btn-info btn-sm" type="button" id="button"
-				name="button">조회</button>
-			&nbsp;
-			<button class="btn btn-info btn-sm" type="reset" id="reset">리셋</button>
-			&nbsp;
-			<button class="btn btn-info btn-sm" type="button" id="printOrderBtn"
-				name="printOrderBtn">인쇄</button>
-			&nbsp;
-			<button class="btn btn-info btn-sm" type="button" id="excelOrderBtn"
-				name="excelOrderBtn">Excel</button>
-			&nbsp;
-		</div>
+		<br />
 		<div class="main-body">
-			<div class="page-wrapper">
+			<div class="text-right">
+				<button class="btn btn-info" type="button" id="button" name="button">조회</button>
+				<button class="btn btn-info" type="reset" id="reset">리셋</button>
+				<button class="btn btn-info" type="button" id="printOrderBtn"
+					name="printOrderBtn">인쇄</button>
+				<button class="btn btn-info" type="button" id="excelOrderBtn"
+					name="excelOrderBtn">Excel</button>
+			</div>
+			<br/>
 				<div class="row">
 					<div class="d-inline-block col-xl-12">
 						<div class="card">
@@ -223,10 +242,25 @@ $(function(){
 									<br />
 									<table>
 										<tr>
-											<td width="130px">날짜</td>
-											<td><input type="date" id="bDate" name="bDate" /></td>
-											<td>~</td>
-											<td><input type="date" id="aDate" name="aDate" /></td>
+											<td>
+												<div
+													class="tui-datepicker-input tui-datetime-input tui-has-focus">
+													<input class="form-control" id="bDate" name="bDate"
+														type="text" aria-label="Date" /> <span
+														class="tui-ico-date"></span>
+													<div id="bDate-container" style="margin-left: -1px;"></div>
+												</div>
+											</td>
+											<td><span style="margin: 10px;"> ~ </span></td>
+											<td>
+												<div
+													class="tui-datepicker-input tui-datetime-input tui-has-focus">
+													<input class="form-control" id="aDate" name="aDate"
+														type="text" aria-label="Date" /> <span
+														class="tui-ico-date"></span>
+													<div id="aDate-container" style="margin-left: -1px;"></div>
+												</div>
+											</td>
 										</tr>
 									</table>
 									<br />
@@ -265,32 +299,29 @@ $(function(){
 				</div>
 			</div>
 		</div>
-	</div>
 
 	<form:form commandName="searchVO" name="listForm" id="listForm"
 		method="post">
 		<input type="hidden" name="ordDNum" />
 		<div class="pcoded-inner-content">
-			<div class="main-body">
-				<div class="page-wrapper">
-					<div class="row">
-						<div class="col-xl-12">
-							<div class="card">
-								<!-- 타이틀 -->
-								<div id="title" class="card-header">
-									<ul>
-										<li>주문목록</li>
-									</ul>
+		<div class="main-body">
+				<div class="row">
+					<div class="col-xl-12">
+						<div class="card">
+							<!-- 타이틀 -->
+							<div id="title" class="card-header">
+								<ul>
+									<li>주문목록</li>
+								</ul>
 
-								</div>
-
-								<!-- // 타이틀 -->
-								<!-- List -->
-								<div id="grid"></div>
 							</div>
-						</div>
 
+							<!-- // 타이틀 -->
+							<!-- List -->
+							<div id="grid"></div>
+						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>

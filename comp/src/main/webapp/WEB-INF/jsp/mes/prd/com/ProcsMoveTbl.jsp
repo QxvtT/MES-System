@@ -300,8 +300,8 @@ $(function(){
 		<div class="main-body">
 			<div class="page-wrapper">
 				<div class="text-right">
-					<button type="button" class="btn btn-primary" id="resetBtn">새자료</button>
-					<button type="button" class="btn btn-primary" id="printBtn">인쇄</button>
+					<button type="button" class="btn btn-info" id="resetBtn">새자료</button>
+					<button type="button" class="btn btn-info" id="printBtn">인쇄</button>
 				</div>
 			</div>
 			<div class="row">
@@ -329,9 +329,6 @@ $(function(){
 													type="text" aria-label="Date" /> <span
 													class="tui-ico-date"></span>
 												<div id="endDate-container" style="margin-left: -1px;"></div>
-											</div>
-											<div>
-												<button type="button" class="btn btn-primary" id="searchBtn">검색</button>
 											</div>
 										</div>
 									</td>

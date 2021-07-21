@@ -227,7 +227,8 @@ function fnShowLogin(stat) {
 	<input type="hidden" id="message" name="message" value="<c:out value='${message}'/>">
 	
 	<fieldset>
-		<img src="<c:url value='/images/egovframework/com/uat/uia/login_tit.png'/>" style="margin:30px 0 0px 60px" alt="login title image"  title="login title image">
+		<div align="center" style="font-size: 50px; font-weight: bold; font-family: sans-serif;">MES SYSTEM</div>
+		<%-- <img src="<c:url value='/images/egovframework/com/uat/uia/login_tit.png'/>" style="margin:30px 0 0px 60px" alt="login title image"  title="login title image"> --%>
 		<div class="login_type">
 			<ul id="ulLoginType">
 				<li><a href="javascript:fnLoginTypeSelect('typeGnr');" id="typeGnr" title=""><spring:message code="comUatUia.loginForm.GNR"/></a></li> <!-- 일반 -->
@@ -252,23 +253,21 @@ function fnShowLogin(stat) {
 				</li>
 				<!-- 아이디 저장 -->
 				<c:set var="title"><spring:message code="comUatUia.loginForm.idSave"/></c:set>
-				<li class="chk">
-					<input type="checkbox" name="checkId" class="check2" onclick="javascript:saveid(document.loginForm);" id="checkId">${title}
-				</li>
-				<li>
-					<input type="button" class="btn_login" value="<spring:message code="comUatUia.loginForm.login"/>" onclick="actionLogin()"> <!-- 로그인  -->
-				</li>
 				<li>
 					<ul class="btn_idpw" >
+						<li class="chk"><input type="checkbox" name="checkId" class="check2" onclick="javascript:saveid(document.loginForm);" id="checkId">${title}</li>
 						<li><a href="#" onclick="goRegiUsr(); return false;"><spring:message code="comUatUia.loginForm.regist"/></a></li> <!-- 회원가입  -->
 					</ul>
 				</li>
 				<li>
+					<input type="button" class="btn_login" value="<spring:message code="comUatUia.loginForm.login"/>" onclick="actionLogin()"> <!-- 로그인  -->
+				</li>
+				<%-- <li>
 					<ul class="btn_idpw" >
 						<li><a href="#" onclick="fnShowLogin(1);"><spring:message code="comUatUia.loginForm.login.gpki"/></a></li><!-- 인증서로그인 -->
 						<li><a href="<c:url value='/uat/uia/egovGpkiIssu.do'/>"><spring:message code="comUatUia.loginForm.gpki.info"/></a></li><!-- 인증서안내 -->
 					</ul>
-				</li>
+				</li> --%>
 				
 			</ul>
 		</div>

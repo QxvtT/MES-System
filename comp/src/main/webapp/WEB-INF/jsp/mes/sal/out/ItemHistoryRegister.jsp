@@ -630,13 +630,49 @@ $(function(){
 	grid5.on('scrollEnd', () => {
 	    grid5.appendRows(getList());
 	  })
+	  
+	  
+		// toast datePicker 관련 Script
+		var today = new Date();
+		var preDay = new Date();
+		preDay.setDate(today.getDate() - 7);
+		
+		// 새자료 버튼 사용시 날짜 정보가 공란이 되는 것을 막기 위해 리셋시 함수로 실행함
+		function setDatePicker(){
+		  	var datepicker = new tui.DatePicker('#wrapper', {
+		         date: today,
+		  		 language: 'ko',
+		         input: {
+		             element: '#itmHisRdy',
+		             format: 'yyyy-MM-dd'
+		         }
+		    });
+			
+		    var picker = tui.DatePicker.createRangePicker({
+		        startpicker: {
+		            date: preDay,
+		            input: '#bDate',
+		            container: '#bDate-container'
+		        },
+		        endpicker: {
+		            date: today,
+		            input: '#aDate',
+		            container: '#aDate-container'
+		        },
+		        language: 'ko',
+		        type: 'date',
+		        format: 'yyyy-MM-dd'
+		    });
+		}
+		setDatePicker(); // 페이지 생성시 날짜 입력창 세팅
+	  
 })
 
 
 </script>
 </head>
 <body>
-<input type="hidden" id="test" name="test" value="test"/>
+	<input type="hidden" id="test" name="test" value="test" />
 	<!-- Page-header start -->
 	<div class="page-header">
 		<div class="page-block">
@@ -651,7 +687,8 @@ $(function(){
 						<li class="breadcrumb-item"><a href="index.jsp"> <i
 								class="fa fa-home"></i>
 						</a></li>
-						<li class="breadcrumb-item"><a href="#!">출고관리</a></li>
+						<li class="breadcrumb-item">영업</li>
+						<li class="breadcrumb-item">출고관리</li>
 					</ul>
 				</div>
 			</div>
@@ -659,78 +696,85 @@ $(function(){
 	</div>
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
-	<div class="main-body">
-	<div class="page-wrapper">
-		<div class="row" >
-			<div class="d-inline-block col-xl-12">
-				<div class="card" >
-					<form id="frm" name = "frm">
-						<div style="margin: 10px">
-
-					<table >
-						<tr>
-							<th>출고일자*</th>
-							<td><input class="form-control" type="date" name="itmHisRdy" id="itmHisRdy"/>
-						</tr>
-						<tr>
-							<th>주문번호*</th>
-							<td><input class="form-control" type="text" name="ordNum" id="ordNum" readonly="readonly"/>
-						</tr>
-						<tr>
-							<th>출고번호</th>
-							<td><input class="form-control" type="text" name="itmHisNum" id="itmHisNum" readonly="readonly"/>
-						</tr>
-						<tr>
-							<th>고객사코드*</th>
-							<td><input  class="form-control" type="text" name="operCode" id="operCode" />
-						</tr>
-						<tr>
-							<th>고객사명</th>
-							<td><input class="form-control" type="text" name="operName" id="operName"  readonly="readonly" />
-						</tr>
-						<tr>
-							<th>특이사항</th>
-							<td><input class="form-control" type="text" name="itmNote" id="itmNote" />
-						</tr>
-						
-						
-					</table>
-					<div align="left">
-						<button type="button" class="btn btn-info btn-sm" id="searchHisBtn" data-toggle="modal" data-target="#myModal">검색</button>&nbsp;
-					
-					<button type="reset" class="btn btn-info btn-sm" id= "reset">새자료</button>
-					</div>
-			
-		</div>
-			</form>
-			</div></div></div></div></div></div>
-
-				<div class="pcoded-inner-content">
-					<div class="main-body">
-						<div class="page-wrapper">
-							<div class="row">
-								<div class="col-xl-12">
-									<div class="card">
-										<!-- 타이틀 -->
-										<div id="title" class="card-header">
-											<ul>
-												<li>List</li>
-												<div align="right">
-													<button  class="btn btn-info btn-sm" type="button" id="insert">추가</button>
-													<button  class="btn btn-info btn-sm" type="button" id="deleteItm">삭제</button>
-													<button type="button" class="btn btn-info btn-sm" id="save">저장</button>
-												</div>
-											</ul>
-										</div>
-
-										<div id="grid"></div>
-									</div>
-								</div>
-
+		<br />
+		<div class="main-body">
+			<div class="text-right">
+				<button type="button" class="btn btn-info" id="searchHisBtn"
+					data-toggle="modal" data-target="#myModal">검색</button>
+				<button type="reset" class="btn btn-info" id="reset">새자료</button>
+			</div>
+			<br />
+			<div class="row">
+				<div class="d-inline-block col-xl-12">
+					<div class="card">
+						<form id="frm" name="frm">
+							<div style="margin: 10px">
+								<table>
+									<tr>
+										<th>출고일자*</th>
+										<td>
+											<div
+												class="tui-datepicker-input tui-datetime-input tui-has-focus">
+												<input class="form-control" type="text" id="itmHisRdy"
+													name="itmHisRdy" aria-label="Date-Time" /> <span
+													class="tui-ico-date"></span>
+											</div>
+											<div id="wrapper" style="margin-top: -1px;"></div>
+										</td>
+										<th>출고번호</th>
+										<td><input class="form-control w-25" type="text"
+											name="itmHisNum" id="itmHisNum" readonly="readonly" /></td>
+									</tr>
+									<tr>
+										<th>고객사코드*</th>
+										<td><input class="form-control w-25" type="text"
+											name="operCode" id="operCode" /></td>
+										<th>고객사명</th>
+										<td><input class="form-control w-25" type="text"
+											name="operName" id="operName" readonly="readonly" /></td>
+									</tr>
+									<tr>
+										<th>특이사항</th>
+										<td><input class="form-control w-25" type="text"
+											name="itmNote" id="itmNote" /></td>
+										<th>주문번호*</th>
+										<td><input class="form-control w-25" type="text"
+											name="ordNum" id="ordNum" readonly="readonly" /></td>
+									</tr>
+								</table>
 							</div>
-						</div>
+						</form>
 					</div>
+				</div>
+			</div>
 		</div>
+	</div>
+
+	<div class="pcoded-inner-content">
+		<div class="main-body">
+			<div class="text-right">
+				<button class="btn btn-info btn-sm" type="button" id="insert">추가</button>
+				<button class="btn btn-info btn-sm" type="button" id="deleteItm">삭제</button>
+				<button type="button" class="btn btn-info btn-sm" id="save">저장</button>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-xl-12">
+					<div class="card">
+						<!-- 타이틀 -->
+						<div id="title" class="card-header">
+							<ul>
+								<li>List</li>
+							</ul>
+						</div>
+
+						<div id="grid"></div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
 
 
 	<!-- 출고번호 검색 모달 -->
@@ -740,21 +784,42 @@ $(function(){
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title" id="exampleModalLabel">출고번호검색</h4>
-					<button class="close" type="button" data-dismiss="modal"aria-label="Close">
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
 						&times;
 					</button>
 				</div>
-				<div class="modal-body" >
+				<div class="modal-body">
 					<form>
-						<div class="form-group row">
-							<div class="col">
-								출고일자<input type="date" name="bDate" /> ~ <input type="date" name="aDate" /><br> 
-							</div>
-						</div>
-						<div class="col-md-3">
-							<button type="button" class="btn btn-info btn-sm" id="hisNumSearch">검색</button>
-							<button type="reset" class="btn btn-info btn-sm" id="hisNumSearchReset">초기화</button>
-						</div>
+						<table>
+							<tr>
+								<td><div>출고 일자</div></td>
+							</tr>
+							<tr>
+								<td><div
+										class="tui-datepicker-input tui-datetime-input tui-has-focus">
+										<input class="form-control" id="bDate" name="bDate"
+											type="text" aria-label="Date" /> <span class="tui-ico-date"></span>
+										<div id="bDate-container" style="margin-left: -1px;"></div>
+									</div></td>
+								<td><span>~</span></td>
+								<td><div
+										class="tui-datepicker-input tui-datetime-input tui-has-focus">
+										<input class="form-control" id="aDate" name="aDate"
+											type="text" aria-label="Date" /> <span class="tui-ico-date"></span>
+										<div id="aDate-container" style="margin-left: -1px;"></div>
+									</div></td>
+							</tr>
+							<tr>
+								<td>
+									<button type="button" class="btn btn-info btn-sm"
+										id="hisNumSearch">검색</button>
+									<button type="reset" class="btn btn-info btn-sm"
+										id="hisNumSearchReset">초기화</button>
+								</td>
+
+							</tr>
+						</table>
 					</form>
 					<br />
 					<div id="grid2"></div>
@@ -767,7 +832,7 @@ $(function(){
 		</div>
 	</div>
 	<!-- 출고번호 검색 모달 종료-->
-	
+
 	<!-- 제품코드 검색 해당 주문에 해당하는 제품코드 -->
 	<div class="modal fade" id="selectItemCode" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -775,15 +840,14 @@ $(function(){
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title" id="exampleModalLabel">제품코드검색</h4>
-					<button class="close" type="button" data-dismiss="modal"aria-label="Close">
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
 						&times;
 					</button>
 				</div>
-				<div class="modal-body" >
-						<div class="form-group row">
-						</div>
-						<div class="col-md-3">
-						</div>
+				<div class="modal-body">
+					<div class="form-group row"></div>
+					<div class="col-md-3"></div>
 					<br />
 					<div id="grid3"></div>
 				</div>
@@ -795,22 +859,21 @@ $(function(){
 		</div>
 	</div>
 	<!-- 제품코드 검색 종료-->
-		<!-- 제품lotNO 검색 해당  제품에 해당하는 lotno -->
+	<!-- 제품lotNO 검색 해당  제품에 해당하는 lotno -->
 	<div class="modal fade" id="selectLotNum" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title" id="exampleModalLabel">lotNo 검색</h4>
-					<button class="close" type="button" data-dismiss="modal"aria-label="Close">
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
 						&times;
 					</button>
 				</div>
-				<div class="modal-body" >
-						<div class="form-group row">
-						</div>
-						<div class="col-md-3">
-						</div>
+				<div class="modal-body">
+					<div class="form-group row"></div>
+					<div class="col-md-3"></div>
 					<br />
 					<div id="grid4"></div>
 				</div>
@@ -822,32 +885,38 @@ $(function(){
 		</div>
 	</div>
 	<!-- lotno 검색 종료-->
-	
-		<!-- 주문번호 검색 -->
+
+	<!-- 주문번호 검색 -->
 	<div class="modal fade" id="selectOrdNum" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title" id="exampleModalLabel">주문번호검색</h4>
-					<button class="close" type="button" data-dismiss="modal"aria-label="Close">
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
 						&times;
 					</button>
 				</div>
-				<div class="modal-body" >
-						<form>
+				<div class="modal-body">
+					<form>
 						<div class="form-group row">
 							<div class="col">
-								주문일자<input type ="radio" id="date" name = "date" value = "request" checked="checked"/>
-								납기일자<input type ="radio" id="date" name = "date" value = "delivery"/><br/>
-								<input type="date" name="ordBDate" /> ~ <input type="date" name="ordADate" /><br> 
+								주문일자<input type="radio" id="date" name="date" value="request"
+									checked="checked" /> 납기일자<input type="radio" id="date"
+									name="date" value="delivery" /><br /> <input type="date"
+									name="ordBDate" /> ~ <input type="date" name="ordADate" /><br>
 							</div>
 						</div>
 						<div class="col-md-3">
-							<button type="button" class="btn btn-info btn-sm" id="ordNumSearch">검색</button>&nbsp;&nbsp;
-							<button type="reset" class="btn btn-info btn-sm" id="ordNumSearchReset" >초기화</button>
+							<button type="button" class="btn btn-info btn-sm"
+								id="ordNumSearch">검색</button>
+							&nbsp;
+							&nbsp;
+							<button type="reset" class="btn btn-info btn-sm"
+								id="ordNumSearchReset">초기화</button>
 						</div>
-						</form>
+					</form>
 					<br />
 					<div id="grid5"></div>
 				</div>
@@ -859,8 +928,8 @@ $(function(){
 		</div>
 	</div>
 	<!-- 주문번호 검색 종료-->
-	
-	
+
+
 
 
 </body>

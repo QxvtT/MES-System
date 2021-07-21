@@ -95,9 +95,11 @@ $(function(){
  		console.log(aDate);
  		console.log(itmHisDNum);
  	}
+	
 	$('#mobile-collapse').click(function() {
 	      grid.refreshLayout();
 	   });
+	
 	reset.onclick = function() {
 		let list=[];
 		grid.resetData(list);
@@ -142,6 +144,29 @@ function ReportToExcelConverter() {
 		}); 
 	};
 	
+	function setDatePicker(){
+		var today = new Date();
+		var preDay = new Date();
+		preDay.setDate(today.getDate() - 7);
+		
+		var picker = tui.DatePicker.createRangePicker({
+	        startpicker: {
+	            date: preDay,
+	            input: '#bDate',
+	            container: '#bDate-container'
+	        },
+	        endpicker: {
+	            date: today,
+	            input: '#aDate',
+	            container: '#aDate-container'
+	        },
+	        language: 'ko',
+	        type: 'date',
+	        format: 'yyyy-MM-dd'
+	    });
+	}
+	setDatePicker();
+	
 })
 </script>
 </head>
@@ -168,81 +193,103 @@ function ReportToExcelConverter() {
 	</div>
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
+		<br />
 		<div class="main-body">
-			<div class="page-wrapper">
-				<div class="row" >
-					<div class="d-inline-block col-xl-12">
-						<div class="card" >
-							<form id="frm" name ="frm">
-								<div style="margin: 10px">
-									<br/>
-									<table>
-										<tr>
-											<td width="130px">날짜</td>
-											<td><input class="form-control" type ="date" id="bDate" name = "bDate" /></td>
-											<td> ~ </td>
-											<td><input class="form-control" type ="date" id="aDate" name = "aDate" /></td>
-										</tr>
-									</table>
-									<br/>
-									<table>
-										<tr>
-											<td width="130px">업체코드</td>
-											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="operCode" name = "operCode" /> &nbsp;</td>
-											<td><%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>&nbsp;</td>
-											<td width="130px">업체이름</td>
-											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="operName" name = "operName" readonly="readonly"/></td>
-										</tr>
-									</table>
-									<table>
-										<tr>
-											<td width="130px">제품코드</td>
-											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmCode" name = "itmCode" ></input> &nbsp;</td>
-											<td><%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>&nbsp;</td>
-											<td width="130px">제품명</td>
-											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmName" name = "itmName" readonly="readonly"></input><br/></td>
-										</tr>
-									</table>
-									<br/>
-									<div align="right">
-										<button type="button" class="btn btn-info btn-sm" id="getItemHistory">검색</button>
-										<button type="reset" class="btn btn-info btn-sm" id="reset">리셋</button>
-										<button class="btn btn-info btn-sm" type="button" id ="printItmHistoryBtn" name = "printItmHistoryBtn" >인쇄</button>&nbsp;
-										<button class="btn btn-info btn-sm" type="button" id ="excelItemHistoryBtn" name = "excelItemHistoryBtn" >Excel</button>&nbsp;
-									</div>
-								</div>
-							</form>
-						</div>
+			<div class="text-right">
+				<button type="button" class="btn btn-info" id="getItemHistory">검색</button>
+				<button type="reset" class="btn btn-info" id="reset">리셋</button>
+				<button class="btn btn-info" type="button" id="printItmHistoryBtn"
+					name="printItmHistoryBtn">인쇄</button>
+				<button class="btn btn-info" type="button" id="excelItemHistoryBtn"
+					name="excelItemHistoryBtn">Excel</button>
+			</div>
+			<br />
+			<div class="row">
+				<div class="d-inline-block col-xl-12">
+					<div class="card">
+						<form id="frm" name="frm">
+							<div style="margin: 10px">
+								<br />
+								<table>
+									<tr>
+										<td width="130px">날짜</td>
+										<td>
+											<div
+												class="tui-datepicker-input tui-datetime-input tui-has-focus">
+												<input class="form-control" id="bDate" name="bDate"
+													type="text" aria-label="Date" /> <span
+													class="tui-ico-date"></span>
+												<div id="bDate-container" style="margin-left: -1px;"></div>
+											</div>
+										</td>
+										<td><span style="margin: 10px;"> ~ </span></td>
+										<td>
+											<div
+												class="tui-datepicker-input tui-datetime-input tui-has-focus">
+												<input class="form-control" id="aDate" name="aDate"
+													type="text" aria-label="Date" /> <span
+													class="tui-ico-date"></span>
+												<div id="aDate-container" style="margin-left: -1px;"></div>
+											</div>
+										</td>
+									</tr>
+								</table>
+								<br />
+								<table>
+									<tr>
+										<td width="130px">업체코드</td>
+										<td><input style="margin-top: 20px;" class="form-control"
+											type="text" id="operCode" name="operCode" /> &nbsp;</td>
+										<td><%@ include
+												file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>&nbsp;</td>
+										<td width="130px">업체이름</td>
+										<td><input style="margin-top: 20px;" class="form-control"
+											type="text" id="operName" name="operName" readonly="readonly" /></td>
+									</tr>
+								</table>
+								<table>
+									<tr>
+										<td width="130px">제품코드</td>
+										<td><input style="margin-top: 20px;" class="form-control"
+											type="text" id="itmCode" name="itmCode"></input> &nbsp;</td>
+										<td><%@ include
+												file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp"%>&nbsp;</td>
+										<td width="130px">제품명</td>
+										<td><input style="margin-top: 20px;" class="form-control"
+											type="text" id="itmName" name="itmName" readonly="readonly"></input><br /></td>
+									</tr>
+								</table>
+								<br />
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-		<div class="pcoded-inner-content">
-			<div class="main-body">
-				<div class="page-wrapper">
-					<div class="row">
-						<div class="col-xl-12">
-							<div class="card">
-								<!-- 타이틀 -->
-								<div id="title" class="card-header">
-									<ul>
-										<li>출고 리스트</li>
-									</ul>
-								</div>
-								<div id="grid"></div>
-							</div>
-						</div>
 
+	<div class="pcoded-inner-content">
+		<div class="main-body">
+			<div class="row">
+				<div class="col-xl-12">
+					<div class="card">
+						<!-- 타이틀 -->
+						<div id="title" class="card-header">
+							<ul>
+								<li>출고 리스트</li>
+							</ul>
+						</div>
+						<div id="grid"></div>
 					</div>
 				</div>
+
 			</div>
 		</div>
+	</div>
 
 
 
-	
+
 </body>
 </html>
 

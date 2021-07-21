@@ -9,7 +9,7 @@
 	<div class="pcoded-inner-navbar main-menu">
 		<div class="">
 			<div class="main-menu-header">
-				<div style="height: 10px"></div>
+				<div style="height: 9px"></div>
 				<div class="user-details pt-3 pb-3">
 					<c:if test="${!empty loginVO}">
 					<span id="more-details">
