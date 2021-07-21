@@ -108,7 +108,7 @@
 		]]>
 	</select>
 	
-	<!-- 생산계획조회 리스트 수정중 -->
+	<!-- 생산계획조회 리스트 -->
 	<select id="selectPrdPlnDList" parameterType="mes.prd.pln.service.ProducePlanDVO" resultType="mes.prd.com.service.ProduceCommandDVO">
 		SELECT * FROM (
 			SELECT A.*, ROWNUM RNUM FROM ( 
@@ -287,6 +287,11 @@
 		select f.*, p.prc_name
 		<if test="movNum != null and movNum != ''">
 		,NVL((select prc_state from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code), '완료') AS PRC_STATE
+		,(select prc_com_d_vol from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code) prc_com_d_vol
+        ,(select prc_unit from process where prc_code = f.prc_code) prc_unit
+        ,(select prc_res_vol from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code) prc_res_vol
+        ,(select prc_err_vol from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code) prc_err_vol
+        ,(select emp_id from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code) emp_id
 		</if>
 		from process_flow F, process P
 		where f.prc_code = p.prc_code

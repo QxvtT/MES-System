@@ -156,13 +156,13 @@
 	console.log(data3);
 	
 	$('#prdComDDate').text(data1.prdComDDate1);
-	$('#movNum').text(data1.movNum);
+	$('#movNum').text(data2.movNum);
 	$('#prdComNum').text(data1.prdComNum);
 	$('#prdComDate').text(data1.prdComDate);
 	$('#itmCode').text(data1.itmCode);
 	$('#itmName').text(data1.itmName);
 	$('#matName').text(data1.matName);
-	$('#lotNum').text(data1.lotNum);
+	$('#lotNum').text(data2.lotNum);
 	$('#prdComVol').text(data1.prdComVol);
 	
 	var date = new Date();
@@ -185,13 +185,13 @@
 		$('<tr>')
 			.append($('<td>').html(data3[i].prcFNo)).attr('align', 'center')
 			.append($('<td>').html(data3[i].prcName))
-			.append($('<td>').html('prcComDVol'))
-			.append($('<td>').html('prcUnit'))
-			.append($('<td>').html('prcResVol'))
-			.append($('<td>').html('empId'))
+			.append($('<td>').html(data3[i].prcComDVol))
+			.append($('<td>').html(data3[i].prcUnit))
+			.append($('<td>').html((data3[i].prcResVol - data3[i].prcErrVol)))
+			.append($('<td>').html(data3[i].empId))
 			.appendTo('#table')
 	};
-
+	
 
 	window.print();
 </script>

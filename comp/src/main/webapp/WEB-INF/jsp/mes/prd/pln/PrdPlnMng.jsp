@@ -763,7 +763,7 @@ $(function(){
 					<form id="prdSearch" name="prdSearch" method="post"
 						action="/prd/pln/ProducePlanList" onsubmit="return false">
 						<table>
-						<tr><td><div class="col-md-3">계획일자</div></td></tr>
+						<tr><td><div>계획일자</div></td></tr>
 							<tr>
 								<td><div
 									class="tui-datepicker-input tui-datetime-input tui-has-focus">
