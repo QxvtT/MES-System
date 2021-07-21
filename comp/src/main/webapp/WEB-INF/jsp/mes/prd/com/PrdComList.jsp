@@ -28,6 +28,7 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
+let prdComDNum = null;
 let prdComDate = null;
 let itemCodes = null;
 let operCodes = null;
@@ -54,41 +55,38 @@ $(function(){
 			{ header: '제품명', name:'itmName', align: 'center'},
 			{ header: '주문번호', name:'ordNum', align: 'center'},
 			{ header: '납기일자', name:'ordDeliveryDate', align: 'center'},
-			{ header: '주문량', name:'ordVol', align: 'center'},
-			{ header: '지시량', name:'prdComVol', align: 'center'},
+			{ header: '주문량', name:'ordVol', align: 'center',
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
+			},
+			{ header: '지시량', name:'prdComVol', align: 'center',
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}		
+			},
 			{ header: '작업구분', name:'prcComDiv', align: 'center'},
 			{ header: '소재 LOT_NO', name:'lotNum', align: 'center', hidden: true},
-			{ header: '수량', name:'matVol', align: 'center', hidden: true},
+			{ header: '수량', name:'matVol', align: 'center', hidden: true,
+				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
+			},
 			{ header: '순서', name:'prcComNo', align: 'center'},
 			{ header: '비고', name:'prdComDNote', align: 'center'}
 	    ],
 	    summary: {
 	        position: 'bottom',
-	        height: 50,
+	        height: 30,
 	        columnContent: {
-	        	prdComDDate: {
-	        		template: function(valueMap) {
-	        			return `합계`;
-	        			}
-				},
+	        	prdComDDate:`합계`,
 				ordVol: {
 					template: function(valueMap) {
-						return valueMap.sum;
+						return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 						}
 				},
 				prdComVol: {
 					template: function(valueMap) {
-						return valueMap.sum;
-						}
-				},
-				lotNum: {
-					template: function(valueMap) {
-						return valueMap.sum;
+						return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 						}
 				},
 				matVol: {
 					template: function(valueMap) {
-						return valueMap.sum;
+						return (valueMap.sum == 0)? 0 : String(valueMap.sum).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 						}
 				}
 	        }// end of columnContent
@@ -130,6 +128,7 @@ $(function(){
 			url : "ProduceCommandSearch",
 			type : "get",
 			data : {
+				prdComDNum : prdComDNum,
 				startDate : startDate,
 				endDate : endDate,
 				itemCodes : itemCodes,
@@ -137,7 +136,9 @@ $(function(){
 				},
 			dataType: "json",
 			success : function(result){
-				console.log(result);
+				if(result.length > 0) {
+					prdComDNum = result[result.length -1].prdComDNum;
+				}
 				data = result;
 			} // end success
 		}); // end ajax 

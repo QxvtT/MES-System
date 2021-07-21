@@ -80,5 +80,7 @@ public class ProducePlanDVO {
     
     private java.math.BigDecimal ordDNum;
     
+    private java.math.BigDecimal prdPerDay;
+    
     
 }

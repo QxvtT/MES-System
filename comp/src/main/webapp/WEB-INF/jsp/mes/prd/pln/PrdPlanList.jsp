@@ -25,6 +25,7 @@
 let prdDate = null;
 let itemCodes = null;
 let operCodes = null;
+let prdPlanDNum = null;
 $(function(){
 	const grid = new tui.Grid({
 	    el: document.getElementById('grid'),
@@ -70,6 +71,7 @@ $(function(){
 	}); // end const grid
 	
 	grid.on('scrollEnd', () => {
+		grid.appendRows(getPrdComList());
 	  })
 	  
 	// toast datePicker 관련 Script
@@ -103,6 +105,7 @@ $(function(){
 			url : "ProducePlanList",
 			type : "get",
 			data : {
+				prdPlanDNum : prdPlanDNum,
 				startDate : startDate,
 				endDate : endDate,
 				itemCodes : itemCodes,
@@ -110,7 +113,10 @@ $(function(){
 				},
 			dataType: "json",
 			success : function(result){
-				console.log(result);
+				if(result.length > 0) {
+					prdPlanDNum = result[result.length -1].prdPlanDNum;
+				}
+				console.log(prdPlanDNum);
 				data = result;
 			} // end success
 		}); // end ajax 
@@ -125,6 +131,7 @@ $(function(){
 	
 	// 생산계획조회 그리드 생성
 	$('#searchBtn').click(function() {
+		prdPlanDNum = null;
 		startDate = $('#startDate').val();
 		endDate = $('#endDate').val();
 		itemCodes = $('#itmCode').val();

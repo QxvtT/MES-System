@@ -76,7 +76,9 @@
 	</update>
 	
 	<insert id="insertProducePlanD" parameterType="mes.prd.pln.service.ProducePlanDVO" statementType="CALLABLE" >
+		
 		<if test="prdNum != null and prdNum != '' and itmCode != null and itmCode != ''">
+		BEGIN
 			INSERT INTO PRODUCE_PLAN_D
 			( PRD_PLAN_D_NUM
 			, PRD_NUM
@@ -97,7 +99,11 @@
 			, #{prdDNote}
 			, #{ordNum}
 			, #{ordDNum}
-			)
+			);
+		</if>
+		<if test="ordNum != null and ordNum != ''">
+			UPDATE ORDER_D SET PRD_CHK = 'Y' WHERE ORD_NUM = #{ordNum} AND ORD_D_NUM = #{ordDNum};
+		END; 
 		</if>
 		
 		<if test="prdNum == null or prdNum == ''">
@@ -107,8 +113,13 @@
 	
 	<delete id="deleteProducePlanD">
 		<if test="prdPlanDNum != null and prdPlanDNum != ''">
+			BEGIN
 			DELETE FROM PRODUCE_PLAN_D
-						WHERE PRD_PLAN_D_NUM=#{prdPlanDNum}
+						WHERE PRD_PLAN_D_NUM=#{prdPlanDNum};
+			<if test="ordDNum != null and ordDNum == ''">
+				UPDATE ORDER_D SET PRD_CHK = 'N' WHERE ORD_D_NUM = #{ordDNum};
+			</if>
+			END;
 		</if>
 	</delete>
 	
@@ -146,7 +157,6 @@
 		WHERE PRD_NUM = #{prdNum}
 		ORDER BY
 		PRD_PLAN_D_NUM DESC
-		
 		<![CDATA[					
 		) A WHERE ROWNUM <= 10
 	)
@@ -177,6 +187,7 @@
 				     , B.PRD_WORK_VOL
 				     , TO_CHAR(B.PRD_PLAN_DATE, 'yyyy-MM-dd') PRD_PLAN_DATE
 				     , B.PRD_NO
+				     , B.PRD_PLAN_D_NUM
 				FROM PRODUCE_PLAN A
 				   , PRODUCE_PLAN_D B 
 				WHERE A.PRD_NUM = B.PRD_NUM
@@ -206,8 +217,14 @@
             </foreach>
         </if>
         </if>
+        <if test="prdPlanDNum != null and prdPlanDNum != ''">
+				<![CDATA[	
+					and prd_plan_d_num < #{prdPlanDNum}
+				]]>
+		</if>
+        ORDER BY prd_plan_d_num DESC
         <![CDATA[
-    	) A WHERE ROWNUM <= 10
+    	) A WHERE ROWNUM <= 15
 	)
 	]]>
 	</select>

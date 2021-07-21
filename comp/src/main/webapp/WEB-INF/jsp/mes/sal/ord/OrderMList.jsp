@@ -22,9 +22,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
-<script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+<script
+	src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script type="text/javaScript" language="javascript" defer="defer">
 let ordDNum = null;
@@ -171,7 +174,8 @@ $(function(){
 						<li class="breadcrumb-item"><a href="index.jsp"> <i
 								class="fa fa-home"></i>
 						</a></li>
-						<li class="breadcrumb-item"><a href="#!">주문조회</a></li>
+						<li class="breadcrumb-item">영업</li>
+						<li class="breadcrumb-item">주문조회</a></li>
 					</ul>
 				</div>
 			</div>
@@ -179,67 +183,92 @@ $(function(){
 	</div>
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
-	<div class="main-body">
-	<div class="page-wrapper">
-		<div class="row" >
-			<div class="d-inline-block col-xl-12">
-				<div class="card" >
-					<form id="frm" name = "frm">
-						<div style="margin: 10px">
-							<table>
-								<tr>
-									<td width="130px">진행구분</td>
-									<td width="100px">진행<input type = "radio" id="ordStatus" name="ordStatus" value="진행" checked="checked"/></td>
-									<td width="100px">완료<input type = "radio" id="ordStatus" name="ordStatus" value="완료"/></td>
-									<td width="100px">전체<input type = "radio" id="ordStatus" name="ordStatus" value=""/></td>
-									<td width="100px"></td>
-									<td width="100px">자료구분</td>
-									<td width="100px">주문일자<input type = "radio" id="date" name="date" value="request" checked="checked"/></td>
-									<td width="100px">납기일자<input type = "radio" id="date" name="date" value="delivery"/></td>
-								</tr>
-							</table>
-							<br/>
-							<table>
-								<tr>
-									<td width="130px">날짜</td>
-									<td><input type ="date" id="bDate" name = "bDate" /></td>
-									<td> ~ </td>
-									<td><input type ="date" id="aDate" name = "aDate" /></td>
-								</tr>
-							</table>
-							<br/>
-							<table>
-								<tr>
-									<td width="130px">업체코드</td>
-									<td><input style="margin-top: 20px;" class="form-control" type ="text" id="operCode" name = "operCode" /> &nbsp;</td>
-									<td><%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>&nbsp;</td>
-									<td width="130px">업체이름</td>
-									<td><input class="form-control" type ="text" id="operName" name = "operName" readonly="readonly"/></td>
-								</tr>
-							</table>
-							<table>
-								<tr>
-									<td width="130px">제품코드</td>
-									<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmCode" name = "itmCode" ></input> &nbsp;</td>
-									<td><%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>&nbsp;</td>
-									<td width="130px">제품명</td>
-									<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmName" name = "itmName" readonly="readonly"></input><br/></td>
-								</tr>
-							</table>
-							<br/>
-							<div align="right">
-								<button  class="btn btn-info btn-sm" type="button" id ="button" name="button">조회</button>&nbsp;
-								<button class="btn btn-info btn-sm" type="reset" id="reset">리셋</button>&nbsp;
-								<button class="btn btn-info btn-sm" type="button" id ="printOrderBtn" name = "printOrderBtn" >인쇄</button>&nbsp;
-								<button class="btn btn-info btn-sm" type="button" id ="excelOrderBtn" name = "excelOrderBtn" >Excel</button>&nbsp;
-							</div>
+		<div align="right">
+			<button class="btn btn-info btn-sm" type="button" id="button"
+				name="button">조회</button>
+			&nbsp;
+			<button class="btn btn-info btn-sm" type="reset" id="reset">리셋</button>
+			&nbsp;
+			<button class="btn btn-info btn-sm" type="button" id="printOrderBtn"
+				name="printOrderBtn">인쇄</button>
+			&nbsp;
+			<button class="btn btn-info btn-sm" type="button" id="excelOrderBtn"
+				name="excelOrderBtn">Excel</button>
+			&nbsp;
+		</div>
+		<div class="main-body">
+			<div class="page-wrapper">
+				<div class="row">
+					<div class="d-inline-block col-xl-12">
+						<div class="card">
+							<form id="frm" name="frm">
+								<div style="margin: 10px">
+									<table>
+										<tr>
+											<td width="130px">진행구분</td>
+											<td width="100px">진행<input type="radio" id="ordStatus"
+												name="ordStatus" value="진행" checked="checked" /></td>
+											<td width="100px">완료<input type="radio" id="ordStatus"
+												name="ordStatus" value="완료" /></td>
+											<td width="100px">전체<input type="radio" id="ordStatus"
+												name="ordStatus" value="" /></td>
+											<td width="100px"></td>
+											<td width="100px">자료구분</td>
+											<td width="100px">주문일자<input type="radio" id="date"
+												name="date" value="request" checked="checked" /></td>
+											<td width="100px">납기일자<input type="radio" id="date"
+												name="date" value="delivery" /></td>
+										</tr>
+									</table>
+									<br />
+									<table>
+										<tr>
+											<td width="130px">날짜</td>
+											<td><input type="date" id="bDate" name="bDate" /></td>
+											<td>~</td>
+											<td><input type="date" id="aDate" name="aDate" /></td>
+										</tr>
+									</table>
+									<br />
+									<table>
+										<tr>
+											<td width="130px">업체코드</td>
+											<td><input style="margin-top: 20px;"
+												class="form-control" type="text" id="operCode"
+												name="operCode" /> &nbsp;</td>
+											<td><%@ include
+													file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>&nbsp;</td>
+											<td width="130px">업체이름</td>
+											<td><input class="form-control" type="text"
+												id="operName" name="operName" readonly="readonly" /></td>
+										</tr>
+									</table>
+									<table>
+										<tr>
+											<td width="130px">제품코드</td>
+											<td><input style="margin-top: 20px;"
+												class="form-control" type="text" id="itmCode" name="itmCode"></input>
+												&nbsp;</td>
+											<td><%@ include
+													file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp"%>&nbsp;</td>
+											<td width="130px">제품명</td>
+											<td><input style="margin-top: 20px;"
+												class="form-control" type="text" id="itmName" name="itmName"
+												readonly="readonly"></input><br /></td>
+										</tr>
+									</table>
+									<br />
+								</div>
+							</form>
 						</div>
-					</form>
+					</div>
 				</div>
 			</div>
-		</div></div>
+		</div>
 	</div>
-	<form:form commandName="searchVO" name="listForm" id="listForm" method="post">
+
+	<form:form commandName="searchVO" name="listForm" id="listForm"
+		method="post">
 		<input type="hidden" name="ordDNum" />
 		<div class="pcoded-inner-content">
 			<div class="main-body">
@@ -252,20 +281,20 @@ $(function(){
 									<ul>
 										<li>주문목록</li>
 									</ul>
-								
+
 								</div>
-								
+
 								<!-- // 타이틀 -->
 								<!-- List -->
 								<div id="grid"></div>
 							</div>
 						</div>
-						
+
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
 	</form:form>
 </body>
 </html>

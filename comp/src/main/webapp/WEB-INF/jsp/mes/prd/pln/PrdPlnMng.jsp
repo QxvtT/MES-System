@@ -35,6 +35,7 @@ let itmCode = null;
 let autoItemInfo = null;
 let rowKey = null;
 let unpStartDate = null;
+let data = null;
 $(function(){
 	
 	// 생산계획 디테일 그리드
@@ -53,8 +54,8 @@ $(function(){
 	    	},
 	    	{
 	    		header: '주문디테일 일련번호',
-	    		name: 'ordDNum',
-	    		hidden: true
+	    		name: 'ordDNum'
+	    		//hidden: true
 	    	},
 			{ 
 	    		header: '제품코드', 
@@ -203,7 +204,7 @@ $(function(){
 	// 조회 모달창 선택 날짜에 해당되는 생산계획 마스터 테이블 Select 데이터
 	function getPrdList() {
 		grid2.clear();
-		let data;
+		data = null;
 		$.ajax({
 			async: false,
 			cache: false,
@@ -229,7 +230,7 @@ $(function(){
 	//미생산 계획 검색 Select 데이터
 	function getUnPrdList() {
 		grid.clear();
-		let data;
+		data = null;
 		$.ajax({
 			async: false,
 			url: 'UnProducePlanList',
@@ -243,13 +244,18 @@ $(function(){
 				for(i in result){
 					grid.appendRow(result[i]);
 				}
+				console.log(grid.getData());
 			}
 		});
 	}
 	
+	grid.on('click', (e) => {
+	    grid.getRow(e.rowKey)
+	  })
+	
 	// 조회에서 선택한 생산계획 디테일 테이블 Select 데이터
 	function getList() {
-		let data = null;
+		data = null;
 		$.ajax({
 			async: false,
 			url : "ProducePlanDList",
@@ -272,7 +278,7 @@ $(function(){
 	// 제품코드 입력 모달창 제품 테이블 Select 데이터
 	function getItemList() {
 		let itmCode = null;
-		let data;
+		data = null;
 		$.ajax({
 			async: false,
 			cache: false,
@@ -294,7 +300,7 @@ $(function(){
 	
 	// 선택한 제품코드 값만 받아오기
 	function selectItem(itmCode) {
-		let data;
+		data = null;
 		$.ajax({
 			async: false,
 			cache: false,
@@ -405,7 +411,6 @@ $(function(){
 			$('#prdName').val(selectRow.prdName);
 			$('#prdNote').val(selectRow.prdNote);
 			grid.resetData(getList());
-			console.log(prdNum);
 		}
 	});
 	
@@ -513,9 +518,10 @@ $(function(){
 				});
 			return false;
 		}
-		
+		console.log(grid.getData());
 		for(let i = 0; i < grid.getRowCount(); i++){
-			if(grid.getValue(i, 'itmName') == null || grid.getValue(i, 'itmName') == ""){
+			console.log(grid.getRowAt(i).itmCode);
+			if(grid.getRowAt(i).itmCode == null || grid.getRowAt(i).itmCode == ""){
 				let myToast = null;
 				//토스트메시지 테스트
 				myToast = $.toast({ 
@@ -534,7 +540,7 @@ $(function(){
 		}
 		
 		for(let i = 0; i < grid.getRowCount(); i++){
-			if(grid.getValue(i, 'prdWorkVol') == null || grid.getValue(i, 'prdWorkVol') == ""){
+			if(grid.getRowAt(i).prdWorkVol == null || grid.getRowAt(i).prdWorkVol == ""){
 				let myToast = null;
 				//토스트메시지 테스트
 				myToast = $.toast({ 
@@ -553,7 +559,7 @@ $(function(){
 		}
 		
 		for(let i = 0; i < grid.getRowCount(); i++){
-			if(grid.getValue(i, 'prdPlanDate') == null || grid.getValue(i, 'prdPlanDate') == ""){
+			if(grid.getRowAt(i).prdPlanDate == null || grid.getRowAt(i).prdPlanDate == ""){
 				let myToast = null;
 				//토스트메시지 테스트
 				myToast = $.toast({ 
@@ -627,6 +633,7 @@ $(function(){
 	$('#deleteRowBtn').click(function() {
 		grid.removeCheckedRows(true);
 	})
+	
 }); 
 
 
@@ -660,8 +667,6 @@ $(function(){
 			</div>
 		</div>
 	</div>
-
-
 
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
@@ -708,7 +713,8 @@ $(function(){
 									</td>
 								</tr>
 								<tr>
-									<td><div
+									<td>
+									<div
 											class="tui-datepicker-input tui-datetime-input tui-has-focus">
 											<input class="form-control" id="unpStartDate"
 												name="unpStartDate" type="text" aria-label="Date" /> <span
