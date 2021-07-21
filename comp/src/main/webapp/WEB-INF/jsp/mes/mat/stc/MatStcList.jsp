@@ -203,6 +203,8 @@ $(function(){
 	resetBtn.onclick=function(){
 		$('input[name="matCode"]').val('');
 		$('input[name="matName"]').val('');
+		$('input[name="sDate"]').val('');
+		$('input[name="eDate"]').val('');
 		grid.clear();
 	}
 })
@@ -210,6 +212,28 @@ $(function(){
 </script>
 </head>
 <body>
+	<!-- 타이틀 -->
+	<div class="page-header">
+		<div class="page-block">
+			<div class="row align-items-center">
+				<div class="col-md-8">
+					<div class="page-header-title">
+						<h5 class="m-b-10">자재 재고 조회</h5>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<ul class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/comp"> <i
+								class="fa fa-home"></i>
+						</a></li>
+						<li class="breadcrumb-item">자재 관리</li>
+						<li class="breadcrumb-item">자재 재고 조회</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- // 타이틀 -->
 	<form:form commandName="searchVO" name="listForm" id="listForm"
 		method="post">
 		<input type="hidden" name="matCode" />
@@ -218,25 +242,19 @@ $(function(){
 				<div class="page-wrapper">
 					<div class="row">
 						<div class="col-xl-12">
-
-							<!-- 타이틀 -->
-							<div id="title" class="mb-4">
-								<h3>자재 재고 조회</h3>
-							</div>
-							<!-- // 타이틀 -->
 							<div class="row">
 								<div class="col-sm-6"></div>
 								<div class="col-sm-6 text-right">
 									<div class="btn-group">
 										<button type="button" id="searchBtn"
-											class="btn waves-effect waves-light btn-primary btn-outline-primary btn-sm">
+											class="btn waves-effect waves-light btn-info btn-outline-info btn-md">
 											조회</button>
 										<input type="button" value="새자료 " id="resetBtn"
 											name="resetBtn"
-											class="btn waves-effect waves-light btn-primary btn-outline-primary btn-sm"></input>
-										<button type="button" class="btn btn-primary btn-sm"
+											class="btn waves-effect waves-light btn-info btn-outline-info btn-md"></input>
+										<button type="button" class="btn btn-info btn-md"
 											id="excelBtn">Excel</button>
-										<button type="button" class="btn btn-primary btn-sm"
+										<button type="button" class="btn btn-info btn-md"
 											id="printBtn">인쇄</button>
 									</div>
 								</div>

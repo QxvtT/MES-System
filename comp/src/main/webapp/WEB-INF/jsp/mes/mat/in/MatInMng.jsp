@@ -777,6 +777,28 @@ $(function(){
 </script>
 </head>
 <body>
+	<!-- 타이틀 -->
+	<div class="page-header">
+		<div class="page-block">
+			<div class="row align-items-center">
+				<div class="col-md-8">
+					<div class="page-header-title">
+						<h5 class="m-b-10">자재 입고 관리</h5>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<ul class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/comp"> <i
+								class="fa fa-home"></i>
+						</a></li>
+						<li class="breadcrumb-item">자재 관리</li>
+						<li class="breadcrumb-item">자재 입고 관리</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- // 타이틀 -->
 	<form:form commandName="searchVO" name="listForm" id="listForm"
 		method="post">
 		<input type="hidden" name="matCode" />
@@ -785,20 +807,15 @@ $(function(){
 				<div class="page-wrapper">
 					<div class="row">
 						<div class="col-xl-12">
-							<!-- 타이틀 -->
-							<div id="title">
-								<h3>자재 입고 관리</h3>
-								<br />
-							</div>
-							<!-- // 타이틀 -->
+
 							<div>
 								<div class="text-right">
 									<button id="matInDayBtn" type="button"
-										class="btn btn-info btn-sm">조회</button>
-									<input id="resetBtn" class="btn btn-info btn-sm" type="button"
+										class="btn btn-info btn-md">조회</button>
+									<input id="resetBtn" class="btn btn-info btn-md" type="button"
 										value="새자료"></input>
 									<button type="button" id="matInSaveBtn" name="matInSaveBtn"
-										class="btn btn-info btn-sm">저장</button>
+										class="btn btn-info btn-md">저장</button>
 								</div>
 							</div>
 							<div class="row">
@@ -883,9 +900,9 @@ $(function(){
 
 							<div class="row">
 								<div class="col-sm-12 text-right">
-									<button type="button" class="btn btn-primary btn-sm"
+									<button type="button" class="btn btn-info btn-sm"
 										id="addRowBtn">추가</button>
-									<button type="button" class="btn btn-primary btn-sm"
+									<button type="button" class="btn btn-info btn-sm"
 										id="deleteRowBtn">삭제</button>
 								</div>
 							</div>
@@ -917,10 +934,11 @@ $(function(){
 				</div>
 				<div style="padding: 10px 10px 10px 10px">
 					<h4>자재코드</h4>
-					<input type="text" id="matCodeM" name="matCode"></input><br><br>
-							<button type="button" id="buttonMat" class="btn" name="button">조회</button>
-							&nbsp;
-							<button type="reset" class="btn">리셋</button>
+					<input type="text" id="matCodeM" name="matCode"></input><br>
+					<br>
+					<button type="button" id="buttonMat" class="btn" name="button">조회</button>
+					&nbsp;
+					<button type="reset" class="btn">리셋</button>
 				</div>
 				<div class="form-group row"></div>
 				<div id="grid4"></div>
