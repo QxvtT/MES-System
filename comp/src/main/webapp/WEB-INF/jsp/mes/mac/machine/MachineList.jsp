@@ -54,7 +54,7 @@ $(function() {
         date: today,
         language: 'ko',
         input: {
-            element: '#buyDate1',
+            element: '#buyDate',
             format: 'yyyy-MM-dd'
         }
     });
@@ -98,13 +98,19 @@ $(function() {
 	$('input#empName').val(machine.getData()[key]['worker']);
 	$('input#use').val(machine.getData()[key]['use']);
 	$('input#usingEnergy').val(machine.getData()[key]['usingEnergy']);
-	$('input#buyDate1').val(machine.getData()[key]['buyDate']);
+	$('input#buyDate').val(machine.getData()[key]['buyDate']);
 	$('input#buyPrice').val(machine.getData()[key]['buyPrice']);
 	$('input#macLoadage').val(machine.getData()[key]['macLoadage']);
 	$('input#macStdTemp').val(machine.getData()[key]['macStdTemp']);
 	if(machine.getData()[key]['imagePath'] != null ) {
 		var path = "${pageContext.request.contextPath}/images/machinemng/" + machine.getData()[key]['imagePath'];
 		$('#img').attr('src', path);
+		
+	} else {
+		var path = "${pageContext.request.contextPath}/images/noimage.png" ;
+		$('#img').attr('src', path);
+		
+		
 	}
 	
 	}); 
@@ -159,12 +165,13 @@ $(function() {
            , success:function(success) {
         	   alert("성공하였습니다.");
         	   console.log(success);
+        	   machine.resetData(getMachineMngList()); 
         	   }
            ,error: function (jqXHR) { 
         	   alert("이미 존재하는 설비코드 입니다."); 
                }
            });
-		 machine.resetData(getMachineMngList()); 
+        
 		 }
 		
 	//수정
@@ -200,7 +207,8 @@ $(function() {
            , data : form
            , success:function(success) {
                alert("성공하였습니다.");
-               console.log(success);
+               machine.resetData(getMachineMngList()); 
+               
            }
            ,error: function (jqXHR) { 
                alert("이미 존재하는 설비코드 입니다."); 
@@ -223,11 +231,24 @@ $(function() {
 			contentType:"application/json",
 			success : function(){
 				
+				alert("삭제 되었습니다.");
+				
 				}
 			});
 		 machine.resetData(getMachineMngList());
 	}
+	
+	cs.onclick = function () {
+		
+		
+			var path = "${pageContext.request.contextPath}/images/noimage.png" ;
+			$('#img').attr('src', path);
+		
+		
+	}
 })
+
+
 </script>
 <style type="">
 .tui-datetime-input {
@@ -300,20 +321,22 @@ $(function() {
 
 								</ul>
 								<br />
-								<div class="form-group row">
-									<div class="img_wrap"
-										style="height: 370px; width: 85%; margin: 0 auto">
-										<img id="img" style="height: 100%; width: 100%"
-											src="${pageContext.request.contextPath}/images/noimage.png" />
+								<form>
+									<div class="form-group row">
+										<div class="img_wrap"
+											style="height: 370px; width: 85%; margin: 0 auto">
+											<img id="img" style="height: 100%; width: 100%"
+												src="${pageContext.request.contextPath}/images/noimage.png" />
+										</div>
 									</div>
-
-								</div>
-								<div class="row col-xl-12">
-									<div class="d-inline-block col-xl-6">
-										<label for="file1"></label> <input type="file" id="file1"
-											name="file1" />
+									<div class="row col-xl-12">
+										<div class="d-inline-block col-xl-9">
+											<label for="file1"></label> <input type="file"
+												class="form-control" id="file1" name="file1" />
+										</div>
+										<button type="reset" id="cs" class="btn">등록 해제</button>
 									</div>
-								</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -357,7 +380,7 @@ $(function() {
 										<td align="right"><select id="use1" name="use1"
 											class="form-control fill">
 												<option value="사용">사용</option>
-												<option value="미 사용">미 사용</option>
+												<option value="미사용">미사용</option>
 										</select></td>
 									</tr>
 									<tr>
@@ -398,7 +421,7 @@ $(function() {
 											<div
 												class="tui-datepicker-input tui-datetime-input tui-has-focus">
 
-												<input type="text" id="buyDate1" name="buyDate1"
+												<input type="text" id="buyDate" name="buyDate"
 													class=" form-control" aria-label="Date-Time"
 													style="text-align: center;" /> <span class="tui-ico-date"></span>
 											</div>

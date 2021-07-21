@@ -30,7 +30,7 @@
 				  , #{use1}
 				  , #{model}
 				  , #{proOper}
-				  , #{worker}
+				  , #{empName}
 				  , #{use}
 				  , #{usingEnergy}
 				  , to_date(#{buyDate}, 'yyyy-MM-dd')
@@ -53,7 +53,7 @@
 				  , USE_1 = #{use1}
 				  , MODEL = #{model}
 				  , PRO_OPER = #{proOper}
-				  , WORKER = #{worker}
+				  , WORKER = #{empName}
 				  , USE = #{use}
 				  , USING_ENERGY = #{usingEnergy}
 				  , BUY_DATE = to_date(#{buyDate}, 'yyyy-MM-dd')

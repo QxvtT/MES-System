@@ -31,6 +31,8 @@ public class MachinemagVO extends MachinemagDefaultVO{
     /** MAC_NAME */
     private java.lang.String macName;
     
+    private java.lang.String empName;
+    
     /** MAC_DIV */
     private java.lang.String macDiv;
     
