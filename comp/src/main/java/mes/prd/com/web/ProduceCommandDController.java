@@ -131,7 +131,7 @@ public class ProduceCommandDController {
 	}
 	
 	/** 공정이동표 페이지 */
-    @RequestMapping(value="/prd/com/ProcessMove.do")
+    @RequestMapping(value="/prd/com/ProcsMoveTbl.do")
     public String processMove(ProduceCommandDVO searchVO, 
     		ModelMap model)
     				throws Exception {
@@ -148,7 +148,7 @@ public class ProduceCommandDController {
    	}
        
    /** 공정이동표 인쇄 페이지 */
-   @RequestMapping(value="/prd/com/ProcessMovePrt.do")
+   @RequestMapping(value="/prd/com/ProcsMoveTblPrt.do")
    public String processMovePrt(ProduceCommandDVO searchVO, 
    		ModelMap model)
    				throws Exception {

@@ -473,7 +473,19 @@ $(function(){
 		console.log(matHisNum);
 		
 		if($('#operCode').val()==""){
-			alert('입고 업체를 넣어주세요.');
+			//alert('입고 업체를 넣어주세요.');
+			$.toast({ 
+				  text : "입고 업체를 넣어 주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
 // 		} else if (){
 // 			alert('미입고량보다 많이 입고 할 수 없습니다.');
 // 			console.log();
@@ -493,7 +505,18 @@ $(function(){
 		});
 		console.log(matHisNum);
 		matHisDNum1 = null;
-			alert('성공');
+		$.toast({ 
+			  text : "저장하였습니다.", 
+			  showHideTransition : 'slide',
+			  bgColor : 'red',
+			  textColor : 'white',
+			  allowToastClose : false,
+			  hideAfter : 2000,
+			  stack : 1,
+			  textAlign : 'center',
+			  position : 'top-center'
+			});
+		return null;
 // 			console.log();
 // 			console.log();
 		}
@@ -585,6 +608,7 @@ $(function(){
 		matHisNum = null;
 		console.log(matHisDNum1)
 		grid.clear();
+		 $('input[name="matHisNum"]').val('');
 
 		matComDateS = $('input[name="matComDateS"]').val();
 		console.log(matComDateS)
@@ -609,6 +633,7 @@ $(function(){
 				} */
 			}
 		}
+		
 	}
 	
 	// 특정 cell만 선택하기 위해 조건문에서 사용되는 함수

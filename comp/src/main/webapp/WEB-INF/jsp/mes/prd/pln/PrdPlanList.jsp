@@ -40,8 +40,8 @@ $(function(){
 			{ header: '제품명', name:'itmName', align:'center'},
 			{ header: '주문번호', name:'ordNum', align:'center'},
 			{ header: '납기일자', name:'ordDeliveryDate', align:'center'},
-			{ header: '주문량', name:'ordVol'},
-			{ header: '계획량', name:'prdWorkVol'},
+			{ header: '주문량', name:'ordVol', align:'center'},
+			{ header: '계획량', name:'prdWorkVol', align:'center'},
 			{ header: '작업일자', name:'prdPlanDate', align:'center'},
 			{ header: '순서', name:'prdNo', align:'center'}
 	    ],
@@ -202,6 +202,11 @@ $(function(){
 })
 
 </script>
+<style>
+	.tui-grid-cell-summary {
+		text-align: center;
+	}
+</style>
 </head>
 <body>
 	<!-- 생산계획조회 Title -->

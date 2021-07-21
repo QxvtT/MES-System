@@ -62,7 +62,7 @@
 	<select id="selectMatStcList" parameterType="mes.mat.stc.service.MaterialStockVO" resultType="mes.mat.stc.service.MaterialStockVO">
 	SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
-				SELECT B.*, C.OUTVOL, (B.INVOL - C.OUTVOL) AS MAT_VOL, (B.MAT_SAFE_STOCK - (B.INVOL - C.OUTVOL)) AS MSHORT
+				SELECT B.*, C.OUTVOL, D.MAT_VOL, (B.MAT_SAFE_STOCK - D.MAT_VOL) AS MSHORT
 				FROM 
 				(SELECT MHD.MAT_CODE
 				        , SUM(MHD.MAT_HIS_D_VOL) AS INVOL
@@ -128,6 +128,11 @@
 	       	</if>
 				GROUP BY MAT_CODE) C
 				ON B.MAT_CODE = C.MAT_CODE
+				LEFT OUTER JOIN
+				(SELECT MAT_CODE, SUM(MAT_VOL) AS MAT_VOL
+				FROM MATERIAL_STOCK
+				GROUP BY MAT_CODE) D
+				ON C.MAT_CODE = D.MAT_CODE
 				ORDER BY B.MAT_CODE				
 		<![CDATA[					
 	) A WHERE ROWNUM <= 10
