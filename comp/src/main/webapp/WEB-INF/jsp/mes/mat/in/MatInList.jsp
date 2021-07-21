@@ -139,7 +139,8 @@ $(function(){
 	
 	
 	$('#testBtn').click(function() {
-		console.log("aaaaaaaaa");
+		matHisDNum1 = null;
+		console.log(matHisDNum1);
 		console.log(grid.getCheckedRows());
 		matHisDateS = $('#startpicker-input').val();
 		matHisDateE = $('#endpicker-input').val();
@@ -154,6 +155,57 @@ $(function(){
 	      grid.refreshLayout();
 	   });
 	
+
+	// 엑셀
+	function ReportToExcelConverter() { 
+		$("#grid").table2excel({ 
+			exclude: ".noExl", 
+			name: "Excel Document Name", 
+			filename: "report" +'.xls', //확장자를 여기서 붙여줘야한다. fileext: ".xls", exclude_img: true, exclude_links: true, exclude_inputs: true 
+			}); 
+		};
+
+	
+	$('#excelBtn').click(function() {
+		ReportToExcelConverter();
+	})
+	
+	// 프린트
+	function info_print() {
+		var initBody = document.body.innerHTML;
+		window.onbeforeprint = function () {
+			document.body.innerHTML = document.getElementById("grid").innerHTML;
+		}
+		window.onafterprint = function () {
+			document.body.innerHTML = initBody;
+		}
+		window.print();
+	}
+	
+	$('#printBtn').click(function() {	
+		$("#grid").print({
+        	globalStyles: true,
+        	mediaPrint: false,
+        	stylesheet: null,
+        	noPrintSelector: ".no-print",
+        	iframe: true,
+        	append: null,
+        	prepend: null,
+        	manuallyCopyFormValues: true,
+        	deferred: $.Deferred(),
+        	timeout: 750,
+        	title: null,
+        	doctype: '<!doctype html>'
+		});
+	})
+	
+	resetBtn.onclick=function(){
+		$('input[name="matCode"]').val('');
+		$('input[name="matName"]').val('');
+		$('input[name="operCode"]').val('');
+		$('input[name="operName"]').val('');
+		grid.clear();
+	}
 	
 })
 
@@ -178,88 +230,101 @@ $(function(){
 								<div class="col-sm-6"></div>
 								<div class="col-sm-6 text-right">
 									<div class="btn-group">
-										<button type="button" id="testBtn" class="btn waves-effect waves-light btn-primary btn-outline-primary"> 조회 </button>
-										<input type="reset" value=" 리셋 " class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
+										<button type="button" id="searchBtn"
+											class="btn waves-effect waves-light btn-primary btn-outline-primary btn-sm">
+											조회</button>
+										<input type="button" value="새자료 " id="resetBtn"
+											name="resetBtn"
+											class="btn waves-effect waves-light btn-primary btn-outline-primary btn-sm"></input>
+										<button type="button" class="btn btn-primary btn-sm"
+											id="excelBtn">Excel</button>
+										<button type="button" class="btn btn-primary btn-sm"
+											id="printBtn">인쇄</button>
 									</div>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="table">
-									<table class="table">
-										<tr>
-											<td>
-												<div class="d-inline-block align-middle">작업일자</div>
-											</td>
-											<td>
-												<div class="row align-items-center text-center col-lg-8">
-												    <div class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-												        <input type="text" id="startpicker-input" class=" form-control w-25" aria-label="Date-Time" name="matHisDate"/>
-												        <span class="tui-ico-date"></span>
-												        <div id="startpicker-container" style="margin-left: -1px;"></div>
-												    </div>
-												    <div id="date1" style="margin-top: -1px;"></div>
-							
-													<label class="col-form-label text-center"> ~ </label>
-													<div class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-												        <input type="text" id="endpicker-input" class=" form-control w-25" aria-label="Date-Time" name="matHisDate"/>
-												        <span class="tui-ico-date"></span>
-												        <div id="endpicker-container" style="margin-left: -1px;"></div>
-												    </div>
-												    <div id="date2" style="margin-top: -1px;"></div>
-												</div>
-												<div class="col-lg-4">
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-										 		<label class="col-form-label text-center">자재코드</label>
-										 	</td>
-										 	<td>
-											 	<div class="row align-items-center text-center col-lg-8">
-													<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode" value="${result.matCode }"></input>
-													<input type="text" class="form-control w-25 ml-3" id="matName" name="matName" value="${result.matName }" readonly></input>
-													<%--<jsp:include page="/MaterialList.page" />
+										<table class="table">
+											<tr>
+												<td>
+													<div class="d-inline-block align-middle">작업일자</div>
+												</td>
+												<td>
+													<div class="row align-items-center text-center col-lg-8">
+														<div
+															class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+															<input type="text" id="startpicker-input"
+																class=" form-control w-25" aria-label="Date-Time"
+																name="matHisDate" /> <span class="tui-ico-date"></span>
+															<div id="startpicker-container"
+																style="margin-left: -1px;"></div>
+														</div>
+														<div id="date1" style="margin-top: -1px;"></div>
+
+														<label class="col-form-label text-center"> ~ </label>
+														<div
+															class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+															<input type="text" id="endpicker-input"
+																class=" form-control w-25" aria-label="Date-Time"
+																name="matHisDate" /> <span class="tui-ico-date"></span>
+															<div id="endpicker-container" style="margin-left: -1px;"></div>
+														</div>
+														<div id="date2" style="margin-top: -1px;"></div>
+													</div>
+													<div class="col-lg-4"></div>
+												</td>
+											</tr>
+											<tr>
+												<td><label class="col-form-label text-center">자재코드</label>
+												</td>
+												<td>
+													<div class="row align-items-center text-center col-lg-8">
+														<input type="text" class="form-control w-25 ml-3"
+															id="matCode" name="matCode" value="${result.matCode }"></input>
+														<input type="text" class="form-control w-25 ml-3"
+															id="matName" name="matName" value="${result.matName }"
+															readonly></input>
+														<%--<jsp:include page="/MaterialList.page" />
 													<c:import url="/MaterialList.page"/> --%>
-													<%@ include file="/WEB-INF/jsp/mes/common/modal/MaterialList.jsp" %>
-													
-												</div>
-												<div class="col-lg-4">
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-										 		<label class="col-form-label text-cen3ter">업체코드</label>
-										 	</td>
-										 	<td>
-											 	<div class="row align-items-center text-center col-lg-8">
-													<input type="text" class="form-control w-25 ml-3" id="operCode" name="operCode" value="${result.operCode }"></input>
-													<input type="text" class="form-control w-25 ml-3" id="operName" name="operName" value="${result.operName }" readonly></input>
-													<%-- <button type="button" class="btn btn-sm btn-primary waves-effect waves-light ml-3"
+														<%@ include
+															file="/WEB-INF/jsp/mes/common/modal/MaterialList.jsp"%>
+
+													</div>
+													<div class="col-lg-4"></div>
+												</td>
+											</tr>
+											<tr>
+												<td><label class="col-form-label text-cen3ter">업체코드</label>
+												</td>
+												<td>
+													<div class="row align-items-center text-center col-lg-8">
+														<input type="text" class="form-control w-25 ml-3"
+															id="operCode" name="operCode" value="${result.operCode }"></input>
+														<input type="text" class="form-control w-25 ml-3"
+															id="operName" name="operName" value="${result.operName }"
+															readonly></input>
+														<%-- <button type="button" class="btn btn-sm btn-primary waves-effect waves-light ml-3"
 														id="searchOperBtn" data-toggle="modal" data-target="#searchOperModal">검색</button>
 														<c:import url="/OperationList.page"/> --%>
-													<%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>
-													
-												</div>
-												<div class="col-lg-4">
-												</div>
-											</td>
-										</tr>
-									</table>
+														<%@ include
+															file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
+
+													</div>
+													<div class="col-lg-4"></div>
+												</td>
+											</tr>
+										</table>
 									</div>
 								</div>
 							</div>
-							
-							<div style="height: 50px"></div>
-							
 							<div class="form-group row">
 								<div class="col-sm-12">
 									<div id="grid"></div>
 								</div>
 							</div>
-	
+
 						</div>
 					</div>
 				</div>

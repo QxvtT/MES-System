@@ -185,6 +185,23 @@ $(function(){
 							</div>
 							<!-- // 타이틀 -->
 							<div class="row">
+								<div class="col-sm-6"></div>
+								<div class="col-sm-6 text-right">
+									<div class="btn-group">
+										<button type="button" id="searchBtn"
+											class="btn waves-effect waves-light btn-primary btn-outline-primary btn-sm">
+											조회</button>
+										<input type="button" value="새자료 " id="resetBtn"
+											name="resetBtn"
+											class="btn waves-effect waves-light btn-primary btn-outline-primary btn-sm"></input>
+										<button type="button" class="btn btn-primary btn-sm"
+											id="excelBtn">Excel</button>
+										<button type="button" class="btn btn-primary btn-sm"
+											id="printBtn">인쇄</button>
+									</div>
+								</div>
+							</div>
+							<div class="row">
 								<div class="col-lg-12">
 									<div class="table">
 										<table class="table">
@@ -217,10 +234,10 @@ $(function(){
 													<div class="col-lg-4">
 													</div>
 												</td>
-												<td>
+												<!-- <td>
 													<div class="d-inline-block align-middle">자재구분</div>
 												</td>
-												<!-- <td>
+												<td>
 													<select>
 														<option>전체</option>
 														<option>일반자재</option>
@@ -244,20 +261,6 @@ $(function(){
 												</td>
 											</tr>
 										</table>
-									</div>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-sm-6"></div>
-								<div class="col-sm-6 text-right">
-									<div class="btn-group">
-										<input type="button" id="searchBtn" name="searchBtn"
-											value="조회"
-											class="btn waves-effect waves-light btn-primary btn-outline-primary">
-										</button>
-										<input type="reset" id="resetBtn" name="resetBtn" value=" 리셋 "
-											class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
 									</div>
 								</div>
 							</div>

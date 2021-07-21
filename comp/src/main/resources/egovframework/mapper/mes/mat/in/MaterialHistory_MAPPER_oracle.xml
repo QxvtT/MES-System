@@ -164,35 +164,31 @@ SELECT * FROM (
 	SELECT * FROM (
 		SELECT A.*, ROWNUM RNUM FROM (
 		SELECT B.*, C.MAT_VOL
-			FROM(
-			SELECT SUM(MO.MAT_NORD_VOL) AS MAT_NORD_VOL
-			    , MO.MAT_CODE
-			    , M.MAT_NAME
-			    , M.MAT_SIZE
-			    , M.MAT_UNIT    
-			FROM MATERIAL_ORDER MO
-			    , MATERIAL M
-			WHERE MO.MAT_CODE = M.MAT_CODE
-			AND MAT_NORD_VOL > 0
-			AND MAT_ORD_OPER = #{operName}
+			FROM(SELECT MO.MAT_COM_NUM
+	          , MO.MAT_NORD_VOL
+	          , MO.MAT_CODE
+	          , MO.MAT_ORD_OPER
+	          , M.MAT_NAME
+	          , M.MAT_SIZE
+	          , M.MAT_UNIT
+	        FROM MATERIAL_ORDER MO
+	            , MATERIAL M
+	        WHERE M.MAT_CODE = MO.MAT_CODE
+	        AND MO.MAT_NORD_VOL > 0
+	        AND MO.MAT_ORD_OPER = #{operName}
 			<if test="matComDateS != null and matComDateS != '' and matComDateE != null and matComDateE != ''"> AND
 			     <![CDATA[			    			
 	          			MO.MAT_ORD_DATE >= TO_DATE(#{matComDateS} ,'yyyy-MM-dd') and  
 	          			MO.MAT_ORD_DATE <= TO_DATE(#{matComDateE} ,'yyyy-MM-dd')
 	      			]]>
 		     </if>
-			GROUP BY MO.MAT_CODE
-			        , MO.MAT_CODE
-			        , M.MAT_NAME
-			        , M.MAT_SIZE
-			        , M.MAT_UNIT) B 
-			LEFT OUTER JOIN 
+			) B LEFT OUTER JOIN
 			(SELECT MAT_CODE, SUM(MAT_VOL) AS MAT_VOL
 			FROM MATERIAL_STOCK
-			GROUP BY MAT_CODE) C
+			GROUP BY MAT_CODE) C 
 			ON B.MAT_CODE = C.MAT_CODE
+			ORDER BY B.MAT_CODE
 				<![CDATA[	
-		ORDER BY B.MAT_CODE				
 	) A WHERE ROWNUM <= 10
 )
 ]]>
@@ -290,8 +286,62 @@ SELECT * FROM (
 ]]>
 	</select>
 	
+<!-- 자재 출고 조회 -->
+	<select id="selectMatOutMng" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="mes.mat.in.service.MaterialHistoryVO">
+SELECT * FROM (
+	SELECT A.*, ROWNUM RNUM FROM ( 
+				SELECT TO_CHAR(MH.MAT_HIS_DATE, 'yyyy-MM-dd') AS MAT_HIS_DATE, 
+				       M.MAT_CODE, 
+				       M.MAT_NAME,
+				       M.MAT_SIZE, 
+				       MH.MAT_OUT,
+				       MHD.MAT_HIS_D_NUM,
+				       MHD.MAT_HIS_D_VOL, 
+				       MHD.MAT_HIS_PRICE, 
+				       (MHD.MAT_HIS_D_VOL * MHD.MAT_HIS_PRICE) AS AMOUNT, 
+				       MHD.LOT_Num,
+				       MHD.MAT_HIS_NUM
+				FROM MATERIAL M, MATERIAL_HISTORY_D MHD, MATERIAL_HISTORY MH, PROCESS P
+				WHERE M.MAT_CODE = MHD.MAT_CODE 
+				      AND MH.MAT_HIS_NUM = MHD.MAT_HIS_NUM
+				      AND P.PRC_NAME = MH.MAT_OUT				      
+				      AND MH.MAT_HIS_DIV='출고'
+				      <if test="matOut != null and matOut != ''">
+				      AND MH.MAT_OUT = #{matOut}
+			    	  </if>
+				      <if test= "matHisNum != null and matHisNum != ''">
+				      		and mhd.mat_his_num = #{matHisNum}
+				      </if> 
+				      <if test="matHisDNum1 != null and matHisDNum1 != ''">
+				      	<![CDATA[	
+				      		and MHD.MAT_HIS_D_NUM < #{matHisDNum1}
+				     	 ]]>
+				      </if>
+			     <if test="matHisDateS != null and matHisDateS != '' and matHisDateE != null and matHisDateE != ''"> AND
+			     	<![CDATA[			    			
+	            			MH.MAT_HIS_DATE >= TO_DATE(#{matHisDateS} ,'yyyy-MM-dd') and  
+	            			MH.MAT_HIS_DATE <= TO_DATE(#{matHisDateE} ,'yyyy-MM-dd')
+      				]]>
+			     </if>
+			     <if test="matCodeList != null">
+			     <if test="matCodeList.size != 0">
+				      AND M.MAT_CODE IN 
+			     	<foreach item="item" index="index" collection="matCodeList"
+					      open="(" separator="," close=")">
+					        #{item}
+					</foreach>
+			     </if>
+			     </if>
+			     order by MHD.MAT_HIS_D_NUM desc
+		<![CDATA[					
+	) A WHERE ROWNUM <= 10
+)
+]]>
+	</select>	
+	<!-- END 자재 출고 조회 -->
+	
 		<!-- 자재 출고 관리 조회 -->
-	<select id="selectMatOutMng" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="egovMap">
+	<select id="selectMatOutMng1" parameterType="mes.mat.in.service.MaterialHistoryVO" resultType="egovMap">
 SELECT * FROM (
 	SELECT A.*, ROWNUM RNUM FROM (
 				SELECT TO_CHAR(MH.MAT_HIS_DATE, 'yyyy-MM-DD') as MAT_HIS_DATE,
@@ -474,8 +524,24 @@ SELECT * FROM (
 	
 	<!--  grid 행 delete -->
 	<delete id="deleteMatInMngD">
-		delete from MATERIAL_HISTORY_D 
-		where MAT_HIS_D_NUM = #{matHisDNum}
+		DECLARE
+		V_MAT_HIS_D_NUM MATERIAL_HISTORY_D.MAT_HIS_NUM%type := #{matHisDNum};
+		V_LOT_NUM MATERIAL_HISTORY_D.LOT_NUM%TYPE := #{lotNum};
+		V_MAT_HIS_D_VOL MATERIAL_HISTORY_D.MAT_HIS_D_VOL%TYPE := #{matHisDVol};
+		BEGIN
+		SELECT MAT_HIS_D_VOL INTO V_MAT_HIS_D_VOL
+		FROM MATERIAL_HISTORY_D
+		WHERE MAT_HIS_D_NUM = V_MAT_HIS_D_NUM;
+		SELECT LOT_NUM INTO V_LOT_NUM
+		FROM MATERIAL_HISTORY_D
+		WHERE MAT_HIS_D_NUM = V_MAT_HIS_D_NUM;
+		DELETE FROM MATERIAL_HISTORY_D 
+		WHERE MAT_HIS_D_NUM = V_MAT_HIS_D_NUM;
+		UPDATE MATERIAL_STOCK
+		SET MAT_VOL = (MAT_VOL - V_MAT_HIS_D_VOL)
+		WHERE LOT_NUM = V_LOT_NUM;
+		END;
+		/
 	</delete>
 	<!-- END grid 행 delete -->
 	

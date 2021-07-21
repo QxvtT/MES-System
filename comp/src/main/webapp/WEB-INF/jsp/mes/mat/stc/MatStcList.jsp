@@ -157,10 +157,54 @@ $(function(){
 		grid.resetData(getList());
 	}
 	
-	resetBtn.onclick=function(){
-		grid.clear();
-	} 
+	// 엑셀
+	function ReportToExcelConverter() { 
+		$("#grid").table2excel({ 
+			exclude: ".noExl", 
+			name: "Excel Document Name", 
+			filename: "report" +'.xls', //확장자를 여기서 붙여줘야한다. fileext: ".xls", exclude_img: true, exclude_links: true, exclude_inputs: true 
+			}); 
+		};
+
 	
+	$('#excelBtn').click(function() {
+		ReportToExcelConverter();
+	})
+	
+	// 프린트
+	function info_print() {
+		var initBody = document.body.innerHTML;
+		window.onbeforeprint = function () {
+			document.body.innerHTML = document.getElementById("grid").innerHTML;
+		}
+		window.onafterprint = function () {
+			document.body.innerHTML = initBody;
+		}
+		window.print();
+	}
+	
+	$('#printBtn').click(function() {	
+		$("#grid").print({
+        	globalStyles: true,
+        	mediaPrint: false,
+        	stylesheet: null,
+        	noPrintSelector: ".no-print",
+        	iframe: true,
+        	append: null,
+        	prepend: null,
+        	manuallyCopyFormValues: true,
+        	deferred: $.Deferred(),
+        	timeout: 750,
+        	title: null,
+        	doctype: '<!doctype html>'
+		});
+	})
+	
+	resetBtn.onclick=function(){
+		$('input[name="matCode"]').val('');
+		$('input[name="matName"]').val('');
+		grid.clear();
+	}
 })
 
 </script>
@@ -178,21 +222,25 @@ $(function(){
 							<!-- 타이틀 -->
 							<div id="title" class="mb-4">
 								<h3>자재 재고 조회</h3>
-								<br />
 							</div>
 							<!-- // 타이틀 -->
 							<div class="row">
 								<div class="col-sm-6"></div>
 								<div class="col-sm-6 text-right">
 									<div class="btn-group">
-										<button type="button" id="searchBtn" name="searchBtn"										
-											class="btn waves-effect waves-light btn-primary btn-outline-primary">
+										<button type="button" id="searchBtn"
+											class="btn waves-effect waves-light btn-primary btn-outline-primary btn-sm">
 											조회</button>
-										<input type="button" id="resetBtn" value="리셋 "
-											class="btn waves-effect waves-light btn-primary btn-outline-primary"></input>
+										<input type="button" value="새자료 " id="resetBtn"
+											name="resetBtn"
+											class="btn waves-effect waves-light btn-primary btn-outline-primary btn-sm"></input>
+										<button type="button" class="btn btn-primary btn-sm"
+											id="excelBtn">Excel</button>
+										<button type="button" class="btn btn-primary btn-sm"
+											id="printBtn">인쇄</button>
 									</div>
 								</div>
-							</div><br />
+							</div>
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="table">
@@ -230,8 +278,10 @@ $(function(){
 												</td>
 												<td>
 													<div class="row align-items-center text-center col-lg-8">
-														<input type="text" class="form-control w-25 ml-3" id="matCode" name="matCode"></input> 
-														<input type="text" class="form-control w-25 ml-3" id="matName" name="matName" readonly></input>
+														<input type="text" class="form-control w-25 ml-3"
+															id="matCode" name="matCode"></input> <input type="text"
+															class="form-control w-25 ml-3" id="matName"
+															name="matName" readonly></input>
 														<%@ include
 															file="/WEB-INF/jsp/mes/common/modal/MaterialList.jsp"%>
 													</div>

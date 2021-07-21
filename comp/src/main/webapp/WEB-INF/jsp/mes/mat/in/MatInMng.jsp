@@ -151,8 +151,7 @@ $(function(){
 	    	},
 			{ 
 	    		header: '발주번호', 
-	    		name:'matComNum',
-	    		editor: "text"
+	    		name:'matComNum'
 	    	},
 			{ 
 	    		header: '입고량', 
@@ -169,7 +168,10 @@ $(function(){
 			{ 
 	    		header: '금액', 
 	    		name:'amount',
-    			editor: "text",
+	    		onAfterChange(e) {
+	    			console.log(e.rowKey)
+	    	    	grid.setValue(e.rowKey, 'matHisDVol', e.value * grid.getValue(e.rowKey, 'matHisPrice'));
+	    	    },
     			formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 	    	},
 			{ 
@@ -438,6 +440,8 @@ $(function(){
 	   
 	$('#matInDayBtn').click(function(){
 		matHisNum1 = null;
+		matHisDNum1 = null;
+		console.log(matHisDNum1);
 		grid2.resetData(getMatInDayList());
 		$("#myModal").modal("toggle");
 		$("#myModal").on('shown.bs.modal', function () {
@@ -486,44 +490,65 @@ $(function(){
 				  position : 'top-center'
 				});
 			return null;
-// 		} else if (){
-// 			alert('미입고량보다 많이 입고 할 수 없습니다.');
-// 			console.log();
-// 			console.log();
-		} else {
-		$.ajax({
-			async: false,
-			url: "matHisMngUpdate",
-			type : "post",
-			data : JSON.stringify(gridData),
-			dataType: "json",
-			contentType: "application/json",
-			success : function(data){
-				console.log(data);
-				matHisNum = data;
-			}
-		});
-		console.log(matHisNum);
-		matHisDNum1 = null;
-		$.toast({ 
-			  text : "저장하였습니다.", 
-			  showHideTransition : 'slide',
-			  bgColor : 'red',
-			  textColor : 'white',
-			  allowToastClose : false,
-			  hideAfter : 2000,
-			  stack : 1,
-			  textAlign : 'center',
-			  position : 'top-center'
-			});
-		return null;
-// 			console.log();
-// 			console.log();
+		} 
+		let datas = grid.getData();
+		for(let i in datas){
+			let matHisDVol = datas[i]['matHisDVol'];
+			let matNordVol = datas[i]['matNordVol'];
+			console.log(matHisDVol);
+			console.log(matNordVol);
+			
+			if (matHisDVol > matNordVol){
+				$.toast({ 
+					  text : "미입고량보다 많이 입고할 수 없습니다.", 
+					  showHideTransition : 'slide',
+					  bgColor : 'red',
+					  textColor : 'white',
+					  allowToastClose : false,
+					  hideAfter : 2000,
+					  stack : 1,
+					  textAlign : 'center',
+					  position : 'top-center'
+					});
+				return null;
+				console.log(matHisDVol);
+				console.log(matNordVol);
+			} 
 		}
-		
+		$.ajax({
+		async: false,
+		url: "matHisMngUpdate",
+		type : "post",
+		data : JSON.stringify(gridData),
+		dataType: "json",
+		contentType: "application/json",
+		success : function(data){
+			console.log(data);
+			matHisNum = data;
+			$.toast({ 
+				  text : "저장하였습니다.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'yellowgreen',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+	}); 
+	console.log(matHisNum);
+	matHisDNum1 = null;
+	
 	}
 	
 	resetBtn.onclick=function(){
+		$('input[name="operCode"]').val('');
+		$('input[name="operName"]').val('');
+		$('input[name="matHisNum"]').val('');
+		matHisDNum1=null;
 		grid.clear();
 	}
 
@@ -620,7 +645,18 @@ $(function(){
 		console.log(operName)
 		
 		if($('#operCode').val()==""){
-			alert('입고 업체를 넣어주세요.');
+			$.toast({ 
+				  text : "입고 업체를 넣어 주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
 		} else{
 			let nordList = getNordList();
 			for(let i in nordList){
@@ -687,7 +723,7 @@ $(function(){
 	}
 	
 	// 발주번호 입력란 클릭 시 미입고 발주 번호 모달창 생성
-	grid.on('click', (e) => {
+	/* grid.on('click', (e) => {
 		var selectComNum = grid.getFocusedCell();
 		if(getKeyByValue(selectComNum, "matComNum") != null){
 			$('#nordModal').modal('toggle');
@@ -696,7 +732,7 @@ $(function(){
 				grid3.refreshLayout();
 			});
 		}
-	});
+	}); */
 	
 	// 자재코드 입력란 클릭 시 자재코드 리스트 모달창 생성
 	grid.on('click', (e) => {
@@ -735,49 +771,6 @@ $(function(){
 		}
 	});
 	
-	// 엑셀
-	function ReportToExcelConverter() { 
-		$("#grid").table2excel({ 
-			exclude: ".noExl", 
-			name: "Excel Document Name", 
-			filename: "report" +'.xls', //확장자를 여기서 붙여줘야한다. fileext: ".xls", exclude_img: true, exclude_links: true, exclude_inputs: true 
-			}); 
-		};
-
-	
-	$('#excelBtn').click(function() {
-		ReportToExcelConverter();
-	})
-	
-	// 프린트
-	function info_print() {
-		var initBody = document.body.innerHTML;
-		window.onbeforeprint = function () {
-			document.body.innerHTML = document.getElementById("grid").innerHTML;
-		}
-		window.onafterprint = function () {
-			document.body.innerHTML = initBody;
-		}
-		window.print();
-	}
-	
-	$('#printBtn').click(function() {	
-		$("#grid").print({
-        	globalStyles: true,
-        	mediaPrint: false,
-        	stylesheet: null,
-        	noPrintSelector: ".no-print",
-        	iframe: true,
-        	append: null,
-        	prepend: null,
-        	manuallyCopyFormValues: true,
-        	deferred: $.Deferred(),
-        	timeout: 750,
-        	title: null,
-        	doctype: '<!doctype html>'
-		});
-	})
-	
 })
 
 
@@ -799,23 +792,14 @@ $(function(){
 							</div>
 							<!-- // 타이틀 -->
 							<div>
-								<div class="text-left">
-									<button type="button" class="btn btn-primary btn-sm"
-										id="excelBtn">Excel</button>
-									<button type="button" class="btn btn-primary btn-sm"
-										id="printBtn">인쇄</button>
-								</div>
 								<div class="text-right">
 									<button id="matInDayBtn" type="button"
 										class="btn btn-info btn-sm">조회</button>
-									<input id="resetBtn" class="btn btn-info btn-sm" type="reset"
-										value="리셋"></input>
+									<input id="resetBtn" class="btn btn-info btn-sm" type="button"
+										value="새자료"></input>
 									<button type="button" id="matInSaveBtn" name="matInSaveBtn"
 										class="btn btn-info btn-sm">저장</button>
-									<button type="button" id="matInDeleteBtn" name="matInDeleteBtn"
-										class="btn btn-info btn-sm">삭제</button>
 								</div>
-
 							</div>
 							<div class="row">
 								<div class="col-md-6">

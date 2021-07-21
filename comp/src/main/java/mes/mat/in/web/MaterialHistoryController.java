@@ -185,7 +185,17 @@ public class MaterialHistoryController {
     @RequestMapping(value="/mat/in/MatOutMng", method=RequestMethod.GET)
     @ResponseBody
     public List<?> ajaxMatOutMng(MaterialHistoryVO searchVO) throws Exception {
-    	
+    	searchVO.setMatCodeList(null);
+    	//자재 코드 다중선택 처리
+    	if(searchVO.getMatCodes() != null && searchVO.getMatCodes() != "") {
+			String[] rowList = searchVO.getMatCodes().split(",");
+			for(int i = 0; i < rowList.length; i++) {
+				rowList[i] = rowList[i].trim();
+			}
+			List<String> al = new ArrayList<String>();
+			al = Arrays.asList(rowList);
+			searchVO.setMatCodeList(al);
+    	}
     	List<?> list = materialHistoryService.selectMatOutMng(searchVO);
     	
     	System.out.println("a");
