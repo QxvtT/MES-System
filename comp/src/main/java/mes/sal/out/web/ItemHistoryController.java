@@ -169,22 +169,28 @@ public class ItemHistoryController {
             throws Exception {
         return "sal/out/ItemHistoryRegister.page";
     }
+    @RequestMapping("/sal/out/ItemHistoryRegister.do")
+    public String updateItemHistoryView(
+            @ModelAttribute("searchVO") ItemHistoryDefaultVO searchVO, Model model)
+            throws Exception {
+        return "sal/out/ItemHistoryRegister.page";
+    }
     
     
     
 
     
-    @RequestMapping("/sal/out/ItemHistoryRegister.do")
-    public String updateItemHistoryView(
-            @RequestParam("itmHisNum") java.lang.String itmHisNum ,
-            @ModelAttribute("searchVO") ItemHistoryDefaultVO searchVO, Model model)
-            throws Exception {
-        ItemHistoryVO itemHistoryVO = new ItemHistoryVO();
-        itemHistoryVO.setItmHisNum(itmHisNum);
-        // 변수명은 CoC 에 따라 itemHistoryVO
-        model.addAttribute(selectItemHistory(itemHistoryVO, searchVO));
-        return "sal/out/ItemHistoryRegister.page";
-    }
+//    @RequestMapping("/sal/out/ItemHistoryRegister.do")
+//    public String updateItemHistoryView(
+//            @RequestParam("itmHisNum") java.lang.String itmHisNum ,
+//            @ModelAttribute("searchVO") ItemHistoryDefaultVO searchVO, Model model)
+//            throws Exception {
+//        ItemHistoryVO itemHistoryVO = new ItemHistoryVO();
+//        itemHistoryVO.setItmHisNum(itmHisNum);
+//        // 변수명은 CoC 에 따라 itemHistoryVO
+//        model.addAttribute(selectItemHistory(itemHistoryVO, searchVO));
+//        return "sal/out/ItemHistoryRegister.page";
+//    }
 
     @RequestMapping("/sal/ord/selectItemHistory.do")
     public @ModelAttribute("itemHistoryVO")
