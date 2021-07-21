@@ -18,9 +18,11 @@
 				ord varchar(50) :='SO'||to_char(sysdate,'yyMMdd')||to_char(order_num_seq.nextval,'FM0000');
 				vol number;
 			begin
- 				select itm_vol into vol
+ 				select sum(itm_vol)
+ 				 into vol
  				from item_stock
- 				where itm_code = #{itmCode};
+ 				where itm_code = #{itmCode}
+ 				group by itm_code;
  				
  				INSERT INTO ORDER_M 
 					VALUES ( ord

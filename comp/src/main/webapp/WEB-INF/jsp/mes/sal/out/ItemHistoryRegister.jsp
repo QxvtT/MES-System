@@ -235,13 +235,33 @@ $(function(){
 			return null;
 		}
 		
-		let itmVol = grid.getData()[0]['itmVol'];
-		itmVol *=1;
+		
 		let size = grid.getData().length;
 		for(let i =0; i<size; i++){
-			if(grid.getData()[i]['itmNoutVol']<itmVol || grid.getData()[i]['itmStock'] < itmVol){
+			let itmVol = grid.getData()[i]['itmVol'];
+			itmVol *=1;
+			if(grid.getData()[i]['itmNoutVol']<itmVol || grid.getData()[i]['itmStock'] < itmVol || itmVol ==0){
 				$.toast({ 
-					  text : "출고일자를 입력해주세요.", 
+					  text : "출고수량을 확인해주세요", 
+					  showHideTransition : 'slide',
+					  bgColor : 'red',
+					  textColor : 'white',
+					  allowToastClose : false,
+					  hideAfter : 2000,
+					  stack : 1,
+					  textAlign : 'center',
+					  position : 'top-center'
+					});
+				return null;
+			}
+		}
+		
+		for(let i =0; i<size; i++){
+			let itmPrice = grid.getData()[i]['itmPrice'];
+			itmPrice *=1;
+			if(itmPrice == 0){
+				$.toast({ 
+					  text : "단가를 입력해주세요", 
 					  showHideTransition : 'slide',
 					  bgColor : 'red',
 					  textColor : 'white',
