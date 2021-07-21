@@ -37,6 +37,7 @@
             v_prd_com_d_num produce_command_d.prd_com_d_num%type;
             v_total_res_vol process_result_d.prc_res_vol%type :=0;
             v_count number :=0;
+            v_mac_code process_result_d.mac_code%type; 
 			begin
 			
 				update process_result_d
@@ -44,8 +45,8 @@
 					, PRC_STATE = '완료'
 				where prc_res_d_num = #{prcResDNum}; 
 			
-				select mov_num
-				into v_mov_num_v
+				select mov_num , mac_code
+				into v_mov_num_v,v_mac_code
 				from process_result_d
 				where prc_res_d_num = #{prcResDNum}; 
 				
@@ -104,6 +105,10 @@
                 	
                      
                 end if;
+                
+               update machine 
+               set use_1 = '미사용'
+               where mac_code = v_mac_code;
                         
 	    		 
     
@@ -119,20 +124,35 @@
 	</update>
 	
 	<update id ="updatePrcStr">
+	begin
 		update process_result_d
 		set prc_str_time = to_date(#{prcStrTime},'yyyy-MM-dd:HH24:mi:ss')
 		, emp_id = #{empId}
 		, mac_code= #{macCode}
-		where prc_res_d_num = #{prcResDNum}
+		where prc_res_d_num = #{prcResDNum};
+		
+		update machine
+			set worker = (select emp_name from employees where emp_id = #{empId})
+			,use_1 = '사용'
+			where mac_code = #{macCode};
+	end;
 
 	</update>
 	<update id ="dataReset">
 	declare
 	v_res_no process_result_d.prc_res_no%type;
 	v_mov_num process_result_d.mov_num%type;
+	v_mac_code process_result_d.mac_code%type; 
+	v_emp_id process_result_d.mac_code%type;
 	begin
-		select prc_res_no, mov_num
-		into v_res_no, v_mov_num
+		select prc_res_no
+		       , mov_num
+		       , mac_code
+		       , emp_id
+		into v_res_no
+		       , v_mov_num
+		       , v_mac_code
+		       , v_emp_id
 		from process_result_d
 		where prc_res_d_num = #{prcResDNum}; 
 	
@@ -149,6 +169,10 @@
 		set prc_com_d_vol = 0
 		where prc_res_no = v_res_no+1
 		and mov_num = v_mov_num;
+		
+		update machine
+		set use_1 = '미사용'
+		where mac_code = v_mac_code;
 	end;	
 
 	</update>
@@ -174,20 +198,29 @@ SELECT * FROM (
                        ,prd.emp_id
                        ,prd.mac_code
                        ,pcd.ord_d_num
+                        ,a.prc_state as prc_f_state
 				from produce_command_d pcd
                      , process_result pr
                      , process_result_d prd
                      , item 
                      , process p 
+                     ,(select a.*, prd.prc_state from process_result pr, 
+                          process_result_d prd,
+                          (select max(prc_code) as prc_code,mov_num from process_result_d group by mov_num)a
+                          where pr.mov_num = prd.mov_num and
+                          pr.mov_num = a.mov_num  and
+                          a.prc_code = prd.prc_code)a
 				where pr.prd_com_d_num = pcd.prd_com_d_num and
 				      item.itm_code=pcd.itm_code and
                       pr.mov_num =prd.mov_num and
                       p.prc_code = prd.prc_code and
+                      a.mov_num = prd.mov_num and
+                      a.prc_state = '진행' and
                       <![CDATA[
                       prd.prc_com_d_vol > 0 and
-                      pcd.prc_com_y <> 'Y'
+                      pcd.prc_com_y <> 'Y' and
                       ]]>
-                      and prd.prc_code =${prcCode}
+                      prd.prc_code =${prcCode}
 				      <if test="prcResDNum1 != null">
 						<![CDATA[	
 							and prd.prc_res_d_num < #{prcResDNum1}
@@ -274,6 +307,7 @@ SELECT * FROM (
                         a.mov_num = prd.mov_num and
 				      	prd.prc_code = #{prcCode} and
 				      	pcd.prd_com_d_num = #{prdComDNum} and
+				      	
 				      	<![CDATA[	
 				      	prd.prc_com_d_vol >0
 				      ]]>
@@ -351,37 +385,7 @@ SELECT * FROM (
 	
 	
 	 
-	<select id="setProduceSelect2" parameterType="mes.prd.res.service.ProcessResultVO" resultType="mes.prd.res.service.ProcessResultVO">
-SELECT * FROM (
-	SELECT A.*, ROWNUM RNUM FROM (
-				select  prd.prc_res_d_num
-						,pcd.prd_com_num
-				        ,prd.mov_num
-				        ,prd.prc_res_no
-				        ,to_char(pcd.prd_com_d_date,'yyyy-MM-dd') as prd_com_d_date
-				        ,p.prc_name
-				        ,prd.PRC_STATE
-				        ,prd.MAC_CODE
-				        ,prd.PRC_WORK_NUM
-				        ,prd.PRC_RES_VOL
-				        ,prd.PRC_ERR_VOL
-				        ,prd.PRC_RESULT_D_NOTE
-				        ,to_char(prd.PRC_STR_TIME,'HH24:mm:ss') as prc_str_time
-				        ,to_char(prd.PRC_END_TIME,'HH24:mm:ss') as prc_end_time
-				        ,prd.PRC_COM_D_VOL
-				from process_result_d prd, process p, produce_command_d pcd, process_result pr
-				where prd.prc_code = p.prc_code 
-				and pr.prd_com_d_num = pcd.prd_com_d_num 
-				and pr.mov_num = prd.mov_num
-				and
-					   prd.prc_res_d_num = #{prcResDNum}
-				      
-		<![CDATA[					
-	) A WHERE ROWNUM <=10
-)
-]]>
-
-	</select>
+	
 	
 	
 	<update id="resultSuccess">
@@ -404,9 +408,7 @@ SELECT * FROM (
 				
 		
 			
-			update machine
-			set worker = (select emp_name from employees where emp_id = #{empId})
-			where mac_code = #{macCode};
+			
 			
 		    select prc_res_vol , prc_err_vol   , mov_num   , prc_res_no
 		    into v_old_res_vol , v_old_err_vol , v_mov_num ,v_prc_res_no

@@ -135,9 +135,7 @@ public class ProcessResultServiceImpl extends EgovAbstractServiceImpl implements
     
     public List<?> setProduceSelect(ProcessResultVO searchVO) throws Exception {
     	List list = processResultDAO.setProduceSelect(searchVO);
-    	if(list.size() <1) {
-    		list = processResultDAO.setProduceSelect2(searchVO);
-    	}
+    	
         return list;
     }
     public void resultSuccess(GridDataVO gridDataVO) throws Exception {

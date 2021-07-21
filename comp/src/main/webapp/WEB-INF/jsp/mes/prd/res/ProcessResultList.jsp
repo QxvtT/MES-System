@@ -38,7 +38,6 @@ let ordDNum = null
 let data;
 let prcCode = null;
 
-let matVol = 0;
 let empId = null;
 let macCode = null;
 let macName = null;
@@ -104,7 +103,7 @@ $(function(){
 	    	{ header: '기실적량', name:'prcResVol'},
 			{ header: '미실적량', name:'prcNVol'},
 			{ header: '불량량', name:'prcErrVol'},
-			{ header: '상태', name:'prcFState'},
+			{ header: '상태', name:'prcFState', escapeHTML:false},
 	    ]
 	});
 	
@@ -147,7 +146,6 @@ $(function(){
 		let key = grid.getFocusedCell()['rowKey'];
 		let result = grid.getColumnValues('prcResDNum')[key];
 		ordDNum = grid.getData()[key]['ordDNum'];
-		console.log(ordDNum);
 		getProcessResultSelect(result);
 		prdComDNum = grid.getColumnValues('prdComDNum')[key];
 		prcCode = grid.getColumnValues('prcCode')[key];;
@@ -203,19 +201,22 @@ function getProcessResultSelect(key) {
 				for(let i = 0; i<result.length; i++){
 					console.log(result[i]['prcFState']);
 					if(result[i]['prcState'] =='진행'){
-						result[i]['prcFState'] = '노랑'
+						result[i]['prcFState'] = '<div align="center"><div style="height: 15px; width: 20px; background-color: yellow;"></div></div>'
 					}
 					else if(result[i]['prcState'] =='완료'){
 						if(result[i]['prcFState']=='진행'){
-							result[i]['prcFState'] = '초록'
+							result[i]['prcFState'] = '<div align="center"><div style="height: 15px; width: 20px; background-color: green;"></div></div>'
 						}else{
-							result[i]['prcFState'] = '파랑'
+							result[i]['prcFState'] = '<div align="center"><div style="height: 15px; width: 20px; background-color: blue;"></div></div>'
 						}
 					}else{
-						result[i]['prcFState'] = '빨강'
+						result[i]['prcFState'] = '<div align="center"><div style="height: 15px; width: 20px; background-color: red;"></div></div>'
 					}
+					
+					
+					
+					
 				}
-				matVol = result[0]['matVol'];
 				console.log(result);
 				data = result;
 			} // end success
@@ -289,7 +290,16 @@ function getProcessResultSelect(key) {
 				prcEndTime =result[0]['prcEndTime'];
 				prcBefState =result[0]['prcBefState'];
 				prcResNo = result[0]['prcResNo'];
-				
+				console.log(result[0]['prcResVol']+result[0]['prcErrVol']);
+				if(result[0]['prcResVol']+result[0]['prcErrVol'] < result[0]['prcComDVol'] || result[0]['prcEndTime'] != null || prcBefState == "진행"){
+					$("#prcEnd").attr("disabled", true);
+
+				}
+				if(result[0]['prcResVol']+result[0]['prcErrVol'] == result[0]['prcComDVol'] && result[0]['prcEndTime'] == null && prcBefState != "진행"){
+					$("#prcEnd").attr("disabled", false);
+
+				}
+
 			} // end success
 		}); // end ajax 
 		return data;
@@ -362,6 +372,8 @@ function getProcessResultSelect(key) {
 				});
 			return null;
 		}
+	
+		
 		let gridData = grid4.getModifiedRows({});
 		gridData["processResultVO"] ={
 										macCode : $('input#macCode').val(),
@@ -384,6 +396,10 @@ function getProcessResultSelect(key) {
 		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
 		prcResDNum1=null;
 		grid.resetData(getProcessResulList());
+		macCode = $('input#macCode').val();
+		empId = $('input#empId').val();
+		grid4.resetData(setProduceSelect(prcResDNum));
+		
 			
 	}
 
@@ -458,8 +474,9 @@ function getProcessResultSelect(key) {
 				
 				}
 			});
-		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
+		prcResDNum1=null;
 		grid.resetData(getProcessResulList());
+		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
 	$("#myModal").modal("toggle");
 	}
 		
@@ -598,6 +615,7 @@ function getProcessResultSelect(key) {
 		});
 		
 		$('#searchMacBtn').click(function(){
+			macCode1= null;
 			usableMachine.resetData(getUsalbeMachine());
 			$("#macModal").modal("toggle");
 			$("#macModal").on('shown.bs.modal', function () {
@@ -668,6 +686,7 @@ function getProcessResultSelect(key) {
 	
 </script>
 </head>
+
 <body>
 	<div class="page-header">
 		<div class="page-block">
@@ -728,7 +747,9 @@ function getProcessResultSelect(key) {
 					</div>
 				</div>
 			</div>
+		
 		</div>
+		
 <!-- 		123 -->
 		<div class="pcoded-inner-content">
 			<div class="main-body">
@@ -837,11 +858,11 @@ function getProcessResultSelect(key) {
 									<th colspan="2" style="text-align: center;">시작시간</th>
 									<td ><input id = "prcStrTime" namd = "prcStrTime" readonly="readonly"/></td>
 									<th colspan="2" style="text-align: center;" >종료시간</th>
-									<td ><input id = "prcEndTime" namd = "prcEndTime" readonly="readonly"/></td>
+									<td ><input id = "prcEndTime" namd = "prcEndTime" readonly="readonly" /></td>
 								</tr>
 								<tr>
 									<td colspan="3" align="center"><button  class="btn btn-info btn-sm" id ="prcStr" name ="prcStr">작업시작</button></td>
-									<td colspan="3" align="center"><button class="btn btn-info btn-sm" id ="prcEnd" name ="prcEnd">작업종료</button></td>								
+									<td colspan="3" align="center"><button class="btn btn-info btn-sm" id ="prcEnd" name ="prcEnd" >작업종료</button></td>								
 								</tr>
 							</table>
 							
@@ -881,6 +902,7 @@ function getProcessResultSelect(key) {
 				</div>
 			</div>
 		</div>
+	</div>
 </body>
 </html>
 

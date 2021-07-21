@@ -81,7 +81,10 @@ $(function(){
 			{ header: '출고량', name:'itmVol',editor:"text"},
 			{ header: '현재고', name:'itmStock'},
 			{ header: '자재LOT_NO', name:'lotNum',editor:"text"},
-			{ header: '단가', name:'itmPrice',editor:"text"},
+			{ header: '단가', name:'itmPrice',
+				onAfterChange(e) {
+				console.log(e)
+				grid.setValue(e.rowKey, 'totalPrice', e.value * grid.getValue(e.rowKey, 'itmVol'));},editor:"text"},
 			{ header: '금액', name:'totalPrice'},
 			{ header: '비고', name:'itmNoteD',editor:"text"}
 	    ]
@@ -188,12 +191,14 @@ $(function(){
 			grid2.refreshLayout();
 		});
 		hisNumSearch.onclick = function() {
+			itmHisNum1 = null;
 			aDate = $(".modal-body").find('input[name="aDate"]').val();
 			bDate = $(".modal-body").find('input[name="bDate"]').val();
 
 			grid2.resetData(getItemHisNumList());
 		}
 		hisNumSearchReset.onclick = function() {
+			itmHisNum1 = null;
 			aDate = null;
 			bDate = null;
 			grid2.resetData(getItemHisNumList());
@@ -220,20 +225,7 @@ $(function(){
 	
 	save.onclick = function() {
 
-		if($("#itmHisRdy").val()==""){
-			$.toast({ 
-				  text : "출고일자를 입력해주세요.", 
-				  showHideTransition : 'slide',
-				  bgColor : 'red',
-				  textColor : 'white',
-				  allowToastClose : false,
-				  hideAfter : 2000,
-				  stack : 1,
-				  textAlign : 'center',
-				  position : 'top-center'
-				});
-			return null;
-		}
+	
 		
 		
 		let size = grid.getData().length;
@@ -274,7 +266,54 @@ $(function(){
 				return null;
 			}
 		}
-
+		for(let i =0; i<size; i++){
+		
+			if(grid.getData()[i]['lotNum'] == '' || grid.getData()[i]['lotNum'] == null ){
+				$.toast({ 
+					  text : "단가를 입력해주세요", 
+					  showHideTransition : 'slide',
+					  bgColor : 'red',
+					  textColor : 'white',
+					  allowToastClose : false,
+					  hideAfter : 2000,
+					  stack : 1,
+					  textAlign : 'center',
+					  position : 'top-center'
+					});
+				return null;
+			}
+		}
+		for(let i =0; i<size; i++){
+			
+			if(grid.getData()[i]['itmCode'] == '' || grid.getData()[i]['itmCode'] == null ){
+				$.toast({ 
+					  text : "단가를 입력해주세요", 
+					  showHideTransition : 'slide',
+					  bgColor : 'red',
+					  textColor : 'white',
+					  allowToastClose : false,
+					  hideAfter : 2000,
+					  stack : 1,
+					  textAlign : 'center',
+					  position : 'top-center'
+					});
+				return null;
+			}
+		}
+		if($("#itmHisRdy").val()==""){
+			$.toast({ 
+				  text : "출고일자를 입력해주세요.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
 			let gridData = grid.getModifiedRows({});
 			gridData["itemHistoryVO"] ={
 										itmHisRdy : $("#itmHisRdy").val()
@@ -321,10 +360,35 @@ $(function(){
 	}
 	
 	deleteItm.onclick = function() {
-		grid.removeCheckedRows()
-		console.log(grid.removeCheckedRows());
+		let size = grid.getCheckedRows().length;
+		if(size == 0){
+			$.toast({ 
+				  text : "삭제할 데이터가 없습니다.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'red',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
+			return null;
+		}
+		
+		for(let i =0; i<size; i++){
+		let delHisDNum = grid.getCheckedRows()[i]['itmHisDNum'];
+		delHisDNum *=1;
+		
+			
+		}
+		grid.removeCheckedRows();
+		
 		
 	}
+	
+	
+	
 	
 	// 주문일련이나 계획일련이 있으면 제품번호 수정 못하게 막는 function
 	grid.on('dblclick', (e) => { 
