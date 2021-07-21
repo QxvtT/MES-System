@@ -194,7 +194,7 @@
 	        						, ord_status='진행'
 	        		where ord_num =  #{ordNum} 
 	        				and itm_code = #{itmCode};
-	        end if
+	        end if;
 					end;
 				]]>
 	</delete>

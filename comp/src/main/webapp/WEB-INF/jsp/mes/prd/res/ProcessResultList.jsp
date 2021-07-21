@@ -341,7 +341,13 @@ function getProcessResultSelect(key) {
 				});
 			return null;
 		}
-		if(grid4.getData()[0]['prcComDVol'] < grid4.getData()[0]['prcResVol']+grid4.getData()[0]['prcErrVol'] ) {
+		let comDVol = grid4.getData()[0]['prcComDVol'];
+		comDVol *=1;
+		let resVol = grid4.getData()[0]['prcResVol'];
+		resVol *=1;
+		let errVol = grid4.getData()[0]['prcErrVol'] ;
+		errVol *=1;
+		if(comDVol < resVol+errVol) {
 			//토스트메시지 
 			$.toast({ 
 				  text : "작업량확인하세요", 
@@ -375,8 +381,8 @@ function getProcessResultSelect(key) {
 				
 			}
 			});
-			prcResDNum1=null;
 		grid3.resetData(getProduceSelect(prdComDNum,prcCode));
+		prcResDNum1=null;
 		grid.resetData(getProcessResulList());
 			
 	}
