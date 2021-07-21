@@ -55,6 +55,22 @@ $(function() {
 		} // end success
 	}); // end ajax 
 	
+	//현재페이지의 메뉴창 열려있게 처리
+	let aTags = $(".pcoded-item > li > ul.pcoded-submenu > li > a");
+	let menu;
+	for(let i=0; i<aTags.length; i++)  {
+		console.log(aTags[i].href);
+		if(aTags[i].href == window.location.href) {
+			menu = aTags.eq(i).closest(".pcoded-item > li").eq(0);
+			
+			menu.closest('.pcoded-inner-navbar').find('li.pcoded-trigger').removeClass('pcoded-trigger');
+			menu.addClass('pcoded-trigger');
+			menu.children('.pcoded-submenu').slideDown();
+			
+		}
+	}
+	
+	
 });
 
 </script>

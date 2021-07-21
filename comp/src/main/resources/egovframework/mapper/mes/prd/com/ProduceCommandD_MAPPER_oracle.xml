@@ -113,7 +113,7 @@
 		SELECT * FROM (
 			SELECT A.*, ROWNUM RNUM FROM ( 
 		        select A.*, to_char(a.prd_com_d_date,'YYYY-MM-DD') as prd_com_d_date1, 
-		        		M.MAT_NAME, nvl(B.yes_Com_Vol,0) as yes_Com_Vol,
+		        		M.MAT_NAME, nvl(B.yes_Com_Vol,0) + (a.ord_vol*0)  as yes_Com_Vol,
 				        a.ord_vol - nvl(B.yes_Com_Vol,0) - NVL(a.ord_out_vol,0) as no_Com_Vol,
 				        a.itm_day_output/8 as UPH, a.prd_com_vol/a.itm_day_output as day_Num
 				from(SELECT A.PRD_DATE

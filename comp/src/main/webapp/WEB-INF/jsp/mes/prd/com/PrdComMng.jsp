@@ -118,9 +118,7 @@ $(function(){
 			},
 			{ header: '주문번호', name:'ordNum'},
 			{ header: '납기일자', name:'ordDeliveryDate'},
-			{ header: '주문량', name:'ordVol',
-				formatter: (ev)=>{console.log(ev);}	
-			},
+			{ header: '주문량', name:'ordVol'},
 			{ header: '기지시량', name:'yesComVol',
 				formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}	
 			},
@@ -1146,10 +1144,10 @@ $(function(){
 		<div class="main-body">
 			<div class="page-wrapper">
 				<div class="text-right">
-					<button type="button" class="btn btn-primary" id="comMadalBtn">조회</button>
-					<button type="button" class="btn btn-primary" id="resetBtn">새자료</button>
-					<button type="button" class="btn btn-primary" id="saveBtn">저장</button>
-					<button type="button" class="btn btn-primary" id="removeBtn">삭제</button>
+					<button type="button" class="btn btn-info" id="comMadalBtn">조회</button>
+					<button type="button" class="btn btn-info" id="resetBtn">새자료</button>
+					<button type="button" class="btn btn-info" id="saveBtn">저장</button>
+					<button type="button" class="btn btn-info" id="removeBtn">삭제</button>
 				</div>
 				<br />
 				<div class="row">
@@ -1220,7 +1218,7 @@ $(function(){
 										    </div>
 										    <div id="date2" class="d-inline-block" style="margin-top: -1px;"></div>
 											<button type="button" id="searchPlnBtn"
-												class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
+												class="btn btn-sm btn-info waves-effect waves-light">검색</button>
 										</div>
 									</div>
 								</div>
@@ -1231,10 +1229,10 @@ $(function(){
 							<div class="col-sm-6"></div>
 							<div class="col-sm-6 text-right">
 								<button
-									class="btn btn-sm btn-primary waves-effect waves-light ml-3"
+									class="btn btn-sm btn-info waves-effect waves-light ml-3"
 									type="button" id="insertBtn">추가</button>
 								<button
-									class="btn btn-sm btn-primary waves-effect waves-light ml-3"
+									class="btn btn-sm btn-info waves-effect waves-light ml-3"
 									type="button" id="deleteBtn">삭제</button>
 							</div>
 						</div>
@@ -1267,11 +1265,11 @@ $(function(){
 								<div class="col-sm-8"></div>
 								<div class="col-sm-4 text-right" style="padding-left: 0px">
 									<button type="button" id="outMatLotBtn"
-										class="btn btn-sm btn-primary btn-disabled disabled waves-effect waves-light">출고</button>
+										class="btn btn-sm btn-info btn-disabled disabled waves-effect waves-light">출고</button>
 									<button type="button" id="searchMatLotBtn"
-										class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
+										class="btn btn-sm btn-info waves-effect waves-light">검색</button>
 									<button type="button" id="deleteMBtn"
-										class="btn btn-sm btn-primary waves-effect waves-light">삭제</button>
+										class="btn btn-sm btn-info waves-effect waves-light">삭제</button>
 								</div>
 							</div>
 							<div class="col-xl-5 col-lg-12">
@@ -1328,7 +1326,7 @@ $(function(){
 							<div id="end-container" style="margin-left: -1px;"></div>
 						</div>
 						<button type="button" id="searchComBtn"
-							class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
+							class="btn btn-sm btn-info waves-effect waves-light">검색</button>
 					</div>
 				</div>
 				<div id="grid2"></div>
@@ -1357,7 +1355,7 @@ $(function(){
 						LOT NO <input type="text" class="form-control ml-3 w-50"
 							id="lotNum" name="lotNum"></input>
 						<button type="button" id="searchLotNumBtn"
-							class="btn btn-sm btn-primary waves-effect waves-light">검색</button>
+							class="btn btn-sm btn-info waves-effect waves-light">검색</button>
 					</div>
 				</div>
 				<div id="gridMatStock"></div>
@@ -1385,7 +1383,7 @@ $(function(){
 					<div id="grid3"></div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" id="itmCheckSearchBtn">확인</button>
+					<button type="button" class="btn btn-info" id="itmCheckSearchBtn">확인</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
 				</div>
 			</div>
