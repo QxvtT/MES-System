@@ -63,7 +63,6 @@ $(function(){
 	}); // end const grid
 	
 	grid.on('scrollEnd', () => {
-	    grid.appendRows(getPrdComList());
 	    });
 	  
 	const grid2 = new tui.Grid({
@@ -107,7 +106,7 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
-			url : "prd/com/ProduceCommandDList",
+			url : "ProduceCommandDList",
 			type : "get",
 			data : {
 				startDate : startDate,
@@ -128,8 +127,9 @@ $(function(){
 			async: false,
 			url : "ProcessMatList",
 			type : "get",
-			data : {prdComMatNum: prdComMatNum,
-					prdComDNum: prdComDNum
+			data : {
+				prdComMatNum: prdComMatNum,
+				prdComDNum: prdComDNum
 					},
 			dataType: "json",
 			success : function(result){
@@ -188,7 +188,7 @@ $(function(){
 		let data;
 		$.ajax({
 			async: false,
-			url : "prd/com/ProduceCommandFlowList",
+			url : "ProduceCommandFlowList",
 			type : "get",
 			data : {
 				itmCode: itmCode,
@@ -232,10 +232,8 @@ $(function(){
 	
 	$('#printBtn').click(function() {
 		getPrtInfo();
-		window.open("ProcessMovePrt.do");
+		window.open("ProcsMoveTblPrt.do");
 	})
-	
-
 	
 	function getPrtInfo() {
 		gridData['grid1Data'] = {
@@ -245,7 +243,8 @@ $(function(){
 					itmCode : grid1Data.itmCode,
 					itmName : grid1Data.itmName,
 					matName : grid1Data.matName,
-					prdComVol : grid1Data.prdComVol
+					prdComVol : grid1Data.prdComVol,
+					prdComDNote : grid1Data.prdComDNote
 					};
 		gridData['grid2Data'] = {
 				movNum : grid2Data.movNum,

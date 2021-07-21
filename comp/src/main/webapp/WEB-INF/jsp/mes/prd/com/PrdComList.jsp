@@ -222,6 +222,11 @@ $(function(){
 })
 
 </script>
+<style>
+	.tui-grid-cell-summary {
+		text-align: center;
+	}
+</style>
 </head>
 <body>
 	<!-- 생산지시조회 Title -->
