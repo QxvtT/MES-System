@@ -205,7 +205,7 @@ public class ProduceCommandDVO extends ProduceCommandDDefaultVO{
     private java.math.BigDecimal prcResVol;
     private java.math.BigDecimal prcErrVol;
     private java.lang.String prcUnit;
-    private java.lang.String empId;
+    private java.lang.String empName;
     
 	
 	public static long getSerialversionuid() {

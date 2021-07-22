@@ -291,7 +291,7 @@
         ,(select prc_unit from process where prc_code = f.prc_code) prc_unit
         ,(select prc_res_vol from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code) prc_res_vol
         ,(select prc_err_vol from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code) prc_err_vol
-        ,(select emp_id from process_result_d where mov_num = #{movNum} and prc_code = f.prc_code) emp_id
+        ,(select e.emp_name from (select emp_id from process_result_d where mov_num = 'M001' and prc_code = f.prc_code) a, employees e where e.emp_id = a.emp_id) emp_name
 		</if>
 		from process_flow F, process P
 		where f.prc_code = p.prc_code

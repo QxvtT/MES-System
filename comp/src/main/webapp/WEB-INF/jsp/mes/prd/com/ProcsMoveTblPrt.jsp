@@ -142,7 +142,7 @@
 			<td class="tg-7btt" colspan="6"><span style="font-weight: bold">비고</span></td>
 		</tr>
 		<tr>
-			<td class="tg-0pky" colspan="6" height="100px;">prdComNote</td>
+			<td class="tg-0pky" colspan="6" height="100px;"></td>
 		</tr>
 	</table>
 </body>
@@ -188,7 +188,7 @@
 			.append($('<td>').html(data3[i].prcComDVol))
 			.append($('<td>').html(data3[i].prcUnit))
 			.append($('<td>').html((data3[i].prcResVol - data3[i].prcErrVol)))
-			.append($('<td>').html(data3[i].empId))
+			.append($('<td>').html(data3[i].empName))
 			.appendTo('#table')
 	};
 	
