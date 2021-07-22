@@ -533,6 +533,7 @@ $(function(){
 		//새로 추가한 행이라 지시일련이 없는 경우 rowKey를 가져간다.
 		if(grid.getValue(e.rowKey,'prdComDNum') == null || grid.getValue(e.rowKey,'prdComDNum') == '') {
 			matRowKey = e.rowKey;
+			prdComDNum = null;
 		} else {
 			matRowKey = null;
 			prdComDNum = grid.getValue(e.rowKey,'prdComDNum');
@@ -1237,7 +1238,7 @@ $(function(){
 							<div class="col-md-6" style="z-index: 150">
 								<div class="card">
 									<div class="card-body">
-										<div class="col-md-12 pl-3 mb-3 pb-3">
+										<div class="col-md-12 pl-3 mb-3 pb-3 pt-3">
 											<h5 class="d-inline">생산계획 조회</h5>
 										</div>
 										<div class="col-md-12 align-items-center text-center mb-3 pb-3">
@@ -1299,7 +1300,7 @@ $(function(){
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xl-7 col-lg-12 row text-right">
+							<div class="col-xl-7 col-lg-12 row text-right" style="margin-right:15px;">
 								<div class="col-sm-8"></div>
 								<div class="col-sm-4 text-right" style="padding-left: 0px">
 									<button type="button" id="outMatLotBtn"

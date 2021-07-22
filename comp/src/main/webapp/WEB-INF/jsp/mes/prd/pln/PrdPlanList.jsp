@@ -242,6 +242,7 @@ $(function(){
 	<div class="pcoded-inner-content">
 		<br />
 		<div class="main-body">
+		<div class="page-wrapper">
 			<div class="text-right">
 				<button type="button" class="btn btn-info" id="searchBtn">조회</button>
 				<button type="button" class="btn btn-info" id="resetBtn">새자료</button>
@@ -255,7 +256,7 @@ $(function(){
 						id="detailForm">
 						<input type="hidden" id="prdComNum" name="prdComNum" />
 						<div class="">
-							<div class="" style="z-index: 200">
+							<div class="card" style="z-index: 200">
 								<div class="table">
 									<table class="table">
 										<tr>
@@ -288,9 +289,9 @@ $(function(){
 											</td>
 											<td>
 												<div class="row">
-													<input type="text" class="form-control w-25" id="operCode"
-														name="operCode" value="${result.operCode }"></input> <input
-														type="text" class="form-control w-25 ml-3 mr-3"
+													<input type="text" class="form-control" id="operCode" style="width:200px;"
+														name="operCode" value="${result.operCode }"></input> 
+													<input type="text" class="form-control ml-3 mr-3" style="width:200px;"
 														id="operName" name="operName" value="${result.operName }"
 														readonly></input>
 													<%@include
@@ -303,9 +304,9 @@ $(function(){
 											</td>
 											<td>
 												<div class="row">
-													<input type="text" class="form-control w-25" id="itmCode"
+													<input type="text" class="form-control" id="itmCode" style="width:200px;"
 														name="itmCode" value="${result.itmCode }"></input> <input
-														type="text" class="form-control w-25 ml-3 mr-3"
+														type="text" class="form-control ml-3 mr-3" style="width:200px;"
 														id="itmName" name="itmName" value="${result.itmName }"
 														readonly></input>
 													<%@include
@@ -318,15 +319,19 @@ $(function(){
 							</div>
 						</div>
 
+						<div class="card pt-3">
+						<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">생산계획 내역</p></div>
 						<div class="row">
 							<div class="col-sm-12">
 								<div id="grid"></div>
 							</div>
 						</div>
+						</div>
 					</form:form>
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 </body>
 </html>

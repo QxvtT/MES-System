@@ -5342,7 +5342,8 @@ button.close {
 	background-clip: padding-box;
 	border: 1px solid rgba(0, 0, 0, .2);
 	border-radius: .3rem;
-	outline: 0
+	outline: 0;
+	text-align: center;
 }
 .modal-contentt {
 	position: relative;
@@ -5359,7 +5360,8 @@ button.close {
 	background-clip: padding-box;
 	border: 1px solid rgba(0, 0, 0, .2);
 	border-radius: .3rem;
-	outline: 0
+	outline: 0;
+	text-align: center;
 }
 
 
@@ -5447,7 +5449,7 @@ button.close {
 
 @media ( min-width :576px) {
 	.modal-dialog {
-		max-width: 500px;
+		max-width: 600px;
 		margin: 1.75rem auto
 	}
 	.modal-dialogg {

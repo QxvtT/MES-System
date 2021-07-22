@@ -671,6 +671,7 @@ $(function(){
 	<div class="pcoded-inner-content">
 		<br />
 		<div class="main-body">
+		<div class="page-wrapper">
 			<div class="text-right">
 				<button type="button" class="btn btn-info" id="searchBtn">조회</button>
 				<button type="button" class="btn btn-info" id="resetBtn">새자료</button>
@@ -681,14 +682,15 @@ $(function(){
 			<form action="" id="master" name="master">
 				<div class="row">
 					<div class="col-md-6">
-						<table class="table" style="background-color: white;">
+					<div class="card">
+						<table class="table">
 							<tr>
 								<th>계획일자*</th>
 								<td>
 									<div
 										class="tui-datepicker-input tui-datetime-input tui-has-focus">
 										<input class="form-control" type="text" id="prdDate"
-											name="prdDate" aria-label="Date-Time" /> <span
+											name="prdDate" aria-label="Date-Time" style="width: 150px;"/> <span
 											class="tui-ico-date"></span>
 									</div>
 									<div id="wrapper" style="margin-top: -1px;"></div>
@@ -704,18 +706,20 @@ $(function(){
 							</tr>
 						</table>
 					</div>
+					</div>
 					<div class="col-md-6">
+					<div class="card">
 						<table class="table" style="background-color: white;">
 							<tr>
-								<td>
+								<td class="pt-3">
 									<h5>미생산 계획 검색</h5>
 								</td>
 							</tr>
 							<tr>
-								<td>
-									<div style="padding-left: 15px; padding-bottom: 10px;">주문
-										접수 일자</div>
-									<div class="row align-items-center text-center col-lg-8">
+								<td class="pt-3 pb-3">
+									<div class="row align-items-center text-center col-lg-12 pt-3 pb-3 mb-3">
+										<div style="padding-left: 15px; padding-bottom: 10px;">주문
+											접수 일자</div>
 										<div
 											class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 											<input class="form-control w-25" id="unpStartDate"
@@ -738,19 +742,25 @@ $(function(){
 							</tr>
 						</table>
 					</div>
+					</div>
 				</div>
 			</form>
-		</div>
-		<div class="text-right">
-			<button type="button" class="btn btn-info btn-sm" id="addRowBtn">추가</button>
-			<button type="button" class="btn btn-info btn-sm" id="deleteRowBtn">삭제</button>
-		</div>
-		<br />
-		<div class="row">
-			<div class="col-xl-12">
-				<div class="card">
-					<div id="grid" />
+			<div class="card pt-3">
+				<div class="row">
+					<div class="col-xl-6">
+						<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">생산계획 내역</p></div>
+					</div>
+					<div class="col-xl-6 text-right pb-3">
+						<button type="button" class="btn btn-info btn-sm" id="addRowBtn">추가</button>
+						<button type="button" class="btn btn-info btn-sm mr-3" id="deleteRowBtn">삭제</button>
+					</div>
 				</div>
+				<div class="row">
+					<div class="col-xl-12">
+						<div id="grid" />
+					</div>
+				</div>
+			</div>
 			</div>
 		</div>
 	</div>
@@ -773,25 +783,23 @@ $(function(){
 						<table>
 							<tr>
 								<td><div>계획일자</div></td>
-							</tr>
-							<tr>
 								<td><div
-										class="tui-datepicker-input tui-datetime-input tui-has-focus">
+										class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 										<input class="form-control" id="startDate" name="startDate"
-											type="text" aria-label="Date" /> <span class="tui-ico-date"></span>
+											type="text" aria-label="Date" style="width: 150px;" /> <span class="tui-ico-date"></span>
 										<div id="startDate-container" style="margin-left: -1px;"></div>
 									</div></td>
 								<td><span>~</span></td>
 								<td><div
-										class="tui-datepicker-input tui-datetime-input tui-has-focus">
+										class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 										<input class="form-control" id="endDate" name="endDate"
-											type="text" aria-label="Date" /> <span class="tui-ico-date"></span>
+											type="text" aria-label="Date" style="width: 150px;"/> <span class="tui-ico-date"></span>
 										<div id="endDate-container" style="margin-left: -1px;"></div>
 									</div></td>
-								<td><div class="col-md-3">
-										<button type="button" class="btn btn-info btn-sm"
-											id="prdSearchBtn">검색</button>
-									</div></td>
+								<td>
+									<button type="button" class="btn btn-info btn-sm"
+										id="prdSearchBtn">검색</button>
+								</td>
 							</tr>
 						</table>
 					</form>
