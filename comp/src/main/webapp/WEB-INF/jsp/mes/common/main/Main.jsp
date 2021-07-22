@@ -22,12 +22,133 @@
 */
 %>
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>eGovFrame <spring:message code="comCmm.unitContent.1" /></title>
+<title>Main</title>
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+<script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+<script type="text/javaScript" language="javascript" defer="defer">
+let comVol = 0;
+let errVol = 0;
+let errPer = 0;
+let bckVol = 0;
+let bckper = 0;
+	$(function(){
+			$.ajax({
+				async: false, 
+				url : "getOrdVol",
+				type : "get",
+				dataType: "json",
+				success : function(result){
+					$('h5#ordVol').text(result);
+				}
+			});
+			
+			$.ajax({
+				async: false, 
+				url : "getOrdComVol",
+				type : "get",
+				dataType: "json",
+				success : function(result){
+					$('h5#ordComVol').text(result);
+				}
+			});
+			
+			$.ajax({
+				async: false, 
+				url : "getBckVol",
+				type : "get",
+				dataType: "json",
+				success : function(result){
+					bckVol = result;
+				}
+			});
+			$.ajax({
+				async: false, 
+				url : "getErrVol",
+				type : "get",
+				dataType: "json",
+				success : function(result){
+					errVol = result
+				}
+			});
+			
+			$.ajax({
+				async: false, 
+				url : "getComVol",
+				type : "get",
+				dataType: "json",
+				success : function(result){
+					comVol = result;
+					if(comVol >0){
+						errPer =errVol/(errVol+bckVol)*100;
+						$('h5#errPer').text(Math.round(errPer)+'%');
+						bckper = bckVol/comVol*100;
+						$('h5#bckPer').text(Math.round(bckper)+'%');
+						
+					}
+				}
+			});
+			$.ajax({
+				async: false, 
+				url : "getUsingMac",
+				type : "get",
+				dataType: "json",
+				success : function(result){
+					$('h5#getUsingMac').text(result);
+				}
+			});
+			$.ajax({
+				async: false, 
+				url : "getMonPrice",
+				type : "get",
+				dataType: "json",
+				success : function(result){
+					$('h5#getMonPrice').text((result).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+				}
+			});
+			$.ajax({
+				async: false, 
+				url : "getMonVol",
+				type : "get",
+				dataType: "json",
+				success : function(result){
+					$('h5#getMonVol').text(result);
+				}
+			});
+			
+			
+			
+	
+		
+	})
+	
+</script>
+<style type="text/css">
+#sibal:hover{
+	background-color: #f0f0f5;
+	cursor:pointer;
+}
+</style>
 </head>
 <body>
+<!-- Page-header start -->
+	<div class="page-header" align="center">
+		<div class="page-block">
+			<div class="row align-items-center">
+				<div class="col-md-8">
+					<div class="page-header-title" >
+						<h5 class="m-b-10">&nbsp;
+						</h5>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
 		<!-- Main-body start -->
 		<div class="main-body">
@@ -37,52 +158,54 @@
 					<div class="row">
 						<!-- Material statustic card start -->
 						<div class="col-xl-4 col-md-12">
+						<!-- 가동중인 설비목록 -->
 							<div class="card mat-stat-card">
 								<div class="card-block">
 									<div class="row align-items-center b-b-default">
-										<div class="col-sm-6 b-r-default p-b-20 p-t-20">
+										<div id ="sibal" class="col-sm-6 b-r-default p-b-20 p-t-20">
 											<div class="row align-items-center text-center">
 												<div class="col-4 p-r-0">
 													<i class="far fa-user text-c-purple f-24"></i>
 												</div>
-												<div class="col-8 p-l-0">
-													<h5>10K</h5>
-													<p class="text-muted m-b-0">Visitors</p>
+												<div id ="sibal" class="col-8 p-l-0" onclick="location.href='${pageContext.request.contextPath}/sal/ord/OrderMList.do'">
+													<h5 id = "ordVol" ></h5>
+													<p class="text-muted m-b-0">진행중인 주문</p>
 												</div>
 											</div>
 										</div>
-										<div class="col-sm-6 p-b-20 p-t-20">
+										<div id ="sibal"class="col-sm-6 p-b-20 p-t-20">
 											<div class="row align-items-center text-center">
 												<div class="col-4 p-r-0">
 													<i class="fas fa-volume-down text-c-green f-24"></i>
 												</div>
-												<div class="col-8 p-l-0">
-													<h5>100%</h5>
-													<p class="text-muted m-b-0">Volume</p>
+												<div class="col-8 p-l-0" onclick="location.href='${pageContext.request.contextPath}/prd/res/ProcessListR.do'">
+													<h5 id = "bckPer"></h5>
+													<p class="text-muted m-b-0">금일 실적률</p>
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class="row align-items-center">
-										<div class="col-sm-6 p-b-20 p-t-20 b-r-default">
+										<div id ="sibal" class="col-sm-6 p-b-20 p-t-20 b-r-default">
 											<div class="row align-items-center text-center">
 												<div class="col-4 p-r-0">
 													<i class="far fa-file-alt text-c-red f-24"></i>
 												</div>
-												<div class="col-8 p-l-0">
-													<h5>2000+</h5>
-													<p class="text-muted m-b-0">Files</p>
+												<div class="col-8 p-l-0" >
+														<h5 id ="ordComVol"></h5>
+													<p class="text-muted m-b-0">완료된 주문</p>
 												</div>
 											</div>
 										</div>
-										<div class="col-sm-6 p-b-20 p-t-20">
+										<div id ="sibal" class="col-sm-6 p-b-20 p-t-20">
 											<div class="row align-items-center text-center">
 												<div class="col-4 p-r-0">
 													<i class="far fa-envelope-open text-c-blue f-24"></i>
 												</div>
-												<div class="col-8 p-l-0">
-													<h5>120</h5>
-													<p class="text-muted m-b-0">Mails</p>
+												<div class="col-8 p-l-0" onclick="location.href='${pageContext.request.contextPath}/prd/res/ProcessListR.do'">
+												<h5 id ="errPer"></h5>
+													<p class="text-muted m-b-0">불량률</p>
+													
 												</div>
 											</div>
 										</div>
@@ -94,49 +217,49 @@
 							<div class="card mat-stat-card">
 								<div class="card-block">
 									<div class="row align-items-center b-b-default">
-										<div class="col-sm-6 b-r-default p-b-20 p-t-20">
+										<div id ="sibal" class="col-sm-6 b-r-default p-b-20 p-t-20">
 											<div class="row align-items-center text-center">
 												<div class="col-4 p-r-0">
 													<i class="fas fa-share-alt text-c-purple f-24"></i>
 												</div>
 												<div class="col-8 p-l-0">
-													<h5>1000</h5>
-													<p class="text-muted m-b-0">Share</p>
+													<h5 id= "getMonPrice"></h5>
+													<p class="text-muted m-b-0">월 매출</p>
 												</div>
 											</div>
 										</div>
-										<div class="col-sm-6 p-b-20 p-t-20">
+										<div id ="sibal" class="col-sm-6 p-b-20 p-t-20">
 											<div class="row align-items-center text-center">
 												<div class="col-4 p-r-0">
 													<i class="fas fa-sitemap text-c-green f-24"></i>
 												</div>
 												<div class="col-8 p-l-0">
-													<h5>600</h5>
-													<p class="text-muted m-b-0">Network</p>
+													<h5 id= "getMonVol"></h5>
+													<p class="text-muted m-b-0">월 생산량</p>
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class="row align-items-center">
-										<div class="col-sm-6 p-b-20 p-t-20 b-r-default">
+										<div id ="sibal"class="col-sm-6 p-b-20 p-t-20 b-r-default">
 											<div class="row align-items-center text-center">
 												<div class="col-4 p-r-0">
 													<i class="fas fa-signal text-c-red f-24"></i>
 												</div>
-												<div class="col-8 p-l-0">
-													<h5>350</h5>
-													<p class="text-muted m-b-0">Returns</p>
+												<div class="col-8 p-l-0" onclick="location.href='${pageContext.request.contextPath}/mac/machine/MacMng.do'">
+													<h5 id ="getUsingMac"></h5>
+													<p class="text-muted m-b-0">사용중 설비</p>
 												</div>
 											</div>
 										</div>
-										<div class="col-sm-6 p-b-20 p-t-20">
+										<div id ="sibal" class="col-sm-6 p-b-20 p-t-20">
 											<div class="row align-items-center text-center">
 												<div class="col-4 p-r-0">
 													<i class="fas fa-wifi text-c-blue f-24"></i>
 												</div>
 												<div class="col-8 p-l-0">
-													<h5>100%</h5>
-													<p class="text-muted m-b-0">Connections</p>
+													<h5>66.75%</h5>
+													<p class="text-muted m-b-0">부하율</p>
 												</div>
 											</div>
 										</div>
@@ -152,8 +275,8 @@
 											<i class="fas fa-star mat-icon f-24"></i>
 										</div>
 										<div class="col-9 cst-cont">
-											<h5>4000+</h5>
-											<p class="m-b-0">Ratings Received</p>
+											<h5>고등어순살조림</h5>
+											<p class="m-b-0">점심메뉴</p>
 										</div>
 									</div>
 								</div>
@@ -165,8 +288,8 @@
 											<i class="fas fa-trophy mat-icon f-24"></i>
 										</div>
 										<div class="col-9 cst-cont">
-											<h5>17</h5>
-											<p class="m-b-0">Achievements</p>
+											<h5 ></h5>
+											<p class="m-b-0">우수사원</p>
 										</div>
 									</div>
 								</div>
@@ -181,59 +304,19 @@
 						<!--  차트자리야 -->
 						
 						
-						<div class="col-xl-12">
-							<div class="card proj-progress-card">
-								<div class="card-block">
-									<div class="row">
-										<div class="col-xl-3 col-md-6">
-											<h6>Published Project</h6>
-											<h5 class="m-b-30 f-w-700">
-												532<span class="text-c-green m-l-10">+1.69%</span>
-											</h5>
-											<div class="progress">
-												<div class="progress-bar bg-c-red" style="width: 25%"></div>
-											</div>
-										</div>
-										<div class="col-xl-3 col-md-6">
-											<h6>Completed Task</h6>
-											<h5 class="m-b-30 f-w-700">
-												4,569<span class="text-c-red m-l-10">-0.5%</span>
-											</h5>
-											<div class="progress">
-												<div class="progress-bar bg-c-blue" style="width: 65%"></div>
-											</div>
-										</div>
-										<div class="col-xl-3 col-md-6">
-											<h6>Successfull Task</h6>
-											<h5 class="m-b-30 f-w-700">
-												89%<span class="text-c-green m-l-10">+0.99%</span>
-											</h5>
-											<div class="progress">
-												<div class="progress-bar bg-c-green" style="width: 85%"></div>
-											</div>
-										</div>
-										<div class="col-xl-3 col-md-6">
-											<h6>Ongoing Project</h6>
-											<h5 class="m-b-30 f-w-700">
-												365<span class="text-c-green m-l-10">+0.35%</span>
-											</h5>
-											<div class="progress">
-												<div class="progress-bar bg-c-yellow" style="width: 45%"></div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+						
 					</div>
 				</div>
 				<!-- Project statustic end -->
+				<iframe style="width: 100%; height: 730px;"   src="prd/mon/MonitorDisplay.do" ></iframe>
 			</div>
 		</div>
-
+ 
 	</div>
 	<div id="styleSelector"></div>
-	<iframe src="prd/mon/MonitorDisplay.do" ></iframe>
+	
+	
+	
 
 </body>
 </html>
