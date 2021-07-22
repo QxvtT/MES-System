@@ -501,6 +501,7 @@ $(function(){
 		$('#prdComName').val('');
 		$('#prdComNote').val('');
 		prdComNum = null;
+		prdComDNum = null;
 		matRowKey = null;
 		prdDateS = $('#startpicker-input').val();
 		prdDateE = $('#endpicker-input').val();
@@ -611,7 +612,7 @@ $(function(){
 			$.toast({ 
 				  text : "출고된 내역은 삭제할수 없습니다.", 
 				  showHideTransition : 'slide',
-				  bgColor : 'red',
+				  bgColor : 'tomato',
 				  textColor : 'white',
 				  allowToastClose : false,
 				  hideAfter : 2000,
@@ -647,7 +648,7 @@ $(function(){
 			$.toast({ 
 				  text : "작성일자를 입력해주세요.", 
 				  showHideTransition : 'slide',
-				  bgColor : 'red',
+				  bgColor : 'tomato',
 				  textColor : 'white',
 				  allowToastClose : false,
 				  hideAfter : 2000,
@@ -662,7 +663,7 @@ $(function(){
 			$.toast({ 
 				  text : "작업지시명을 입력해주세요.", 
 				  showHideTransition : 'slide',
-				  bgColor : 'red',
+				  bgColor : 'tomato',
 				  textColor : 'white',
 				  allowToastClose : false,
 				  hideAfter : 2000,
@@ -682,7 +683,7 @@ $(function(){
 			$.toast({ 
 				  text : "제품코드를 입력해주세요.", 
 				  showHideTransition : 'slide',
-				  bgColor : 'red',
+				  bgColor : 'tomato',
 				  textColor : 'white',
 				  allowToastClose : false,
 				  hideAfter : 2000,
@@ -700,7 +701,7 @@ $(function(){
 			$.toast({ 
 				  text : "작업구분을 입력해주세요.", 
 				  showHideTransition : 'slide',
-				  bgColor : 'red',
+				  bgColor : 'tomato',
 				  textColor : 'white',
 				  allowToastClose : false,
 				  hideAfter : 2000,
@@ -718,7 +719,7 @@ $(function(){
 			$.toast({ 
 				  text : "지시량을 입력해주세요.", 
 				  showHideTransition : 'slide',
-				  bgColor : 'red',
+				  bgColor : 'tomato',
 				  textColor : 'white',
 				  allowToastClose : false,
 				  hideAfter : 2000,
@@ -736,7 +737,7 @@ $(function(){
 			$.toast({ 
 				  text : "작업일자를 입력해주세요.", 
 				  showHideTransition : 'slide',
-				  bgColor : 'red',
+				  bgColor : 'tomato',
 				  textColor : 'white',
 				  allowToastClose : false,
 				  hideAfter : 2000,
@@ -781,6 +782,18 @@ $(function(){
 					}
 					prdComDNum1 = null;
 					grid.resetData(getList());
+					//토스트메시지 
+					$.toast({ 
+					  text : "작업지시 저장에 성공했습니다.", 
+					  showHideTransition : 'slide',
+					  bgColor : 'Limegreen',
+					  textColor : 'white',
+					  allowToastClose : false,
+					  hideAfter : 2000,
+					  stack : 1,
+					  textAlign : 'center',
+					  position : 'top-center'
+					});
 				}
 				});
 		
@@ -801,7 +814,7 @@ $(function(){
 			$.toast({ 
 				  text : "자재수량을 입력해주세요.", 
 				  showHideTransition : 'slide',
-				  bgColor : 'red',
+				  bgColor : 'tomato',
 				  textColor : 'white',
 				  allowToastClose : false,
 				  hideAfter : 2000,
@@ -827,6 +840,18 @@ $(function(){
 			contentType:"application/json",
 			success : function(data) {
 				console.log(data);
+				//토스트메시지 
+				$.toast({ 
+				  text : "작업자재 저장에 성공했습니다.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'Limegreen',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
 			}
 		});
 		gridMat.resetData(getComMatList());
@@ -855,7 +880,7 @@ $(function(){
 			$.toast({ 
 				  text : "출고할 자재가 없습니다.", 
 				  showHideTransition : 'slide',
-				  bgColor : 'red',
+				  bgColor : 'tomato',
 				  textColor : 'white',
 				  allowToastClose : false,
 				  hideAfter : 2000,
@@ -871,7 +896,7 @@ $(function(){
 			$.toast({ 
 				  text : "변경사항이 저장되지 않았습니다.", 
 				  showHideTransition : 'slide',
-				  bgColor : 'red',
+				  bgColor : 'tomato',
 				  textColor : 'white',
 				  allowToastClose : false,
 				  hideAfter : 2000,
@@ -895,7 +920,7 @@ $(function(){
 			$.toast({ 
 				  text : "자재수량이 지시량보다 적습니다.", 
 				  showHideTransition : 'slide',
-				  bgColor : 'red',
+				  bgColor : 'tomato',
 				  textColor : 'white',
 				  allowToastClose : false,
 				  hideAfter : 2000,
@@ -930,6 +955,18 @@ $(function(){
 			success : function(data) {
 				console.log(data);
 				prdComNum = data;
+				//토스트메시지 
+				$.toast({ 
+				  text : "출고되었습니다.", 
+				  showHideTransition : 'slide',
+				  bgColor : 'Limegreen',
+				  textColor : 'white',
+				  allowToastClose : false,
+				  hideAfter : 2000,
+				  stack : 1,
+				  textAlign : 'center',
+				  position : 'top-center'
+				});
 			}
 		});
 		prdComDNum1 = null;
@@ -1104,6 +1141,7 @@ $(function(){
 		$('#prdComName').val('');
 		$('#prdComNote').val('');
 		prdComNum = null;
+		prdComDNum = null;
 		matRowKey = null;
 	}
 	//리셋기능

@@ -541,7 +541,6 @@ SELECT * FROM (
 		SET MAT_VOL = (MAT_VOL - V_MAT_HIS_D_VOL)
 		WHERE LOT_NUM = V_LOT_NUM;
 		END;
-		/
 	</delete>
 	<!-- END grid 행 delete -->
 	

@@ -27,3 +27,8 @@
 .tui-calendar .tui-calendar-header {
 	border-bottom: 0px;
 }
+
+/* 데이트피커 아이콘 높이 맞추기 */
+.tui-datepicker-input.tui-has-focus {
+	height: 36px;
+}
