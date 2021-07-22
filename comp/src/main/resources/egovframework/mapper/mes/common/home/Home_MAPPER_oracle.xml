@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mes.common.home.service.impl.HomeMapper">
+
+	<select id="getOrdVol" resultType="int">
+		select count(*)
+		from order_d
+		where ord_status = '진행'
+	</select>
+	
+	
+	<select id="getComVol" resultType="int">
+		select sum(prd_com_vol) com_vol
+		from produce_command_d
+		where to_char(prd_com_d_date,'yyyy-MM-dd')=to_char(sysdate,'yyyy-MM-dd')
+	</select>
+    
+    <select id="getBckVol" resultType="int">
+    
+    	select sum(prc_bck_vol)
+		from process_result
+		where prd_com_d_num in (select prd_com_d_num
+                        from produce_command_d
+                        where to_char(prd_com_d_date,'yyyy-MM-dd')=to_char(sysdate,'yyyy-MM-dd'))
+     </select>
+     <select id="getUsingMac" resultType="int">
+     	select count(*)
+     	from machine
+     	where use_1 = '사용'
+     </select>
+
+ 	<select id="getMonPrice" resultType="int">
+     	select sum(itm_vol*itm_price) 
+		from item_history_d ihd
+    		,item_history ih
+		where ihd.itm_his_num = ih.itm_his_num
+		and to_char(ih.itm_his_rdy,'yyyy-MM')=to_char(sysdate,'yyyy-MM')
+     </select>
+     <select id="getMonVol" resultType="int">
+     	select sum(prc_bck_vol)
+		from process_result
+		where prd_com_d_num in (select prd_com_d_num
+                        from produce_command_d
+                        where to_char(prd_com_d_date,'yyyy-MM')=to_char(sysdate,'yyyy-MM'))
+     </select>
+      <select id="getOrdComVol" resultType="int">
+     	select count(*)
+		from order_d
+		where ord_status = '완료'
+     </select>
+       <select id="getErrVol" resultType="int">
+     select sum(prc_err_vol)
+	from process_result_d
+	where mov_num = (select mov_num from process_result
+					where prd_com_d_num in (select prd_com_d_num from produce_command_d
+ 											where to_char(prd_com_d_date,'yyyy-MM-dd')=to_char(sysdate,'yyyy-MM-dd')))
+     </select>
+                        
+</mapper>
