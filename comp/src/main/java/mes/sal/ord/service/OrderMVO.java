@@ -26,6 +26,7 @@ public class OrderMVO extends OrderMDefaultVO{
     
     /** ORD_NUM */
     private java.lang.String ordNum;
+    private java.lang.String ordNum1;
     
     /** ORD_REQUEST_DATE */
     private java.lang.String ordRequestDate;
@@ -77,3 +78,4 @@ public class OrderMVO extends OrderMDefaultVO{
     
     
    }
+

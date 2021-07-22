@@ -193,7 +193,26 @@ function ReportToExcelConverter() {
 		grid.resetData(list);
 		grid2.resetData(list);
 	}
+	// 이쁜달력
+	let today = new Date();
+	var datepicker = new tui.DatePicker('#aadate', {
+        date: today,
+        language: 'ko',
+        input: {
+            element: '#aDate',
+            format: 'yyyy-MM-dd'
+        }
+    });
 	
+	var datepicker = new tui.DatePicker('#bbdate', {
+        date: today,
+        language: 'ko',
+        input: {
+            element: '#bDate',
+            format: 'yyyy-MM-dd'
+        }
+    });
+
 	
 	
 })
@@ -211,7 +230,7 @@ function ReportToExcelConverter() {
 				</div>
 				<div class="col-md-4">
 					<ul class="breadcrumb">
-						<li class="breadcrumb-item"><a href="index.jsp"> <i
+						<li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.jsp"> <i
 								class="fa fa-home"></i>
 						</a></li>
 						<li class="breadcrumb-item"><a href="#!">공정실적조회</a></li>
@@ -242,12 +261,29 @@ function ReportToExcelConverter() {
 													<td width="100px">전체<input type = "radio" id="prcComY" name="prcComY" value=""/></td>
 													<td width="100px"></td>
 												</tr>
+												<tr>
+													<td>지시일자</td>
+													<td colspan="2">
+														<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+															<input type="text" id="bDate" name="bDate" class=" form-control" aria-label="Date-Time"
+																	style="text-align: center;" /> <span class="tui-ico-date" ></span>
+														</div>
+														<div id="bbdate" style="margin-top: -1px;"></div>
+													</td>
+													<td align="center"><h3>  ~ </h3></td>
+													<td colspan="2">
+														<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+															<input type="text" id="aDate" name="aDate"
+																	class=" form-control" aria-label="Date-Time"
+																	style="text-align: center;" /> <span class="tui-ico-date"></span>
+														</div>
+														<div id="aadate" style="margin-top: -1px;"></div>
+													</td>
+												
+												</tr>
 											</table>
+										
 										</div>
-										<ul>
-											지시일자<input type ="date" id="bDate" name = "bDate" />~<input type ="date" id="aDate" name = "aDate" />
-										</ul>
-										<ul>
 											<div align="right">
 												<button class="btn btn-info btn-sm" type ="button" id ="search" name = "search">검색</button>
 												<button class="btn btn-info btn-sm" type ="reset" id ="reset" name = "reset">새자료</button>

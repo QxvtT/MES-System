@@ -698,7 +698,7 @@ function getProcessResultSelect(key) {
 				</div>
 				<div class="col-md-4">
 					<ul class="breadcrumb">
-						<li class="breadcrumb-item"><a href="index.jsp"> <i
+						<li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.jsp"> <i
 								class="fa fa-home"></i>
 						</a></li>
 						<li class="breadcrumb-item"><a href="#!">공정실적관리</a></li>
