@@ -199,15 +199,16 @@ $(function(){
 	<!-- Page-header end -->
 	
 	<div class="pcoded-inner-content">
-		<form id="frm" name = "frm">
-			<div class="main-body">
-				<div align="right" style="margin-top: 5px">
-					<button  class="btn btn-info btn" type="button" id ="button" name="button">조회</button>&nbsp;
-					<button class="btn btn-info btn" type="reset" id="reset">새자료</button>&nbsp;
-					<button class="btn btn-info btn" type="button" id ="printOrderBtn" name = "printOrderBtn" >인쇄</button>&nbsp;
-					<button class="btn btn-info btn" type="button" id ="excelOrderBtn" name = "excelOrderBtn" >Excel</button>&nbsp;
-	   			</div>
-				<div class="page-wrapper">
+		<div class="main-body">
+			<div class="page-wrapper">
+				<form id="frm" name = "frm">
+					<div align="right" style="margin-top: 5px">
+						<button  class="btn btn-info btn" type="button" id ="button" name="button">조회</button>&nbsp;
+						<button class="btn btn-info btn" type="reset" id="reset">새자료</button>&nbsp;
+						<button class="btn btn-info btn" type="button" id ="printOrderBtn" name = "printOrderBtn" >인쇄</button>&nbsp;
+						<button class="btn btn-info btn" type="button" id ="excelOrderBtn" name = "excelOrderBtn" >Excel</button>&nbsp;
+		   			</div>
+		   			<br/>
 					<div class="row" >
 						<div class="d-inline-block col-xl-12">
 							<div class="card" >
@@ -243,7 +244,7 @@ $(function(){
 											</td>
 												
 										</tr>
-										<tr><td><p></p></td></tr>
+										
 										<tr>
 											<td width="130px">업체코드</td>
 											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="operCode" name = "operCode" /> &nbsp;</td>
@@ -260,42 +261,35 @@ $(function(){
 											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmName" name = "itmName" readonly="readonly"></input><br/></td>
 										</tr>
 									</table>
-								<br/>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</form>
+				</form>
 	<form:form commandName="searchVO" name="listForm" id="listForm" method="post">
 		<input type="hidden" name="ordDNum" />
-		<div class="pcoded-inner-content">
-			<div class="main-body">
-				<div class="page-wrapper">
-					<div class="row">
-						<div class="col-xl-12">
-							<div class="card">
-								<!-- 타이틀 -->
-								<div id="title" class="card-header">
-									<ul>
-										<li>주문목록</li>
-									</ul>
-								
-								</div>
-								
-								<!-- // 타이틀 -->
-								<!-- List -->
-								<div id="grid"></div>
-							</div>
+			<div class="row">
+				<div class="col-xl-12">
+					<div class="card">
+						<!-- 타이틀 -->
+						<div id="title" class="card-header">
+							<ul>
+								<li>주문목록</li>
+							</ul>
+						
 						</div>
 						
+						<!-- // 타이틀 -->
+						<!-- List -->
+						<div id="grid"></div>
 					</div>
 				</div>
+				
 			</div>
-		</div>
-		
 	</form:form>
+		</div>
+	</div>
+</div>
 </body>
 </html>
 

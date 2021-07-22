@@ -262,85 +262,88 @@ $(function(){
 					<button type="button" class="btn btn-info" id="excelBtn">Excel</button>
 					<button type="button" class="btn btn-info" id="printBtn">인쇄</button>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-xl-12">
-					<form:form commandName="produceCommandDVO" name="detailForm"
-						id="detailForm">
-						<input type="hidden" id="prdComNum" name="prdComNum" />
-						<div class="">
-							<div class="" style="z-index: 200">
-								<div class="table">
-									<table class="table">
-										<tr>
-											<td>
-												<div class="d-inline-block align-middle">작업일자</div>
-											</td>
-											<td>
-												<div class="row">
-													<div
-														class="tui-datepicker-input tui-datetime-input tui-has-focus">
-														<input class="form-control" id="startDate"
-															name="startDate" type="text" aria-label="Date" /> <span
-															class="tui-ico-date"></span>
-														<div id="startDate-container" style="margin-left: -1px;"></div>
+				<br/>
+				<div class="row">
+					<div class="col-xl-12">
+						<form:form commandName="produceCommandDVO" name="detailForm"
+							id="detailForm">
+							<input type="hidden" id="prdComNum" name="prdComNum" />
+							<div class="">
+								<div class="card" style="z-index: 200">
+									<div class="table">
+										<table class="table">
+											<tr>
+												<td>
+													<div class="d-inline-block align-middle">작업일자</div>
+												</td>
+												<td>
+													<div class="row">
+														<div
+															class="tui-datepicker-input tui-datetime-input tui-has-focus">
+															<input class="form-control" id="startDate"
+																name="startDate" type="text" aria-label="Date" /> <span
+																class="tui-ico-date"></span>
+															<div id="startDate-container" style="margin-left: -1px;"></div>
+														</div>
+														<span style="margin: 10px;"> ~ </span>
+														<div
+															class="tui-datepicker-input tui-datetime-input tui-has-focus">
+															<input class="form-control" id="endDate" name="endDate"
+																type="text" aria-label="Date" /> <span
+																class="tui-ico-date"></span>
+															<div id="endDate-container" style="margin-left: -1px;"></div>
+														</div>
 													</div>
-													<span style="margin: 10px;"> ~ </span>
-													<div
-														class="tui-datepicker-input tui-datetime-input tui-has-focus">
-														<input class="form-control" id="endDate" name="endDate"
-															type="text" aria-label="Date" /> <span
-															class="tui-ico-date"></span>
-														<div id="endDate-container" style="margin-left: -1px;"></div>
-													</div>
-												</div>
-											</td>
-
-										</tr>
-										<tr>
-											<td><label class="col-form-label text-center">고객사</label>
-											</td>
-											<td>
-												<div class="row">
-													<input type="text" class="form-control w-25"
-														id="operCode" name="operCode" value="${result.operCode }"></input>
-													<input type="text" class="form-control w-25 ml-3 mr-3"
-														id="operName" name="operName" value="${result.operName }"
-														readonly></input>
-													<%@include
-														file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td><label class="col-form-label text-center">제품코드</label>
-											</td>
-											<td>
-												<div class="row">
+												</td>
+	
+											</tr>
+											<tr>
+												<td><label class="col-form-label text-center">고객사</label>
+												</td>
+												<td>
+													<div class="row">
 														<input type="text" class="form-control w-25"
-															id="itmCode" name="itmCode" value="${result.itmCode }"></input>
+															id="operCode" name="operCode" value="${result.operCode }"></input>
 														<input type="text" class="form-control w-25 ml-3 mr-3"
-															id="itmName" name="itmName" value="${result.itmName }"
+															id="operName" name="operName" value="${result.operName }"
 															readonly></input>
 														<%@include
-															file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp"%>
-														
-														<input id="showLot" type="checkbox" style="margin-top: 10px; margin-left: 30px;"/>
-														<label for="showLot" style="margin-top: 9px; margin-left: 10px;">소재LOT 출력</label>
-												</div>
-											</td>
-										</tr>
-									</table>
+															file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label class="col-form-label text-center">제품코드</label>
+												</td>
+												<td>
+													<div class="row">
+															<input type="text" class="form-control w-25"
+																id="itmCode" name="itmCode" value="${result.itmCode }"></input>
+															<input type="text" class="form-control w-25 ml-3 mr-3"
+																id="itmName" name="itmName" value="${result.itmName }"
+																readonly></input>
+															<%@include
+																file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp"%>
+															
+															<input id="showLot" type="checkbox" style="margin-top: 10px; margin-left: 30px;"/>
+															<label for="showLot" style="margin-top: 9px; margin-left: 10px;">소재LOT 출력</label>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</div>
 								</div>
 							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-sm-12">
-								<div id="grid"></div>
+							<div class="card pt-3">
+								<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">생산지시 내역</p></div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div id="grid"></div>
+									</div>
+								</div>
 							</div>
-						</div>
-					</form:form>
+						</form:form>
+					</div>
 				</div>
 			</div>
 		</div>

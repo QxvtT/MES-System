@@ -22,13 +22,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
-<script
-	src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+<style type="">
+	.tui-datepicker-input>.tui-ico-date {
+		top: 20%;
+		left: 80%;
+	}
+</style>
 <script type="text/javaScript" language="javascript" defer="defer">
 let movNum1 = null;
 let aDate = null;
@@ -241,84 +240,78 @@ function ReportToExcelConverter() {
 	</div>
 <!-- 공정실적관리List -->
 	<div class="pcoded-inner-content">
-		<form>
-			<div class="main-body">
-				<div align="right" style="margin-top: 5px">
-				 	<button class="btn btn-info btn" type ="button" id ="search" name = "search">검색</button>
-					<button class="btn btn-info btn" type ="reset" id ="reset" name = "reset">새자료</button>
-					<button class="btn btn-info btn" type="button" id ="printOrderBtn" name = "printOrderBtn" >인쇄</button>
-					<button class="btn btn-info btn" type="button" id ="excelOrderBtn" name = "excelOrderBtn" >Excel</button>
-				</div>
-					<div class="page-wrapper">
-						<div class="row">
-							<div class="d-inline-block col-xl-12">
-								<div class="card">
-									<!-- 타이틀 -->
-									<div id="title" class="card-header">
-										<div>
-											<table>
-												<tr>
-													<td width="130px">진행구분</td>
-													<td width="100px">진행<input type = "radio" id="prcComY" name="prcComY" value="N" checked="checked"/></td>
-													<td width="100px">완료<input type = "radio" id="prcComY" name="prcComY" value="Y"/></td>
-													<td width="100px">전체<input type = "radio" id="prcComY" name="prcComY" value=""/></td>
-													<td width="100px"></td>
-												</tr>
-												<tr>
-													<td>지시일자</td>
-													<td colspan="2">
-														<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-															<input type="text" id="bDate" name="bDate" class=" form-control" aria-label="Date-Time"
-																	style="text-align: center;" /> <span class="tui-ico-date" ></span>
-														</div>
-														<div id="bbdate" style="margin-top: -1px;"></div>
-													</td>
-													<td align="center"><h3>  ~ </h3></td>
-													<td colspan="2">
-														<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-															<input type="text" id="aDate" name="aDate"
-																	class=" form-control" aria-label="Date-Time"
-																	style="text-align: center;" /> <span class="tui-ico-date"></span>
-														</div>
-														<div id="aadate" style="margin-top: -1px;"></div>
-													</td>
-												
-												</tr>
-											</table>
-										
+		<div class="main-body">
+			<div class="page-wrapper">
+				<form>
+					<div align="right" style="margin-top: 5px">
+					 	<button class="btn btn-info btn" type ="button" id ="search" name = "search">검색</button>
+						<button class="btn btn-info btn" type ="reset" id ="reset" name = "reset">새자료</button>
+						<button class="btn btn-info btn" type="button" id ="printOrderBtn" name = "printOrderBtn" >인쇄</button>
+						<button class="btn btn-info btn" type="button" id ="excelOrderBtn" name = "excelOrderBtn" >Excel</button>
+					</div>
+					<br/>
+					<div class="row">
+						<div class="d-inline-block col-xl-12">
+							<div class="card">
+								<!-- 타이틀 -->
+								<div id="title" class="card-header">
+									<div>
+										<table>
+											<tr>
+												<td width="130px">진행구분</td>
+												<td width="100px">진행<input type = "radio" id="prcComY" name="prcComY" value="N" checked="checked"/></td>
+												<td width="100px">완료<input type = "radio" id="prcComY" name="prcComY" value="Y"/></td>
+												<td width="100px">전체<input type = "radio" id="prcComY" name="prcComY" value=""/></td>
+												<td width="100px"></td>
+											</tr>
+											<tr>
+												<td>지시일자</td>
+												<td colspan="2">
+													<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+														<input type="text" id="bDate" name="bDate" class=" form-control" aria-label="Date-Time"
+																style="text-align: center;" /> <span class="tui-ico-date" ></span>
+													</div>
+													<div id="bbdate" style="margin-top: -1px;"></div>
+												</td>
+												<td align="center"><h3>  ~ </h3></td>
+												<td colspan="2">
+													<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+														<input type="text" id="aDate" name="aDate"
+																class=" form-control" aria-label="Date-Time"
+																style="text-align: center;" /> <span class="tui-ico-date"></span>
+													</div>
+													<div id="aadate" style="margin-top: -1px;"></div>
+												</td>
+											</tr>
+										</table>
+									
 										</div>
 									</div>
 								<div id="grid"></div>
 							</div>
 						</div>
-
 					</div>
-				</div>
-			</div>
-		</form>
-	</div>
-		<div class="pcoded-inner-content">
-			<div class="main-body">
-				<div class="page-wrapper">
-					<div class="row">
-						<div class="col-xl-12">
-						
-							<div class="card">
-								<!-- 타이틀 -->
-								<div id="title" class="card-header">
-									<div align="right">
-									</div>
-									
-								</div>
-								<div id="grid2"></div>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
+				</form>
 		
+				<div class="row">
+					<div class="col-xl-12">
+					
+						<div class="card">
+							<!-- 타이틀 -->
+							<div id="title" class="card-header">
+								<div align="right">
+								</div>
+								
+							</div>
+							<div id="grid2"></div>
+						</div>
+					</div>
+
+				</div>
+		</div>
+	</div>
+</div>
+
 
 </body>
 </html>

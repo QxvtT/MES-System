@@ -669,7 +669,6 @@ $(function(){
 
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
-		<br />
 		<div class="main-body">
 		<div class="page-wrapper">
 			<div class="text-right">
@@ -709,7 +708,7 @@ $(function(){
 					</div>
 					<div class="col-md-6">
 					<div class="card">
-						<table class="table" style="background-color: white;">
+						<table class="table">
 							<tr>
 								<td class="pt-3">
 									<h5>미생산 계획 검색</h5>

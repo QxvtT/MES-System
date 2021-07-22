@@ -700,13 +700,15 @@ $(function(){
 	</div>
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
-		<form id="frm" name = "frm">
-			<div class="main-body">
-				<div align="right" style="margin-top: 5px">
-					<button type="button" class="btn btn-info btn" id="searchHisBtn" data-toggle="modal" data-target="#myModal">검색</button>&nbsp;
-					<button type="reset" class="btn btn-info btn" id= "reset">새자료</button>
-				</div>
-				<div class="page-wrapper">
+		<div class="main-body">
+			<div class="page-wrapper">
+				<form id="frm" name = "frm">
+					<div align="right" style="margin-top: 5px">
+						<button type="button" class="btn btn-info btn" id="searchHisBtn" data-toggle="modal" data-target="#myModal">검색</button>&nbsp;
+						<button type="reset" class="btn btn-info btn" id= "reset">새자료</button>
+						<button type="button" class="btn btn-info" id="save">저장</button>
+					</div>
+					<br/>
 					<div class="row" >
 						<div class="d-inline-block col-xl-12">
 							<div class="card" >
@@ -745,26 +747,20 @@ $(function(){
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</form>
-	</div>
-	<div class="pcoded-inner-content">
-		<div class="main-body">
-			<div class="page-wrapper">
+				</form>
+	
 				<div class="row">
 					<div class="col-xl-12">
-						<div class="card">
+						<div class="card pt-3">
 							<!-- 타이틀 -->
-							<div id="title" class="card-header">
-								<ul>
-									<li>List</li>
-									<div align="right">
-										<button  class="btn btn-info btn-sm" type="button" id="insert">추가</button>
-										<button  class="btn btn-info btn-sm" type="button" id="deleteItm">삭제</button>
-										<button type="button" class="btn btn-info btn-sm" id="save">저장</button>
-									</div>
-								</ul>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">list</p></div>
+								</div>
+								<div class="col-sm-6 text-right  mb-3">
+									<button  class="btn btn-info btn-sm" type="button" id="insert">추가</button>
+									<button  class="btn btn-info btn-sm mr-3" type="button" id="deleteItm">삭제</button>
+								</div>
 							</div>
 							<div id="grid"></div>
 						</div>

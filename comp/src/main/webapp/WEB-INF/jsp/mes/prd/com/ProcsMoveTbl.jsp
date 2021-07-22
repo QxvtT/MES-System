@@ -300,109 +300,111 @@ $(function(){
 		<div class="main-body">
 			<div class="page-wrapper">
 				<div class="text-right">
+					<button type="button" class="btn btn-info" id="searchBtn">검색</button>
 					<button type="button" class="btn btn-info" id="resetBtn">새자료</button>
 					<button type="button" class="btn btn-info" id="printBtn">인쇄</button>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-xl-12">
-					<form id="pmFrm" action="ProcessMovePrt.do" onsubmit="return false">
-						<div class="table">
-							<table class="table">
-								<tr>
-									<td>
-										<div class="d-inline-block align-middle">작업지시일자</div>
-									</td>
-									<td>
-										<div class="row">
-											<div
-												class="tui-datepicker-input tui-datetime-input tui-has-focus">
-												<input class="form-control" id="startDate" name="startDate"
-													type="text" aria-label="Date" /> <span
-													class="tui-ico-date"></span>
-												<div id="startDate-container" style="margin-left: -1px;"></div>
+				<br/>
+				<div class="row">
+					<div class="col-xl-12">
+						<form id="pmFrm" action="ProcessMovePrt.do" onsubmit="return false">
+							<div class="card">
+								<table class="table">
+									<tr>
+										<td>
+											<div class="d-inline-block align-middle">작업지시일자</div>
+										</td>
+										<td>
+											<div class="row">
+												<div
+													class="tui-datepicker-input tui-datetime-input tui-has-focus">
+													<input class="form-control" id="startDate" name="startDate"
+														type="text" aria-label="Date" /> <span
+														class="tui-ico-date"></span>
+													<div id="startDate-container" style="margin-left: -1px;"></div>
+												</div>
+												<span style="margin: 10px;"> ~ </span>
+												<div
+													class="tui-datepicker-input tui-datetime-input tui-has-focus">
+													<input class="form-control" id="endDate" name="endDate"
+														type="text" aria-label="Date" /> <span
+														class="tui-ico-date"></span>
+													<div id="endDate-container" style="margin-left: -1px;"></div>
+												</div>
 											</div>
-											<span style="margin: 10px;"> ~ </span>
-											<div
-												class="tui-datepicker-input tui-datetime-input tui-has-focus">
-												<input class="form-control" id="endDate" name="endDate"
-													type="text" aria-label="Date" /> <span
-													class="tui-ico-date"></span>
-												<div id="endDate-container" style="margin-left: -1px;"></div>
-											</div>
-										</div>
-									</td>
-								</tr>
-							</table>
-						</div>
-						<div class="row">
-							<div class="col-sm-12">
-								<div id="grid"></div>
+										</td>
+									</tr>
+								</table>
 							</div>
-						</div>
-						<div class="table">
-							<table class="table">
-								<tr>
-									<td>
-										<div class="row">
-											<div style="margin: 10px;">제품코드</div>
-											<div>
-												<input class="form-control" id="itmCode" name="itmCode"
-													type="text" readonly="readonly" />
+							<div class="row">
+								<div class="col-sm-12">
+									<div id="grid"></div>
+								</div>
+							</div>
+							<div class="table">
+								<table class="table">
+									<tr>
+										<td>
+											<div class="row">
+												<div style="margin: 10px;">제품코드</div>
+												<div>
+													<input class="form-control" id="itmCode" name="itmCode"
+														type="text" readonly="readonly" />
+												</div>
+												<div style="margin: 10px;">제품명</div>
+												<div>
+													<input class="form-control" id="itmName" name="itmName"
+														type="text" readonly="readonly" />
+												</div>
+												<div style="margin: 10px;">고객사</div>
+												<div>
+													<input class="form-control" id="operName" name="operName"
+														type="text" readonly="readonly" />
+												</div>
+												<div style="margin: 10px;">지시량</div>
+												<div>
+													<input class="form-control" id="prdComVol" name="prdComVol"
+														type="text" readonly="readonly" />
+												</div>
 											</div>
-											<div style="margin: 10px;">제품명</div>
-											<div>
-												<input class="form-control" id="itmName" name="itmName"
-													type="text" readonly="readonly" />
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="table">
+								<table class="table">
+									<tr>
+										<td>
+											<div class="row">
+												<div style="margin: 10px;">소재코드</div>
+												<div>
+													<input class="form-control" id="matCode" name="matCode"
+														type="text" readonly="readonly" />
+												</div>
+												<div style="margin: 10px;">소재명</div>
+												<div>
+													<input class="form-control" id="matName" name="matName"
+														type="text" readonly="readonly" />
+												</div>
 											</div>
-											<div style="margin: 10px;">고객사</div>
-											<div>
-												<input class="form-control" id="operName" name="operName"
-													type="text" readonly="readonly" />
-											</div>
-											<div style="margin: 10px;">지시량</div>
-											<div>
-												<input class="form-control" id="prdComVol" name="prdComVol"
-													type="text" readonly="readonly" />
-											</div>
-										</div>
-									</td>
-								</tr>
-							</table>
-						</div>
-						<div class="table">
-							<table class="table">
-								<tr>
-									<td>
-										<div class="row">
-											<div style="margin: 10px;">소재코드</div>
-											<div>
-												<input class="form-control" id="matCode" name="matCode"
-													type="text" readonly="readonly" />
-											</div>
-											<div style="margin: 10px;">소재명</div>
-											<div>
-												<input class="form-control" id="matName" name="matName"
-													type="text" readonly="readonly" />
-											</div>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<div id="grid2"></div>
-									</td>
-								</tr>
-							</table>
-							<table class="table">
-								<tr>
-									<td>
-										<div id="grid3"></div>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</form>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div id="grid2"></div>
+										</td>
+									</tr>
+								</table>
+								<table class="table">
+									<tr>
+										<td>
+											<div id="grid3"></div>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>

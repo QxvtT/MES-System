@@ -710,10 +710,11 @@ function getProcessResultSelect(key) {
 <!-- 공정실적관리List -->
 	<div class="pcoded-inner-content">
 			<div class="main-body">
-				<div align="right" style="margin-top: 5px">
-					<button type ="button" class="btn btn-info btn" id ="search" name = "search">검색</button>
-				</div>
 				<div class="page-wrapper">
+					<div align="right" style="margin-top: 5px">
+						<button type ="button" class="btn btn-info btn" id ="search" name = "search">검색</button>
+					</div>
+					<br/>
 					<div class="row">
 						<div class="d-inline-block col-xl-12">
 						
@@ -722,10 +723,10 @@ function getProcessResultSelect(key) {
 								<div id="title" class="card-header">
 									<table>
 										<tr>
-											<td>공정코드</td>
+											<td><div class="mr-3">공정코드</div></td>
 											<td><input class="form-control" type="text" id="prcCode" name ="prcCode" /></td>
 											<td><%@ include file="/WEB-INF/jsp/mes/common/modal/ProcessList.jsp" %></td>
-											<td>공정명</td>
+											<td><div class="ml-3 mr-3">공정명</div></td>
 											<td><input  class="form-control" type="text" id="prcName" name ="prcName" readonly="readonly"/></td>
 										</tr>
 									</table>
@@ -746,25 +747,13 @@ function getProcessResultSelect(key) {
 						</div>
 
 					</div>
-				</div>
-			</div>
-		
-		</div>
-		
 <!-- 		123 -->
-		<div class="pcoded-inner-content">
-			<div class="main-body">
-				<div class="page-wrapper">
 					<div class="row">
 						<div class="col-xl-4">
 						
-							<div class="card">
+							<div class="card pt-3">
 								<!-- 타이틀 -->
-								<div id="title" class="card-header">
-									<ul>
-										<li>작업실적대상제품자료</li>
-									</ul>
-								</div>
+								<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">작업실적대상제품자료</p></div>
 								<div id="table1">
 									<table class = "table" >
 										<tr>
@@ -802,14 +791,9 @@ function getProcessResultSelect(key) {
 						</div>
 						<div class="col-xl-8">
 						
-							<div class="card">
+							<div class="card pt-3">
 								<!-- 타이틀 -->
-								<div id="title" class="card-header">
-									<ul>
-										<li>list</li>
-									</ul>
-								</div>
-
+								<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">list</p></div>
 								<!-- // 타이틀 -->
 								<!-- List -->
 								<div id="grid3"></div>

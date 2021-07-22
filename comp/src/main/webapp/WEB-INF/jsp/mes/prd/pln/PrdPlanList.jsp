@@ -240,7 +240,6 @@ $(function(){
 	<!-- 생산계획조회 Title End -->
 
 	<div class="pcoded-inner-content">
-		<br />
 		<div class="main-body">
 		<div class="page-wrapper">
 			<div class="text-right">

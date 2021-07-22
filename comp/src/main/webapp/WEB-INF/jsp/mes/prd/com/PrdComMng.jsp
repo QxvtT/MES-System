@@ -1193,142 +1193,135 @@ $(function(){
 					<div class="col-xl-12">
 						<div class="row">
 							<div class="col-md-6" style="z-index: 200">
-								<div class="table">
+								<div class="card">
 								<input type="hidden" id="prdComNum" />
 									<table class="table">
 										<tr>
+											<th>작성일자*</th>
 											<td>
-												<div class="d-inline-block align-middle">작성일자</div>
-											</td>
-											<td>
-												<div class="row align-items-center text-center col-lg-12">
-													<div
-														class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-														<input type="text" id="prdComDate" name="prdComDate"
-															class=" form-control w-25" aria-label="Date-Time" /> 
-														<span class="tui-ico-date"></span>
-													</div>
-													<div id="date" style="margin-top: -1px;"></div>
+												<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+													<input type="text" id="prdComDate" name="prdComDate"
+														class=" form-control" aria-label="Date-Time" style="width: 150px;"/> 
+													<span class="tui-ico-date"></span>
 												</div>
+												<div id="date" style="margin-top: -1px;"></div>
 											</td>
 										</tr>
 										<tr>
-											<td><label class="col-form-label text-center">작업지시명</label>
-											</td>
-											<td>
-												<div class="row align-items-center text-center col-lg-12">
-													<input type="text" class="form-control w-25 ml-3"
-														id="prdComName" name="prdComName"></input>
-												</div>
-											</td>
+											<th>작업지시명*</th>
+											<td><input type="text" class="form-control" id="prdComName"></input></td>
 										</tr>
 										<tr>
-											<td><label class="col-form-label text-center">특이사항</label>
-											</td>
-											<td>
-												<div class="row align-items-center text-center col-lg-12">
-													<input type="text" class="form-control ml-3"
-														id="prdComNote" name="prdComNote"></input>
-												</div>
-											</td>
+											<th>특이사항</th>
+											<td><input type="text" class="form-control" id="prdComNote"></input></td>
 										</tr>
 									</table>
 								</div>
 							</div>
 							<div class="col-md-6" style="z-index: 150">
 								<div class="card">
-									<div class="card-body">
-										<div class="col-md-12 pl-3 mb-3 pb-3 pt-3">
-											<h5 class="d-inline">생산계획 조회</h5>
-										</div>
-										<div class="col-md-12 align-items-center text-center mb-3 pb-3">
-										    <div class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3 d-inline-block">
-										        <input type="text" id="startpicker-input" class=" form-control w-25" aria-label="Date-Time" name="prdDate"/>
-										        <span class="tui-ico-date"></span>
-										        <div id="startpicker-container" style="margin-left: -1px;"></div>
-										    </div>
-										    <div id="date1" class="d-inline-block" style="margin-top: -1px;"></div>
-					
-											<label class="col-form-label text-center d-inline-block"> ~ </label>
-											<div class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3 d-inline-block">
-										        <input type="text" id="endpicker-input" class=" form-control w-25" aria-label="Date-Time" name="prdDate"/>
-										        <span class="tui-ico-date"></span>
-										        <div id="endpicker-container" style="margin-left: -1px;"></div>
-										    </div>
-										    <div id="date2" class="d-inline-block" style="margin-top: -1px;"></div>
-											<button type="button" id="searchPlnBtn"
-												class="btn btn-sm btn-info waves-effect waves-light">검색</button>
-										</div>
+									<table class="table">
+										<tr>
+											<td class="pt-3">
+												<h5>생산계획 조회</h5>
+											</td>
+										</tr>
+										<tr>
+											<td class="pt-3 pb-3">
+												<div class="row align-items-center text-center col-lg-12 pt-3 pb-3 mb-3">
+													<div style="padding-left: 15px; padding-bottom: 10px;">작업일자</div>
+													<div
+														class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+														<input class="form-control w-25" id="startpicker-input"
+															type="text" aria-label="Date" /> 
+														<span class="tui-ico-date"></span>
+														<div id="startpicker-container" style="margin-left: -1px;"></div>
+													</div>
+													<label class="col-form-label text-center"> ~ </label>
+													<div
+														class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+														<input class="form-control w-25" id="endpicker-input"
+															type="text" aria-label="Date" /> <span
+															class="tui-ico-date"></span>
+														<div id="endpicker-container" style="margin-left: -1px;"></div>
+													</div>
+													<button type="button" id="searchPlnBtn"
+														class="btn btn-info btn-sm">불러오기</button>
+												</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="card pt-3" style="margin-bottom:0;">
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">생산지시 내역</p></div>
+								</div>
+								<div class="col-sm-6 text-right pb-3">
+									<button
+										class="btn btn-sm btn-info waves-effect waves-light"
+										type="button" id="insertBtn">추가</button>
+									<button
+										class="btn btn-sm btn-info waves-effect waves-light mr-3"
+										type="button" id="deleteBtn">삭제</button>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12" style="z-index: 100">
+									<div id="grid"></div>
+								</div>
+							</div>
+						
+							<div class="row">
+								<div class="col-xl-7 col-lg-12">
+									<label class="ml-3 d-inline">자재코드</label> <input type="text"
+										class="form-control ml-3 d-inline" id="matCode" name="matCode"
+										style="width: 100px" readonly></input> <label
+										class="ml-3 d-inline">자재명</label> <input type="text"
+										class="form-control ml-3 d-inline" id="matName" name="matName"
+										style="width: 100px" readonly></input>
+								</div>
+								<div class="col-xl-5 col-lg-12">
+									<label class="ml-3 d-inline">제품코드</label> <input type="text"
+										class="form-control ml-3 d-inline" id="itmCode" name="itmCode"
+										style="width: 100px" readonly></input> <label
+										class="ml-3 d-inline">제품명</label> <input type="text"
+										class="form-control ml-3 d-inline" id="itmName" name="itmName"
+										style="width: 100px" readonly></input>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xl-7 col-lg-12 row text-right" style="margin-right:15px;">
+									<div class="col-sm-8"></div>
+									<div class="col-sm-4 text-right" style="padding-left: 0px">
+										<button type="button" id="outMatLotBtn"
+											class="btn btn-sm btn-info btn-disabled disabled waves-effect waves-light">출고</button>
+										<button type="button" id="searchMatLotBtn"
+											class="btn btn-sm btn-info waves-effect waves-light">검색</button>
+										<button type="button" id="deleteMBtn"
+											class="btn btn-sm btn-info waves-effect waves-light">삭제</button>
 									</div>
 								</div>
-							</div>
-						</div>
-
-						<div class="row" style="height: 50px">
-							<div class="col-sm-6"></div>
-							<div class="col-sm-6 text-right">
-								<button
-									class="btn btn-sm btn-info waves-effect waves-light ml-3"
-									type="button" id="insertBtn">추가</button>
-								<button
-									class="btn btn-sm btn-info waves-effect waves-light ml-3"
-									type="button" id="deleteBtn">삭제</button>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-sm-12" style="z-index: 100">
-								<div id="grid"></div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xl-7 col-lg-12">
-								<label class="ml-3 d-inline">자재코드</label> <input type="text"
-									class="form-control ml-3 d-inline" id="matCode" name="matCode"
-									style="width: 100px" readonly></input> <label
-									class="ml-3 d-inline">자재명</label> <input type="text"
-									class="form-control ml-3 d-inline" id="matName" name="matName"
-									style="width: 100px" readonly></input>
-							</div>
-							<div class="col-xl-5 col-lg-12">
-								<label class="ml-3 d-inline">제품코드</label> <input type="text"
-									class="form-control ml-3 d-inline" id="itmCode" name="itmCode"
-									style="width: 100px" readonly></input> <label
-									class="ml-3 d-inline">제품명</label> <input type="text"
-									class="form-control ml-3 d-inline" id="itmName" name="itmName"
-									style="width: 100px" readonly></input>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xl-7 col-lg-12 row text-right" style="margin-right:15px;">
-								<div class="col-sm-8"></div>
-								<div class="col-sm-4 text-right" style="padding-left: 0px">
-									<button type="button" id="outMatLotBtn"
-										class="btn btn-sm btn-info btn-disabled disabled waves-effect waves-light">출고</button>
-									<button type="button" id="searchMatLotBtn"
-										class="btn btn-sm btn-info waves-effect waves-light">검색</button>
-									<button type="button" id="deleteMBtn"
-										class="btn btn-sm btn-info waves-effect waves-light">삭제</button>
+								<div class="col-xl-5 col-lg-12">
+									<label class="ml-3  d-inline">고객사명</label> <input type="text"
+										class="form-control ml-3  d-inline" id="operName"
+										name="operName" style="width: 100px" readonly></input> <label
+										class="ml-3  d-inline">지시량</label> <input type="text"
+										class="form-control ml-3  d-inline" id="prdComVol"
+										name="prdComVol" style="width: 100px" readonly></input>
 								</div>
 							</div>
-							<div class="col-xl-5 col-lg-12">
-								<label class="ml-3  d-inline">고객사명</label> <input type="text"
-									class="form-control ml-3  d-inline" id="operName"
-									name="operName" style="width: 100px" readonly></input> <label
-									class="ml-3  d-inline">지시량</label> <input type="text"
-									class="form-control ml-3  d-inline" id="prdComVol"
-									name="prdComVol" style="width: 100px" readonly></input>
+							<div class="row">
+								<div class="col-xl-7 col-lg-12" style="padding-right:0;">
+									<div id="gridMat"></div>
+								</div>
+								<div class="col-xl-5 col-lg-12" style="padding-left:0;">
+									<div id="gridFlow"></div>
+								</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-xl-7 col-lg-12">
-								<div id="gridMat"></div>
-							</div>
-							<div class="col-xl-5 col-lg-12">
-								<div id="gridFlow"></div>
-							</div>
-						</div>
-
 
 					</div>
 				</div>

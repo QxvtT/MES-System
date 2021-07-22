@@ -185,15 +185,16 @@ function ReportToExcelConverter() {
 	</div>
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
-		<form id="frm" name ="frm">
-			<div class="main-body">
-				<div align="right" style="margin-top: 5px">
-					<button type="button" class="btn btn-info btn" id="getItemHistory">검색</button>
-					<button type="reset" class="btn btn-info btn" id="reset">새자료</button>
-					<button class="btn btn-info btn" type="button" id ="printItmHistoryBtn" name = "printItmHistoryBtn" >인쇄</button>
-					<button class="btn btn-info btn" type="button" id ="excelItemHistoryBtn" name = "excelItemHistoryBtn" >Excel</button>
-				</div>
-				<div class="page-wrapper">
+		<div class="main-body">
+			<div class="page-wrapper">
+				<form id="frm" name ="frm">
+					<div align="right" style="margin-top: 5px">
+						<button type="button" class="btn btn-info btn" id="getItemHistory">검색</button>
+						<button type="reset" class="btn btn-info btn" id="reset">새자료</button>
+						<button class="btn btn-info btn" type="button" id ="printItmHistoryBtn" name = "printItmHistoryBtn" >인쇄</button>
+						<button class="btn btn-info btn" type="button" id ="excelItemHistoryBtn" name = "excelItemHistoryBtn" >Excel</button>
+					</div>
+					<br/>
 					<div class="row" >
 						<div class="d-inline-block col-xl-12">
 							<div class="card" >
@@ -239,31 +240,21 @@ function ReportToExcelConverter() {
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</form>
-	</div>
+				</form>
 	
-		<div class="pcoded-inner-content">
-			<div class="main-body">
-				<div class="page-wrapper">
 					<div class="row">
 						<div class="col-xl-12">
-							<div class="card">
+							<div class="card pt-3">
 								<!-- 타이틀 -->
-								<div id="title" class="card-header">
-									<ul>
-										<li>출고 리스트</li>
-									</ul>
-								</div>
+								<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">출고 리스트</p></div>
 								<div id="grid"></div>
 							</div>
 						</div>
-
 					</div>
-				</div>
+				
 			</div>
 		</div>
+	</div>
 
 
 
