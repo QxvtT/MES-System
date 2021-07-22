@@ -212,57 +212,70 @@ $(function(){
 		   			<br/>
 					<div class="row" >
 						<div class="d-inline-block col-xl-12">
-							<div class="card" >
-								<div style="margin: 10px">
-									<table>
-										<tr>
-											<td width="100px">자료구분</td>
-											<td width="100px">주문일자<input type = "radio" id="date" name="date" value="request" checked="checked"/></td>
-											<td width="100px">납기일자<input type = "radio" id="date" name="date" value="delivery"/></td>
-											<td width="100px"></td>
-											<td width="130px">진행구분</td>
-											<td width="100px">진행<input type = "radio" id="ordStatus" name="ordStatus" value="진행" checked="checked"/></td>
-											<td width="100px">완료<input type = "radio" id="ordStatus" name="ordStatus" value="완료"/></td>
-											<td width="100px">전체<input type = "radio" id="ordStatus" name="ordStatus" value=""/></td>
-										</tr>
-										<tr>
-											<td width="130px">날짜</td>
-											<td>
+							<div class="card">
+								<table class="table">
+									<tr>
+										<td>
+											<label class="col-form-label text-center">자료구분</label>
+										</td>
+										<td>
+											주문일자 <input type = "radio" id="date" name="date" value="request" checked="checked"/>
+											납기일자 <input type = "radio" id="date" name="date" value="delivery"/>
+											<div class="d-inline-block" style="width:100px"></div>
+											<label class="col-form-label text-center ml-3 mr-3">진행구분</label>
+											진행 <input type = "radio" id="ordStatus" name="ordStatus" value="진행" checked="checked"/>
+											완료 <input type = "radio" id="ordStatus" name="ordStatus" value="완료"/>
+											전체 <input type = "radio" id="ordStatus" name="ordStatus" value=""/>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<label class="col-form-label text-center">날짜</label>
+										</td>
+										<td>
+											<div class="row">
 												<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
 													<input type="text" id="bDate" name="bDate" class=" form-control" aria-label="Date-Time"
 															style="text-align: center;" /> <span class="tui-ico-date"></span>
+													<div id="bbdate" style="margin-top: -1px;"></div>
 												</div>
-												<div id="bbdate" style="margin-top: -1px;"></div>
-											</td>
-											<td align="center"><h3>  ~ </h3></td>
-											<td>
+												<span style="margin: 10px;"> ~ </span>
 												<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
 													<input type="text" id="aDate" name="aDate"
 														class=" form-control" aria-label="Date-Time"
 														style="text-align: center;" /> <span class="tui-ico-date"></span>
+													<div id="aadate" style="margin-top: -1px;"></div>
 												</div>
-												<div id="aadate" style="margin-top: -1px;"></div>
-											</td>
-												
-										</tr>
-										
-										<tr>
-											<td width="130px">업체코드</td>
-											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="operCode" name = "operCode" /> &nbsp;</td>
-											<td><%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>&nbsp;</td>
-											<td width="130px">업체이름</td>
-											<td><input class="form-control" type ="text" id="operName" name = "operName" readonly="readonly"/></td>
-										</tr>
-								
-										<tr>
-											<td width="130px">제품코드</td>
-											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmCode" name = "itmCode" ></input> &nbsp;</td>
-											<td><%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>&nbsp;</td>
-											<td width="130px">제품명</td>
-											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmName" name = "itmName" readonly="readonly"></input><br/></td>
-										</tr>
-									</table>
-								</div>
+											</div>
+										</td>
+									</tr>
+									
+									<tr>
+										<td>
+											<label class="col-form-label text-center">업체코드</label>
+										</td>
+										<td>
+											<div class="row">
+												<input style="width:200px;" class="form-control mr-3" type ="text" id="operCode" name = "operCode" />
+												<%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>
+												<input style="width:200px;" class="form-control ml-3" type ="text" id="operName" name = "operName" readonly="readonly"/>
+											</div>
+										</td>
+									</tr>
+							
+									<tr>
+										<td>
+											<label class="col-form-label text-center">제품코드</label>
+										</td>
+										<td>
+											<div class="row">
+												<input style="width:200px;" class="form-control mr-3" type ="text" id="itmCode" name = "itmCode" ></input> 
+												<%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>
+												<input style="width:200px;" class="form-control ml-3" type ="text" id="itmName" name = "itmName" readonly="readonly"></input>
+											</div>
+										</td>
+									</tr>
+								</table>
 							</div>
 						</div>
 					</div>
@@ -271,18 +284,13 @@ $(function(){
 		<input type="hidden" name="ordDNum" />
 			<div class="row">
 				<div class="col-xl-12">
-					<div class="card">
-						<!-- 타이틀 -->
-						<div id="title" class="card-header">
-							<ul>
-								<li>주문목록</li>
-							</ul>
-						
+					<div class="card pt-3">
+						<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">주문목록</p></div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div id="grid"></div>
+							</div>
 						</div>
-						
-						<!-- // 타이틀 -->
-						<!-- List -->
-						<div id="grid"></div>
 					</div>
 				</div>
 				

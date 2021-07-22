@@ -713,38 +713,34 @@ $(function(){
 					<div class="row" >
 						<div class="d-inline-block col-xl-12">
 							<div class="card" >
-								<div style="margin: 10px">
-									<table >
-										<tr align="center">
-											<th width="150px">주문번호*</th>
-											<td><input class="form-control" type="text" name="ordNum" id="ordNum" readonly="readonly"/></td>
-											<th width="150px">출고번호</th>
-											<td><input class="form-control" type="text" name="itmHisNum" id="itmHisNum" readonly="readonly"/></td>
-											<th width="150px" >출고일자*</th>
-											<td>
-												<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-													<input type="text" id="itmHisRdy" name="itmHisRdy"
-														class=" form-control" aria-label="Date-Time" style="text-align: center;" /> <span class="tui-ico-date"></span>
-												</div>
-												<div id="date" style="margin-top: -1px;"></div>
-											</td>
-										</tr>
-										<tr><td><p> </p></td></tr>
-										<tr align="center">
-											<th width="150px">고객사코드*</th>
-											<td><input  class="form-control" type="text" name="operCode" id="operCode" /></td>
-											<th width="150px">고객사명</th>
-											<td><input class="form-control" type="text" name="operName" id="operName"  readonly="readonly" /></td>
-										</tr>
-										<tr><td><p> </p></td></tr>
-										<tr align="center">
-											<th width="150px">특이사항</th>
-											<td><input class="form-control" type="text" name="itmNote" id="itmNote" /></td>
-										</tr>
-										
-										
-									</table>
-								</div>
+								<table class="table">
+									<tr>
+										<th>주문번호*</th>
+										<td><input style="width:200px;" class="form-control" type="text" name="ordNum" id="ordNum" readonly="readonly"/></td>
+										<th>출고번호</th>
+										<td><input style="width:200px;" class="form-control" type="text" name="itmHisNum" id="itmHisNum" readonly="readonly"/></td>
+										<th>출고일자*</th>
+										<td>
+											<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+												<input type="text" id="itmHisRdy" name="itmHisRdy"
+													class=" form-control" aria-label="Date-Time" style="text-align: center;" /> <span class="tui-ico-date"></span>
+											</div>
+											<div id="date" style="margin-top: -1px;"></div>
+										</td>
+									</tr>
+									<tr>
+										<th>고객사코드*</th>
+										<td><input style="width:200px;" class="form-control" type="text" name="operCode" id="operCode" /></td>
+										<th>고객사명</th>
+										<td><input style="width:200px;" class="form-control" type="text" name="operName" id="operName"  readonly="readonly" /></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<th>특이사항</th>
+										<td colspan="5"><input class="form-control w-75" type="text" name="itmNote" id="itmNote" /></td>
+									</tr>
+								</table>
 							</div>
 						</div>
 					</div>

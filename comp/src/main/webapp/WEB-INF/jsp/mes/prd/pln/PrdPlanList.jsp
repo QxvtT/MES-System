@@ -319,12 +319,12 @@ $(function(){
 						</div>
 
 						<div class="card pt-3">
-						<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">생산계획 내역</p></div>
-						<div class="row">
-							<div class="col-sm-12">
-								<div id="grid"></div>
+							<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">생산계획 내역</p></div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div id="grid"></div>
+								</div>
 							</div>
-						</div>
 						</div>
 					</form:form>
 				</div>

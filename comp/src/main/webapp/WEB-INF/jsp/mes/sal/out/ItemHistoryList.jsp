@@ -198,46 +198,54 @@ function ReportToExcelConverter() {
 					<br/>
 					<div class="row" >
 						<div class="d-inline-block col-xl-12">
-							<div class="card" >
-								<div style="margin: 10px">
-								<br/>
-									<table>
-										<tr>
-											<td width="130px">출고날짜</td>
-											<td>
+							<div class="card">
+								<table class="table">
+									<tr>
+										<td>
+											<div class="d-inline-block align-middle">출고날짜</div>
+										</td>
+										<td>
+											<div class="row">
 												<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
 													<input type="text" id="bDate" name="bDate" class=" form-control" aria-label="Date-Time"
 													style="text-align: center;" /> <span class="tui-ico-date"></span>
 												</div>
 												<div id="bbdate" style="margin-top: -1px;"></div>
-											</td>
-											<td><h3>   ~   </h3></td>
-											<td>
+												<span style="margin: 10px;"> ~ </span>
 												<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
 													<input type="text" id="aDate" name="aDate"
 														class=" form-control" aria-label="Date-Time"
 														style="text-align: center;" /> <span class="tui-ico-date"></span>
 												</div>
 												<div id="aadate" style="margin-top: -1px;"></div>
-											</td>
-										</tr>
-										<tr><td><p></p></td></tr>
-										<tr>
-											<td width="130px">업체코드</td>
-											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="operCode" name = "operCode" /> &nbsp;</td>
-											<td><%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>&nbsp;</td>
-											<td width="130px">업체이름</td>
-											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="operName" name = "operName" readonly="readonly"/></td>
-										</tr>
-										<tr>
-											<td width="130px">제품코드</td>
-											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmCode" name = "itmCode" ></input> &nbsp;</td>
-											<td><%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>&nbsp;</td>
-											<td width="130px">제품명</td>
-											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmName" name = "itmName" readonly="readonly"></input><br/></td>
-										</tr>
-									</table>
-								</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="d-inline-block align-middle">업체코드</div>
+										</td>
+										<td>
+											<div class="row">
+												<input style="width:200px;" class="form-control mr-3" type ="text" id="operCode" name = "operCode" />
+												<%@ include file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp" %>
+												<input style="width:200px;" class="form-control ml-3" type ="text" id="operName" name = "operName" readonly="readonly"/>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="d-inline-block align-middle">제품코드</div>
+										</td>
+										<td>
+											<div class="row">
+												<input style="width:200px;" class="form-control mr-3" type ="text" id="itmCode" name = "itmCode" ></input>
+												<%@ include file="/WEB-INF/jsp/mes/common/modal/ItemList.jsp" %>
+												<input style="width:200px;" class="form-control ml-3" type ="text" id="itmName" name = "itmName" readonly="readonly"></input>
+											</div>
+										</td>
+									</tr>
+								</table>
 							</div>
 						</div>
 					</div>
