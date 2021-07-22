@@ -22,13 +22,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>목록</title>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
-<script
-	src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+
 <script type="text/javaScript" language="javascript" defer="defer">
 let matHisNum1 = null;
 let matHisNum2 = null;
@@ -1003,8 +997,8 @@ $(function(){
 					</button>
 				</div>
 				<div class="modal-body">
-					<div>
-						<div class="d-inline-block align-middle">입고 일자 *</div>
+					<div class="row mb-3">
+						<div class="d-inline-block ml-3"><span style="vertical-align: sub;">입고 일자 *</span></div>
 						<div
 							class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 							<input type="text" id="InStartpicker-input"
@@ -1022,7 +1016,7 @@ $(function(){
 						</div>
 						<div id="date3" style="margin-top: -1px;"></div>
 						<div>
-							<input type="button" id="searchBtn" name="searchBtn" value="검색"></input>
+							<input type="button" id="searchBtn" name="searchBtn" class="btn btn-sm btn-info" value="검색"></input>
 						</div>
 					</div>
 					<div id='grid2' />

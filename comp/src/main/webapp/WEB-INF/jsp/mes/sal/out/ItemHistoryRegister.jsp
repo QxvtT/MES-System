@@ -25,14 +25,11 @@
 
 
 <title><c:out value="${registerFlag}" /></title>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
-<script
-	src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-
+<style type="">
+	.tui-datepicker-input>.tui-ico-date {
+		left:85%;
+	}
+</style>
 <script type="text/javaScript" language="javascript" defer="defer">
 
 // 전체주문페이지 
@@ -782,36 +779,27 @@ $(function(){
 				<div class="modal-body" >
 					<form>
 						<div class="form-group row">
-							<div class="col">
-								출고일자
-								<table>
-									<tr>
-										<td>
-											<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-												<input type="text" id="hisBDate" name="hisBDate" class=" form-control" aria-label="Date-Time"
-													style="text-align: center;" /> <span class="tui-ico-date"></span>
-											</div>
-											<div id="hisbbdate" style="margin-top: -1px;"></div>
-										</td>
-										<td align="center"><h3>  ~ </h3></td>
-										<td>
-											<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-												<input type="text" id="hisADate" name="hisADate"
-														class=" form-control" aria-label="Date-Time"
-														style="text-align: center;" /> <span class="tui-ico-date"></span>
-											</div>
-											<div id="hisaadate" style="margin-top: -1px;"></div>
-										</td>
-									</tr>
-								</table> 
+							<div class="col-sm-12">
+								<div class="d-inline-block align-middle">출고일자</div>
+								<div class="d-inline-block tui-datepicker-input tui-datetime-input tui-has-focus">
+									<input type="text" id="hisBDate" name="hisBDate" class=" form-control w-25 ml-3" aria-label="Date-Time"
+										style="text-align: center;" /> <span class="tui-ico-date"></span>
+								</div>
+								<div id="hisbbdate" class="d-inline-block" style="margin-top: -1px;"></div>
+								<label class="col-form-label text-center d-inline-block"> ~ </label>
+								<div class="d-inline-block tui-datepicker-input tui-datetime-input tui-has-focus">
+									<input type="text" id="hisADate" name="hisADate"
+											class=" form-control w-25 ml-3 d-inline-block" aria-label="Date-Time"
+											style="text-align: center;" /> <span class="tui-ico-date"></span>
+								</div>
+								<div id="hisaadate" class="d-inline-block" style="margin-top: -1px;"></div>
+							</div>
+							<div class="col-sm-12 mt-3">
+								<button type="button" class="btn btn-info btn-sm" id="hisNumSearch">검색</button>
+								<button type="reset" class="btn btn-info btn-sm" id="hisNumSearchReset">초기화</button>
 							</div>
 						</div>
-						<div class="col-md-3">
-							<button type="button" class="btn btn-info btn-sm" id="hisNumSearch">검색</button>
-							<button type="reset" class="btn btn-info btn-sm" id="hisNumSearchReset">초기화</button>
-						</div>
 					</form>
-					<br />
 					<div id="grid2"></div>
 				</div>
 				<div class="modal-footer">
