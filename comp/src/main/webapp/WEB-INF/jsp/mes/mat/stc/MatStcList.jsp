@@ -223,10 +223,10 @@ $(function(){
 				</div>
 				<div class="col-md-4">
 					<ul class="breadcrumb">
-						<li class="breadcrumb-item"><a href="/comp"> <i
+						<li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/main.do"> <i
 								class="fa fa-home"></i>
 						</a></li>
-						<li class="breadcrumb-item">자재 관리</li>
+						<li class="breadcrumb-item">자재관리</li>
 						<li class="breadcrumb-item">자재 재고 조회</li>
 					</ul>
 				</div>
@@ -234,12 +234,12 @@ $(function(){
 		</div>
 	</div>
 	<!-- // 타이틀 -->
-	<form:form commandName="searchVO" name="listForm" id="listForm"
-		method="post">
-		<input type="hidden" name="matCode" />
-		<div class="pcoded-inner-content">
-			<br />
-			<div class="main-body">
+	<div class="pcoded-inner-content">
+		<div class="main-body">
+			<div class="page-wrapper">
+				<form:form commandName="searchVO" name="listForm" id="listForm"
+					method="post">
+				<input type="hidden" name="matCode" />
 				<div class="text-right">
 					<button type="button" id="searchBtn"
 						class="btn waves-effect waves-light btn-info  btn-md">조회</button>
@@ -251,7 +251,7 @@ $(function(){
 				<br/>
 				<div class="row">
 					<div class="col-xl-12">
-						<div class="table">
+						<div class="card">
 							<table class="table">
 								<tr>
 									<td>
@@ -297,11 +297,19 @@ $(function(){
 								</tr>
 							</table>
 						</div>
-						<div id="grid"></div>
+						<div class="card pt-3">
+							<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">자재 재고</p></div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div id="grid"></div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
+			</form:form>
 		</div>
-	</form:form>
+	</div>
+</div>
 </body>
 </html>

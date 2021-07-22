@@ -227,7 +227,7 @@ $(function(){
 				</div>
 				<div class="col-md-4">
 					<ul class="breadcrumb">
-						<li class="breadcrumb-item"><a href="/comp"> <i
+						<li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/main.do"> <i
 								class="fa fa-home"></i>
 						</a></li>
 						<li class="breadcrumb-item">생산관리</li>

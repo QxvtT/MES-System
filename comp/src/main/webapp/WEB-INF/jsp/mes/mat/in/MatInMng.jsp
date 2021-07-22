@@ -788,10 +788,10 @@ $(function(){
 				</div>
 				<div class="col-md-4">
 					<ul class="breadcrumb">
-						<li class="breadcrumb-item"><a href="/comp"> <i
+						<li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/main.do"> <i
 								class="fa fa-home"></i>
 						</a></li>
-						<li class="breadcrumb-item">자재 관리</li>
+						<li class="breadcrumb-item">자재관리</li>
 						<li class="breadcrumb-item">자재 입고 관리</li>
 					</ul>
 				</div>
@@ -799,115 +799,124 @@ $(function(){
 		</div>
 	</div>
 	<!-- // 타이틀 -->
-	<form:form commandName="searchVO" name="listForm" id="listForm"
-		method="post">
-		<input type="hidden" name="matCode" />
-		<div class="pcoded-inner-content">
-			<br />
-			<div class="main-body">
-				<div class="text-right">
-					<button id="matInDayBtn" type="button" class="btn btn-info btn-md">조회</button>
-					<input id="resetBtn" class="btn btn-info btn-md" type="button"
-						value="새자료"></input>
-					<button type="button" id="matInSaveBtn" name="matInSaveBtn"
-						class="btn btn-info btn-md">저장</button>
-				</div>
-				<br />
-				<div class="row">
-					<div class="col-md-6">
-						<div class="table">
-							<table class="table">
-								<tr>
-									<td>
-										<div class="d-inline-block align-middle">입고 일자 *</div>
-									</td>
-									<td>
-										<div class="row align-items-center text-center col-lg-12">
-											<div
-												class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-												<input type="text" id="MatInpicker-input"
-													class=" form-control w-25" aria-label="Date-Time"
-													name="matHisDate" /> <span class="tui-ico-date"></span>
-												<div id="MatInpicker-container" style="margin-left: -1px;"></div>
-											</div>
-											<div id="date1" style="margin-top: -1px;"></div>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td><label class="col-form-label text-center">입고업체
-											*</label></td>
-									<td>
-										<div class="row align-items-center col-lg-12">
-											<input type="text" class="form-control w-25 ml-3"
-												id="operCode" name="operCode"></input> <input type="text"
-												class="form-control w-25 ml-3" id="operName" name="operName"
-												readonly></input>
-											<%@ include
-												file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td><label class="col-form-label text-center">입고번호</label></td>
-									<td>
-										<div class="row align-items-center text-center col-lg-12">
-											<input type="text" readonly name="matHisNum" id="matHisNum"
-												class=" form-control w-25 ml-3" />
-										</div>
-									</td>
-								</tr>
-							</table>
-						</div>
+	<div class="pcoded-inner-content">
+		<div class="main-body">
+			<div class="page-wrapper">
+				<form:form commandName="searchVO" name="listForm" id="listForm"
+					method="post">
+					<input type="hidden" name="matCode" />
+					<div class="text-right">
+						<button id="matInDayBtn" type="button" class="btn btn-info btn-md">조회</button>
+						<input id="resetBtn" class="btn btn-info btn-md" type="button"
+							value="새자료"></input>
+						<button type="button" id="matInSaveBtn" name="matInSaveBtn"
+							class="btn btn-info btn-md">저장</button>
 					</div>
-					<div class="col-md-6">
-						<div class="card">
-							<div class="card-body">
-								<h5 class="d-inline-block pt-3">미입고 자료</h5>
-								<div class="row mt-3 mb-3 pb-3 pt-3">
-									<div class="d-inline-block align-middle ml-3">일자 *</div>
-									<div
-										class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-										<input type="text" id="nStartpicker-input"
-											class=" form-control w-25" aria-label="Date-Time"
-											name="matComDateS" /> <span class="tui-ico-date"></span>
-										<div id="nStartpicker-container" style="margin-left: -1px;"></div>
-									</div>									
-									<div id="date4" style="margin-top: -1px;"></div>
-									~
-									<div
-										class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
-										<input type="text" id="nEndpicker-input"
-											class=" form-control w-25" aria-label="Date-Time"
-											name="matComDateE" /> <span class="tui-ico-date"></span>
-										<div id="nEndpicker-container" style="margin-left: -1px;"></div>
-									</div>
-									<div id="date5" style="margin-top: -1px;"></div>
-									<input type="button" id="nOrdBtn" name="nOrdBtn"
-										class="btn btn-info btn-sm" value="미입고 자료 조회" />
-
-								</div>
+					<br />
+					<div class="row">
+						<div class="col-md-6">
+							<div class="card">
+								<table class="table">
+									<tr>
+										<td>
+											<div class="d-inline-block align-middle">입고 일자 *</div>
+										</td>
+										<td>
+											<div class="row align-items-center text-center col-lg-12">
+												<div
+													class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+													<input type="text" id="MatInpicker-input"
+														class=" form-control w-25" aria-label="Date-Time"
+														name="matHisDate" /> <span class="tui-ico-date"></span>
+													<div id="MatInpicker-container" style="margin-left: -1px;"></div>
+												</div>
+												<div id="date1" style="margin-top: -1px;"></div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td><label class="col-form-label text-center">입고업체
+												*</label></td>
+										<td>
+											<div class="row align-items-center col-lg-12">
+												<input type="text" class="form-control w-25 ml-3"
+													id="operCode" name="operCode"></input> <input type="text"
+													class="form-control w-25 ml-3  mr-3" id="operName" name="operName"
+													readonly></input>
+												<%@ include
+													file="/WEB-INF/jsp/mes/common/modal/OperationList.jsp"%>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td><label class="col-form-label text-center">입고번호</label></td>
+										<td>
+											<div class="row align-items-center text-center col-lg-12">
+												<input type="text" readonly name="matHisNum" id="matHisNum"
+													class=" form-control w-25 ml-3" />
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="card">
+								<table class="table">
+										<tr>
+											<td class="pt-3">
+												<h5>미입고 자료</h5>
+											</td>
+										</tr>
+										<tr>
+											<td class="pt-3 pb-3">
+												<div class="row align-items-center text-center col-lg-12 pt-3 pb-3 mb-3">
+													<div style="padding-left: 15px; padding-bottom: 10px;">일자*</div>
+													<div
+														class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+														<input class="form-control w-25" id="nStartpicker-input"
+															type="text" aria-label="Date" /> 
+														<span class="tui-ico-date"></span>
+														<div id="nStartpicker-container" style="margin-left: -1px;"></div>
+													</div>
+													<label class="col-form-label text-center"> ~ </label>
+													<div
+														class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
+														<input class="form-control w-25" id="nEndpicker-input"
+															type="text" aria-label="Date" /> <span
+															class="tui-ico-date"></span>
+														<div id="nEndpicker-container" style="margin-left: -1px;"></div>
+													</div>
+													<button type="button" id="nOrdBtn"
+														class="btn btn-info btn-sm">미입고 자료 조회</button>
+												</div>
+											</td>
+										</tr>
+									</table>
 							</div>
 						</div>
 					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-sm-12 text-right">
-						<button type="button" class="btn btn-info btn-sm" id="addRowBtn">추가</button>
-						<button type="button" class="btn btn-info btn-sm"
-							id="deleteRowBtn">삭제</button>
+					<div class="card pt-3">
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="ml-3 mt-2"><p class="font-weight-bold" style="font-size:15px">입고 내역</p></div>
+							</div>
+							<div class="col-sm-6 text-right">
+								<button type="button" class="btn btn-info btn-sm" id="addRowBtn">추가</button>
+								<button type="button" class="btn btn-info btn-sm mr-3"
+									id="deleteRowBtn">삭제</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xl-12">
+								<div id="grid" />
+							</div>
+						</div>
 					</div>
-				</div>
-				<br/>
-				<div class="row">
-					<div class="col-xl-12">
-						<div id="grid" />
-					</div>
-				</div>
+				</form:form>
 			</div>
 		</div>
-	</form:form>
+	</div>
 
 	<!-- 자재 코드 리스트 -->
 	<div class="modal fade" id="matModal" tabindex="-1" role="dialog"

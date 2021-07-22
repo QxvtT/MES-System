@@ -271,10 +271,11 @@ $(function() {
 				</div>
 				<div class="col-md-4">
 					<ul class="breadcrumb">
-						<li class="breadcrumb-item"><a href="index.jsp"> <i
+						<li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/main.do"> <i
 								class="fa fa-home"></i>
 						</a></li>
-						<li class="breadcrumb-item"><a href="#!">주문관리</a></li>
+						<li class="breadcrumb-item">생산관리</li>
+						<li class="breadcrumb-item"><a href="#!">설비관리</a></li>
 					</ul>
 				</div>
 			</div>
