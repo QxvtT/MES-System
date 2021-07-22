@@ -241,17 +241,20 @@ function ReportToExcelConverter() {
 	</div>
 <!-- 공정실적관리List -->
 	<div class="pcoded-inner-content">
+		<form>
 			<div class="main-body">
-				<div class="page-wrapper">
-					<div class="row">
-						<div class="d-inline-block col-xl-12">
-						
-							<div class="card">
-								<!-- 타이틀 -->
-								<form>
+				<div align="right" style="margin-top: 5px">
+				 	<button class="btn btn-info btn" type ="button" id ="search" name = "search">검색</button>
+					<button class="btn btn-info btn" type ="reset" id ="reset" name = "reset">새자료</button>
+					<button class="btn btn-info btn" type="button" id ="printOrderBtn" name = "printOrderBtn" >인쇄</button>
+					<button class="btn btn-info btn" type="button" id ="excelOrderBtn" name = "excelOrderBtn" >Excel</button>
+				</div>
+					<div class="page-wrapper">
+						<div class="row">
+							<div class="d-inline-block col-xl-12">
+								<div class="card">
+									<!-- 타이틀 -->
 									<div id="title" class="card-header">
-										
-										
 										<div>
 											<table>
 												<tr>
@@ -284,15 +287,7 @@ function ReportToExcelConverter() {
 											</table>
 										
 										</div>
-											<div align="right">
-												<button class="btn btn-info btn-sm" type ="button" id ="search" name = "search">검색</button>
-												<button class="btn btn-info btn-sm" type ="reset" id ="reset" name = "reset">새자료</button>
-											</div>
-										</ul>
 									</div>
-								</form>
-								<!-- // 타이틀 -->
-								<!-- List -->
 								<div id="grid"></div>
 							</div>
 						</div>
@@ -300,7 +295,8 @@ function ReportToExcelConverter() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</form>
+	</div>
 		<div class="pcoded-inner-content">
 			<div class="main-body">
 				<div class="page-wrapper">
@@ -311,17 +307,9 @@ function ReportToExcelConverter() {
 								<!-- 타이틀 -->
 								<div id="title" class="card-header">
 									<div align="right">
-										<ul>
-											<button class="btn btn-info btn-sm" type="button" id ="printOrderBtn" name = "printOrderBtn" >인쇄</button>
-											&nbsp;
-											<button class="btn btn-info btn-sm" type="button" id ="excelOrderBtn" name = "excelOrderBtn" >Excel</button>
-										</ul>
 									</div>
 									
 								</div>
-
-								<!-- // 타이틀 -->
-								<!-- List -->
 								<div id="grid2"></div>
 							</div>
 						</div>

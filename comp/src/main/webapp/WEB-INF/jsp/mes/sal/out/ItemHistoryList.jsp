@@ -185,35 +185,41 @@ function ReportToExcelConverter() {
 	</div>
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
-		<div class="main-body">
-			<div class="page-wrapper">
-				<div class="row" >
-					<div class="d-inline-block col-xl-12">
-						<div class="card" >
-							<form id="frm" name ="frm">
+		<form id="frm" name ="frm">
+			<div class="main-body">
+				<div align="right" style="margin-top: 5px">
+					<button type="button" class="btn btn-info btn" id="getItemHistory">검색</button>
+					<button type="reset" class="btn btn-info btn" id="reset">새자료</button>
+					<button class="btn btn-info btn" type="button" id ="printItmHistoryBtn" name = "printItmHistoryBtn" >인쇄</button>
+					<button class="btn btn-info btn" type="button" id ="excelItemHistoryBtn" name = "excelItemHistoryBtn" >Excel</button>
+				</div>
+				<div class="page-wrapper">
+					<div class="row" >
+						<div class="d-inline-block col-xl-12">
+							<div class="card" >
 								<div style="margin: 10px">
-									<br/>
+								<br/>
 									<table>
 										<tr>
 											<td width="130px">출고날짜</td>
 											<td>
-										<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-											<input type="text" id="bDate" name="bDate" class=" form-control" aria-label="Date-Time"
+												<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+													<input type="text" id="bDate" name="bDate" class=" form-control" aria-label="Date-Time"
 													style="text-align: center;" /> <span class="tui-ico-date"></span>
-										</div>
-										<div id="bbdate" style="margin-top: -1px;"></div>
-									</td>
-									<td><h3>   ~   </h3></td>
-									<td>
-										<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-											<input type="text" id="aDate" name="aDate"
-													class=" form-control" aria-label="Date-Time"
-													style="text-align: center;" /> <span class="tui-ico-date"></span>
-										</div>
-										<div id="aadate" style="margin-top: -1px;"></div>
-									</td>
+												</div>
+												<div id="bbdate" style="margin-top: -1px;"></div>
+											</td>
+											<td><h3>   ~   </h3></td>
+											<td>
+												<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+													<input type="text" id="aDate" name="aDate"
+														class=" form-control" aria-label="Date-Time"
+														style="text-align: center;" /> <span class="tui-ico-date"></span>
+												</div>
+												<div id="aadate" style="margin-top: -1px;"></div>
+											</td>
 										</tr>
-								<tr><td><p></p></td></tr>
+										<tr><td><p></p></td></tr>
 										<tr>
 											<td width="130px">업체코드</td>
 											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="operCode" name = "operCode" /> &nbsp;</td>
@@ -229,20 +235,13 @@ function ReportToExcelConverter() {
 											<td><input style="margin-top: 20px;" class="form-control" type ="text" id="itmName" name = "itmName" readonly="readonly"></input><br/></td>
 										</tr>
 									</table>
-								
-									<div align="right">
-										<button type="button" class="btn btn-info btn-sm" id="getItemHistory">검색</button>
-										<button type="reset" class="btn btn-info btn-sm" id="reset">리셋</button>
-										<button class="btn btn-info btn-sm" type="button" id ="printItmHistoryBtn" name = "printItmHistoryBtn" >인쇄</button>&nbsp;
-										<button class="btn btn-info btn-sm" type="button" id ="excelItemHistoryBtn" name = "excelItemHistoryBtn" >Excel</button>&nbsp;
-									</div>
 								</div>
-							</form>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 	
 		<div class="pcoded-inner-content">

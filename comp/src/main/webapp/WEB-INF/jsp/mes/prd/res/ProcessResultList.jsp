@@ -710,6 +710,9 @@ function getProcessResultSelect(key) {
 <!-- 공정실적관리List -->
 	<div class="pcoded-inner-content">
 			<div class="main-body">
+				<div align="right" style="margin-top: 5px">
+					<button type ="button" class="btn btn-info btn" id ="search" name = "search">검색</button>
+				</div>
 				<div class="page-wrapper">
 					<div class="row">
 						<div class="d-inline-block col-xl-12">
@@ -732,9 +735,7 @@ function getProcessResultSelect(key) {
 										
 									</ul>
 									<ul>
-										<div align="right">
-											<button type ="button" class="btn btn-info btn-sm" id ="search" name = "search">검색</button>
-										</div>
+										
 									</ul>
 								</div>
 

@@ -700,81 +700,79 @@ $(function(){
 	</div>
 	<!-- Page-header end -->
 	<div class="pcoded-inner-content">
-	<div class="main-body">
-	<div class="page-wrapper">
-		<div class="row" >
-			<div class="d-inline-block col-xl-12">
-				<div class="card" >
-					<form id="frm" name = "frm">
-						<div style="margin: 10px">
-
-					<table >
-						<tr align="center">
-							
-							<th width="150px">주문번호*</th>
-							<td><input class="form-control" type="text" name="ordNum" id="ordNum" readonly="readonly"/></td>
-							<th width="150px">출고번호</th>
-							<td><input class="form-control" type="text" name="itmHisNum" id="itmHisNum" readonly="readonly"/></td>
-							<th width="150px" >출고일자*</th>
-							<td>
-								<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-									<input type="text" id="itmHisRdy" name="itmHisRdy"
-										class=" form-control" aria-label="Date-Time" style="text-align: center;" /> <span class="tui-ico-date"></span>
-								</div>
-								<div id="date" style="margin-top: -1px;"></div>
-							</td>
-						</tr>
-						<tr><td><p> </p></td></tr>
-						<tr align="center">
-							<th width="150px">고객사코드*</th>
-							<td><input  class="form-control" type="text" name="operCode" id="operCode" /></td>
-							<th width="150px">고객사명</th>
-							<td><input class="form-control" type="text" name="operName" id="operName"  readonly="readonly" /></td>
-						</tr>
-						<tr><td><p> </p></td></tr>
-						<tr align="center">
-							<th width="150px">특이사항</th>
-							<td><input class="form-control" type="text" name="itmNote" id="itmNote" /></td>
-						</tr>
-						
-						
-					</table>
-					<div align="right">
-						<button type="button" class="btn btn-info btn-sm" id="searchHisBtn" data-toggle="modal" data-target="#myModal">검색</button>&nbsp;
-					
-					<button type="reset" class="btn btn-info btn-sm" id= "reset">새자료</button>
-					</div>
-			
-		</div>
-			</form>
-			</div></div></div></div></div></div>
-
-				<div class="pcoded-inner-content">
-					<div class="main-body">
-						<div class="page-wrapper">
-							<div class="row">
-								<div class="col-xl-12">
-									<div class="card">
-										<!-- 타이틀 -->
-										<div id="title" class="card-header">
-											<ul>
-												<li>List</li>
-												<div align="right">
-													<button  class="btn btn-info btn-sm" type="button" id="insert">추가</button>
-													<button  class="btn btn-info btn-sm" type="button" id="deleteItm">삭제</button>
-													<button type="button" class="btn btn-info btn-sm" id="save">저장</button>
+		<form id="frm" name = "frm">
+			<div class="main-body">
+				<div align="right" style="margin-top: 5px">
+					<button type="button" class="btn btn-info btn" id="searchHisBtn" data-toggle="modal" data-target="#myModal">검색</button>&nbsp;
+					<button type="reset" class="btn btn-info btn" id= "reset">새자료</button>
+				</div>
+				<div class="page-wrapper">
+					<div class="row" >
+						<div class="d-inline-block col-xl-12">
+							<div class="card" >
+								<div style="margin: 10px">
+									<table >
+										<tr align="center">
+											<th width="150px">주문번호*</th>
+											<td><input class="form-control" type="text" name="ordNum" id="ordNum" readonly="readonly"/></td>
+											<th width="150px">출고번호</th>
+											<td><input class="form-control" type="text" name="itmHisNum" id="itmHisNum" readonly="readonly"/></td>
+											<th width="150px" >출고일자*</th>
+											<td>
+												<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+													<input type="text" id="itmHisRdy" name="itmHisRdy"
+														class=" form-control" aria-label="Date-Time" style="text-align: center;" /> <span class="tui-ico-date"></span>
 												</div>
-											</ul>
-										</div>
-
-										<div id="grid"></div>
-									</div>
+												<div id="date" style="margin-top: -1px;"></div>
+											</td>
+										</tr>
+										<tr><td><p> </p></td></tr>
+										<tr align="center">
+											<th width="150px">고객사코드*</th>
+											<td><input  class="form-control" type="text" name="operCode" id="operCode" /></td>
+											<th width="150px">고객사명</th>
+											<td><input class="form-control" type="text" name="operName" id="operName"  readonly="readonly" /></td>
+										</tr>
+										<tr><td><p> </p></td></tr>
+										<tr align="center">
+											<th width="150px">특이사항</th>
+											<td><input class="form-control" type="text" name="itmNote" id="itmNote" /></td>
+										</tr>
+										
+										
+									</table>
 								</div>
-
 							</div>
 						</div>
 					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="pcoded-inner-content">
+		<div class="main-body">
+			<div class="page-wrapper">
+				<div class="row">
+					<div class="col-xl-12">
+						<div class="card">
+							<!-- 타이틀 -->
+							<div id="title" class="card-header">
+								<ul>
+									<li>List</li>
+									<div align="right">
+										<button  class="btn btn-info btn-sm" type="button" id="insert">추가</button>
+										<button  class="btn btn-info btn-sm" type="button" id="deleteItm">삭제</button>
+										<button type="button" class="btn btn-info btn-sm" id="save">저장</button>
+									</div>
+								</ul>
+							</div>
+							<div id="grid"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
+	</div>
 
 
 	<!-- 출고번호 검색 모달 -->
