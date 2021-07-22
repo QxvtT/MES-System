@@ -56,7 +56,7 @@ $(function(){
 	    el: document.getElementById('grid'),
 	    scrollX: false,
 	    scrollY: true,
-	    bodyHeight: 200,
+	    bodyHeight: 350,
 	    data: null,
 	    rowHeaders: ['rowNum'],
 	    columns: [
@@ -138,7 +138,7 @@ $(function(){
 	} 
 	
 	
-	$('#testBtn').click(function() {
+	$('#searchBtn').click(function() {
 		matHisDNum1 = null;
 		console.log(matHisDNum1);
 		console.log(grid.getCheckedRows());
@@ -257,7 +257,7 @@ $(function(){
 							<table class="table">
 								<tr>
 									<td>
-										<div class="d-inline-block align-middle">작업일자</div>
+										<div class="d-inline-block align-middle">입고일자</div>
 									</td>
 									<td>
 										<div class="row align-items-center text-center col-lg-8">
@@ -287,7 +287,7 @@ $(function(){
 									<td><label class="col-form-label text-center">자재코드</label>
 									</td>
 									<td>
-										<div class="row align-items-center text-center col-lg-8">
+										<div class="row align-items-center col-lg-8">
 											<input type="text" class="form-control w-25 ml-3"
 												id="matCode" name="matCode" value="${result.matCode }"></input>
 											<input type="text" class="form-control w-25 ml-3"
@@ -306,7 +306,7 @@ $(function(){
 									<td><label class="col-form-label text-cen3ter">업체코드</label>
 									</td>
 									<td>
-										<div class="row align-items-center text-center col-lg-8">
+										<div class="row align-items-center col-lg-8">
 											<input type="text" class="form-control w-25 ml-3"
 												id="operCode" name="operCode" value="${result.operCode }"></input>
 											<input type="text" class="form-control w-25 ml-3"

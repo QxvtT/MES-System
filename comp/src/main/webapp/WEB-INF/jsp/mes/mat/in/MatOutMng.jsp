@@ -56,7 +56,7 @@ $(function(){
 	    el: document.getElementById('grid'),
 	    scrollX: false,
 	    scrollY: true,
-	    bodyHeight: 200,
+	    bodyHeight: 380,
 	    data: null,
 	    rowHeaders: ['rowNum'],
 	    columns: [
@@ -287,7 +287,7 @@ $(function(){
 									<td><label class="col-form-label text-center">자재코드</label>
 									</td>
 									<td>
-										<div class="row align-items-center text-center col-lg-8">
+										<div class="row align-items-center col-lg-8">
 											<input type="text" class="form-control w-25 ml-3"
 												id="matCode" name="matCode" value="${result.matCode }"></input>
 											<input type="text" class="form-control w-25 ml-3"
@@ -303,10 +303,10 @@ $(function(){
 									</td>
 								</tr>
 								<tr>
-									<td><label class="col-form-label text-cen3ter">업체코드</label>
+									<td><label class="col-form-label text-cen3ter">공정코드</label>
 									</td>
 									<td>
-										<div class="row align-items-center text-center col-lg-8">
+										<div class="row align-items-center col-lg-8">
 											<input type="text" class="form-control w-25 ml-3"
 												id="prcCode" name="prcCode" value="${result.prcCode }"></input>
 											<input type="text" class="form-control w-25 ml-3"

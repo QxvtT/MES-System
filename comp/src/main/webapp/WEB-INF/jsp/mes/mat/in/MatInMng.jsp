@@ -123,7 +123,7 @@ $(function(){
 	    el: document.getElementById('grid'),
 	    scrollX: false,
 	    scrollY: true,
-	    bodyHeight: 200,
+	    bodyHeight: 300,
 	    data: null,
 	    rowHeaders: ['rowNum', 'checkbox'],
 	    columns: [
@@ -838,7 +838,7 @@ $(function(){
 									<td><label class="col-form-label text-center">입고업체
 											*</label></td>
 									<td>
-										<div class="row align-items-center text-center col-lg-12">
+										<div class="row align-items-center col-lg-12">
 											<input type="text" class="form-control w-25 ml-3"
 												id="operCode" name="operCode"></input> <input type="text"
 												class="form-control w-25 ml-3" id="operName" name="operName"
@@ -872,8 +872,9 @@ $(function(){
 											class=" form-control w-25" aria-label="Date-Time"
 											name="matComDateS" /> <span class="tui-ico-date"></span>
 										<div id="nStartpicker-container" style="margin-left: -1px;"></div>
-									</div>
+									</div>									
 									<div id="date4" style="margin-top: -1px;"></div>
+									~
 									<div
 										class="tui-datepicker-input tui-datetime-input tui-has-focus ml-3">
 										<input type="text" id="nEndpicker-input"

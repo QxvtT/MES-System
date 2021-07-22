@@ -60,7 +60,7 @@ $(function(){
 	    el: document.getElementById('grid'),
 	    scrollX: false,
 	    scrollY: true,
-	    bodyHeight: 200,
+	    bodyHeight: 400,
 	    data: null,
 	    rowHeaders: ['rowNum'],
 	    columns: [
@@ -284,7 +284,7 @@ $(function(){
 									<td><label class="col-form-label text-center">자재코드</label>
 									</td>
 									<td>
-										<div class="row align-items-center text-center col-lg-8">
+										<div class="row align-items-center col-lg-8">
 											<input type="text" class="form-control w-25 ml-3"
 												id="matCode" name="matCode"></input> <input type="text"
 												class="form-control w-25 ml-3" id="matName" name="matName"
