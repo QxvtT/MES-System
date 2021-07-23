@@ -269,7 +269,7 @@ $(function(){
 							id="detailForm">
 							<input type="hidden" id="prdComNum" name="prdComNum" />
 							<div class="">
-								<div class="card" style="z-index: 200">
+								<div class="card">
 									<div class="table">
 										<table class="table">
 											<tr>

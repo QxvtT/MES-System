@@ -78,6 +78,7 @@
 	<insert id="insertProducePlanD" parameterType="mes.prd.pln.service.ProducePlanDVO" statementType="CALLABLE" >
 		
 		<if test="prdNum != null and prdNum != '' and itmCode != null and itmCode != ''">
+		DECLARE
 		BEGIN
 			INSERT INTO PRODUCE_PLAN_D
 			( PRD_PLAN_D_NUM
@@ -100,9 +101,9 @@
 			, #{ordNum}
 			, #{ordDNum}
 			);
-		</if>
-		<if test="ordNum != null and ordNum != ''">
-			UPDATE ORDER_D SET PRD_CHK = 'Y' WHERE ORD_NUM = #{ordNum} AND ORD_D_NUM = #{ordDNum};
+			<if test="ordNum != null and ordNum != ''">
+				UPDATE ORDER_D SET PRD_CHK = 'Y' WHERE ORD_NUM = #{ordNum} AND ORD_D_NUM = #{ordDNum};
+			</if>
 		END; 
 		</if>
 		
@@ -113,6 +114,7 @@
 	
 	<delete id="deleteProducePlanD">
 		<if test="prdPlanDNum != null and prdPlanDNum != ''">
+			DECLARE
 			BEGIN
 			DELETE FROM PRODUCE_PLAN_D
 						WHERE PRD_PLAN_D_NUM=#{prdPlanDNum};
@@ -125,9 +127,13 @@
 	
 	<delete id="producePlanDelete">
 		<if test="prdNum != null and prdNum != ''">
+		DECLARE
 		BEGIN
 			DELETE FROM PRODUCE_PLAN WHERE PRD_NUM = #{prdNum};
 			DELETE FROM PRODUCE_PLAN_D WHERE PRD_NUM = #{prdNum};
+			<if test="ordDNum != null and ordDNum == ''">
+				UPDATE ORDER_D SET PRD_CHK = 'N' WHERE ORD_D_NUM = #{ordDNum};
+			</if>
 		END;
 		</if>
 	</delete>

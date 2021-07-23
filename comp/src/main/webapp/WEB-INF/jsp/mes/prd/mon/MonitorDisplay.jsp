@@ -106,7 +106,7 @@ ul {
 			<tr>
 				<td style="background-color: #334269">분할설비</td>
 				<c:choose>
-					<c:when test="${!empty list }">
+					<c:when test="${empty list }">
 						<td style="background-color: #334269"></td>
 						<th colspan="5">대기중</th>
 					</c:when>
@@ -144,7 +144,7 @@ ul {
 			<tr>
 				<td style="background-color: #334269">열처리설비</td>
 				<c:choose>
-					<c:when test="${!empty list }">
+					<c:when test="${empty list }">
 						<td style="background-color: #334269"></td>
 						<th colspan="5">대기중</th>
 					</c:when>
@@ -160,7 +160,7 @@ ul {
 			<tr>
 				<td style="background-color: #334269">도금설비</td>
 				<c:choose>
-					<c:when test="${!empty list }">
+					<c:when test="${empty list }">
 						<td style="background-color: #334269"></td>
 						<th colspan="5">대기중</th>
 					</c:when>
@@ -176,7 +176,7 @@ ul {
 			<tr>
 				<td style="background-color: #334269">포장설비</td>
 				<c:choose>
-					<c:when test="${!empty list }">
+					<c:when test="${empty list }">
 						<td style="background-color: #334269"></td>
 						<th colspan="5">대기중</th>
 					</c:when>
@@ -204,7 +204,7 @@ ul {
 			<tr>
 				<td style="background-color: #334269">분할설비</td>
 				<c:choose>
-					<c:when test="${!empty list }">
+					<c:when test="${empty list }">
 						<td style="background-color: #334269"></td>
 						<th colspan="5">대기중</th>
 					</c:when>
@@ -220,7 +220,7 @@ ul {
 			<tr>
 				<td style="background-color: #334269">압축설비</td>
 				<c:choose>
-					<c:when test="${!empty list }">
+					<c:when test="${empty list }">
 						<td style="background-color: #334269"></td>
 						<th colspan="5">대기중</th>
 					</c:when>
@@ -236,7 +236,7 @@ ul {
 			<tr>
 				<td style="background-color: #334269">열처리설비</td>
 				<c:choose>
-					<c:when test="${!empty list }">
+					<c:when test="${empty list }">
 						<td style="background-color: #334269"></td>
 						<th colspan="5">대기중</th>
 					</c:when>
@@ -252,7 +252,7 @@ ul {
 			<tr>
 				<td style="background-color: #334269">도금설비</td>
 				<c:choose>
-					<c:when test="${!empty list }">
+					<c:when test="${empty list }">
 						<td style="background-color: #334269"></td>
 						<th colspan="5">대기중</th>
 					</c:when>
@@ -268,7 +268,7 @@ ul {
 			<tr>
 				<td style="background-color: #334269">포장설비</td>
 				<c:choose>
-					<c:when test="${!empty list }">
+					<c:when test="${empty list }">
 						<td style="background-color: #334269"></td>
 						<th colspan="5">대기중</th>
 					</c:when>

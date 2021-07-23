@@ -36,6 +36,7 @@ let autoItemInfo = null;
 let rowKey = null;
 let unpStartDate = null;
 let data = null;
+let myToast = null;
 $(function(){
 	
 	// 생산계획 디테일 그리드
@@ -54,8 +55,8 @@ $(function(){
 	    	},
 	    	{
 	    		header: '주문디테일 일련번호',
-	    		name: 'ordDNum'
-	    		//hidden: true
+	    		name: 'ordDNum',
+	    		hidden: true
 	    	},
 			{ 
 	    		header: '제품코드', 
@@ -526,14 +527,14 @@ $(function(){
 				//토스트메시지 테스트
 				myToast = $.toast({ 
 					  text : "제품코드가 비어있습니다.", 
-					  showHideTransition : 'slide',  // It can be plain, fade or slide
-					  bgColor : 'tomato',              // Background color for toast
-					  textColor : 'white',            // text color
-					  allowToastClose : false,       // Show the close button or not
-					  hideAfter : 2000,              // `false` to make it sticky or time in miliseconds to hide after
-					  stack : 5,                     // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
-					  textAlign : 'center',            // Alignment of text i.e. left, right, center
-					  position : 'top-center'       // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
+					  showHideTransition : 'slide',  
+					  bgColor : 'tomato',             
+					  textColor : 'white',            
+					  allowToastClose : false,     
+					  hideAfter : 2000,              
+					  stack : 5,                     
+					  textAlign : 'center',         
+					  position : 'top-center'       
 					});
 				return false;
 			}
@@ -595,8 +596,19 @@ $(function(){
 			contentType:"application/json",
 			success: function(result){
 				prdNum = result;
-				console.log(JSON.stringify(gridData))
-				}
+				$.toast({ 
+					  text : "작업지시 저장에 성공했습니다.", 
+					  showHideTransition : 'slide',
+					  bgColor : 'Limegreen',
+					  textColor : 'white',
+					  allowToastClose : false,
+					  hideAfter : 2000,
+					  stack : 1,
+					  textAlign : 'center',
+					  position : 'top-center'
+				});
+			},
+			error: console.log("err")
 		});
 		grid.resetData(getList());
 	})// end of saveBtn
