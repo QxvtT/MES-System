@@ -88,6 +88,7 @@ $(function(){
 	buttonE.onclick = function(){
 		empId1 = null;
 		empNameM = $('input#empNameM').val();
+		
 		employees.resetData(getEmployeesList());
 		
 	}
@@ -110,8 +111,11 @@ $(function(){
 		$('input[id="empId"]').val(empId2);
 		$('input[id="empName"]').val(empName);
 		empId1 = null;
+		empNameM = null;
+			$('input#empNameM').val('');
 		employees.resetData(getEmployeesList());
 		$("#employeesModal").modal("toggle");
+		
 	});
 	
 	employees.on('check', (e) => {
