@@ -256,7 +256,7 @@ function fnShowLogin(stat) {
 				<li>
 					<ul class="btn_idpw" >
 						<li class="chk"><input type="checkbox" name="checkId" class="check2" onclick="javascript:saveid(document.loginForm);" id="checkId">${title}</li>
-						<li><a href="#" onclick="goRegiUsr(); return false;"><spring:message code="comUatUia.loginForm.regist"/></a></li> <!-- 회원가입  -->
+						<%--<li><a href="#" onclick="goRegiUsr(); return false;"><spring:message code="comUatUia.loginForm.regist"/></a></li> <!-- 회원가입  --> --%>
 					</ul>
 				</li>
 				<li>
