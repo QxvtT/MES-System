@@ -76,8 +76,6 @@ $(function(){
 	    	{ header: '순번', name:'prdComDNum'},
 	    	{ header: '소재 LOT_NO', name:'lotNum'},
 	    	{ header: '수량', name:'matVol'},
-			{ header: '상태', name:''},
-			{ header: '작업공정', name:'prcCode'},
 			{ header: '이동NO', name:'movNum'}
 	    ]
 	}); // end const grid

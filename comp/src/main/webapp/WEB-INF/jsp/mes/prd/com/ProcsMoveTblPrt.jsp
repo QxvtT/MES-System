@@ -188,7 +188,7 @@
 			.append($('<td>').html(data3[i].prcComDVol))
 			.append($('<td>').html(data3[i].prcUnit))
 			.append($('<td>').html((data3[i].prcResVol - data3[i].prcErrVol)))
-			.append($('<td>').html(data3[i].empName))
+			.append($('<td>').html(' '))
 			.appendTo('#table')
 	};
 	

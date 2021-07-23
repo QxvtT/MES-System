@@ -323,7 +323,21 @@ $(function(){
 					data : JSON.stringify(gridData),
 					dataType: "json",
 					contentType:"application/json",
-					success : console.log("updatesuccess")
+					success : function() {
+						console.log("updatesuccess");
+						$.toast({ 
+							  text : "제품이 출고되었습니다.", 
+							  showHideTransition : 'slide',
+							  bgColor : 'Limegreen',
+							  textColor : 'white',
+							  allowToastClose : false,
+							  hideAfter : 2000,
+							  stack : 1,
+							  textAlign : 'center',
+							  position : 'top-center'
+						});
+						
+					}
 					
 					});
 			if($( 'input#itmHisNum' ).val()==null || $( 'input#itmHisNum' ).val()==""){
