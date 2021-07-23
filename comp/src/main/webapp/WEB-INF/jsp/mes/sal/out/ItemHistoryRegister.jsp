@@ -526,7 +526,8 @@ $(function(){
 				date = null;
 				ordADate = null;
 				ordBDate = null;
-				grid5.resetData(setOrdNum());
+				let list = [];
+				grid5.resetData(list);
 			}
 			ordNumY.onclick = function() {
 				ordNum = grid5.getCheckedRows()[0]['ordNum'];
@@ -878,11 +879,12 @@ $(function(){
 					</button>
 				</div>
 				<div class="modal-body" >
-						<form>
+					<form>
 						<div class="form-group row">
-							<div class="col">
-								주문일자<input type ="radio" id="date" name = "date" value = "request" checked="checked"/>
-								납기일자<input type ="radio" id="date" name = "date" value = "delivery"/><br/>
+							<div class="col" align="center">
+										주문일자<input type ="radio" id="date" name = "date" value = "request" checked="checked"/>&nbsp;&nbsp;&nbsp;
+										납기일자<input type ="radio" id="date" name = "date" value = "delivery"/>
+								
 								<table>
 									<tr>
 										<td>
