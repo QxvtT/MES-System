@@ -72,17 +72,18 @@ $(function(){
 			{ header: '제품명', name:'itmName'},
 			{ header: '규격', name:'itmSize'},
 			{ header: '단위', name:'itmUnit'},
-			{ header: '주문량', name:'ordVol'},
-			{ header: '기출고량', name:'ordOutVol'},
-			{ header: '미출고량', name:'itmNoutVol'},
-			{ header: '출고량', name:'itmVol',editor:"text"},
-			{ header: '현재고', name:'itmStock'},
-			{ header: '자재LOT_NO', name:'lotNum',editor:"text"},
+			{ header: '주문량', name:'ordVol',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
+			{ header: '기출고량', name:'ordOutVol',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
+			{ header: '미출고량', name:'itmNoutVol',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
+			{ header: '출고량', name:'itmVol',editor:"text",formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
+			{ header: '현재고', name:'itmStock',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
+			{ header: 'LOT_NO', name:'lotNum',editor:"text"},
 			{ header: '단가', name:'itmPrice',
 				onAfterChange(e) {
 				console.log(e)
-				grid.setValue(e.rowKey, 'totalPrice', e.value * grid.getValue(e.rowKey, 'itmVol'));},editor:"text"},
-			{ header: '금액', name:'totalPrice'},
+				grid.setValue(e.rowKey, 'totalPrice', e.value * grid.getValue(e.rowKey, 'itmVol'));},editor:"text"
+				,formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
+			{ header: '금액', name:'totalPrice',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
 			{ header: '비고', name:'itmNoteD',editor:"text"}
 	    ]
 	}); // end const grid
@@ -451,7 +452,7 @@ $(function(){
 			{ header: '제품명', name:'itmName'},
 			{ header: '규격', name:'itmSize'},
 			{ header: '단위', name:'itmUnit'},
-			{ header: '주문량', name:'ordVol'}
+			{ header: '주문량', name:'ordVol',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}}
 	    ]
 	});
 	function setItemCode() {
@@ -485,7 +486,7 @@ $(function(){
 	    columns: [
 			{ header: '제품코드', name:'itmCode'},
 			{ header: 'lot_no', name:'lotNum'},
-			{ header: '재고', name:'itmVol'}
+			{ header: '재고', name:'itmVol',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}}
 	    ]
 	});
 	function setLotNum(test) {

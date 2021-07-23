@@ -156,16 +156,16 @@ $(function(){
 			{ 
 	    		header: '단가', 
 	    		name:'matHisPrice',
+	    		onAfterChange(e) {
+	    	    	grid.setValue(e.rowKey, 'amount', e.value * grid.getValue(e.rowKey, 'matHisDVol'));
+	    	    },
     			editor: "text",
     			formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 	    	},
 			{ 
 	    		header: '금액', 
 	    		name:'amount',
-	    		onAfterChange(e) {
-	    			console.log(e.rowKey)
-	    	    	grid.setValue(e.rowKey, 'matHisDVol', e.value * grid.getValue(e.rowKey, 'matHisPrice'));
-	    	    },
+	    		
     			formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
 	    	},
 			{ 
