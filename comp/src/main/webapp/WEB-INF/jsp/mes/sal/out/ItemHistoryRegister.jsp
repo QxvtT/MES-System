@@ -77,7 +77,7 @@ $(function(){
 			{ header: '미출고량', name:'itmNoutVol'},
 			{ header: '출고량', name:'itmVol',editor:"text"},
 			{ header: '현재고', name:'itmStock'},
-			{ header: '자재LOT_NO', name:'lotNum',editor:"text"},
+			{ header: 'LOT_NO', name:'lotNum',editor:"text"},
 			{ header: '단가', name:'itmPrice',
 				onAfterChange(e) {
 				console.log(e)

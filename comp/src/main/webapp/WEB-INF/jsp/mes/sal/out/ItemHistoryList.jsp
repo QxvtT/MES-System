@@ -46,7 +46,7 @@ $(function(){
 	    columns: [
 	    	{ header: '출고일자', name:'itmHisRdy'},
 	    	{ header: '업체명', name:'operName'},
-	    	{ header: '자재LOT_NO', name:'lotNum'},
+	    	{ header: 'LOT_NO', name:'lotNum'},
 			{ header: '제품코드', name:'itmCode'},
 			{ header: '제품명', name:'itmName'},
 			{ header: '주문번호', name:'ordNum'},

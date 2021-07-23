@@ -168,7 +168,7 @@ let bckper = 0;
 													<i class="far fa-user text-c-purple f-24"></i>
 												</div>
 												<div id ="sibal" class="col-8 p-l-0" onclick="location.href='${pageContext.request.contextPath}/sal/ord/OrderMList.do'">
-													<h5 id = "ordVol" ></h5>
+													<h5 id = "ordVol" >0</h5>
 													<p class="text-muted m-b-0">진행중인 주문</p>
 												</div>
 											</div>
@@ -179,7 +179,7 @@ let bckper = 0;
 													<i class="fas fa-volume-down text-c-green f-24"></i>
 												</div>
 												<div class="col-8 p-l-0" onclick="location.href='${pageContext.request.contextPath}/prd/res/ProcessListR.do'">
-													<h5 id = "bckPer"></h5>
+													<h5 id = "bckPer">0%</h5>
 													<p class="text-muted m-b-0">금일 실적률</p>
 												</div>
 											</div>
@@ -192,7 +192,7 @@ let bckper = 0;
 													<i class="far fa-file-alt text-c-red f-24"></i>
 												</div>
 												<div class="col-8 p-l-0" >
-														<h5 id ="ordComVol"></h5>
+														<h5 id ="ordComVol">0</h5>
 													<p class="text-muted m-b-0">완료된 주문</p>
 												</div>
 											</div>
@@ -203,7 +203,7 @@ let bckper = 0;
 													<i class="far fa-envelope-open text-c-blue f-24"></i>
 												</div>
 												<div class="col-8 p-l-0" onclick="location.href='${pageContext.request.contextPath}/prd/res/ProcessListR.do'">
-												<h5 id ="errPer"></h5>
+												<h5 id ="errPer">0%</h5>
 													<p class="text-muted m-b-0">불량률</p>
 													
 												</div>
@@ -223,7 +223,7 @@ let bckper = 0;
 													<i class="fas fa-share-alt text-c-purple f-24"></i>
 												</div>
 												<div class="col-8 p-l-0">
-													<h5 id= "getMonPrice"></h5>
+													<h5 id= "getMonPrice">0</h5>
 													<p class="text-muted m-b-0">월 매출</p>
 												</div>
 											</div>
@@ -234,7 +234,7 @@ let bckper = 0;
 													<i class="fas fa-sitemap text-c-green f-24"></i>
 												</div>
 												<div class="col-8 p-l-0">
-													<h5 id= "getMonVol"></h5>
+													<h5 id= "getMonVol">0</h5>
 													<p class="text-muted m-b-0">월 생산량</p>
 												</div>
 											</div>
@@ -247,7 +247,7 @@ let bckper = 0;
 													<i class="fas fa-signal text-c-red f-24"></i>
 												</div>
 												<div class="col-8 p-l-0" onclick="location.href='${pageContext.request.contextPath}/mac/machine/MacMng.do'">
-													<h5 id ="getUsingMac"></h5>
+													<h5 id ="getUsingMac">0</h5>
 													<p class="text-muted m-b-0">사용중 설비</p>
 												</div>
 											</div>
