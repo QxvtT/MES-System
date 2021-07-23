@@ -50,9 +50,9 @@ $(function(){
 			{ header: '제품코드', name:'itmCode'},
 			{ header: '제품명', name:'itmName'},
 			{ header: '주문번호', name:'ordNum'},
-			{ header: '수량', name:'itmVol'},
-			{ header: '단가', name:'itmPrice'},
-			{ header: '금액', name:'totalPrice'},
+			{ header: '수량', name:'itmVol',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
+			{ header: '단가', name:'itmPrice',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
+			{ header: '금액', name:'totalPrice',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
 			{ header: '비고', name:'itmNoteD'}
 	    ]
 	}); // end const grid

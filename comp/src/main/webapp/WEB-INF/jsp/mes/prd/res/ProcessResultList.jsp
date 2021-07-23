@@ -243,16 +243,18 @@ function getProcessResultSelect(key) {
 	});
 	grid3.on('dblclick', () => { 
 		let key = grid3.getFocusedCell()['rowKey'];
-		prcResDNum = grid3.getColumnValues('prcResDNum')[key];
 		
-		empId = grid3.getColumnValues('empId')[key]
-		macCode = grid3.getColumnValues('macCode')[key]
-		grid4.resetData(setProduceSelect(prcResDNum));
+			prcResDNum = grid3.getColumnValues('prcResDNum')[key];
+			
+			empId = grid3.getColumnValues('empId')[key]
+			macCode = grid3.getColumnValues('macCode')[key]
+			grid4.resetData(setProduceSelect(prcResDNum));
+			
+			$('#myModal').modal('toggle');
+			$('#myModal').on('shown.bs.modal', function(){
+				 grid4.refreshLayout();
+			});
 		
-		$('#myModal').modal('toggle');
-		$('#myModal').on('shown.bs.modal', function(){
-			 grid4.refreshLayout();
-		});
 	});
 	
 	function setProduceSelect(key) { 

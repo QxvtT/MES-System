@@ -53,10 +53,10 @@ $(function(){
 			{ header: '제품코드', name:'itmCode'},
 			{ header: '제품이름', name:'itmName'},
 			{ header: '주문상태', name:'ordStatus'},
-			{ header: '주문량', name:'ordVol'},
-			{ header: '지시량', name:'ordIndVol'},
-			{ header: '출고량', name:'ordOutVol'},
-			{ header: '완제품재고', name:'itmStock'},
+			{ header: '주문량', name:'ordVol',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
+			{ header: '지시량', name:'ordIndVol',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
+			{ header: '출고량', name:'ordOutVol',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
+			{ header: '완제품재고', name:'itmStock',formatter: (ev)=>{return (ev.value == null)? null : String(ev.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");}},
 			{ header: '비고', name:'ordNote'},
 			{ header: '계획여부', name:'prdChk'}
 	    ]
