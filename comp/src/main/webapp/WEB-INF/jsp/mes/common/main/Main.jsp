@@ -180,7 +180,7 @@ let bckper = 0;
 												</div>
 												<div class="col-8 p-l-0" onclick="location.href='${pageContext.request.contextPath}/prd/res/ProcessListR.do'">
 													<h5 id = "bckPer">0%</h5>
-													<p class="text-muted m-b-0">금일 실적률</p>
+													<p class="text-muted m-b-0">금일 실적률</p> 
 												</div>
 											</div>
 										</div>
@@ -191,7 +191,7 @@ let bckper = 0;
 												<div class="col-4 p-r-0">
 													<i class="far fa-file-alt text-c-red f-24"></i>
 												</div>
-												<div class="col-8 p-l-0" >
+												<div id ="sibal" class="col-8 p-l-0" onclick="location.href='${pageContext.request.contextPath}/sal/ord/OrderMList.do'">
 														<h5 id ="ordComVol">0</h5>
 													<p class="text-muted m-b-0">완료된 주문</p>
 												</div>
