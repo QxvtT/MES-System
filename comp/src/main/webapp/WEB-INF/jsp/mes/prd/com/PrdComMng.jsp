@@ -1383,11 +1383,13 @@ $(function(){
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="">
-						LOT NO <input type="text" class="form-control ml-3 w-50"
-							id="lotNum" name="lotNum"></input>
-						<button type="button" id="searchLotNumBtn"
-							class="btn btn-sm btn-info waves-effect waves-light">검색</button>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="ml-3 d-inline-block">LOT NO</div> <input type="text" class="form-control ml-3 w-50 d-inline-block"
+								id="lotNum" name="lotNum"></input>
+							<button type="button" id="searchLotNumBtn"
+								class="btn btn-sm btn-info waves-effect waves-light ml-3">검색</button>
+						</div>
 					</div>
 				</div>
 				<div id="gridMatStock"></div>
