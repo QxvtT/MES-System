@@ -282,7 +282,8 @@ $(function(){
 				</div>
 				<div class="col-md-4">
 					<ul class="breadcrumb">
-						<li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/main.do"> <i
+						<li class="breadcrumb-item"><a
+							href="${pageContext.request.contextPath}/main.do"> <i
 								class="fa fa-home"></i>
 						</a></li>
 						<li class="breadcrumb-item">생산관리</li>
@@ -302,10 +303,11 @@ $(function(){
 					<button type="button" class="btn btn-info" id="resetBtn">새자료</button>
 					<button type="button" class="btn btn-info" id="printBtn">인쇄</button>
 				</div>
-				<br/>
+				<br />
 				<div class="row">
 					<div class="col-xl-12">
-						<form id="pmFrm" action="ProcessMovePrt.do" onsubmit="return false">
+						<form id="pmFrm" action="ProcessMovePrt.do"
+							onsubmit="return false">
 							<div class="card">
 								<table class="table">
 									<tr>
@@ -369,37 +371,46 @@ $(function(){
 									</tr>
 								</table>
 							</div>
-							<div class="table">
-								<table class="table">
-									<tr>
-										<td>
-											<div class="row">
-												<div style="margin: 10px;">소재코드</div>
-												<div>
-													<input class="form-control" id="matCode" name="matCode"
-														type="text" readonly="readonly" />
+							<div class="card">
+								<div class="table row col-sm-12">
+									<table class="table col-sm-6">
+										<tr>
+											<td>
+												<div class="row">
+													<div style="margin: 10px;">소재코드</div>
+													<div>
+														<input class="form-control" id="matCode" name="matCode"
+															type="text" readonly="readonly" />
+													</div>
+													<div style="margin: 10px;">소재명</div>
+													<div>
+														<input class="form-control" id="matName" name="matName"
+															type="text" readonly="readonly" />
+													</div>
 												</div>
-												<div style="margin: 10px;">소재명</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div id="grid2"></div>
+											</td>
+										</tr>
+									</table>
+									<table class="table col-sm-6">
+										<tr>
+											<td>
 												<div>
-													<input class="form-control" id="matName" name="matName"
-														type="text" readonly="readonly" />
+													<div style="margin: 40px;"></div>
 												</div>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<div id="grid2"></div>
-										</td>
-									</tr>
-								</table>
-								<table class="table">
-									<tr>
-										<td>
-											<div id="grid3"></div>
-										</td>
-									</tr>
-								</table>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div id="grid3"></div>
+											</td>
+										</tr>
+									</table>
+								</div>
 							</div>
 						</form>
 					</div>
