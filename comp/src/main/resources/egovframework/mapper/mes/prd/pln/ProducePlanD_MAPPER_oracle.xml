@@ -26,8 +26,8 @@
 		<where>
 			<if test="startDate != null and startDate !='' and endDate !=null and endDate != ''">
 				<![CDATA[
-					PRD_DATE >= #{startDate} AND
-					PRD_DATE <= #{endDate}
+					PRD_DATE >= TO_DATE(#{startDate}, 'yyyy-MM-dd') AND
+					PRD_DATE <= TO_DATE(#{endDate}, 'yyyy-MM-dd')
 					ORDER BY PRD_DATE
 				]]>
 			</if>
@@ -49,8 +49,8 @@
 		WHERE B.PRD_CHK = 'N' 
         AND A.ORD_NUM = B.ORD_NUM
         <![CDATA[
-        AND ORD_REQUEST_DATE >= #{unpStartDate}
-        AND ORD_REQUEST_DATE <= #{unpEndDate}
+        AND ORD_REQUEST_DATE >= TO_DATE(#{unpStartDate}, 'yyyy-MM-dd')
+        AND ORD_REQUEST_DATE <= TO_DATE(#{unpEndDate}, 'yyyy-MM-dd')
         ]]>
 	</select>
 	
@@ -198,8 +198,8 @@
 				   , PRODUCE_PLAN_D B 
 				WHERE A.PRD_NUM = B.PRD_NUM
 				<![CDATA[
-				AND PRD_DATE >= #{startDate}
-		        AND PRD_DATE <= #{endDate}
+				AND PRD_DATE >= TO_DATE(#{startDate}, 'yyyy-MM-dd)
+		        AND PRD_DATE <= TO_DATE(#{endDate}, 'yyyy-MM-dd)
 		        ]]>
         <if test="itemCodeList != null">
 		<if test="itemCodeList.size != 0">

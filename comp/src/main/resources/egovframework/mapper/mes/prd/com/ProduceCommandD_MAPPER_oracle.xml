@@ -32,8 +32,8 @@
         FROM PRODUCE_COMMAND_D PCD, PRODUCE_COMMAND_MAT PCM 
         WHERE PCM.PRD_COM_D_NUM = PCD.PRD_COM_D_NUM) A
       <![CDATA[
-      WHERE PRD_COM_D_DATE >= #{startDate}
-      AND PRD_COM_D_DATE <= #{endDate}
+      WHERE PRD_COM_D_DATE >= TO_DATE(#{startDate}, 'yyyy-MM-dd')
+      AND PRD_COM_D_DATE <= TO_DATE(#{endDate}, 'yyyy-MM-dd')
       ]]>
       <if test="itemCodeList != null">
       <if test="itemCodeList.size != 0">
@@ -194,8 +194,8 @@
 		</if>
 		<if test="prdComNum == null or prdComNum == ''">
 				<![CDATA[	
-					and prd_com_d_date1 >= #{startDate}
-					and prd_com_d_date1 <= #{endDate}
+					and prd_com_d_date1 >= TO_DATE(#{startDate}, 'yyyy-MM-dd')
+					and prd_com_d_date1 <= TO_DATE(#{endDate}, 'yyyy-MM-dd')
 				]]>
 		</if>
 		ORDER BY
