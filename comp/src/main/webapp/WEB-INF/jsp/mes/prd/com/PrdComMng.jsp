@@ -495,11 +495,6 @@ $(function(){
 		$('#matCode').val('');
 		$('#matName').val('');
 		$('#operName').val('');
-		//지시번호, 작성일자, 지시명, 특이사항 리셋
-		$('#prdComNum').val('');
-		$('#prdComDate').val('');
-		$('#prdComName').val('');
-		$('#prdComNote').val('');
 		prdComNum = null;
 		prdComDNum = null;
 		matRowKey = null;

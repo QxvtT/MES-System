@@ -39,7 +39,8 @@ import mes.mac.service.MachinemagVO;
 @SessionAttributes(types = MachinemagVO.class)
 public class MachinemagController {
 
-	private String path = "C:/Users/admin/git/MES-System/comp/src/main/webapp/images/machinemng";
+	//private String path = "C:/Users/admin/git/MES-System/comp/src/main/webapp/images/machinemng";
+	private String path = "/usr/local/dev/upload/";
 
 	@Resource(name = "machineService")
 	private MachinemagService machineService;

@@ -421,7 +421,7 @@ function getProcessResultSelect(key) {
 				});
 			return null;
 		}
-		if(prcBefState != "완료" && prcResNo > 1) {
+		/* if(prcBefState != "완료" && prcResNo > 1) {
 			//토스트메시지 
 			$.toast({ 
 				  text : "이전공정이 완료되지 않았습니다", 
@@ -435,7 +435,7 @@ function getProcessResultSelect(key) {
 				  position : 'top-center'
 				});
 			return null;
-		}
+		} */
 		let prcErrVol = grid4.getData()[0]['prcErrVol'];
 		prcErrVol *=1;
 		let prcResVol = grid4.getData()[0]['prcResVol'];

@@ -128,10 +128,44 @@ let bckper = 0;
 	
 </script>
 <style type="text/css">
+
 #sibal:hover{
 	background-color: #f0f0f5;
 	cursor:pointer;
 }
+
+.cssZoom{
+	border:1px solid #ccc;
+	padding:10px;
+	margin-top:10px;
+	width:100%;
+	height:47vh;
+	overflow:hidden;
+}
+
+.cssZoom iframe{
+	-ms-zoom: 0.5;
+	
+	-moz-transform: scale(0.5);
+	-moz-transform-origin: 0 0;
+	
+	-o-transform: scale(0.5);
+	-o-transform-origin: 0 0;
+	
+	-webkit-transform: scale(0.5);
+	-webkit-transform-origin: 0 0;
+	
+	transform: scale(0.5);
+	transform-origin: 0 0;	
+	
+	border:1px solid #ccc;
+	top:0px;
+	left:0px;
+	
+	width:200%;
+	height:200%;
+}
+
 </style>
 </head>
 <body>
@@ -308,7 +342,9 @@ let bckper = 0;
 					</div>
 				</div>
 				<!-- Project statustic end -->
-				<iframe style="width: 100%; height: 730px;"   src="prd/mon/MonitorDisplay.do" ></iframe>
+				<div class="cssZoom">
+				<iframe scrolling="no" src="prd/mon/MonitorDisplay.do"></iframe>
+				</div>
 			</div>
 		</div>
  
