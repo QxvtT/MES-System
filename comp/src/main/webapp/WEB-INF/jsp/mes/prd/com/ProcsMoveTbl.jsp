@@ -70,7 +70,7 @@ $(function(){
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
-	    rowWidth: 100,
+	    rowWidth: 50,
 	    data: null,
 	    columns: [
 	    	{ header: '순번', name:'prdComDNum'},
@@ -88,7 +88,7 @@ $(function(){
 	    scrollX: false,
 	    scrollY: true,
 	    bodyHeight: 200,
-	    rowWidth: 100,
+	    rowWidth: 50,
 	    data: null,
 	    columns: [
 	    	{ header: '상태', name:'prcState'},
@@ -202,25 +202,28 @@ $(function(){
 		return data;
 	} 
 	
-	var today = new Date();
-	var preDay = new Date();
-	preDay.setDate(today.getDate() - 7);
-	
-	var picker = tui.DatePicker.createRangePicker({
-        startpicker: {
-            date: preDay,
-            input: '#startDate',
-            container: '#startDate-container'
-        },
-        endpicker: {
-            date: today,
-            input: '#endDate',
-            container: '#endDate-container'
-        },
-        language: 'ko',
-        type: 'date',
-        format: 'yyyy-MM-dd'
-    });
+	function setDatePicker(){
+		var today = new Date();
+		var preDay = new Date();
+		preDay.setDate(today.getDate() - 7);
+		
+		var picker = tui.DatePicker.createRangePicker({
+	        startpicker: {
+	            date: preDay,
+	            input: '#startDate',
+	            container: '#startDate-container'
+	        },
+	        endpicker: {
+	            date: today,
+	            input: '#endDate',
+	            container: '#endDate-container'
+	        },
+	        language: 'ko',
+	        type: 'date',
+	        format: 'yyyy-MM-dd'
+	    });
+	}
+	setDatePicker();
 	
 	$('#mobile-collapse').click(function() {
 		grid.refreshLayout();
@@ -228,6 +231,20 @@ $(function(){
 		grid3.refreshLayout();
 	});
 	
+	$("html, body").on('mousewheel DOMMouseScroll', function(e) {
+		grid.refreshLayout();
+		grid2.refreshLayout();
+		grid3.refreshLayout();
+    });
+	
+	$('#resetBtn').click(function() {
+		pmFrm.reset();
+		setDatePicker();
+		grid.resetData([]);
+		grid2.resetData([]);
+		grid3.resetData([]);
+	});
+
 	$('#printBtn').click(function() {
 		getPrtInfo();
 		window.open("ProcsMoveTblPrt.do");
@@ -373,7 +390,7 @@ $(function(){
 							</div>
 							<div class="card">
 								<div class="table row col-sm-12">
-									<table class="table col-sm-6">
+									<table class="table col-sm-12">
 										<tr>
 											<td>
 												<div class="row">
@@ -391,23 +408,8 @@ $(function(){
 											</td>
 										</tr>
 										<tr>
-											<td>
-												<div id="grid2"></div>
-											</td>
-										</tr>
-									</table>
-									<table class="table col-sm-6">
-										<tr>
-											<td>
-												<div>
-													<div style="margin: 40px;"></div>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<div id="grid3"></div>
-											</td>
+											<td class="col-sm-6" id="grid2"></td>
+											<td class="col-sm-6" id="grid3"></td>
 										</tr>
 									</table>
 								</div>
