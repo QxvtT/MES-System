@@ -430,6 +430,10 @@ $(function(){
 			prdNum = grid2.getValue(rows, 'prdNum');
 			if(prdNum != null){
 				$('#searchModal').modal("hide");
+				var selectRow = grid2.getRow(rows);
+				$('#prdDate').val(selectRow.prdDate);
+				$('#prdName').val(selectRow.prdName);
+				$('#prdNote').val(selectRow.prdNote);
 				grid.resetData(getList());
 			}
 		})
@@ -597,7 +601,7 @@ $(function(){
 			success: function(result){
 				prdNum = result;
 				$.toast({ 
-					  text : "작업지시 저장에 성공했습니다.", 
+					  text : "생산계획을 저장했습니다.", 
 					  showHideTransition : 'slide',
 					  bgColor : 'Limegreen',
 					  textColor : 'white',
