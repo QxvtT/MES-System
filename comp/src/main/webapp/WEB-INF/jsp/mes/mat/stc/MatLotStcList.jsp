@@ -214,7 +214,7 @@ $(function(){
 								<table class="table">
 									<tr>
 										<td>
-											<div class="d-inline-block align-middle">작업일자</div>
+											<div class="d-inline-block align-middle">입고일자</div>
 										</td>
 										<td>
 											<div class="row align-items-center text-center col-lg-8">
