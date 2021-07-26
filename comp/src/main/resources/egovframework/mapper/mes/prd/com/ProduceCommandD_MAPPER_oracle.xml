@@ -15,7 +15,7 @@
 		    ,A.ITM_CODE
 		    ,(SELECT ITM_NAME FROM ITEM WHERE ITM_CODE = A.ITM_CODE) ITM_NAME
 		    ,(SELECT ORD_NUM FROM ORDER_D WHERE ORD_D_NUM = A.ORD_D_NUM) ORD_NUM
-		    ,TO_CHAR((SELECT ORD_DELIVERY_DATE FROM ORDER_M OM INNER JOIN ORDER_D OD ON OM.ORD_NUM = OD.ORD_NUM WHERE A.ORD_D_NUM = OD.ORD_D_NUM), 'yyyy-MM-dd') ORD_DELIVERY_DATE
+		    ,(SELECT ORD_DELIVERY_DATE FROM ORDER_M OM INNER JOIN ORDER_D OD ON OM.ORD_NUM = OD.ORD_NUM WHERE A.ORD_D_NUM = OD.ORD_D_NUM) ORD_DELIVERY_DATE
 		    ,CASE WHEN ORD_D_NUM IS NOT NULL AND ROW_NUM = 1 THEN (SELECT ORD_VOL FROM ORDER_D WHERE ORD_D_NUM = A.ORD_D_NUM) ELSE 0 END AS ORD_VOL
 		    ,CASE WHEN ORD_D_NUM IS NOT NULL AND ROW_NUM = 1 THEN (SELECT PRD_COM_VOL FROM ORDER_D WHERE ORD_D_NUM = A.ORD_D_NUM) ELSE 0 END AS PRD_COM_VOL
             ,A.PRD_COM_VOL
@@ -194,8 +194,8 @@
 		</if>
 		<if test="prdComNum == null or prdComNum == ''">
 				<![CDATA[	
-					and prd_com_d_date1 >= TO_DATE(#{startDate}, 'yyyy-MM-dd')
-					and prd_com_d_date1 <= TO_DATE(#{endDate}, 'yyyy-MM-dd')
+					and prd_com_d_date1 >= #{startDate}
+					and prd_com_d_date1 <= #{endDate}
 				]]>
 		</if>
 		ORDER BY

@@ -103,8 +103,8 @@ $(function() {
 	$('input#macLoadage').val(machine.getData()[key]['macLoadage']);
 	$('input#macStdTemp').val(machine.getData()[key]['macStdTemp']);
 	if(machine.getData()[key]['imagePath'] != null ) {
-		//var path = "${pageContext.request.contextPath}/images/machinemng/" + machine.getData()[key]['imagePath'];
-		var path = "/usr/local/dev/upload/" + machine.getData()[key]['imagePath'];
+		var path = "${pageContext.request.contextPath}/images/machinemng/" + machine.getData()[key]['imagePath'];
+		
 		$('#img').attr('src', path);
 		
 	} else {

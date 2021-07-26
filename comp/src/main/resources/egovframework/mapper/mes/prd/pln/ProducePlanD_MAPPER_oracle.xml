@@ -182,24 +182,24 @@
 		SELECT * FROM (
 			SELECT A.*, ROWNUM RNUM FROM ( 
 		        SELECT 
-		        	   TO_CHAR(A.PRD_DATE, 'yyyy-MM-dd') PRD_DATE
+		        	   A.PRD_DATE
 				     , (SELECT OPER_NAME FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) as OPER_NAME
 				     , B.PRD_NUM
 				     , B.ITM_CODE
 				     , (SELECT ITM_NAME FROM ITEM WHERE ITM_CODE = B.ITM_CODE) as ITM_NAME
 				     , B.ORD_NUM
-				     , TO_CHAR((SELECT ORD_DELIVERY_DATE FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM), 'yyyy-MM-dd') ORD_DELIVERY_DATE
+				     , (SELECT ORD_DELIVERY_DATE FROM ORDER_M WHERE ORD_NUM = B.ORD_NUM) ORD_DELIVERY_DATE
 				     , (SELECT ORD_VOL FROM ORDER_D WHERE ORD_NUM = B.ORD_NUM AND ORD_D_NUM = B.ORD_D_NUM) ORD_VOL
 				     , B.PRD_WORK_VOL
-				     , TO_CHAR(B.PRD_PLAN_DATE, 'yyyy-MM-dd') PRD_PLAN_DATE
+				     , B.PRD_PLAN_DATE PRD_PLAN_DATE
 				     , B.PRD_NO
 				     , B.PRD_PLAN_D_NUM
 				FROM PRODUCE_PLAN A
 				   , PRODUCE_PLAN_D B 
 				WHERE A.PRD_NUM = B.PRD_NUM
 				<![CDATA[
-				AND PRD_DATE >= TO_DATE(#{startDate}, 'yyyy-MM-dd)
-		        AND PRD_DATE <= TO_DATE(#{endDate}, 'yyyy-MM-dd)
+				AND PRD_DATE >= TO_DATE(#{startDate}, 'yyyy-MM-dd')
+		        AND PRD_DATE <= TO_DATE(#{endDate}, 'yyyy-MM-dd')
 		        ]]>
         <if test="itemCodeList != null">
 		<if test="itemCodeList.size != 0">
